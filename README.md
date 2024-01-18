@@ -16,6 +16,8 @@ To be used in: https://www.kiertoasuomesta.fi/
 
 ## Documentation
 
+Definition of done: https://github.com/MTK-ohtu/mtk-ohtu/blob/main/docs/Definition_of_done.md
+
 ## License
 
 ## Project progress
