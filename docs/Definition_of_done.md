@@ -16,4 +16,9 @@
 - Required tests done
 - Code is documented
 
+
 ## Sprint 2 -> 
+	To be added
+	- Unittests, Coverage, CodeCOV, Robot? 
+	- Pylint, Black to refactor?
+	- Documentation (DocString)
