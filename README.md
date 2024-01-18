@@ -26,3 +26,5 @@ App: _link here_
 
 
 ## Frameworks & libraries used
+
+[![codecov](https://codecov.io/gh/MTK-ohtu/mtk-ohtu/graph/badge.svg?token=U4WI4WSGPC)](https://codecov.io/gh/MTK-ohtu/mtk-ohtu)
