@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "mtk-ohtu"
+version = "0.1.0"
+description = ""
+authors = ["MTK-Ohtu group"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+flask = "^3.0.0"
+invoke = "^2.2.0"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.4"
+coverage = "^7.4.0"
+pylint = "^3.0.3"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
