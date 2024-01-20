@@ -11,8 +11,16 @@ To be used in: https://www.kiertoasuomesta.fi/
 
 ### Installation
 
+1. Clone the project to your computer.
+2. Install dependencies with command: `poetry install`.
+3. Configure enviroment variables. See "Configuration".
+4. Start the app with command: `poetry run invoke start`.
 
 ## Configuration
+
+To run this app, enviroment variable need to be set. To do this, find `.env.template` on projects root folder and rename it to `.env`.
+Next, you need to generate a secret key. You can do this for example with command: `python3 -c 'import secrets; print(secrets.token_hex())'`. Replace PUT_THE_KEY_HERE with the generated secret key inside .env -file.
+
 
 ## Documentation
 
