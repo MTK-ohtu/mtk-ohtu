@@ -8,6 +8,8 @@ COPY . /app
 
 EXPOSE 8080
 
+ENV FLASK_APP=app.py
+
 RUN poetry install
 
-ENTRYPOINT ["poetry", "run", "python", "-m", "src/index.py"]
+ENTRYPOINT ["poetry", "run", "flask", "run"]
