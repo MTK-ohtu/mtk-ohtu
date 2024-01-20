@@ -1,7 +1,13 @@
+from config import SECRET_KEY
 from flask import Flask
+from src.controllers.example_controller import test_controller
 
-app = Flask(__name__)
+def create_app():
+    app = Flask(__name__)
+    app.secret_key = SECRET_KEY
 
-@app.route("/")
-def index():
-    return "Hello world!"
+    app.register_blueprint(test_controller)
+
+    return app
+
+app = create_app()
