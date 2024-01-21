@@ -1,15 +1,16 @@
-FROM python:3.10-bookworm
+FROM python:3.10-alpine
 
 WORKDIR /app
 
-RUN pip install poetry
+COPY . .
 
-COPY . /app
+RUN pip install poetry
 
 EXPOSE 5000
 
 ENV FLASK_APP=app.py
 
 RUN poetry install
+RUN chmod +x ./init_config.sh
 
-ENTRYPOINT ["./init_config", "poetry", "run", "flask", "run"]
+ENTRYPOINT ["poetry", "run", "flask", "run", "--host", "0.0.0.0"]
