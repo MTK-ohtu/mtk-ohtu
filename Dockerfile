@@ -12,4 +12,4 @@ ENV FLASK_APP=app.py
 
 RUN poetry install
 
-ENTRYPOINT ["/bin/sh", "-c", "chmod +x ./init_config.sh && ./init_config.sh && poetry run flask run --host 0.0.0.0"]
+ENTRYPOINT ["/bin/sh", "-c", "./init_config.sh && poetry run flask run --host 0.0.0.0"]
