@@ -14,8 +14,11 @@
 - Program code pushed to master
 - User story taken to staging server
 - Required tests done
+	- pytest
+	- Branch coverage 50% / minimissään 1 testi
 - Code is documented
-
+	- Kaavio / malli rakenteesta
+	- Docstringit
 
 ## Sprint 2 -> 
 	To be added
