@@ -28,6 +28,9 @@ docker run -d -p 5000:5000 --rm mtk-ohtu
 ```
 3. Access app from your web browser in address localhost:5000
 
+You need to build image only once unless you have removed the builded image.
+
+
 ## Configuration
 
 To run this app, enviroment variable need to be set. To do this, find `.env.template` on projects root folder and rename it to `.env`.
