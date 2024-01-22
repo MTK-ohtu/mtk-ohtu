@@ -16,6 +16,18 @@ To be used in: https://www.kiertoasuomesta.fi/
 3. Configure enviroment variables. See "Configuration".
 4. Start the app with command: `poetry run invoke start`.
 
+### Run with Docker
+
+1. Build docker image
+```bash
+docker build -t mtk-ohtu .
+```
+2. Run container (single use)
+```bash
+docker run -d -p 5000:5000 --rm mtk-ohtu
+```
+3. Access app from your web browser in address localhost:5000
+
 ## Configuration
 
 To run this app, enviroment variable need to be set. To do this, find `.env.template` on projects root folder and rename it to `.env`.
