@@ -10,4 +10,4 @@ EXPOSE 5000
 
 RUN poetry install
 
-ENTRYPOINT ["/bin/sh", "-c", "src/init_config.sh && poetry run flask --app sr/app run --host 0.0.0.0"]
+ENTRYPOINT ["/bin/sh", "-c", "src/init_config.sh && poetry run flask --app src/app run --host 0.0.0.0"]
