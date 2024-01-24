@@ -1,0 +1,31 @@
+name: Tests
+
+on: [workflow_call]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          
+      - name: Install Poetry
+        run: pip install poetry
+        
+      - name: Install dependencies
+        run: poetry install
+        
+      #- name: Run tests
+      #  run: poetry run coverage run --branch -m pytest
+        
+      #- name: Pylint
+      #  run: poetry run pylint src
+
+      #- name: Upload coverage reports to Codecov
+      #  uses: codecov/codecov-action@v3
+      #  env:
+      #    CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
