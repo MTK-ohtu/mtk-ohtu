@@ -1,6 +1,6 @@
 from config import SECRET_KEY
 from flask import Flask
-from src.controllers.example_controller import test_controller
+from controllers.example_controller import test_controller
 
 def create_app():
     app = Flask(__name__)
