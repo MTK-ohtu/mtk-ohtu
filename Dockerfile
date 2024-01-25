@@ -1,4 +1,5 @@
 FROM python:3.10-bookworm
+#FROM python:3.10-alpine
 
 WORKDIR /app
 
@@ -7,9 +8,9 @@ WORKDIR /app
 # COPY requirements.txt .
 # COPY poetry.lock .
 # COPY pyproject.toml .
-# COPY ./src .
+# COPY ./src/* .
 
-COPY . .
+COPY . ./
 
 RUN chmod -R 777 *
 #--chown=:root --chmod=770 . ./
@@ -30,5 +31,5 @@ RUN poetry config installer.max-workers 10
 #RUN poetry install --no-interaction --no-ansi -vvv --no-root
 RUN poetry install --no-root
 
-ENTRYPOINT ["poetry", "run", "flask", "--app", "src/app.py", "run", "--host", "0.0.0.0"]
-#CMD ["/bin/sh"]
+#ENTRYPOINT ["poetry", "run", "flask", "--app", "src/app.py", "run", "--host", "0.0.0.0"]
+CMD ["/bin/sh"]
