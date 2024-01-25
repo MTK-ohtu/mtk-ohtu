@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div>
+    <form action="/distance" method="POST">
+        <p>Address 1: <br><input type="text" name="address1" minlength="1" maxlength="200"></p>
+        <p>Address 2: <br><input type="text" name="address2" minlength="1" maxlength="200"></p>
+
+        <input type="submit" value="Calculate distance">
+        <!-- <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}"> -->
+    </form>
+</div>
+
+<div class="card">
+    <p>Distance: {{ distance }} km</p>
+    <p>Duration: {{ duration }}</p>
+    <p>Geodesic distance: {{ geodesic_distance }} km</p>
+
+</div>
+
+{% endblock %}
