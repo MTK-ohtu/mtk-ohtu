@@ -16,6 +16,10 @@ def listings():
 def create_listing():
     return render_template("createpost.html")
 
+@controller.route("/login")
+def login():
+    return render_template("login.html")
+
 
 @controller.route("/distance", methods=["get", "post"])
 def distance():
