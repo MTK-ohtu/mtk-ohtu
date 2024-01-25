@@ -1,4 +1,6 @@
 from flask import Blueprint, render_template, request, redirect
+from config import DATABASE_CONFIG
+import database.database as db
 import route_calculator
 import datetime
 

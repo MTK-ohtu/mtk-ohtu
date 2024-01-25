@@ -1,6 +1,8 @@
 #from config import SECRET_KEY
 from flask import Flask
 from controllers.routes import controller
+from database.database import DatabaseConfig
+
 
 def create_app():
     app = Flask(__name__)
