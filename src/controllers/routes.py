@@ -10,7 +10,16 @@ def index():
 
 @controller.route("/listings")
 def listings():
-    return render_template("listings.html")
+    user_location = "Helsinki"
+    listing1_location = "Turku"
+    listing2_location = "Kemi"
+    route1 = route_calculator.Route(user_location, listing1_location, "miko.paajanen@helsinki.fi")
+    route2 = route_calculator.Route(user_location, listing2_location, "miko.paajanen@helsinki.fi")
+    return render_template(
+        "listings.html",
+        distance1=round(route1.distance/1000,1),
+        distance2=round(route2.distance/1000,1),
+    )
 
 @controller.route("/createpost")
 def create_listing():
