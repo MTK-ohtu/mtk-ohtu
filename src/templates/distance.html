@@ -1,22 +1,68 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<div>
-    <form action="/distance" method="POST">
-        <p>Address 1: <br><input type="text" name="address1" minlength="1" maxlength="200"></p>
-        <p>Address 2: <br><input type="text" name="address2" minlength="1" maxlength="200"></p>
-        <p>Quantity: <br><input type="number" name="quantity" minlength="1" maxlength="200"> tn</p>
-        <input type="submit" value="Calculate distance">
-        <!-- <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}"> -->
-    </form>
-</div>
+    <div>
+        <form action="/distance" method="POST">
+            <p>Address 1: <br><input type="text" name="address1" minlength="1" maxlength="200"></p>
+            <p>Address 2: <br><input type="text" name="address2" minlength="1" maxlength="200"></p>
+            <p>Quantity: <br><input type="number" name="quantity" minlength="1" maxlength="200"> tn</p>
+            <input type="submit" value="Calculate distance">
+            <!-- <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}"> -->
+        </form>
+    </div>
 
-<div class="card">
-    <p>Distance: {{ distance }} km</p>
-    <p>Duration: {{ duration }}</p>
-    <p>Geodesic distance: {{ geodesic_distance }} km</p>
-    <p>Price: {{ price }} €</p>
+    <div class="card">
+        <p>Distance: {{ distance }} km</p>
+        <p>Duration: {{ duration }}</p>
+        <p>Geodesic distance: {{ geodesic_distance }} km</p>
+        <p>Price: {{ price }} €</p>
+ 
+    </div>
 
-</div>
+    <!-- Include Leaflet JavaScript and CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
+    <!-- Include Leaflet Routing Machine JavaScript and CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+    <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+
+    <!-- Add a container for the map -->
+    <div id="map" style="height: 400px;"></div>
+
+    <!-- Your custom JavaScript to initialize the map and routing -->
+    <script>
+        var map = L.map('map').setView([0, 0], 2);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Add routing control to the map
+        L.Routing.control({
+            waypoints: [
+                L.latLng("{{start_location[0]}}","{{start_location[1]}}"), // Starting point (update with actual coordinates)
+                L.latLng("{{end_location[0]}}", "{{end_location[1]}}")  // Destination point (update with actual coordinates)
+            ],
+            routeWhileDragging: true
+        }).addTo(map);
+
+        // Function to get the user's location
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition);
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+
+        // Function to display the user's location
+        function showPosition(position) {
+            var lat = position.coords.latitude;
+            var lon = position.coords.longitude;
+
+            // Use the obtained coordinates, for example, to set the map center
+            map.setView([lat, lon], 13);
+        }
+    </script>
 {% endblock %}
