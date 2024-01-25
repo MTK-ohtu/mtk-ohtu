@@ -21,4 +21,4 @@ RUN poetry add $(cat requirements.txt)
 RUN poetry install --no-interaction --no-ansi -vvv --no-root
 #RUN poetry install --no-root
 
-ENTRYPOINT ["/bin/sh", "-c", "poetry run flask --app src/app run --host 0.0.0.0"]
+ENTRYPOINT ["poetry run flask --app src/app run --host 0.0.0.0"]
