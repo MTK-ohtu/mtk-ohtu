@@ -21,6 +21,8 @@ RUN chmod -R 777 *
 RUN pip install poetry
 #RUN curl -sSL https://install.python-poetry.org | python3 -
 
+ENV POETRY_VIRTUALENVS_IN_PROJECT=true
+
 EXPOSE 5000
 
 RUN poetry config installer.max-workers 10
@@ -31,5 +33,5 @@ RUN poetry config installer.max-workers 10
 #RUN poetry install --no-interaction --no-ansi -vvv --no-root
 RUN poetry install --no-root
 
-#ENTRYPOINT ["poetry", "run", "flask", "--app", "src/app.py", "run", "--host", "0.0.0.0"]
-CMD ["/bin/sh"]
+ENTRYPOINT ["poetry", "run", "flask", "--app", "src/app.py", "run", "--host", "0.0.0.0"]
+#CMD ["/bin/sh"]
