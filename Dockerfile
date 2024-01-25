@@ -2,7 +2,7 @@ FROM python:3.10-alpine
 
 WORKDIR /app
 
-ENV PATH="/home/appuser/.local/bin:$PATH"
+#ENV PATH="/home/appuser/.local/bin:$PATH"
 
 COPY . . 
 
