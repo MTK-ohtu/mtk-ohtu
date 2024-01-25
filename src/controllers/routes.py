@@ -24,11 +24,14 @@ def distance():
     if request.method == "POST":
         address1 = request.form["address1"]
         address2 = request.form["address2"]
+        qt = int(request.form["quantity"])
         route = route_calculator.Route(address1, address2, "miko.paajanen@helsinki.fi")
 
         return render_template(
             "distance.html",
             distance=round(route.distance/1000,1), 
-            duration=str(datetime.timedelta(seconds=(route.duration))).split(".")[0],
-            geodesic_distance=round(route.geodesic_distance()/1000,1)
+            #"duration=str(datetime.timedelta(seconds=(route.duration))).split(".")[0],
+            duration=str(datetime.timedelta(seconds=(round(route.duration)))),
+            geodesic_distance=round(route.geodesic_distance()/1000,1),
+            price = round(route.distance/1000,1)*qt*0.5
         )

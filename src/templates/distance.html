@@ -5,7 +5,7 @@
     <form action="/distance" method="POST">
         <p>Address 1: <br><input type="text" name="address1" minlength="1" maxlength="200"></p>
         <p>Address 2: <br><input type="text" name="address2" minlength="1" maxlength="200"></p>
-
+        <p>Quantity: <br><input type="number" name="quantity" minlength="1" maxlength="200"> tn</p>
         <input type="submit" value="Calculate distance">
         <!-- <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}"> -->
     </form>
@@ -15,6 +15,7 @@
     <p>Distance: {{ distance }} km</p>
     <p>Duration: {{ duration }}</p>
     <p>Geodesic distance: {{ geodesic_distance }} km</p>
+    <p>Price: {{ price }} €</p>
 
 </div>
 
