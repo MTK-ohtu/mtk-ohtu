@@ -50,5 +50,6 @@ def distance():
             geodesic_distance=round(route.geodesic_distance()/1000,1),
             price = round(route.distance/1000,1)*qt*0.5,
             start_location = start_location,
-            end_location = end_location
+            end_location = end_location,
+            route_geojson = route.geojson
         )

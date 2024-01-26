@@ -34,6 +34,7 @@ class Route:
         route_summary = self.__get_route_summary()
         self.distance = route_summary["distance"] # Distance in meters
         self.duration = route_summary["duration"] # Duration in seconds
+        self.geojson = self.__get_route_call().json()
 
     def geodesic_distance(self):   
         """Return the geodesic distance (bee-line) between the two locations in kilometers."""
