@@ -26,3 +26,4 @@ print(f'start: {start.longitude}, {start.latitude}')
 print(f'end: {end.longitude}, {end.latitude}')
 
 print(demo_route.geojson)
+print(type(demo_route.geojson))

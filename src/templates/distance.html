@@ -30,44 +30,42 @@
 <!-- Add a container for the map -->
 <div id="map" style="height: 400px;"></div>
 
-<p>{{route_geojson}}</p>
-
 <!-- Your custom JavaScript to initialize the map and routing -->
 <script>
     var map = L.map('map').setView([0, 0], 2);
+    var route_geojson = JSON.parse('{{ route_geojson }}'.replaceAll('&#34;', '"'));
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors'
     }).addTo(map);
 
-    // Add routing control to the map
-    // L.Routing.control({
-    //     waypoints: [
-    //         L.latLng("{{start_location[0]}}", "{{start_location[1]}}"), // Starting point (update with actual coordinates)
-    //         L.latLng("{{end_location[0]}}", "{{end_location[1]}}")  // Destination point (update with actual coordinates)
-    //     ],
-    //     routeWhileDragging: true
-    // }).addTo(map);
+    // Adds geojson route to map
+    L.geoJSON(route_geojson).addTo(map);
 
-    L.geoJSON("{{ route_geojson }}").addTo(map);
+    // // Function to get the user's location
+    // function getLocation() {
+    //     if (navigator.geolocation) {
+    //         navigator.geolocation.getCurrentPosition(showPosition);
+    //     } else {
+    //         alert("Geolocation is not supported by this browser.");
+    //     }
+    // }
 
+    // // Function to display the user's location
+    // function showPosition(position) {
+    //     var lat = position.coords.latitude;
+    //     var lon = position.coords.longitude;
 
-    // Function to get the user's location
-    function getLocation() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(showPosition);
-        } else {
-            alert("Geolocation is not supported by this browser.");
-        }
-    }
+    //     // Use the obtained coordinates, for example, to set the map center
+    //     map.setView([lat, lon], 13);
+    // }
 
-    // Function to display the user's location
-    function showPosition(position) {
-        var lat = position.coords.latitude;
-        var lon = position.coords.longitude;
+    var bbox = route_geojson["features"][0]["bbox"];
+    var southWest = L.latLng(bbox[1], bbox[0]),
+        northEast = L.latLng(bbox[3], bbox[2]),
+        bounds = L.latLngBounds(southWest, northEast);
 
-        // Use the obtained coordinates, for example, to set the map center
-        map.setView([lat, lon], 13);
-    }
+    map.fitBounds(bounds);
+
 </script>
 {% endblock %}
