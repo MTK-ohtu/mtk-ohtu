@@ -1,5 +1,5 @@
 import unittest
-from route_calculator import Route
+from logic.route_calculator import Route
 
 
 class TestRoute(unittest.TestCase):

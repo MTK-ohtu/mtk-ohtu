@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect
 from config import DATABASE_CONFIG
 import database.database as db
-import route_calculator
+import logic.route_calculator as route_calculator
 import datetime
 
 controller = Blueprint("example", __name__)

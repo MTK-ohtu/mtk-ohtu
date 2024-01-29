@@ -1,7 +1,6 @@
-from geopy.geocoders import Nominatim
 import geopy.distance
 import requests
-from location import Location
+from logic.location import Location
 import datetime
 
 
@@ -34,9 +33,8 @@ class Route:
             key (str): The API key used for the API call.
         """
         print("Route init")
-        geolocator = Nominatim(user_agent=user_email)
-        self.location1 = Location(start, geolocator)
-        self.location2 = Location(end, geolocator)
+        self.location1 = Location(start, user_email)
+        self.location2 = Location(end, user_email)
         self.api_key = key
         route_summary = self.__get_route_summary()
         self.distance = route_summary["distance"]  # Distance in meters

@@ -1,3 +1,5 @@
+from geopy.geocoders import Nominatim
+
 class Location:
     """A class for storing the latitude and longitude of a location.
 
@@ -7,13 +9,14 @@ class Location:
         longitude (float): The longitude of the address.
     """
 
-    def __init__(self, address, geolocator):
+    def __init__(self, address, user_email):
         """Initialize the Location class.
 
         Args:
             address (str): The address of the location.
-            geolocator (geopy.geocoders.Nominatim): The geolocator object.
+            user_email (str): The email address used for the API call.
         """
+        geolocator = Nominatim(user_agent=user_email)
         self.location = geolocator.geocode(address)
         self.latitude = self.location.latitude
         self.longitude = self.location.longitude

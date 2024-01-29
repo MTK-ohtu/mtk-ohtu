@@ -1,6 +1,6 @@
-from route_calculator import Route
+from logic.route_calculator import Route
 
-from location import Location
+from logic.location import Location
 from geopy.geocoders import Nominatim
 
 # Uses the Route class from route.py. Can be used for testing and should be deleted when the Route class is implemented in the main program.
@@ -12,8 +12,8 @@ email = "miko.paajanen@helsinki.fi"
 geolocator = Nominatim(user_agent=email)
 
 
-start = Location(loc1, geolocator)
-end = Location(loc2, geolocator)
+start = Location(loc1, email)
+end = Location(loc2, email)
 
 demo_route = Route(loc1,loc2,email)
 
