@@ -19,8 +19,8 @@ jobs:
       - name: Install dependencies
         run: poetry install
 
-      - name: Prepare test data and start the application
-        run: docker compose -f compose.ci.yml up -d
+      #- name: Prepare test data and start the application
+      #  run: docker compose -f compose.ci.yml up -d
         
       - name: Run tests
         run: poetry run coverage run --branch -m pytest
