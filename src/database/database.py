@@ -12,6 +12,19 @@ class DatabaseConfig:
     password: str
 
 
+def db_excecute_file(filename: str, config: DatabaseConfig):
+    """Executes all commands in .sql file"""
+    commands = ""
+    with open(filename,"r") as f:
+        commands = f.read()
+        commands = [cmd for cmd in commands.split("\n") if len(cmd)>0]
+    connection = db_connect(config)
+    with connection:
+        cursor = connection.cursor()
+        for cmd in commands:
+            cursor.execute(cmd)
+    connection.close()
+
 def db_connect(config: DatabaseConfig):
     connection = psycopg2.connect(
         host=config.uri,
