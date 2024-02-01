@@ -60,7 +60,7 @@ def distance():
             # "duration=str(datetime.timedelta(seconds=(route.duration))).split(".")[0],
             duration=str(datetime.timedelta(seconds=(round(route.duration)))),
             geodesic_distance=round(route.geodesic_distance()/1000,1),
-            price = round(route.distance/1000,1)*qt*0.5,
+            price = round(route.distance/1000*qt*0.5,2),
             start_location = start_location,
             end_location = end_location,
             route_geojson = route.geojson

@@ -1,6 +1,13 @@
 {% extends "layout.html" %}
 
 {% block content %}
+<div>
+    <form action="/distance" method="POST">
+        <p>Toimitusosoite: <br><input type="text" name="address" minlength="1" maxlength="200"></p>
+        <input type="submit" value="Calculate distance">
+        <!-- <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}"> -->
+    </form>
+</div>
 
 <div class="card">
     <h2>Listing 1</h2>
