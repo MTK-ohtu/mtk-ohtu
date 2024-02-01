@@ -17,7 +17,7 @@ def db_excecute_file(filename: str, config: DatabaseConfig):
     commands = ""
     with open(filename,"r") as f:
         commands = f.read()
-        commands = [cmd.strip() for cmd in commands.split(";")]
+        commands = [cmd.strip() for cmd in commands.split(";") if len(cmd)>0]
     connection = db_connect(config)
     with connection:
         cursor = connection.cursor()
