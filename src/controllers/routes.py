@@ -14,19 +14,31 @@ def index():
 
 @controller.route("/listings")
 def listings():
-    user_location = "Helsinki"
-    listing1_location = "Turku"
-    listing2_location = "Kemi"
-    route1 = route_calculator.Route(
-        user_location, listing1_location
-    )
-    route2 = route_calculator.Route(
-        user_location, listing2_location, "miko.paajanen@helsinki.fi"
-    )
+    user_location = "Simonkatu 6"
+    db_listings = db.db_get_product_list(DATABASE_CONFIG)
+    print(len(db_listings))
+    listings = []
+    i = 0
+    for listing in db_listings:
+        print(f'{listing[0]}: {listing[2]}')
+        listings.append(
+            {
+                "name": listing[0],
+                "price": listing[1],
+                "location": listing[2],
+                "seller": listing[3],
+                "distance": round(route_calculator.Route(
+                    user_location, listing[2]
+                ).distance / 1000, 1),
+            }
+        )
+        i += 1
+        if i > 10:
+            break
+
     return render_template(
         "listings.html",
-        distance1=round(route1.distance / 1000, 1),
-        distance2=round(route2.distance / 1000, 1),
+        listings=listings,
     )
 
 

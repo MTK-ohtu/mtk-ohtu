@@ -3,22 +3,27 @@
 {% block content %}
 <div>
     <form action="/distance" method="POST">
-        <p>Toimitusosoite: <br><input type="text" name="address" minlength="1" maxlength="200"></p>
-        <input type="submit" value="Calculate distance">
+        <p>
+            Toimitusosoite: <br>
+            <input type="text" name="address" minlength="1" maxlength="200">
+            <input type="submit" value="Calculate distance">
+        </p>
+
         <!-- <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}"> -->
     </form>
 </div>
 
-<div class="card">
-    <h2>Listing 1</h2>
-    <p>Description of the product or sidestream...</p>
-    <p>Distance: {{ distance1 }} km</p>
-</div>
+
+
+{% for listing in listings %}
 
 <div class="card">
-    <h2>Listing 2</h2>
-    <p>Description of the product or sidestream...</p>
-    <p>Distance: {{ distance2 }} km</p>
+    <h2>{{ listing.name }}</h2>
+    <p>Price: {{ listing.price }} €</p>
+    <p>{{ listing.location}}</p>
+    <p>Distance: {{ listing.distance}} km</p>
 </div>
+
+{% endfor %}
 
 {% endblock %}

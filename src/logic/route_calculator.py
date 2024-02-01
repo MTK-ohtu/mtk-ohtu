@@ -39,7 +39,10 @@ class Route:
         route_summary = self.__get_route_summary()
         self.distance = route_summary["distance"]  # Distance in meters
         self.duration = route_summary["duration"]  # Duration in seconds
-        self.geojson = self.__get_route_call().text
+        try:
+            self.geojson = self.__get_route_call().text
+        except:
+            self.geojson = None
 
     def geodesic_distance(self):
         """Return the geodesic distance (bee-line) between the two locations in kilometers."""
@@ -64,8 +67,11 @@ class Route:
 
     def __get_route_summary(self):
         """Return the route summary from the openrouteservice API."""
-        call = self.__get_route_call()
-        return call.json()["features"][0]["properties"]["summary"]
+        try:
+            call = self.__get_route_call()
+            return call.json()["features"][0]["properties"]["summary"]
+        except:
+            return {"distance": 0, "duration": 0}
     
     def __get_route_waypoints(self):
         call = self.__get_route_call()
