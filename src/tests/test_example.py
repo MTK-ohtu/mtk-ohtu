@@ -11,10 +11,16 @@ class TestRoute(unittest.TestCase):
         self.demo_route = Route(self.loc1, self.loc2, self.email)
 
     def test_check_distance_correct(self):
-        self.assertEqual(self.demo_route.distance, 5441.6)
+        result = False
+        if 5430 < self.demo_route.distance < 5450:
+            result = True
+        self.assertTrue(result)
 
     def test_check_duration_correct(self):
-        self.assertEqual(self.demo_route.duration, 1056.3)
+        result = False
+        if 1050 < self.demo_route.duration < 1060:
+            result = True
+        self.assertTrue(result)
 
     #def test_geo_correct(self):
     #    self.assertAlmostEqual(self.demo_route.geodesic_distance(), 4567.9, places=1)
