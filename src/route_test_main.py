@@ -1,7 +1,9 @@
 from logic.route_calculator import Route
-
 from logic.location import Location
 from geopy.geocoders import Nominatim
+import database.database as db
+from config import DATABASE_CONFIG
+
 
 # Uses the Route class from route.py. Can be used for testing and should be deleted when the Route class is implemented in the main program.
 
@@ -25,5 +27,6 @@ print(demo_route.geodesic_distance())
 print(f'start: {start.longitude}, {start.latitude}')
 print(f'end: {end.longitude}, {end.latitude}')
 
-print(demo_route.geojson)
-print(type(demo_route.geojson))
+#print(demo_route.geojson))
+
+print(db.db_get_product_list(DATABASE_CONFIG))

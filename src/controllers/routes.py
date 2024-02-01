@@ -18,7 +18,7 @@ def listings():
     listing1_location = "Turku"
     listing2_location = "Kemi"
     route1 = route_calculator.Route(
-        user_location, listing1_location, "miko.paajanen@helsinki.fi"
+        user_location, listing1_location
     )
     route2 = route_calculator.Route(
         user_location, listing2_location, "miko.paajanen@helsinki.fi"
