@@ -48,7 +48,7 @@ def db_get_product_list(config: DatabaseConfig) -> list:
         cursor.execute(
             "SELECT p.name, p.price, p.location, s.name \
                         FROM products as p \
-                        LEFT JOIN sellers AS s ON s.id == p.seller_id;"
+                        LEFT JOIN sellers AS s ON s.id = p.seller_id;"
         )
         out = list(cursor.fetchall())
     connection.close()
