@@ -9,7 +9,7 @@ class Location:
         longitude (float): The longitude of the address.
     """
 
-    def __init__(self, address, user_email):
+    def __init__(self, address, user_email = "miko.paajanen@helsinki.fi"):
         """Initialize the Location class.
 
         Args:
