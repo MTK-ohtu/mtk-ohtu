@@ -53,3 +53,25 @@ def db_get_product_list(config: DatabaseConfig) -> list:
         out = list(cursor.fetchall())
     connection.close()
     return out
+
+def db_get_user(username: str, password: str, config: DatabaseConfig) -> bool:
+    """Gets user from database
+    Args:
+        config: Database config
+        username: Username
+        password: Password
+    Returns: True if user exists and password is correct, False otherwise
+    """
+    connection = db_connect(config)
+    out = False
+    with connection:
+        cursor = connection.cursor()
+        cursor.execute(
+            "SELECT id, password FROM users WHERE username=%s;",
+            (username,)
+        )
+        user = cursor.fetchone()
+        if user:
+            out = user[1] == password
+    connection.close()
+    return out
