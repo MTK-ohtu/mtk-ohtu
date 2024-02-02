@@ -77,3 +77,7 @@ def distance():
             end_location = end_location,
             route_geojson = route.geojson
         )
+
+@controller.route("/addlogistics", methods=["get", "post"])
+def add_logistics():
+    return render_template("addlogistics.html")
