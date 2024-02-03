@@ -17,16 +17,37 @@ geolocator = Nominatim(user_agent=email)
 start = Location(loc1, email)
 end = Location(loc2, email)
 
-demo_route = Route(loc1,loc2,email)
+print(start.location.raw)
 
-print(demo_route.distance)
-print(demo_route.duration)
-print(demo_route.geodesic_distance())
+# demo_route = Route(loc1,loc2,email)
 
 
-print(f'start: {start.longitude}, {start.latitude}')
-print(f'end: {end.longitude}, {end.latitude}')
+# print(demo_route.distance)
+# print(demo_route.duration)
+# print(demo_route.geodesic_distance())
+
+
+# print(f'start: {start.longitude}, {start.latitude}')
+# print(f'end: {end.longitude}, {end.latitude}')
 
 #print(demo_route.geojson))
 
-print(db.db_get_product_list(DATABASE_CONFIG))
+
+# listings = db.db_get_product_list(DATABASE_CONFIG)
+# for i in range(12):
+#     print(listings[i])
+
+
+# counting_set = set(listings)
+# unique_listings = len(counting_set)
+# print(counting_set)
+
+
+# print()
+# print("sql")
+# print()
+# for listing in counting_set:
+#     loc = Location(listing[2], email)
+#     print(f"INSERT INTO products (seller_id, name, price, description, image, created_at, location, coordinates) VALUES ({listing[4][-1]}, '{listing[0]}', {listing[1]}, '{listing[3]}', NULL, NOW(), '{listing[2]}', [{loc.longitude}, {loc.latitude}]) ON CONFLICT DO NOTHING;")
+
+
