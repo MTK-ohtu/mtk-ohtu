@@ -39,14 +39,14 @@ def db_get_product_list(config: DatabaseConfig) -> list:
     """Gets list of products from database
     Args:
         config: Database config
-    Returns: List of tuples, tuples in format ('product name', 'product price', 'product location', 'seller name')
+    Returns: List of tuples, tuples in format ('product name', 'product price', 'product location', 'product description', 'seller name')
     """
     connection = db_connect(config)
     out = None
     with connection:
         cursor = connection.cursor()
         cursor.execute(
-            "SELECT p.name, p.price, p.location, s.name \
+            "SELECT p.name, p.price, p.location, p.description, s.name \
                         FROM products as p \
                         LEFT JOIN sellers AS s ON s.id = p.seller_id;"
         )
