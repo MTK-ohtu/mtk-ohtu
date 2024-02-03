@@ -21,7 +21,7 @@ def db_excecute_file(filename: str, config: DatabaseConfig):
     connection = db_connect(config)
     with connection:
         cursor = connection.cursor()
-        for cmd in commands:
+        for cmd in commands[:-1]:
             cursor.execute(cmd)
     connection.close()
 
@@ -39,14 +39,14 @@ def db_get_product_list(config: DatabaseConfig) -> list:
     """Gets list of products from database
     Args:
         config: Database config
-    Returns: List of tuples, tuples in format ('product name', 'product price', 'product location', 'product description', 'seller name')
+    Returns: List of tuples, tuples in format ('product name', 'product price', 'product location', 'product description', 'seller name', longiture, latitude)
     """
     connection = db_connect(config)
     out = None
     with connection:
         cursor = connection.cursor()
         cursor.execute(
-            "SELECT p.name, p.price, p.location, p.description, s.name \
+            "SELECT p.name, p.price, p.location, p.description, s.name, ST_X(p.coordinates) AS longitude, ST_Y(p.coordinates) AS latitude \
                         FROM products as p \
                         LEFT JOIN sellers AS s ON s.id = p.seller_id;"
         )

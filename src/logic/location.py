@@ -19,12 +19,13 @@ class Location:
         self.geolocator = Nominatim(user_agent=user_email)
         if type(loc_input) == str:
             self.location = self.location_from_address(loc_input)
-            self.latitude = self.location.latitude
             self.longitude = self.location.longitude
+            self.latitude = self.location.latitude            
         elif type(loc_input) == tuple or type(loc_input) == list:
             self.location = None
-            self.latitude = loc_input[0]
-            self.longitude = loc_input[1]
+            self.longitude = loc_input[0]
+            self.latitude = loc_input[1]
+            
 
 
     def location_from_address(self, address):

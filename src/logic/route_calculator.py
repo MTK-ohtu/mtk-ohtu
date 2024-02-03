@@ -27,22 +27,27 @@ class Route:
         """Initialize the Route class.
 
         Args:
-            start (str): The starting location of the route.
-            end (str): The ending location of the route.
+            start (Location): The starting location of the route.
+            end (Location): The ending location of the route.
             user_email (str): The email address used for the API call.
             key (str): The API key used for the API call.
         """
         print("Route init")
-        self.location1 = Location(start, user_email)
-        self.location2 = Location(end, user_email)
+        self.location1 = start
+        self.location2 = end
+        if self.location1.latitude == self.location2.latitude and self.location1.longitude == self.location2.longitude:
+            raise ValueError("The locations are the same.")
         self.api_key = key
-        route_summary = self.__get_route_summary()
-        self.distance = route_summary["distance"]  # Distance in meters
-        self.duration = route_summary["duration"]  # Duration in seconds
         try:
-            self.geojson = self.__get_route_call().text
+            call = self.__get_route_call()
+            route_summary = call.json()["features"][0]["properties"]["summary"]
+            self.geojson = call.text            
         except:
             self.geojson = None
+            route_summary = {"distance": 0, "duration": 0}
+        self.distance = route_summary["distance"]  # Distance in meters
+        self.duration = route_summary["duration"]  # Duration in seconds
+
 
     def geodesic_distance(self):
         """Return the geodesic distance (bee-line) between the two locations in kilometers."""
@@ -53,6 +58,7 @@ class Route:
 
     def __get_route_call(self):
         """Return the route call from the openrouteservice API."""
+
         headers = {
             "Accept": "application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8",
         }
@@ -64,14 +70,6 @@ class Route:
             return f"error: {call.status_code}"
         else:
             return call
-
-    def __get_route_summary(self):
-        """Return the route summary from the openrouteservice API."""
-        try:
-            call = self.__get_route_call()
-            return call.json()["features"][0]["properties"]["summary"]
-        except:
-            return {"distance": 0, "duration": 0}
     
     def __get_route_waypoints(self):
         call = self.__get_route_call()

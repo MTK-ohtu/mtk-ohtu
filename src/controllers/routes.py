@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, redirect
 from config import DATABASE_CONFIG
 import database.database as db
 import logic.route_calculator as route_calculator
+from logic.location import Location
 import datetime
 import logic.user as users
 
@@ -13,30 +14,37 @@ def index():
     return render_template("index.html")
 
 
-@controller.route("/listings")
+@controller.route("/listings", methods=["GET", "POST"])
 def listings():
-    user_location = "Simonkatu 6"
     db_listings = db.db_get_product_list(DATABASE_CONFIG)
-    print(len(db_listings))
-    listings = []
-    i = 0
+    if request.method == "POST":
+        user_location = Location(request.form["address"])
+    listings = []     
     for listing in db_listings:
-        print(f'{listing[0]}: {listing[2]}')
-        listings.append(
-            {
-                "name": listing[0],
-                "price": listing[1],
-                "location": listing[2],
-                "seller": listing[3],
-                "distance": round(route_calculator.Route(
-                    user_location, listing[2]
-                ).distance / 1000, 1),
-            }
-        )
-        i += 1
-        if i > 10:
-            break
-
+        if request.method == "GET": 
+            listings.append(
+                {
+                    "name": listing[0],
+                    "price": listing[1],
+                    "location": listing[2],
+                    "seller": listing[3],
+                    "distance": "Submit location to see distance in",
+                }
+            )
+        if request.method == "POST":
+            listing_location = Location((listing[5], listing[6]))
+            route_to_product = route_calculator.Route(
+                user_location, listing_location
+            )
+            listings.append(
+                {
+                    "name": listing[0],
+                    "price": listing[1],
+                    "location": listing[2],
+                    "seller": listing[3],
+                    "distance": round(route_to_product.distance / 1000, 1),
+                }
+            )
     return render_template(
         "listings.html",
         listings=listings,
@@ -70,14 +78,13 @@ def distance():
         address1 = request.form["address1"]
         address2 = request.form["address2"]
         qt = int(request.form["quantity"])
-        route = route_calculator.Route(address1, address2, "miko.paajanen@helsinki.fi")
+        route = route_calculator.Route(address1, address2)
         start_location = (route.location1.latitude, route.location1.longitude)
         end_location = (route.location2.latitude, route.location2.longitude)
 
         return render_template(
             "distance.html",
             distance=round(route.distance / 1000, 1),
-            # "duration=str(datetime.timedelta(seconds=(route.duration))).split(".")[0],
             duration=str(datetime.timedelta(seconds=(round(route.duration)))),
             geodesic_distance=round(route.geodesic_distance()/1000,1),
             price = round(route.distance/1000*qt*0.5,2),

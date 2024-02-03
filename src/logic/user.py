@@ -1,4 +1,4 @@
-from src import database as db
+from database import database as db
 from flask import session
 import secrets
 from werkzeug.security import check_password_hash, generate_password_hash

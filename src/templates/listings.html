@@ -2,7 +2,7 @@
 
 {% block content %}
 <div>
-    <form action="/distance" method="POST">
+    <form action="/listings" method="POST">
         <p>
             Toimitusosoite: <br>
             <input type="text" name="address" minlength="1" maxlength="200">
@@ -18,7 +18,7 @@
 {% for listing in listings %}
 
 <div class="card">
-    <h2>{{ listing.name }}</h2>
+    <h2><a href=“#”>{{ listing.name }}</a></h2>
     <p>Price: {{ listing.price }} €</p>
     <p>{{ listing.location}}</p>
     <p>Distance: {{ listing.distance}} km</p>

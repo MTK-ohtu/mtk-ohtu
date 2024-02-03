@@ -33,10 +33,12 @@ print(start.location.raw)
 #print(demo_route.geojson))
 
 
-# listings = db.db_get_product_list(DATABASE_CONFIG)
-# for i in range(12):
-#     print(listings[i])
+listings = db.db_get_product_list(DATABASE_CONFIG)
+unique_listings = []
 
+for listing in listings:
+    if listing not in unique_listings:
+        unique_listings.append(listing)
 
 # counting_set = set(listings)
 # unique_listings = len(counting_set)
@@ -48,6 +50,21 @@ print(start.location.raw)
 # print()
 # for listing in counting_set:
 #     loc = Location(listing[2], email)
-#     print(f"INSERT INTO products (seller_id, name, price, description, image, created_at, location, coordinates) VALUES ({listing[4][-1]}, '{listing[0]}', {listing[1]}, '{listing[3]}', NULL, NOW(), '{listing[2]}', [{loc.longitude}, {loc.latitude}]) ON CONFLICT DO NOTHING;")
+#     print(f"INSERT INTO products (seller_id, name, price, description, image, created_at, location, coordinates) VALUES ({listing[4][-1]}, '{listing[0]}', {listing[1]}, '{listing[3]}', NULL, NOW(), '{listing[2]}', ST_GeomFromText('POINT({loc.longitude} {loc.latitude})', 4326)) ON CONFLICT DO NOTHING;")
 
 
+A = unique_listings[0]
+B = unique_listings[2]
+for i in range(7):
+    print(f'{i}: {A[i]}')
+
+loc_A = Location((A[5], A[6]))
+loc_B = Location((B[5], B[6]))
+
+
+
+test_route = Route(loc_A,loc_B)
+print("test_route")
+print(test_route.distance)
+print(test_route.duration)
+print(test_route.geodesic_distance())
