@@ -1,0 +1,54 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div>
+    <h2>Add your logistics service</h2>
+    <form id="logisticsForm">
+        <label>Select Service Type:</label>
+        
+        <div class="service-option">
+            <input type="radio" id="private" name="serviceType" value="private" onclick="toggleQuestions()">
+            <label for="private" class="circle-label">Private Logistics Service</label>
+        </div>
+
+        <div class="service-option">
+            <input type="radio" id="company" name="serviceType" value="company" onclick="toggleQuestions()">
+            <label for="company" class="circle-label">Company</label>
+        </div>
+
+        <div id="privateQuestions" style="display: none;">
+            <label for="fullName">Your full name:</label>
+            <input type="text" id="fullName" name="fullName"><br>
+
+            <label for="">Kysymys:</label>
+            <input type="text" id="" name="">
+        </div>
+
+        <div id="companyQuestions" style="display: none;">
+            <label for="companyName">Company name:</label>
+            <input type="text" id="companyName" name="companyName"><br>
+
+            <label for="">Kysymys:</label>
+            <input type="text" id="" name="">
+        </div>
+    </form>
+</div>
+
+<script>
+    function toggleQuestions() {
+        var serviceType = document.querySelector('input[name="serviceType"]:checked').value;
+        var privateQuestions = document.getElementById("privateQuestions");
+        var companyQuestions = document.getElementById("companyQuestions");
+
+        if (serviceType === "private") {
+            privateQuestions.style.display = "block";
+            companyQuestions.style.display = "none";
+        } else if (serviceType === "company") {
+            privateQuestions.style.display = "none";
+            companyQuestions.style.display = "block";
+        }
+    }
+</script>
+
+{% endblock %}

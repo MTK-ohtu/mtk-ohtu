@@ -3,6 +3,7 @@ from config import DATABASE_CONFIG
 import database.database as db
 import logic.route_calculator as route_calculator
 import datetime
+import logic.user as users
 
 controller = Blueprint("example", __name__)
 
@@ -47,10 +48,17 @@ def create_listing():
     return render_template("createpost.html")
 
 
-@controller.route("/login")
+@controller.route("/login", methods=["GET", "POST"])
 def login():
-    return render_template("login.html")
-
+    if request.method == "GET":
+        return render_template("login.html")
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+        if users.login(username, password):
+            return redirect("/")
+        else:
+            return render_template("login.html", message="Salasana tai käyttäjätunnus väärin")
 
 @controller.route("/distance", methods=["get", "post"])
 def distance():
@@ -77,3 +85,7 @@ def distance():
             end_location = end_location,
             route_geojson = route.geojson
         )
+
+@controller.route("/addlogistics", methods=["get", "post"])
+def add_logistics():
+    return render_template("addlogistics.html")
