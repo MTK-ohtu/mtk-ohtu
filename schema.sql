@@ -1,10 +1,3 @@
-DROP TYPE IF EXISTS buying_or_selling CASCADE;
-DROP TYPE IF EXISTS delivery_method_type CASCADE; 
-DROP TYPE IF EXISTS supply_demand_type CASCADE;
-DROP TYPE IF EXISTS batch_units_type CASCADE;
-DROP TYPE IF EXISTS vehichle_requirement_type CASCADE;
-DROP TYPE IF EXISTS category_type CASCADE;
-
 CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
     username TEXT UNIQUE NOT NULL,
@@ -15,7 +8,7 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 CREATE TABLE IF NOT EXISTS companies (
-    id INTEGER PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     user_id INTEGER NOT NULL REFERENCES users(id),
     name TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT NOW(),
@@ -23,12 +16,13 @@ CREATE TABLE IF NOT EXISTS companies (
     standard_industrial_classification VARCHAR(16) NOT NULL
 );
 
-CREATE TYPE buying_or_selling AS ENUM ('sell','buy');
-CREATE TYPE delivery_method_type  AS ENUM ('pickup', 'seller delivers', 'freight');
-CREATE TYPE supply_demand_type AS ENUM ('one time', 'recurring', 'annually', 'weekly');
-CREATE TYPE batch_units_type AS ENUM ('tn', 'm3', 'kg', 'l', 'pcs', 'batch');
-CREATE TYPE vehichle_requirement_type AS ENUM ('dry', 'refrigerated', 'tanker', 'flatbed', 'container');
-CREATE TYPE category_type AS ENUM (
+DO $$ BEGIN
+    CREATE TYPE buying_or_selling AS ENUM ('sell','buy');
+    CREATE TYPE delivery_method_type  AS ENUM ('pickup', 'seller delivers', 'freight');
+    CREATE TYPE supply_demand_type AS ENUM ('one time', 'recurring', 'annually', 'weekly');
+    CREATE TYPE batch_units_type AS ENUM ('tn', 'm3', 'kg', 'l', 'pcs', 'batch');
+    CREATE TYPE vehichle_requirement_type AS ENUM ('dry', 'refrigerated', 'tanker', 'flatbed', 'container');
+    CREATE TYPE category_type AS ENUM (
     'Manure',
     'Grass, waste fodder and green growths',
     'Basket fodder',
@@ -41,9 +35,12 @@ CREATE TYPE category_type AS ENUM (
     'Logistics and contracting',
     'Other'
 );
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
 
 CREATE TABLE IF NOT EXISTS listings (
-    id INTEGER PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     user_id INTEGER NOT NULL REFERENCES users(id),
     listing_type buying_or_selling NOT NULL,
     category category_type NOT NULL,
@@ -65,7 +62,7 @@ CREATE TABLE IF NOT EXISTS listings (
 );
 
 CREATE TABLE IF NOT EXISTS purchases (
-    id INTEGER PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     user_id INTEGER NOT NULL REFERENCES users(id),
     listing_id INTEGER NOT NULL REFERENCES listings(id),
     quantity INTEGER NOT NULL,
@@ -75,7 +72,7 @@ CREATE TABLE IF NOT EXISTS purchases (
 );
 
 CREATE TABLE IF NOT EXISTS logistics_contractors (
-    id INTEGER PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     name TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT NOW(),
     business_id VARCHAR(16),

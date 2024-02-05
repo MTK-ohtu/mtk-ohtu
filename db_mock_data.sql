@@ -1,3 +1,5 @@
+
+
 INSERT INTO users (username, password, email) VALUES ('testikayttaja1', 'salasana123', 'testi1@gmail.com') ON CONFLICT DO NOTHING;
 INSERT INTO users (username, password, email) VALUES ('testikayttaja2', 'salasana123', 'testi2@gmail.com') ON CONFLICT DO NOTHING;
 INSERT INTO users (username, password, email) VALUES ('testikayttaja3', 'salasana123', 'testi3@gmail.com') ON CONFLICT DO NOTHING;
