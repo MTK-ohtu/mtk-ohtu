@@ -48,9 +48,9 @@ def db_get_product_list(config: DatabaseConfig) -> list:
     with connection:
         cursor = connection.cursor()
         cursor.execute(
-            "SELECT p.name, p.price, p.location, p.description, s.name, ST_X(p.coordinates) AS longitude, ST_Y(p.coordinates) AS latitude \
-                        FROM products as p \
-                        LEFT JOIN sellers AS s ON s.id = p.seller_id;"
+            "SELECT l.category, l.price, l.address, l.description, u.username, ST_X(l.coordinates) AS longitude, ST_Y(l.coordinates) AS latitude \
+                        FROM listings as l \
+                        LEFT JOIN users AS u ON u.id = l.user_id;"
         )
         out = list(cursor.fetchall())
     connection.close()
