@@ -41,7 +41,7 @@ def db_get_product_list(config: DatabaseConfig) -> list:
     """Gets list of products from database
     Args:
         config: Database config
-    Returns: List of tuples, tuples in format ('product name', 'product price', 'product location', 'product description', 'seller name', longiture, latitude)
+    Returns: List of tuples, tuples in format ('product name', 'product price', 'product location', 'product description', 'seller name', (longitude, latitude))
     """
     connection = db_connect(config)
     out = None

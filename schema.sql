@@ -1,7 +1,9 @@
-DROP TABLE users CASCADE;
-DROP TABLE companies CASCADE;
-DROP TABLE listings CASCADE;
-DROP TABLE purchases CASCADE;
+DROP TYPE IF EXISTS buying_or_selling CASCADE;
+DROP TYPE IF EXISTS delivery_method_type CASCADE; 
+DROP TYPE IF EXISTS supply_demand_type CASCADE;
+DROP TYPE IF EXISTS batch_units_type CASCADE;
+DROP TYPE IF EXISTS vehichle_requirement_type CASCADE;
+DROP TYPE IF EXISTS category_type CASCADE;
 
 CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
