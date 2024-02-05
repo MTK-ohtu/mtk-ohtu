@@ -29,7 +29,7 @@ def login(username, password):
         bool: True if the login is successful, False otherwise.
     """
 
-    user = db.get_user(username, password, DATABASE_CONFIG)
+    user = db.db_get_user(username, password, DATABASE_CONFIG)
     if user:
         if check_password_hash(user.password, password):
             session["user_id"] = user.id

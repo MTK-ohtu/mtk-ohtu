@@ -10,6 +10,7 @@ class DatabaseConfig:
     db_name: str
     user: str
     password: str
+    port: int
 
 
 def db_excecute_file(filename: str, config: DatabaseConfig):
@@ -31,6 +32,7 @@ def db_connect(config: DatabaseConfig):
         database=config.db_name,
         user=config.user,
         password=config.password,
+        port=config.port
     )
     return connection
 
@@ -59,7 +61,7 @@ def db_get_user(username: str, password: str, config: DatabaseConfig) -> bool:
     Args:
         config: Database config
         username: Username
-        password: Password
+        password: Password HASH
     Returns: True if user exists and password is correct, False otherwise
     """
     connection = db_connect(config)
@@ -75,3 +77,34 @@ def db_get_user(username: str, password: str, config: DatabaseConfig) -> bool:
             out = user[1] == password
     connection.close()
     return out
+
+def db_add_user(username: str, password: str, email: str, config: DatabaseConfig) -> tuple:
+    """Adds user to database.
+    Args:
+        username: new username
+        password: new password
+        email: user email
+        config: Database config
+    Returns: (True, user id) if adding user succeeds, (False, None) if user already exists"""
+    connection = db_connect(config)
+    out = False
+    with connection:
+        cursor = connection.cursor()
+        try:
+            cursor.execute(
+                "INSERT INTO users (username, password, email) (%s,%s,%s)",(username,password, email)
+            )
+        except psycopg2.errors.UniqueViolation:
+            return (False, None)
+        cursor.execute(
+            "SELECT id FROM users WHERE username=%s;",
+            (username,)
+        )
+        user = cursor.fetchone()
+        out = (True, user[0])
+    connection.close()
+    return out
+
+
+
+    
