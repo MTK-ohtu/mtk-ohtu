@@ -32,7 +32,7 @@ def listings():
                 }
             )
         if request.method == "POST":
-            listing_location = Location((listing[5], listing[6]))
+            listing_location = Location(listing[2])
             route_to_product = route_calculator.Route(
                 user_location, listing_location
             )
