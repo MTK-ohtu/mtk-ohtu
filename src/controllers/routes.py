@@ -42,7 +42,7 @@ def listings():
                     "price": listing[1],
                     "location": listing[2],
                     "seller": listing[3],
-                    "distance": round(route_to_product.distance / 1000, 1),
+                    "distance": round(route_to_product.geodesic_distance() / 1000, 1),
                 }
             )
     return render_template(

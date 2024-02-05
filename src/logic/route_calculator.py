@@ -32,29 +32,37 @@ class Route:
             user_email (str): The email address used for the API call.
             key (str): The API key used for the API call.
         """
-        print("Route init")
+        
         self.location1 = start
         self.location2 = end
         if self.location1.latitude == self.location2.latitude and self.location1.longitude == self.location2.longitude:
             raise ValueError("The locations are the same.")
         self.api_key = key
+        self.distance = 0 # Distance in meters
+        self.duration = 0 # Duration in seconds
+        self.geodesic_distance_meters = 0 # Geodesic distance in meters
+        self.geojson = None
+
+    def calculate_route(self):
+        """Calculate the route between the two locations. The route detailes are saved as class variables."""
+        print("getting route")
         try:
             call = self.__get_route_call()
             route_summary = call.json()["features"][0]["properties"]["summary"]
             self.geojson = call.text            
         except:
-            self.geojson = None
-            route_summary = {"distance": 0, "duration": 0}
-        self.distance = route_summary["distance"]  # Distance in meters
-        self.duration = route_summary["duration"]  # Duration in seconds
+            raise ValueError("Error in route call")
+        self.distance = route_summary["distance"]  
+        self.duration = route_summary["duration"]  
 
-
+    
     def geodesic_distance(self):
         """Return the geodesic distance (bee-line) between the two locations in kilometers."""
-        return geopy.distance.geodesic(
+        self.geodesic_distance_meters = geopy.distance.geodesic(
             (self.location1.latitude, self.location1.longitude),
             (self.location2.latitude, self.location2.longitude),
         ).m
+        return self.geodesic_distance_meters
 
     def __get_route_call(self):
         """Return the route call from the openrouteservice API."""
@@ -71,7 +79,4 @@ class Route:
         else:
             return call
     
-    def __get_route_waypoints(self):
-        call = self.__get_route_call()
-        return call.json()["features"][0]["geometry"]["coordinates"]
 

@@ -3,6 +3,7 @@ from logic.location import Location
 from geopy.geocoders import Nominatim
 import database.database as db
 from config import DATABASE_CONFIG
+import time
 
 
 # Uses the Route class from route.py. Can be used for testing and should be deleted when the Route class is implemented in the main program.
@@ -67,4 +68,17 @@ test_route = Route(loc_A,loc_B)
 print("test_route")
 print(test_route.distance)
 print(test_route.duration)
+
+start_time = time.time()
 print(test_route.geodesic_distance())
+print(test_route.geodesic_distance())
+print("geodesic distance calculation",time.time() - start_time)
+
+start_time = time.time()
+test_route.calculate_route()
+print(test_route.distance)
+print(test_route.duration)
+print("route calculation",time.time() - start_time)
+
+
+
