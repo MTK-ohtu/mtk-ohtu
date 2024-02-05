@@ -75,10 +75,11 @@ def distance():
             "distance.html", start_location=(0, 0), end_location=(0, 0)
         )
     if request.method == "POST":
-        address1 = request.form["address1"]
-        address2 = request.form["address2"]
+        address1 = Location(request.form["address1"])
+        address2 = Location(request.form["address2"])
         qt = int(request.form["quantity"])
         route = route_calculator.Route(address1, address2)
+        route.calculate_route()
         start_location = (route.location1.latitude, route.location1.longitude)
         end_location = (route.location2.latitude, route.location2.longitude)
 
