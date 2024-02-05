@@ -1,3 +1,8 @@
+DROP TABLE users CASCADE;
+DROP TABLE companies CASCADE;
+DROP TABLE listings CASCADE;
+DROP TABLE purchases CASCADE;
+
 CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
     username TEXT UNIQUE NOT NULL,
@@ -7,14 +12,14 @@ CREATE TABLE IF NOT EXISTS users (
     company_role_id TEXT
 );
 
-CREATE TABLE IF NOT EXISTS companies {
-    id INTEGER SERIAL PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS companies (
+    id INTEGER PRIMARY KEY,
     user_id INTEGER NOT NULL REFERENCES users(id),
     name TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT NOW(),
     business_id VARCHAR(16) NOT NULL,
     standard_industrial_classification VARCHAR(16) NOT NULL
-};
+);
 
 CREATE TYPE buying_or_selling AS ENUM ('sell','buy');
 CREATE TYPE delivery_method_type  AS ENUM ('pickup', 'seller delivers', 'freight');
@@ -35,15 +40,15 @@ CREATE TYPE category_type AS ENUM (
     'Other'
 );
 
-CREATE TABLE IF NOT EXISTS listings {
-    id INTEGER SERIAL PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS listings (
+    id INTEGER PRIMARY KEY,
     user_id INTEGER NOT NULL REFERENCES users(id),
     listing_type buying_or_selling NOT NULL,
     category category_type NOT NULL,
     subcategory VARCHAR(16),
     delivery_method delivery_method_type NOT NULL,
-    supply_demand supply_demand NOT NULL,
-    is_continuous BOOLEAN DEFAULT 1,
+    supply_demand supply_demand_type NOT NULL,
+    is_continuous BOOLEAN DEFAULT true,
     expiration_date TIMESTAMP,
     batch_size INTEGER NOT NULL,
     batch_units batch_units_type NOT NULL,
@@ -52,26 +57,26 @@ CREATE TABLE IF NOT EXISTS listings {
     delivery_details TEXT,
     description TEXT,
     address TEXT NOT NULL,
-    coordinates GEOMETRY(POINT, 4326),
+    coordinates POINT,
     vehichle_requirement vehichle_requirement_type,
-    complies_with_regulations BOOLEAN DEFAULT 0
-};
+    complies_with_regulations BOOLEAN DEFAULT false
+);
 
-CREATE TABLE IF NOT EXISTS purchases {
-    id INTEGER SERIAL PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS purchases (
+    id INTEGER PRIMARY KEY,
     user_id INTEGER NOT NULL REFERENCES users(id),
     listing_id INTEGER NOT NULL REFERENCES listings(id),
     quantity INTEGER NOT NULL,
     created_at TIMESTAMP DEFAULT NOW(),
     start_address TEXT NOT NULL,
     delivery_address TEXT NOT NULL
-};
+);
 
-CREATE TABLE IF NOT EXISTS logistics_contractors {
-    id INTEGER SERIAL PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS logistics_contractors (
+    id INTEGER PRIMARY KEY,
     name TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT NOW(),
     business_id VARCHAR(16),
     address TEXT NOT NULL,
     cargo_capabilities vehichle_requirement_type[]
-};
+);
