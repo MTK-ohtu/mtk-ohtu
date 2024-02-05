@@ -1,14 +1,17 @@
 import unittest
 from logic.route_calculator import Route
+from logic.location import Location
 
 
 class TestRoute(unittest.TestCase):
     def setUp(self):
-        self.loc1 = "Gustaf Hällströmin katu 2, 00560 Helsinki"
-        self.loc2 = "Leppäsuonkatu 11"
+        self.loc1 = Location("Gustaf Hällströmin katu 2, 00560 Helsinki")
+        self.loc2 = Location("Leppäsuonkatu 11")
         self.email = "miko.paajanen@helsinki.fi"
+        
 
         self.demo_route = Route(self.loc1, self.loc2, self.email)
+        self.demo_route.calculate_route()
 
     def test_check_distance_correct(self):
         result = False
