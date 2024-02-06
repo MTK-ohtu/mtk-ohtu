@@ -103,9 +103,46 @@ def db_add_user(username: str, password: str, email: str, config: DatabaseConfig
     connection.close()
     return out
 
-def add_logistics(config: DatabaseConfig):
-    """Adds new logistics service to database"""
-    pass
+def db_add_logistics(name: str, business_id: str, address: str, vehicle_categories, config: DatabaseConfig):
+    """
+    Adds new logistics service to database
+    Args:
+        name: name of the logistics service provider
+        business_id: business identification number (y-tunnus) if exists
+        address: addres of the logistics service provider
+        vehicle_categories: types of equipment the provider has
+        config: Database config
+    Returns:
+        True if data was inserted succesfully
+    """
+    connection = db_connect(config)
+    out = False
+    with connection:
+        cursor = connection.cursor()
+        try:
+            cursor.execute(
+                "INSERT INTO logistics_contractors (name, business_id, address, cargo_capabilities) VALUES (%s,%s,%s,%s::vehichle_requirement_type[])", (name, business_id, address, vehicle_categories)
+            )
+        except psycopg2.Error as e:
+            print(f"Error inserting data: {e}")
+        out = True
+    connection.close()
+    return out
 
 def db_get_logistics(config: DatabaseConfig):
     pass
+
+def db_get_vehicle_categories(config: DatabaseConfig) -> list:
+    """
+    Gets vehicle categories from database
+    Args:
+        config: Database config
+    Returns: Vehicle categories as a list"""
+    connection = db_connect(config)
+    out = False
+    with connection:
+        cursor = connection.cursor()
+        cursor.execute("SELECT unnest(enum_range(NULL::vehichle_requirement_type))")
+        out = [row[0] for row in cursor.fetchall()]
+    connection.close()
+    return out

@@ -99,7 +99,8 @@ def distance():
 @controller.route("/addlogistics", methods=["GET", "POST"])
 def add_logistics():
     if request.method == "GET":
-        return render_template("addlogistics.html")
+        vehicle_categories = db.db_get_vehicle_categories(DATABASE_CONFIG)
+        return render_template("addlogistics.html", vehicle_categories=vehicle_categories)
     
     if request.method == "POST":
         service_type = request.form.get('serviceType')

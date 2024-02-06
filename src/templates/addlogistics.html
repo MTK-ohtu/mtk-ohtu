@@ -4,7 +4,7 @@
 
 <div>
     <h2>Add your logistics service</h2>
-    <form id="logisticsForm" action="/addlogistics" method="post">
+    <form id="logisticsForm" action="/addlogistics" method="post" onsubmit="return validateForm()">
         <h4>Select service type</h4>
         
         <div class="service-option">
@@ -34,26 +34,12 @@
             <input type="text" id="address" name="address"><br>
 
             <h4>Select your vehicle categories:</h4>
+            {% for category in vehicle_categories %}
             <div>
-                <input type="checkbox" id="dry" name="vehicleCategories[]" value="dry">
-                <label for="dry">Dry</label>
+                <input type="checkbox" id="{{ category }}" name="vehicleCategories[]" value="{{ category }}">
+                <label for="{{ category }}">{{ category }}</label>
             </div>
-            <div>
-                <input type="checkbox" id="refrigerated" name="vehicleCategories[]" value="refrigerated">
-                <label for="refrigerated">Refrigerated</label>
-            </div>
-            <div>
-                <input type="checkbox" id="tanker" name="vehicleCategories[]" value="tanker">
-                <label for="tanker">Tanker</label>
-            </div>
-            <div>
-                <input type="checkbox" id="flatbed" name="vehicleCategories[]" value="flatbed">
-                <label for="flatbed">Flatbed</label>
-            </div>
-            <div>
-                <input type="checkbox" id="container" name="vehicleCategories[]" value="container">
-                <label for="container">Container</label>
-            </div>
+            {% endfor %}
 
         </div>
         <input type="submit" value="Submit">
@@ -73,6 +59,28 @@
             privateQuestions.style.display = "none";
             companyQuestions.style.display = "block";
         }
+    }
+</script>
+<script>
+    function validateForm() {
+        var serviceType = document.querySelector('input[name="serviceType"]:checked');
+        var fullName = document.getElementById("fullName");
+        var companyName = document.getElementById("companyName");
+        var businessId = document.getElementById("businessId");
+        var address = document.getElementById("address");
+
+        if (!serviceType || !fullName || !companyName || !businessId || !address) {
+            alert("Please fill in all required fields.");
+            return false;
+        }
+
+        var checkboxes = document.querySelectorAll('input[name="vehicleCategories[]"]:checked');
+        if (checkboxes.length === 0) {
+            alert("Please select at least one vehicle category.");
+            return false;
+        }
+
+        return true;
     }
 </script>
 
