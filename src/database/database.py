@@ -103,6 +103,9 @@ def db_add_user(username: str, password: str, email: str, config: DatabaseConfig
     connection.close()
     return out
 
+def add_logistics(config: DatabaseConfig):
+    """Adds new logistics service to database"""
+    pass
 
-
-    
+def db_get_logistics(config: DatabaseConfig):
+    pass

@@ -4,8 +4,8 @@
 
 <div>
     <h2>Add your logistics service</h2>
-    <form id="logisticsForm">
-        <label>Select Service Type:</label>
+    <form id="logisticsForm" action="/addlogistics" method="post">
+        <h4>Select service type</h4>
         
         <div class="service-option">
             <input type="radio" id="private" name="serviceType" value="private" onclick="toggleQuestions()">
@@ -20,18 +20,43 @@
         <div id="privateQuestions" style="display: none;">
             <label for="fullName">Your full name:</label>
             <input type="text" id="fullName" name="fullName"><br>
-
-            <label for="">Kysymys:</label>
-            <input type="text" id="" name="">
         </div>
 
         <div id="companyQuestions" style="display: none;">
             <label for="companyName">Company name:</label>
             <input type="text" id="companyName" name="companyName"><br>
-
-            <label for="">Kysymys:</label>
-            <input type="text" id="" name="">
+            <label for="businessId">Business ID:</label>
+            <input type="text" id="businessId" name="businessId"><br>
         </div>
+
+        <div id="allQuestions">
+            <label for="address">Address:</label>
+            <input type="text" id="address" name="address"><br>
+
+            <h4>Select your vehicle categories:</h4>
+            <div>
+                <input type="checkbox" id="dry" name="vehicleCategories[]" value="dry">
+                <label for="dry">Dry</label>
+            </div>
+            <div>
+                <input type="checkbox" id="refrigerated" name="vehicleCategories[]" value="refrigerated">
+                <label for="refrigerated">Refrigerated</label>
+            </div>
+            <div>
+                <input type="checkbox" id="tanker" name="vehicleCategories[]" value="tanker">
+                <label for="tanker">Tanker</label>
+            </div>
+            <div>
+                <input type="checkbox" id="flatbed" name="vehicleCategories[]" value="flatbed">
+                <label for="flatbed">Flatbed</label>
+            </div>
+            <div>
+                <input type="checkbox" id="container" name="vehicleCategories[]" value="container">
+                <label for="container">Container</label>
+            </div>
+
+        </div>
+        <input type="submit" value="Submit">
     </form>
 </div>
 

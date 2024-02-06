@@ -5,6 +5,7 @@ import logic.route_calculator as route_calculator
 from logic.location import Location
 import datetime
 import logic.user as users
+import logic.logistics as logistics
 
 controller = Blueprint("example", __name__)
 
@@ -94,6 +95,19 @@ def distance():
             route_geojson = route.geojson
         )
 
-@controller.route("/addlogistics", methods=["get", "post"])
+
+@controller.route("/addlogistics", methods=["GET", "POST"])
 def add_logistics():
-    return render_template("addlogistics.html")
+    if request.method == "GET":
+        return render_template("addlogistics.html")
+    
+    if request.method == "POST":
+        service_type = request.form.get('serviceType')
+        name = request.form.get('fullName') if service_type == 'private' else request.form.get('companyName')
+        business_id = request.form.get('businessId') if service_type == 'company' else None
+        address = request.form.get('address')
+        vehicle_categories = request.form.getlist('vehicleCategories[]')
+
+        logistics.addlogistics(service_type, name, business_id, address, vehicle_categories)
+
+        return redirect("/")
