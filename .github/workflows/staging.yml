@@ -32,6 +32,8 @@ jobs:
             uses: docker/metadata-action@v4
             with:
               images: mtkohtu/mtk-ohtu
+              tags: |
+                type=raw,value=latest,enable={{is_default_branch}}
 
           - name: Build and push
             uses: docker/build-push-action@v5
