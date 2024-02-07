@@ -5,7 +5,6 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from config import DATABASE_CONFIG
 
 
-
 """
 def register(username, password):
     hash_value = generate_password_hash(password)
@@ -16,6 +15,7 @@ def register(username, password):
 
     return login(username, password)
 """
+
 
 def login(username, password):
     """
@@ -42,5 +42,6 @@ def login(username, password):
 def logout():
     del session["user_id"]
 
+
 def user_id():
-    return session["user_id",0]
+    return session["user_id", 0]

@@ -16,7 +16,7 @@ class DatabaseConfig:
 def db_excecute_file(filename: str, config: DatabaseConfig):
     """Executes all commands in .sql file"""
     commands = ""
-    with open(filename,"r") as f:
+    with open(filename, "r") as f:
         commands = f.read()
     connection = db_connect(config)
     with connection:
@@ -24,13 +24,14 @@ def db_excecute_file(filename: str, config: DatabaseConfig):
         cursor.execute(commands)
     connection.close()
 
+
 def db_connect(config: DatabaseConfig):
     connection = psycopg2.connect(
         host=config.uri,
         database=config.db_name,
         user=config.user,
         password=config.password,
-        port=config.port
+        port=config.port,
     )
     return connection
 
@@ -54,6 +55,7 @@ def db_get_product_list(config: DatabaseConfig) -> list:
     connection.close()
     return out
 
+
 def db_get_user(username: str, password: str, config: DatabaseConfig) -> bool:
     """Gets user from database
     Args:
@@ -66,44 +68,50 @@ def db_get_user(username: str, password: str, config: DatabaseConfig) -> bool:
     out = False
     with connection:
         cursor = connection.cursor()
-        cursor.execute(
-            "SELECT id, password FROM users WHERE username=%s;",
-            (username,)
-        )
+        cursor.execute("SELECT id, password FROM users WHERE username=%s;", (username,))
         user = cursor.fetchone()
         if user:
             out = user[1] == password
     connection.close()
     return out
 
-def db_add_user(username: str, password: str, email: str, config: DatabaseConfig) -> tuple:
+
+def db_add_user(
+    username: str, password: str, email: str, config: DatabaseConfig
+) -> tuple:
     """Adds user to database.
     Args:
         username: new username
         password: new password
         email: user email
         config: Database config
-    Returns: (True, user id) if adding user succeeds, (False, None) if user already exists"""
+    Returns: (True, user id) if adding user succeeds, (False, None) if user already exists
+    """
     connection = db_connect(config)
     out = False
     with connection:
         cursor = connection.cursor()
         try:
             cursor.execute(
-                "INSERT INTO users (username, password, email) (%s,%s,%s)",(username,password, email)
+                "INSERT INTO users (username, password, email) (%s,%s,%s)",
+                (username, password, email),
             )
         except psycopg2.errors.UniqueViolation:
             return (False, None)
-        cursor.execute(
-            "SELECT id FROM users WHERE username=%s;",
-            (username,)
-        )
+        cursor.execute("SELECT id FROM users WHERE username=%s;", (username,))
         user = cursor.fetchone()
         out = (True, user[0])
     connection.close()
     return out
 
-def db_add_logistics(name: str, business_id: str, address: str, vehicle_categories, config: DatabaseConfig):
+
+def db_add_logistics(
+    name: str,
+    business_id: str,
+    address: str,
+    vehicle_categories,
+    config: DatabaseConfig,
+):
     """
     Adds new logistics service to database
     Args:
@@ -121,7 +129,8 @@ def db_add_logistics(name: str, business_id: str, address: str, vehicle_categori
         cursor = connection.cursor()
         try:
             cursor.execute(
-                "INSERT INTO logistics_contractors (name, business_id, address, cargo_capabilities) VALUES (%s,%s,%s,%s::vehichle_requirement_type[])", (name, business_id, address, vehicle_categories)
+                "INSERT INTO logistics_contractors (name, business_id, address, cargo_capabilities) VALUES (%s,%s,%s,%s::vehichle_requirement_type[])",
+                (name, business_id, address, vehicle_categories),
             )
         except psycopg2.Error as e:
             print(f"Error inserting data: {e}")
@@ -129,8 +138,10 @@ def db_add_logistics(name: str, business_id: str, address: str, vehicle_categori
     connection.close()
     return out
 
+
 def db_get_logistics(config: DatabaseConfig):
     pass
+
 
 def db_get_vehicle_categories(config: DatabaseConfig) -> list:
     """

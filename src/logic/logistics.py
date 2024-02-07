@@ -15,4 +15,6 @@ def addlogistics(service_type, name, business_id, address, vehicle_categories):
     print("Address:", address)
     print("Vehicle Categories:", vehicle_categories)
 
-    db.db_add_logistics(name, business_id, address, vehicle_categories, config=DATABASE_CONFIG)
+    db.db_add_logistics(
+        name, business_id, address, vehicle_categories, config=DATABASE_CONFIG
+    )

@@ -31,7 +31,7 @@ print(start.location.raw)
 # print(f'start: {start.longitude}, {start.latitude}')
 # print(f'end: {end.longitude}, {end.latitude}')
 
-#print(demo_route.geojson))
+# print(demo_route.geojson))
 
 
 listings = db.db_get_product_list(DATABASE_CONFIG)
@@ -57,14 +57,13 @@ for listing in listings:
 A = unique_listings[0]
 B = unique_listings[2]
 for i in range(7):
-    print(f'{i}: {A[i]}')
+    print(f"{i}: {A[i]}")
 
 loc_A = Location((A[5], A[6]))
 loc_B = Location((B[5], B[6]))
 
 
-
-test_route = Route(loc_A,loc_B)
+test_route = Route(loc_A, loc_B)
 print("test_route")
 print(test_route.distance)
 print(test_route.duration)
@@ -72,13 +71,10 @@ print(test_route.duration)
 start_time = time.time()
 print(test_route.geodesic_distance())
 print(test_route.geodesic_distance())
-print("geodesic distance calculation",time.time() - start_time)
+print("geodesic distance calculation", time.time() - start_time)
 
 start_time = time.time()
 test_route.calculate_route()
 print(test_route.distance)
 print(test_route.duration)
-print("route calculation",time.time() - start_time)
-
-
-
+print("route calculation", time.time() - start_time)

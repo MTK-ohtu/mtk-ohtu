@@ -20,9 +20,9 @@ def listings():
     db_listings = db.db_get_product_list(DATABASE_CONFIG)
     if request.method == "POST":
         user_location = Location(request.form["address"])
-    listings = []     
+    listings = []
     for listing in db_listings:
-        if request.method == "GET": 
+        if request.method == "GET":
             listings.append(
                 {
                     "name": listing[0],
@@ -34,9 +34,7 @@ def listings():
             )
         if request.method == "POST":
             listing_location = Location(listing[2])
-            route_to_product = route_calculator.Route(
-                user_location, listing_location
-            )
+            route_to_product = route_calculator.Route(user_location, listing_location)
             listings.append(
                 {
                     "name": listing[0],
@@ -67,7 +65,10 @@ def login():
         if users.login(username, password):
             return redirect("/")
         else:
-            return render_template("login.html", message="Salasana tai käyttäjätunnus väärin")
+            return render_template(
+                "login.html", message="Salasana tai käyttäjätunnus väärin"
+            )
+
 
 @controller.route("/distance", methods=["get", "post"])
 def distance():
@@ -88,11 +89,11 @@ def distance():
             "distance.html",
             distance=round(route.distance / 1000, 1),
             duration=str(datetime.timedelta(seconds=(round(route.duration)))),
-            geodesic_distance=round(route.geodesic_distance()/1000,1),
-            price = round(route.distance/1000*qt*0.5,2),
-            start_location = start_location,
-            end_location = end_location,
-            route_geojson = route.geojson
+            geodesic_distance=round(route.geodesic_distance() / 1000, 1),
+            price=round(route.distance / 1000 * qt * 0.5, 2),
+            start_location=start_location,
+            end_location=end_location,
+            route_geojson=route.geojson,
         )
 
 
@@ -100,15 +101,25 @@ def distance():
 def add_logistics():
     if request.method == "GET":
         vehicle_categories = db.db_get_vehicle_categories(DATABASE_CONFIG)
-        return render_template("addlogistics.html", vehicle_categories=vehicle_categories)
-    
-    if request.method == "POST":
-        service_type = request.form.get('serviceType')
-        name = request.form.get('fullName') if service_type == 'private' else request.form.get('companyName')
-        business_id = request.form.get('businessId') if service_type == 'company' else None
-        address = request.form.get('address')
-        vehicle_categories = request.form.getlist('vehicleCategories[]')
+        return render_template(
+            "addlogistics.html", vehicle_categories=vehicle_categories
+        )
 
-        logistics.addlogistics(service_type, name, business_id, address, vehicle_categories)
+    if request.method == "POST":
+        service_type = request.form.get("serviceType")
+        name = (
+            request.form.get("fullName")
+            if service_type == "private"
+            else request.form.get("companyName")
+        )
+        business_id = (
+            request.form.get("businessId") if service_type == "company" else None
+        )
+        address = request.form.get("address")
+        vehicle_categories = request.form.getlist("vehicleCategories[]")
+
+        logistics.addlogistics(
+            service_type, name, business_id, address, vehicle_categories
+        )
 
         return redirect("/")

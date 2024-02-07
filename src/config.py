@@ -7,7 +7,7 @@ DATABASE_CONFIG = DatabaseConfig(
     db_name=getenv("DATABASE_NAME"),
     user=getenv("DATABASE_USER"),
     password=getenv("DATABASE_PASSWORD"),
-    port=getenv("DATABASE_PORT")
+    port=getenv("DATABASE_PORT"),
 )
 
 # if SECRET_KEY in (None, "PUT_THE_KEY_HERE"):
