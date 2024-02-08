@@ -10,7 +10,7 @@ class Location:
         longitude (float): The longitude of the address.
     """
 
-    def __init__(self, loc_input, user_email="miko.paajanen@helsinki.fi"):
+    def __init__(self, loc_input, user_email="miko.paajanen@gmail.com"):
         """Initialize the Location class.
 
         Args:
@@ -26,6 +26,8 @@ class Location:
             self.location = None
             self.longitude = loc_input[0]
             self.latitude = loc_input[1]
+        else:
+            raise ValueError("Invalid input")
 
     def location_from_address(self, address):
         """Return the coordinates of the address."""

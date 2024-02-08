@@ -56,7 +56,8 @@ CREATE TABLE IF NOT EXISTS listings (
     delivery_details TEXT,
     description TEXT,
     address TEXT NOT NULL,
-    coordinates POINT,
+    longitude NUMERIC,
+    latitude NUMERIC,
     vehichle_requirement vehichle_requirement_type,
     complies_with_regulations BOOLEAN DEFAULT false
 );

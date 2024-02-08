@@ -33,7 +33,14 @@ def listings():
                 }
             )
         if request.method == "POST":
-            listing_location = Location(listing[2])
+            start_time = datetime.datetime.now()
+            if listing[5] is not None and listing[6] is not None:
+                listing_location = Location((listing[5],listing[6]))
+                print("calc with coords: ", (datetime.datetime.now() - start_time).microseconds / 1000,"ms")
+
+            else:
+                listing_location = Location(listing[2])
+                print("calc with address:", (datetime.datetime.now() - start_time).microseconds / 1000,"ms")
             route_to_product = route_calculator.Route(user_location, listing_location)
             listings.append(
                 {

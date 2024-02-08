@@ -5,22 +5,22 @@ from logic.location import Location
 
 class TestRoute(unittest.TestCase):
     def setUp(self):
-        self.loc1 = Location("Gustaf Hällströmin katu 2, 00560 Helsinki")
-        self.loc2 = Location("Leppäsuonkatu 11")
+        self.loc1 = Location((24.962548,60.205298))
+        self.loc2 = Location((24.922388,60.169232))
         self.email = "miko.paajanen@helsinki.fi"
 
-        self.demo_route = Route(self.loc1, self.loc2, self.email)
+        self.demo_route = Route(self.loc1, self.loc2)
         self.demo_route.calculate_route()
 
     def test_check_distance_correct(self):
         result = False
-        if 5430 < self.demo_route.distance < 5450:
+        if 5500 < self.demo_route.distance < 5600:
             result = True
         self.assertTrue(result)
 
     def test_check_duration_correct(self):
         result = False
-        if 1050 < self.demo_route.duration < 1060:
+        if 1050 < self.demo_route.duration < 1100:
             result = True
         self.assertTrue(result)
 

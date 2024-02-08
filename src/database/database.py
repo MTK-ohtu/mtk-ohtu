@@ -7,15 +7,14 @@ def db_get_product_list(config: DatabaseConfig) -> list:
     """Gets list of products from database
     Args:
         config: Database config
-    Returns: List of tuples, tuples in format 
-             ('product name', 'product price', 'product location', 'product description', 'seller name', (longitude, latitude))
+    Returns: List of tuples, tuples in format ('product name', 'product price', 'product location', 'product description', 'seller name', longitude, latitude)
     """
     connection = db_connect(config)
     out = None
     with connection:
         cursor = connection.cursor()
         cursor.execute(
-            "SELECT l.category, l.price, l.address, l.description, u.username, l.coordinates \
+            "SELECT l.category, l.price, l.address, l.description, u.username, l.longitude, l.latitude \
                         FROM listings as l \
                         LEFT JOIN users AS u ON u.id = l.user_id;"
         )
@@ -102,14 +101,8 @@ def db_add_logistics(
         out = True
     return out
 
-#def db_add_vehicle(vehicle: str, config: DatabaseConfig):
-#    connection = db_connect(config)
-#    out = False
-#    with connection:
-#        cursor = connection.cursor()
-#        try:
-#            cursor.execute(
-#                "INSERT INTO vehicles "
+def db_add_vehicle(vehicle: str, config: DatabaseConfig):
+    pass
 
 
 def db_get_logistics(config: DatabaseConfig):
