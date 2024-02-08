@@ -7,15 +7,14 @@ def db_get_product_list(config: DatabaseConfig) -> list:
     """Gets list of products from database
     Args:
         config: Database config
-    Returns: List of tuples, tuples in format 
-             ('product name', 'product price', 'product location', 'product description', 'seller name', (longitude, latitude))
+    Returns: List of tuples, tuples in format ('product name', 'product price', 'product location', 'product description', 'seller name', longitude, latitude)
     """
     connection = db_connect(config)
     out = None
     with connection:
         cursor = connection.cursor()
         cursor.execute(
-            "SELECT l.category, l.price, l.address, l.description, u.username, l.coordinates \
+            "SELECT l.category, l.price, l.address, l.description, u.username, l.longitude, l.latitude \
                         FROM listings as l \
                         LEFT JOIN users AS u ON u.id = l.user_id;"
         )
@@ -74,8 +73,8 @@ def db_add_logistics(
     name: str,
     business_id: str,
     address: str,
-    vehicle_categories,
-    config: DatabaseConfig,
+    vehicle_category: str,
+    config: DatabaseConfig
 ):
     """
     Adds new logistics service to database
@@ -94,14 +93,16 @@ def db_add_logistics(
         cursor = connection.cursor()
         try:
             cursor.execute(
-                "INSERT INTO logistics_contractors (name, business_id, address, cargo_capabilities) \
-                 VALUES (%s,%s,%s,%s::vehichle_requirement_type[])",
-                (name, business_id, address, vehicle_categories),
+                "INSERT INTO logistics_contractors (name, business_id, address) VALUES (%s,%s,%s)",
+                (name, business_id, address),
             )
         except psycopg.Error as e:
             print(f"Error inserting data: {e}")
         out = True
     return out
+
+def db_add_vehicle(vehicle: str, config: DatabaseConfig):
+    pass
 
 
 def db_get_logistics(config: DatabaseConfig):
