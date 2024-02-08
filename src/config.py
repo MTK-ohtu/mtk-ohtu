@@ -1,5 +1,5 @@
 from os import getenv
-from database.database import DatabaseConfig
+from database.db_meta import DatabaseConfig
 
 SECRET_KEY = getenv("SECRET_KEY")
 DATABASE_CONFIG = DatabaseConfig(
