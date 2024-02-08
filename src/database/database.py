@@ -121,8 +121,8 @@ def db_add_logistics(
     name: str,
     business_id: str,
     address: str,
-    vehicle_categories,
-    config: DatabaseConfig,
+    vehicle_category: str,
+    config: DatabaseConfig
 ):
     """
     Adds new logistics service to database
@@ -141,14 +141,23 @@ def db_add_logistics(
         cursor = connection.cursor()
         try:
             cursor.execute(
-                "INSERT INTO logistics_contractors (name, business_id, address, cargo_capabilities) VALUES (%s,%s,%s,%s::vehichle_requirement_type[])",
-                (name, business_id, address, vehicle_categories),
+                "INSERT INTO logistics_contractors (name, business_id, address) VALUES (%s,%s,%s)",
+                (name, business_id, address),
             )
         except psycopg2.Error as e:
             print(f"Error inserting data: {e}")
         out = True
     connection.close()
     return out
+
+#def db_add_vehicle(vehicle: str, config: DatabaseConfig):
+#    connection = db_connect(config)
+#    out = False
+#    with connection:
+#        cursor = connection.cursor()
+#        try:
+#            cursor.execute(
+#                "INSERT INTO vehicles "
 
 
 def db_get_logistics(config: DatabaseConfig):
