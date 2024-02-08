@@ -20,9 +20,24 @@ class SupplyDemandType(Enum):
 
  #   CREATE TYPE vehichle_requirement_type AS ENUM ('dry', 'refrigerated', 'tanker', 'flatbed', 'container');
 
+class CategoryType(Enum):
+    MANURE = 'Manure' 
+    GRASS_WASTE_FODDER_AND_GREEN_GROWTHS = 'Grass, waste fodder and green growths' 
+    BASKET_FODDER = 'Basket fodder' 
+    PLANT_BASED_BIOMASSES = 'Plant-based biomasses' 
+    ANIMAL_BASED_BIOMASSES = 'Animal-based biomasses' 
+    SOIL_AND_GROWING_MEDIA = 'Soil and growing media' 
+    DIGESTION = 'Digestion' 
+    WOOD = 'Wood' 
+    OTHER_SIDE_STREAMS_NOT_BIOMASS = 'Other side streams (not biomass)' 
+    LOGISTICS_AND_CONTRACTING = 'Logistics and contracting' 
+    OTHER = 'Other'
+
+
 
 DEFINED_ENUMS = {
     "buying_or_selling" : BuyOrSell,
     "delivery_method_type": DeliveryMethodType,
-    "supply_demand_type": SupplyDemandType
+    "supply_demand_type": SupplyDemandType,
+    "category_type": CategoryType
 }

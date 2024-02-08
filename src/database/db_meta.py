@@ -50,13 +50,15 @@ def db_connect(config: DatabaseConfig) -> psycopg.Connection:
         password={config.password} \
         port={config.port}"
     )
+    db_register_enums(connection)
     return connection
 
 
 def db_create(config: DatabaseConfig):
     """Creates database and python mappings for enums"""
-    db_excecute_file("schema.sql")
-    connection = db_connect(config)
+    db_excecute_file("schema.sql", config)
+
+def db_register_enums(connection):
     for enm in db_enums.DEFINED_ENUMS:
-        value = db_enums.DEFINED_ENUMS[enm]
-        register_enum(EnumInfo.fetch(connection, enm), connection, value, mapping={m: m.value for m in value})
+        enum_object = db_enums.DEFINED_ENUMS[enm]
+        register_enum(EnumInfo.fetch(connection, enm), connection, enum_object, mapping={m: m.value for m in enum_object})

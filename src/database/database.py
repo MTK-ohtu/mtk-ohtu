@@ -19,6 +19,7 @@ def db_get_product_list(config: DatabaseConfig) -> list:
                         LEFT JOIN users AS u ON u.id = l.user_id;"
         )
         out = list(cursor.fetchall())
+    print(type(out[0][0]))
     return out
 
 
