@@ -1,5 +1,7 @@
 import psycopg
+import database.db_enums as db_enums
 from dataclasses import dataclass
+from psycopg.types.enum import EnumInfo, register_enum
 
 
 @dataclass
@@ -54,3 +56,7 @@ def db_connect(config: DatabaseConfig) -> psycopg.Connection:
 def db_create(config: DatabaseConfig):
     """Creates database and python mappings for enums"""
     db_excecute_file("schema.sql")
+    connection = db_connect(config)
+    for enm in db_enums.DEFINED_ENUMS:
+        value = db_enums.DEFINED_ENUMS[enm]
+        register_enum(EnumInfo.fetch(connection, enm), connection, value, mapping={m: m.value for m in value})
