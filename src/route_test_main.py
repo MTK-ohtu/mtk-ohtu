@@ -15,10 +15,10 @@ email = "miko.paajanen@helsinki.fi"
 geolocator = Nominatim(user_agent=email)
 
 
-start = Location(loc1, email)
-end = Location(loc2, email)
+# start = Location(loc1, email)
+# end = Location(loc2, email)
 
-print(start.location.raw)
+# print(start.location.raw)
 
 # demo_route = Route(loc1,loc2,email)
 
@@ -34,21 +34,21 @@ print(start.location.raw)
 # print(demo_route.geojson))
 
 
-listings = db.db_get_product_list(DATABASE_CONFIG)
-unique_listings = []
+# listings = db.db_get_product_list(DATABASE_CONFIG)
+# unique_listings = []
 
-for listing in listings:
-    if listing not in unique_listings:
-        unique_listings.append(listing)
+# for listing in listings:
+#     if listing not in unique_listings:
+#         unique_listings.append(listing)
 
 
-print(len(unique_listings))
-for listing in unique_listings:
-    if listing[5] is not None and listing[6] is not None:
-        print(listing[2],":",listing[5],listing[6])
-        print(type(listing[5]))
-        loc = Location((listing[5],listing[6]))
-        print("coords (lon, lat):",loc.longitude, loc.latitude)
+# print(len(unique_listings))
+# for listing in unique_listings:
+#     if listing[5] is not None and listing[6] is not None:
+#         print(listing[2],":",listing[5],listing[6])
+#         print(type(listing[5]))
+#         loc = Location((listing[5],listing[6]))
+#         print("coords (lon, lat):",loc.longitude, loc.latitude)
 
 
 # print()
@@ -83,3 +83,11 @@ for listing in unique_listings:
 # print(test_route.distance)
 # print(test_route.duration)
 # print("route calculation", time.time() - start_time)
+
+loc1 = Location((24.962548,60.205298))
+loc2 = Location((24.922388,60.169232))
+print(loc1.latitude)
+route = Route(loc1, loc2)
+route.calculate_route()
+print(route.distance)
+print(route.duration)
