@@ -82,8 +82,10 @@ CREATE TABLE IF NOT EXISTS logistics_contractors (
 );
 
 CREATE TABLE IF NOT EXISTS vehicles (
+    id SERIAL PRIMARY KEY,
     logistic_id INTEGER NOT NULL REFERENCES logistics_contractors(id),
     name VARCHAR(16) NOT NULL,
     vehicle_capibility vehichle_requirement_type NOT NULL,
-    vehicle_capacity INTEGER NOT NULL
+    vehicle_capacity INTEGER NOT NULL,
+    price_per_hour INTEGER
 );
