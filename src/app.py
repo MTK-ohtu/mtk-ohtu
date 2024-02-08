@@ -1,7 +1,7 @@
 # from config import SECRET_KEY
 from flask import Flask
 from controllers.routes import controller
-from database.database import db_excecute_file
+from database.db_meta import db_excecute_file
 from config import DATABASE_CONFIG
 
 

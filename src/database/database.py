@@ -1,51 +1,5 @@
-import psycopg2
-from dataclasses import dataclass
-
-
-@dataclass
-class DatabaseConfig:
-    """Object for storing database configuration information"""
-
-    uri: str
-    db_name: str
-    user: str
-    password: str
-    port: int
-
-
-def db_excecute_file(filename: str, config: DatabaseConfig):
-    """Executes all commands in .sql file"""
-    commands = ""
-    with open(filename, "r") as f:
-        commands = f.read()
-    connection = db_connect(config)
-    with connection:
-        cursor = connection.cursor()
-        cursor.execute(commands)
-    connection.close()
-
-def db_drop_all(config: DatabaseConfig):
-    """UNSAFE; DO NOT EXPOSE! : Clear entire database"""
-    connection = db_connect(config)
-    with connection:
-        cursor = connection.cursor()
-        cursor.execute(f"DROP SCHEMA public CASCADE; \
-                        CREATE SCHEMA public; \
-                        GRANT ALL ON SCHEMA public TO {config.user}; \
-                        GRANT ALL ON SCHEMA public TO public;")
-
-    connection.close()
-
-
-def db_connect(config: DatabaseConfig):
-    connection = psycopg2.connect(
-        host=config.uri,
-        database=config.db_name,
-        user=config.user,
-        password=config.password,
-        port=config.port,
-    )
-    return connection
+import psycopg
+from database.db_meta import DatabaseConfig, db_connect
 
 
 def db_get_product_list(config: DatabaseConfig) -> list:
@@ -108,7 +62,7 @@ def db_add_user(
                 "INSERT INTO users (username, password, email) (%s,%s,%s)",
                 (username, password, email),
             )
-        except psycopg2.errors.UniqueViolation:
+        except psycopg.errors.UniqueViolation:
             return (False, None)
         cursor.execute("SELECT id FROM users WHERE username=%s;", (username,))
         user = cursor.fetchone()
@@ -144,7 +98,7 @@ def db_add_logistics(
                 "INSERT INTO logistics_contractors (name, business_id, address, cargo_capabilities) VALUES (%s,%s,%s,%s::vehichle_requirement_type[])",
                 (name, business_id, address, vehicle_categories),
             )
-        except psycopg2.Error as e:
+        except psycopg.Error as e:
             print(f"Error inserting data: {e}")
         out = True
     connection.close()
