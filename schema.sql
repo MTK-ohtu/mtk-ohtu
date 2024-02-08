@@ -74,9 +74,17 @@ CREATE TABLE IF NOT EXISTS purchases (
 
 CREATE TABLE IF NOT EXISTS logistics_contractors (
     id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id),
     name TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT NOW(),
     business_id VARCHAR(16),
     address TEXT NOT NULL,
     cargo_capabilities vehichle_requirement_type[]
+);
+
+CREATE TABLE IF NOT EXISTS vehicles (
+    logistic_id INTEGER NOT NULL REFERENCES logistics_contractors(id),
+    name VARCHAR(16) NOT NULL,
+    vehicle_capibility vehichle_requirement_type NOT NULL,
+    vehicle_capacity INTEGER NOT NULL
 );
