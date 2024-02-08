@@ -3,7 +3,7 @@ from flask import session
 from config import DATABASE_CONFIG
 
 
-def addlogistics(service_type, name, business_id, address, vehicle_categories):
+def addlogistics(service_type, name, business_id, address, vehicle_category, max_amount):
     """
     Adds a new logistic company
 
@@ -13,8 +13,9 @@ def addlogistics(service_type, name, business_id, address, vehicle_categories):
     print("Name:", name)
     print("Business ID:", business_id)
     print("Address:", address)
-    print("Vehicle Categories:", vehicle_categories)
+    print("Vehicle Category:", vehicle_category)
+    print("Max", max_amount)
 
     db.db_add_logistics(
-        name, business_id, address, vehicle_categories, config=DATABASE_CONFIG
+        name, business_id, address, vehicle_category, config=DATABASE_CONFIG
     )

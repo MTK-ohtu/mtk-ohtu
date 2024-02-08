@@ -33,20 +33,41 @@
             <label for="address">Address:</label>
             <input type="text" id="address" name="address"><br>
 
-            <h4>Select your vehicle categories:</h4>
+            <h4>Add a vehicle:</h4>
             {% for category in vehicle_categories %}
-            <div>
-                <input type="checkbox" id="{{ category }}" name="vehicleCategories[]" value="{{ category }}">
+            <div class="vehicle-option">
+                <input type="radio" id="{{ category }}" name="vehicleCategory" value="{{ category }}" onchange="toggleTextBox('{{ category }}')">
                 <label for="{{ category }}">{{ category }}</label>
+                <div id="{{ category }}-maxAmount" style="display: none;">
+                    <label for="{{ category }}-amount">Maximum cargo (in tons)</label>
+                    <input type="text" id="{{ category }}-amount" name="amount">
+                </div>
             </div>
             {% endfor %}
 
+            <h4>Price per hour estimate</h4>
+            <input type="text" id="price" name="price">€/h
         </div>
         <input type="submit" value="Submit">
     </form>
 </div>
 
 <script>
+    function toggleTextBox(category) {
+        var maxAmountDiv = document.getElementById(category + '-maxAmount');
+
+        // Hide all textboxes
+        var allDivs = document.querySelectorAll('.vehicle-option div');
+        allDivs.forEach(function(div) {
+            div.style.display = 'none';
+        });
+
+        // Show the selected textbox
+        if (maxAmountDiv.style.display === 'none') {
+            maxAmountDiv.style.display = 'block';
+        }
+    }
+
     function toggleQuestions() {
         var serviceType = document.querySelector('input[name="serviceType"]:checked').value;
         var privateQuestions = document.getElementById("privateQuestions");
@@ -60,8 +81,7 @@
             companyQuestions.style.display = "block";
         }
     }
-</script>
-<script>
+
     function validateForm() {
         var serviceType = document.querySelector('input[name="serviceType"]:checked');
         var fullName = document.getElementById("fullName");
@@ -71,12 +91,6 @@
 
         if (!serviceType || !fullName || !companyName || !businessId || !address) {
             alert("Please fill in all required fields.");
-            return false;
-        }
-
-        var checkboxes = document.querySelectorAll('input[name="vehicleCategories[]"]:checked');
-        if (checkboxes.length === 0) {
-            alert("Please select at least one vehicle category.");
             return false;
         }
 
