@@ -20,7 +20,6 @@ def db_get_product_list(config: DatabaseConfig) -> list:
                         LEFT JOIN users AS u ON u.id = l.user_id;"
         )
         out = list(cursor.fetchall())
-    connection.close()
     return out
 
 
@@ -40,7 +39,6 @@ def db_get_user(username: str, password: str, config: DatabaseConfig) -> bool:
         user = cursor.fetchone()
         if user:
             out = user[1] == password
-    connection.close()
     return out
 
 
@@ -69,7 +67,6 @@ def db_add_user(
         cursor.execute("SELECT id FROM users WHERE username=%s;", (username,))
         user = cursor.fetchone()
         out = (True, user[0])
-    connection.close()
     return out
 
 
@@ -104,7 +101,6 @@ def db_add_logistics(
         except psycopg.Error as e:
             print(f"Error inserting data: {e}")
         out = True
-    connection.close()
     return out
 
 
@@ -124,5 +120,4 @@ def db_get_vehicle_categories(config: DatabaseConfig) -> list:
         cursor = connection.cursor()
         cursor.execute("SELECT unnest(enum_range(NULL::vehichle_requirement_type))")
         out = [row[0] for row in cursor.fetchall()]
-    connection.close()
     return out
