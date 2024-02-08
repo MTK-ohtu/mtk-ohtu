@@ -24,20 +24,23 @@ def db_excecute_file(filename: str, config: DatabaseConfig):
         cursor.execute(commands)
     connection.close()
 
+
 def db_drop_all(config: DatabaseConfig):
     """UNSAFE; DO NOT EXPOSE! : Clear entire database"""
     connection = db_connect(config)
     with connection:
         cursor = connection.cursor()
-        cursor.execute(f"DROP SCHEMA public CASCADE; \
+        cursor.execute(
+            f"DROP SCHEMA public CASCADE; \
                         CREATE SCHEMA public; \
                         GRANT ALL ON SCHEMA public TO {config.user}; \
-                        GRANT ALL ON SCHEMA public TO public;")
+                        GRANT ALL ON SCHEMA public TO public;"
+        )
 
     connection.close()
 
 
-def db_connect(config: DatabaseConfig):
+def db_connect(config: DatabaseConfig) -> psycopg.Connection:
     connection = psycopg.connect(
         f"host={config.uri} \
         dbname={config.db_name} \
@@ -47,7 +50,7 @@ def db_connect(config: DatabaseConfig):
     )
     return connection
 
+
 def db_create(config: DatabaseConfig):
     """Creates database and python mappings for enums"""
     db_excecute_file("schema.sql")
-

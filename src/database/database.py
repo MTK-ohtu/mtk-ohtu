@@ -1,12 +1,14 @@
 import psycopg
 from database.db_meta import DatabaseConfig, db_connect
 
+# pylint: disable=E1129
 
 def db_get_product_list(config: DatabaseConfig) -> list:
     """Gets list of products from database
     Args:
         config: Database config
-    Returns: List of tuples, tuples in format ('product name', 'product price', 'product location', 'product description', 'seller name', (longitude, latitude))
+    Returns: List of tuples, tuples in format 
+             ('product name', 'product price', 'product location', 'product description', 'seller name', (longitude, latitude))
     """
     connection = db_connect(config)
     out = None
@@ -95,7 +97,8 @@ def db_add_logistics(
         cursor = connection.cursor()
         try:
             cursor.execute(
-                "INSERT INTO logistics_contractors (name, business_id, address, cargo_capabilities) VALUES (%s,%s,%s,%s::vehichle_requirement_type[])",
+                "INSERT INTO logistics_contractors (name, business_id, address, cargo_capabilities) \
+                 VALUES (%s,%s,%s,%s::vehichle_requirement_type[])",
                 (name, business_id, address, vehicle_categories),
             )
         except psycopg.Error as e:
