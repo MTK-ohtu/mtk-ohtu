@@ -76,7 +76,6 @@ def db_add_logistics(
     name: str,
     business_id: str,
     address: str,
-    vehicle_category: str,
     config: DatabaseConfig
 ):
     """
@@ -91,22 +90,35 @@ def db_add_logistics(
         True if data was inserted succesfully
     """
     connection = db_connect(config)
+    logistics_id = None
+    with connection:
+        cursor = connection.cursor()
+        try:
+            cursor.execute(
+                "INSERT INTO logistics_contractors (name, business_id, address) VALUES (%s,%s,%s) RETURNING id",
+                (name, business_id, address),
+            )
+            logistics_id = cursor.fetchone()[0]
+        except psycopg.Error as e:
+            print(f"Error inserting data: {e}")
+    connection.close()
+    return logistics_id
+
+def db_add_vehicle(logistics_id: int, name: str, vehicle: str, max_weight: int, price: int, config: DatabaseConfig):
+    connection = db_connect(config)
     out = False
     with connection:
         cursor = connection.cursor()
         try:
             cursor.execute(
-                "INSERT INTO logistics_contractors (name, business_id, address) VALUES (%s,%s,%s)",
-                (name, business_id, address),
+                "INSERT INTO vehicles (logistic_id, name, vehicle_type, vehicle_capacity, price_per_hour) VALUES (%s,%s,%s,%s,%s)",
+                (logistics_id, name, vehicle, max_weight, price),
             )
         except psycopg.Error as e:
             print(f"Error inserting data: {e}")
         out = True
     connection.close()
     return out
-
-def db_add_vehicle(vehicle: str, config: DatabaseConfig):
-    pass
 
 
 def db_get_logistics(config: DatabaseConfig):

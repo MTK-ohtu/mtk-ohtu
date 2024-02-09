@@ -38,9 +38,9 @@
             <div class="vehicle-option">
                 <input type="radio" id="{{ category }}" name="vehicleCategory" value="{{ category }}" onchange="toggleTextBox('{{ category }}')">
                 <label for="{{ category }}">{{ category }}</label>
-                <div id="{{ category }}-maxAmount" style="display: none;">
-                    <label for="{{ category }}-amount">Maximum cargo (in tons)</label>
-                    <input type="text" id="{{ category }}-amount" name="amount">
+                <div id="{{ category }}-maxWeight" style="display: none;">
+                    <label for="{{ category }}-weight">Maximum cargo (in tons)</label>
+                    <input type="text" id="{{ category }}-weight" name="weight">
                 </div>
             </div>
             {% endfor %}
@@ -54,7 +54,7 @@
 
 <script>
     function toggleTextBox(category) {
-        var maxAmountDiv = document.getElementById(category + '-maxAmount');
+        var maxWeightDiv = document.getElementById(category + '-maxWeight');
 
         // Hide all textboxes
         var allDivs = document.querySelectorAll('.vehicle-option div');
@@ -63,8 +63,8 @@
         });
 
         // Show the selected textbox
-        if (maxAmountDiv.style.display === 'none') {
-            maxAmountDiv.style.display = 'block';
+        if (maxWeightDiv.style.display === 'none') {
+            maxWeightDiv.style.display = 'block';
         }
     }
 

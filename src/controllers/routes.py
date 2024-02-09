@@ -124,10 +124,11 @@ def add_logistics():
         )
         address = request.form.get("address")
         vehicle_category = request.form.get("vehicleCategory")
-        max_amount = request.form.get("amount")
+        max_weight = request.form.get("weight")
+        price_per_hour = request.form.get("price")
 
         logistics.addlogistics(
-            service_type, name, business_id, address, vehicle_category, max_amount
+            service_type, name, business_id, address, vehicle_category, max_weight, price_per_hour
         )
 
         return redirect("/")
