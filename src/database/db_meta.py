@@ -41,13 +41,16 @@ def db_drop_all(config: DatabaseConfig):
 
 
 def db_connect(config: DatabaseConfig) -> psycopg.Connection:
-    connection = psycopg.connect(
-        f"host={config.uri} \
-        dbname={config.db_name} \
-        user={config.user} \
-        password={config.password} \
-        port={config.port}"
-    )
+    conn_args_dict = {'host': config.uri,
+        'dbname': config.db_name,
+        'user': config.user,
+        'password': config.password,
+        'port': config.port}
+    
+    conn_args = [(k,conn_args_dict[k]) for k in conn_args_dict if conn_args_dict[k]]
+    conn_args = " ".join([f"{k}={v}" for k,v in conn_args])
+    
+    connection = psycopg.connect(conn_args)
     return connection
 
 
