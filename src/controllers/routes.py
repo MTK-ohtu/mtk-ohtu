@@ -131,3 +131,11 @@ def add_logistics():
         )
 
         return redirect("/")
+
+@controller.route("/listing/<int:listing_id>", methods=["GET", "POST"])
+def listing(listing_id):
+    if request.method == "GET":
+        listing = db.db_get_product_by_id(listing_id, DATABASE_CONFIG)
+        return render_template("product.html", listing=listing)
+    if request.method == "POST":
+        return redirect("/")
