@@ -75,6 +75,11 @@ def login():
             return render_template(
                 "login.html", message="Salasana tai käyttäjätunnus väärin"
             )
+        
+@controller.route("/logout")
+def logout():
+    users.logout()
+    return redirect("/")
 
 
 @controller.route("/distance", methods=["get", "post"])

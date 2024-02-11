@@ -12,6 +12,22 @@
 </head>
 
 <body>
+
+	<div class="row">
+		<div class="col-8">
+			{% if session.user_id %}
+			<a href="/logout"><button type="submit" class="btn btn-primary">Kirjaudu ulos</button></a>
+			<a href="/newpost"><button type="submit" class="btn btn-primary">Jätä ilmoitus</button></a>
+			Olet kirjautunut sisään.
+		  </div>
+			{% else %}
+		
+		  <div class="col-8">
+			<a href="/register">  <button type="submit" class="btn btn-primary">Tee Käyttäjä</button> </a>
+			<a href="/login"><button type="submit" class="btn btn-primary">Kirjaudu</button></a>
+		</div>
+		</div>
+		{% endif %}
 	<section class="h-100">
 		<div class="container h-100">
 			<div class="row justify-content-sm-center h-100">
