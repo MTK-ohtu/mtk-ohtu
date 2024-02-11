@@ -1,5 +1,6 @@
 import psycopg
 from database.db_meta import DatabaseConfig, db_connect
+from werkzeug.security import check_password_hash
 
 # pylint: disable=E1129
 
@@ -23,7 +24,7 @@ def db_get_product_list(config: DatabaseConfig) -> list:
     return out
 
 
-def db_get_user(username: str, password: str, config: DatabaseConfig) -> bool:
+def db_get_user(username: str, password: str, config: DatabaseConfig):
     """Gets user from database
     Args:
         config: Database config
@@ -38,7 +39,7 @@ def db_get_user(username: str, password: str, config: DatabaseConfig) -> bool:
         cursor.execute("SELECT id, password FROM users WHERE username=%s;", (username,))
         user = cursor.fetchone()
         if user:
-            out = user[1] == password
+            out = user
     connection.close()
     return out
 

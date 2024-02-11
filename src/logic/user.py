@@ -30,13 +30,15 @@ def login(username, password):
     """
 
     user = db.db_get_user(username, password, DATABASE_CONFIG)
-    if user:
-        if check_password_hash(user.password, password):
-            session["user_id"] = user.id
-            session["csrf_token"] = secrets.token_hex(16)
-            return True
-    else:
+    print("user", user[0])
+    if not user:
+        print("no user")
         return False
+    else:
+        session["user_id"] = user[0]
+        session["csrf_token"] = secrets.token_hex(16)
+        print("logged in")
+        return True
 
 
 def logout():
