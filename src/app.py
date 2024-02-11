@@ -1,4 +1,4 @@
-from config import SECRET_KEY
+# from config import SECRET_KEY
 from flask import Flask, session
 from controllers.routes import controller
 from database.db_meta import db_excecute_file
