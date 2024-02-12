@@ -37,15 +37,8 @@
             <label for="radius"></label>
             <input type="text" id="radius" name="radius"> kilometers
 
-
-
-
-
-
             <h4>Add materials you can deliver</h4>
-
             <div id="materials-container">
-      <!-- Initial dropdown and textbox -->
                 <div class="material-entry">
                     <label for="dropdown">Select an option:</label>
                     <select class="material-dropdown" name="dropdown">
@@ -66,7 +59,6 @@
 
 <script>
     function saveMaterial() {
-      // Get the selected category and price from the currently visible entry
       const selectedCategory = document.querySelector('.material-entry .material-dropdown').value;
       const pricePerHour = document.querySelector('.material-entry .price-per-hour').value;
 

@@ -6,6 +6,7 @@ from logic.location import Location
 import datetime
 import logic.user as users
 import logic.logistics as logistics
+from database.db_enums import CategoryType
 
 controller = Blueprint("example", __name__)
 
@@ -118,11 +119,10 @@ def distance():
 @controller.route("/addlogistics", methods=["GET", "POST"])
 def add_logistics():
     if request.method == "GET":
-        vehicle_categories = db.db_get_vehicle_categories(DATABASE_POOL)
-        material_categories = db.db_get_material_categories(DATABASE_POOL)
+
+        material_categories = [e.value for e in CategoryType]
         return render_template(
             "addlogistics.html",
-            vehicle_categories=vehicle_categories,
             material_categories=material_categories
         )
 
