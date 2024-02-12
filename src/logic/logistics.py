@@ -1,6 +1,6 @@
 from database import database as db
 from flask import session
-from config import DATABASE_CONFIG
+from config import DATABASE_POOL
 
 
 def addlogistics(service_type, name, business_id, address, vehicle_category, max_amount):
@@ -17,5 +17,5 @@ def addlogistics(service_type, name, business_id, address, vehicle_category, max
     print("Max", max_amount)
 
     db.db_add_logistics(
-        name, business_id, address, vehicle_category, config=DATABASE_CONFIG
+        name, business_id, address, vehicle_category, config=DATABASE_POOL
     )

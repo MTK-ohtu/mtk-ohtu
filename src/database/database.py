@@ -1,17 +1,16 @@
 import psycopg
-from database.db_meta import DatabaseConfig, db_connect
+from psycopg_pool import ConnectionPool
 
 # pylint: disable=E1129
 
-def db_get_product_list(config: DatabaseConfig) -> list:
+def db_get_product_list(pool: ConnectionPool) -> list:
     """Gets list of products from database
     Args:
         config: Database config
     Returns: List of tuples, tuples in format ('product name', 'product price', 'product location', 'product description', 'seller name', longitude, latitude)
     """
-    connection = db_connect(config)
     out = None
-    with connection:
+    with pool.connection() as connection:
         cursor = connection.cursor()
         cursor.execute(
             "SELECT l.category, l.price, l.address, l.description, u.username, l.longitude, l.latitude, l.id \
@@ -21,16 +20,15 @@ def db_get_product_list(config: DatabaseConfig) -> list:
         out = list(cursor.fetchall())
     return out
 
-def db_get_product_by_id(product_id: int, config: DatabaseConfig) -> tuple:
+def db_get_product_by_id(product_id: int, pool: ConnectionPool) -> tuple:
     """Gets product from database by id
     Args:
         config: Database config
         product_id: Product id
     Returns: Tuple in format ('product name', 'product price', 'product location', 'product description', 'seller name', longitude, latitude)
     """
-    connection = db_connect(config)
     out = None
-    with connection:
+    with pool.connection() as connection:
         cursor = connection.cursor()
         cursor.execute(
             "SELECT l.category, l.price, l.address, l.description, u.username, l.longitude, l.latitude \
@@ -42,7 +40,7 @@ def db_get_product_by_id(product_id: int, config: DatabaseConfig) -> tuple:
         out = cursor.fetchone()
     return out
 
-def db_get_user(username: str, password: str, config: DatabaseConfig) -> bool:
+def db_get_user(username: str, password: str, pool: ConnectionPool) -> bool:
     """Gets user from database
     Args:
         config: Database config
@@ -50,9 +48,8 @@ def db_get_user(username: str, password: str, config: DatabaseConfig) -> bool:
         password: Password HASH
     Returns: True if user exists and password is correct, False otherwise
     """
-    connection = db_connect(config)
     out = False
-    with connection:
+    with pool.connection() as connection:
         cursor = connection.cursor()
         cursor.execute("SELECT id, password FROM users WHERE username=%s;", (username,))
         user = cursor.fetchone()
@@ -62,7 +59,7 @@ def db_get_user(username: str, password: str, config: DatabaseConfig) -> bool:
 
 
 def db_add_user(
-    username: str, password: str, email: str, config: DatabaseConfig
+    username: str, password: str, email: str, pool: ConnectionPool
 ) -> tuple:
     """Adds user to database.
     Args:
@@ -72,9 +69,8 @@ def db_add_user(
         config: Database config
     Returns: (True, user id) if adding user succeeds, (False, None) if user already exists
     """
-    connection = db_connect(config)
     out = False
-    with connection:
+    with pool.connection() as connection:
         cursor = connection.cursor()
         try:
             cursor.execute(
@@ -94,7 +90,7 @@ def db_add_logistics(
     business_id: str,
     address: str,
     vehicle_category: str,
-    config: DatabaseConfig
+    pool: ConnectionPool
 ):
     """
     Adds new logistics service to database
@@ -107,9 +103,8 @@ def db_add_logistics(
     Returns:
         True if data was inserted succesfully
     """
-    connection = db_connect(config)
     out = False
-    with connection:
+    with pool.connection() as connection:
         cursor = connection.cursor()
         try:
             cursor.execute(
@@ -121,23 +116,22 @@ def db_add_logistics(
         out = True
     return out
 
-def db_add_vehicle(vehicle: str, config: DatabaseConfig):
+def db_add_vehicle(vehicle: str, pool: ConnectionPool):
     pass
 
 
-def db_get_logistics(config: DatabaseConfig):
+def db_get_logistics(pool: ConnectionPool):
     pass
 
 
-def db_get_vehicle_categories(config: DatabaseConfig) -> list:
+def db_get_vehicle_categories(pool: ConnectionPool) -> list:
     """
     Gets vehicle categories from database
     Args:
-        config: Database config
+        pool: Database connection pool
     Returns: Vehicle categories as a list"""
-    connection = db_connect(config)
     out = False
-    with connection:
+    with pool.connection() as connection:    
         cursor = connection.cursor()
         cursor.execute("SELECT unnest(enum_range(NULL::vehichle_requirement_type))")
         out = [row[0] for row in cursor.fetchall()]

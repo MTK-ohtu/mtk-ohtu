@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect
-from config import DATABASE_CONFIG
+from config import DATABASE_POOL
 import database.database as db
 import logic.route_calculator as route_calculator
 from logic.location import Location
@@ -17,7 +17,7 @@ def index():
 
 @controller.route("/listings", methods=["GET", "POST"])
 def listings():
-    db_listings = db.db_get_product_list(DATABASE_CONFIG)
+    db_listings = db.db_get_product_list(DATABASE_POOL)
     if request.method == "POST":
         user_location = Location(request.form["address"])
     listings = []
@@ -26,7 +26,7 @@ def listings():
             listings.append(
                 {
                     "listing_id": listing[7],
-                    "name": listing[0],
+                    "name": listing[0].value,
                     "price": listing[1],
                     "location": listing[2],
                     "seller": listing[3],
@@ -110,7 +110,7 @@ def distance():
 @controller.route("/addlogistics", methods=["GET", "POST"])
 def add_logistics():
     if request.method == "GET":
-        vehicle_categories = db.db_get_vehicle_categories(DATABASE_CONFIG)
+        vehicle_categories = db.db_get_vehicle_categories(DATABASE_POOL)
         return render_template(
             "addlogistics.html", vehicle_categories=vehicle_categories
         )
@@ -138,10 +138,10 @@ def add_logistics():
 @controller.route("/listing/<int:listing_id>", methods=["GET", "POST"])
 def listing(listing_id):
     if request.method == "GET":
-        db_listing = db.db_get_product_by_id(listing_id, DATABASE_CONFIG)
+        db_listing = db.db_get_product_by_id(listing_id, DATABASE_POOL)
         print(db_listing)
         listing = {
-            "name": db_listing[0],
+            "name": db_listing[0].value,
             "price": db_listing[1],
             "address": db_listing[2],
             "description": db_listing[3],
@@ -151,9 +151,9 @@ def listing(listing_id):
         }
         return render_template("product.html", listing=listing, listing_id=listing_id, show_route=False)
     if request.method == "POST":
-        db_listing = db.db_get_product_by_id(listing_id, DATABASE_CONFIG)
+        db_listing = db.db_get_product_by_id(listing_id, DATABASE_POOL)
         listing = {
-            "name": db_listing[0],
+            "name": db_listing[0].value,
             "price": db_listing[1],
             "address": db_listing[2],
             "description": db_listing[3],
@@ -168,7 +168,7 @@ def listing(listing_id):
             listing_location = Location(listing["address"])
         route_to_product = route_calculator.Route(user_location, listing_location)
         route_to_product.calculate_route()  
-        logistics = db.db_get_logistics(DATABASE_CONFIG)
+        logistics = db.db_get_logistics(DATABASE_POOL)
         return render_template(
             "product.html", 
             listing_id = listing_id,
