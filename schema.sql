@@ -81,8 +81,7 @@ CREATE TABLE IF NOT EXISTS logistics_contractors (
     address TEXT NOT NULL,
     longitude NUMERIC,
     latitude NUMERIC,
-    delivery_radius INTEGER NOT NULL,
-
+    delivery_radius INTEGER NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS vehicles (
