@@ -6,6 +6,7 @@ from logic.location import Location
 import datetime
 import logic.user as users
 import logic.logistics as logistics
+from geojson import Point, Feature, FeatureCollection
 
 controller = Blueprint("example", __name__)
 
@@ -168,6 +169,7 @@ def listing(listing_id):
             "product.html", listing=listing, listing_id=listing_id, show_route=False
         )
     if request.method == "POST":
+<<<<<<< HEAD
         db_listing = db.db_get_product_by_id(listing_id, DATABASE_POOL)
         listing = {
             "name": db_listing[0].value,
@@ -203,3 +205,20 @@ def listing(listing_id):
 def get_contractors(x,y,r):
     contractors = db.get_contractors_by_euclidean(x, y, r, DATABASE_CONFIG)
     return render_template("contractor_list.html", x, y, contractors)
+=======
+        return redirect("/")
+    
+    
+@controller.route("/contractors", methods=["GET"])
+def get_contractors(x,y,r):
+    results = db.get_contractors_by_euclidean(x, y, r, DATABASE_CONFIG)
+    features = []
+    for r in results:
+        feature = geojson.feature(
+            geometry=Point((r[0],r[1])), 
+            properties={"name": r[2], "address": r[3]}
+            )        
+        features.append(feature)
+    contractors = FeatureCollection(features)
+    return render_template("contractor_list.html", x, y, contractors)
+>>>>>>> 3244448 (contractors listing)

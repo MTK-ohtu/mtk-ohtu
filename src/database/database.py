@@ -163,7 +163,7 @@ def db_get_contractors_by_euclidean(x, y, r, pool: ConnectionPool) -> list:
     out = False
     with pool.connection() as connection:
         cursor = connection.cursor()
-        query = f"SELECT * FROM logistics_contractors WHERE x BETWEEN {x-r} AND {x+r} AND y BETWEEN {y-r} AND {y+r}"
+        query = f"SELECT longitude, latitude, name, address FROM logistics_contractors WHERE x BETWEEN {x-r} AND {x+r} AND y BETWEEN {y-r} AND {y+r}"
         cursor.execute(query)
         out = list(cursor.fetchall())
     return out
