@@ -177,7 +177,7 @@ def get_contractors(x,y,r):
     results = db.get_contractors_by_euclidean(x, y, r, DATABASE_CONFIG)
     features = []
     for r in results:
-        feature = geojson.feature(
+        feature = feature(
             geometry=Point((r[0],r[1])), 
             properties={"name": r[2], "address": r[3]}
             )        
