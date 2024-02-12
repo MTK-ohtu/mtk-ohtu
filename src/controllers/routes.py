@@ -36,12 +36,20 @@ def listings():
         if request.method == "POST":
             start_time = datetime.datetime.now()
             if listing[5] is not None and listing[6] is not None:
-                listing_location = Location((listing[5],listing[6]))
-                print("calc with coords: ", (datetime.datetime.now() - start_time).microseconds / 1000,"ms")
+                listing_location = Location((listing[5], listing[6]))
+                print(
+                    "calc with coords: ",
+                    (datetime.datetime.now() - start_time).microseconds / 1000,
+                    "ms",
+                )
 
             else:
                 listing_location = Location(listing[2])
-                print("calc with address:", (datetime.datetime.now() - start_time).microseconds / 1000,"ms")
+                print(
+                    "calc with address:",
+                    (datetime.datetime.now() - start_time).microseconds / 1000,
+                    "ms",
+                )
             route_to_product = route_calculator.Route(user_location, listing_location)
             listings.append(
                 {
@@ -134,6 +142,7 @@ def add_logistics():
 
         return redirect("/")
 
+
 @controller.route("/listing/<int:listing_id>", methods=["GET", "POST"])
 def listing(listing_id):
     if request.method == "GET":
@@ -148,7 +157,9 @@ def listing(listing_id):
             "longitude": db_listing[5],
             "latitude": db_listing[6],
         }
-        return render_template("product.html", listing=listing, listing_id=listing_id, show_route=False)
+        return render_template(
+            "product.html", listing=listing, listing_id=listing_id, show_route=False
+        )
     if request.method == "POST":
         db_listing = db.db_get_product_by_id(listing_id, DATABASE_POOL)
         listing = {
@@ -158,23 +169,25 @@ def listing(listing_id):
             "description": db_listing[3],
             "seller": db_listing[4],
             "longitude": db_listing[5],
-            "latitude": db_listing[6]
-        } 
+            "latitude": db_listing[6],
+        }
         user_location = Location(request.form["address"])
         if listing["longitude"] is not None and listing["latitude"] is not None:
             listing_location = Location((listing["longitude"], listing["latitude"]))
         else:
             listing_location = Location(listing["address"])
         route_to_product = route_calculator.Route(user_location, listing_location)
-        route_to_product.calculate_route()  
+        route_to_product.calculate_route()
         logistics = db.db_get_logistics(DATABASE_POOL)
         return render_template(
-            "product.html", 
-            listing_id = listing_id,
+            "product.html",
+            listing_id=listing_id,
             listing=listing,
             distance=round(route_to_product.distance / 1000, 1),
-            duration=str(datetime.timedelta(seconds=(round(route_to_product.duration)))),
+            duration=str(
+                datetime.timedelta(seconds=(round(route_to_product.duration)))
+            ),
             route_geojson=route_to_product.geojson,
-            user_location = user_location.location,
-            show_route=True
+            user_location=user_location.location,
+            show_route=True,
         )

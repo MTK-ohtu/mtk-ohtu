@@ -3,7 +3,9 @@ from flask import session
 from config import DATABASE_POOL
 
 
-def addlogistics(service_type, name, business_id, address, vehicle_category, max_amount):
+def addlogistics(
+    service_type, name, business_id, address, vehicle_category, max_amount
+):
     """
     Adds a new logistic company
 
