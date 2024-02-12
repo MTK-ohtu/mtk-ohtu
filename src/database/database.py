@@ -24,7 +24,7 @@ def db_get_product_list(config: DatabaseConfig) -> list:
     return out
 
 
-def db_get_user(username: str, password: str, config: DatabaseConfig):
+def db_get_user(username: str, config: DatabaseConfig):
     """Gets user from database
     Args:
         config: Database config
@@ -44,6 +44,9 @@ def db_get_user(username: str, password: str, config: DatabaseConfig):
     return out
 
 
+def db_check_if_user_exists():
+    pass
+
 def db_add_user(
     username: str, password: str, email: str, config: DatabaseConfig
 ) -> tuple:
@@ -55,13 +58,15 @@ def db_add_user(
         config: Database config
     Returns: (True, user id) if adding user succeeds, (False, None) if user already exists
     """
+    
     connection = db_connect(config)
     out = False
+    print("DB", username,email,password)
     with connection:
         cursor = connection.cursor()
         try:
             cursor.execute(
-                "INSERT INTO users (username, password, email) (%s,%s,%s)",
+                "INSERT INTO users (username, password, email) VALUES (%s,%s,%s) RETURNING id",
                 (username, password, email),
             )
         except psycopg.errors.UniqueViolation:
@@ -69,6 +74,7 @@ def db_add_user(
         cursor.execute("SELECT id FROM users WHERE username=%s;", (username,))
         user = cursor.fetchone()
         out = (True, user[0])
+
     connection.close()
     return out
 
