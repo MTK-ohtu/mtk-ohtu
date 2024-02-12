@@ -43,7 +43,7 @@ def db_get_product_by_id(product_id: int, pool: ConnectionPool) -> tuple:
     return out
 
 
-def db_get_user(username: str, password: str, pool: ConnectionPool) -> bool:
+def db_get_user(username: str, pool: ConnectionPool) -> bool:
     """Gets user from database
     Args:
         config: Database config

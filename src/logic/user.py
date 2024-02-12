@@ -30,7 +30,6 @@ def login(username, password):
     """
 
     user = db.db_get_user(username, DATABASE_POOL)
-    print(user)
     if not user:
         print("no user")
         return False
