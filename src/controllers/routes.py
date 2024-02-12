@@ -53,6 +53,7 @@ def listings():
                     "distance": round(route_to_product.geodesic_distance() / 1000, 1),
                 }
             )
+            listings = sorted(listings, key=lambda x: x['distance'])
     return render_template(
         "listings.html",
         listings=listings,
