@@ -104,6 +104,7 @@ def db_add_logistics(
     connection.close()
     return logistics_id
 
+
 def db_add_vehicle(logistics_id: int, name: str, vehicle: str, max_weight: int, price: int, config: DatabaseConfig):
     connection = db_connect(config)
     out = False

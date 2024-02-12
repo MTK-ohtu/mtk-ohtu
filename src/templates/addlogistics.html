@@ -56,13 +56,11 @@
     function toggleTextBox(category) {
         var maxWeightDiv = document.getElementById(category + '-maxWeight');
 
-        // Hide all textboxes
         var allDivs = document.querySelectorAll('.vehicle-option div');
         allDivs.forEach(function(div) {
             div.style.display = 'none';
         });
 
-        // Show the selected textbox
         if (maxWeightDiv.style.display === 'none') {
             maxWeightDiv.style.display = 'block';
         }

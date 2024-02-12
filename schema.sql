@@ -78,7 +78,11 @@ CREATE TABLE IF NOT EXISTS logistics_contractors (
     name TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT NOW(),
     business_id VARCHAR(16),
-    address TEXT NOT NULL
+    address TEXT NOT NULL,
+    longitude NUMERIC,
+    latitude NUMERIC,
+    delivery_radius INTEGER NOT NULL,
+
 );
 
 CREATE TABLE IF NOT EXISTS vehicles (
@@ -88,4 +92,12 @@ CREATE TABLE IF NOT EXISTS vehicles (
     vehicle_type vehichle_requirement_type NOT NULL,
     vehicle_capacity INTEGER NOT NULL,
     price_per_hour INTEGER
+);
+
+CREATE TABLE IF NOT EXISTS materials (
+    id SERIAL PRIMARY KEY,
+    logistic_id INTEGER REFERENCES logistics_contractors(id),
+    type category_type,
+    price_per_km INTEGER,
+    base_rate INTEGER
 );
