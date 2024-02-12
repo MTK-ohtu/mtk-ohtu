@@ -25,6 +25,7 @@ def listings():
         if request.method == "GET":
             listings.append(
                 {
+                    "listing_id": listing[7],
                     "name": listing[0],
                     "price": listing[1],
                     "location": listing[2],
@@ -44,6 +45,7 @@ def listings():
             route_to_product = route_calculator.Route(user_location, listing_location)
             listings.append(
                 {
+                    "listing_id": listing[7],
                     "name": listing[0],
                     "price": listing[1],
                     "location": listing[2],
@@ -135,7 +137,43 @@ def add_logistics():
 @controller.route("/listing/<int:listing_id>", methods=["GET", "POST"])
 def listing(listing_id):
     if request.method == "GET":
-        listing = db.db_get_product_by_id(listing_id, DATABASE_CONFIG)
-        return render_template("product.html", listing=listing)
+        db_listing = db.db_get_product_by_id(listing_id, DATABASE_CONFIG)
+        print(db_listing)
+        listing = {
+            "name": db_listing[0],
+            "price": db_listing[1],
+            "address": db_listing[2],
+            "description": db_listing[3],
+            "seller": db_listing[4],
+            "longitude": db_listing[5],
+            "latitude": db_listing[6],
+        }
+        return render_template("product.html", listing=listing, listing_id=listing_id, show_route=False)
     if request.method == "POST":
-        return redirect("/")
+        db_listing = db.db_get_product_by_id(listing_id, DATABASE_CONFIG)
+        listing = {
+            "name": db_listing[0],
+            "price": db_listing[1],
+            "address": db_listing[2],
+            "description": db_listing[3],
+            "seller": db_listing[4],
+            "longitude": db_listing[5],
+            "latitude": db_listing[6]
+        } 
+        user_location = Location(request.form["address"])
+        if listing["longitude"] is not None and listing["latitude"] is not None:
+            listing_location = Location((listing["longitude"], listing["latitude"]))
+        else:
+            listing_location = Location(listing["address"])
+        route_to_product = route_calculator.Route(user_location, listing_location)
+        route_to_product.calculate_route()  
+        return render_template(
+            "product.html", 
+            listing_id = listing_id,
+            listing=listing,
+            distance=round(route_to_product.distance / 1000, 1),
+            duration=str(datetime.timedelta(seconds=(round(route_to_product.duration)))),
+            route_geojson=route_to_product.geojson,
+            user_location = user_location.location,
+            show_route=True
+        )

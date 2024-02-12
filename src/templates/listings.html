@@ -18,7 +18,7 @@
 {% for listing in listings %}
 
 <div class="card">
-    <h2><a href=“#”>{{ listing.name }}</a></h2>
+    <h2><a href="listing/{{listing.listing_id}}">{{ listing.name }}</a></h2>
     <p>Price: {{ listing.price }} €</p>
     <p>{{ listing.location}}</p>
     <p>Distance: {{ listing.distance}} km</p>
