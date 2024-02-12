@@ -26,7 +26,7 @@ def listings():
             listings.append(
                 {
                     "listing_id": listing[7],
-                    "name": listing[0],
+                    "name": listing[0].value,
                     "price": listing[1],
                     "location": listing[2],
                     "seller": listing[3],
@@ -140,7 +140,7 @@ def listing(listing_id):
         db_listing = db.db_get_product_by_id(listing_id, DATABASE_POOL)
         print(db_listing)
         listing = {
-            "name": db_listing[0],
+            "name": db_listing[0].value,
             "price": db_listing[1],
             "address": db_listing[2],
             "description": db_listing[3],
@@ -152,7 +152,7 @@ def listing(listing_id):
     if request.method == "POST":
         db_listing = db.db_get_product_by_id(listing_id, DATABASE_POOL)
         listing = {
-            "name": db_listing[0],
+            "name": db_listing[0].value,
             "price": db_listing[1],
             "address": db_listing[2],
             "description": db_listing[3],
