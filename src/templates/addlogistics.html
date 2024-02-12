@@ -37,25 +37,38 @@
             <label for="radius"></label>
             <input type="text" id="radius" name="radius"> kilometers
 
+
+
+
+
+
             <h4>Add materials you can deliver</h4>
-            <label for="materials">Select an option:</label>
-            <select id="materials" name="materials">
-                {% for material in material_categories %}
-                <option value="{{ material }}">{{ material }}</option>
-                {% endfor %}
-            <br>
-            <label for="price_per_hour">€/h</label>
-            <input type="text" id="price_per_hour" name="price_per_hour">€/h
-            </select>
 
-            <button onclick="saveMaterial()">Save</button>
-            <button onclick="addMaterial()">Add</button>
+            <div id="materials-container">
+      <!-- Initial dropdown and textbox -->
+                <div class="material-entry">
+                    <label for="dropdown">Select an option:</label>
+                    <select class="material-dropdown" name="dropdown">
+                        {% for material in material_categories %}
+                        <option value="{{ material }}">{{ material }}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="price_per_hour">€/h:</label>
+                    <input type="text" class="price-per-hour" name="price_per_hour">
+                </div>
+            </div>
+            <button type="button" onclick="saveMaterial()">Save</button>
+            <button type="button" onclick="addMaterial()">Add</button>
+        </div>
+        <input type="submit" value="Submit">
+    </form>
+</div>
 
-  <script>
+<script>
     function saveMaterial() {
       // Get the selected category and price from the currently visible entry
-      const selectedCategory = document.querySelector('.material-dropdown').value;
-      const pricePerHour = document.querySelector('.price-per-hour').value;
+      const selectedCategory = document.querySelector('.material-entry .material-dropdown').value;
+      const pricePerHour = document.querySelector('.material-entry .price-per-hour').value;
 
       // Implement your save logic here, for example, send data to the server
       console.log('Saved:', selectedCategory, pricePerHour);
@@ -74,30 +87,6 @@
       materialsContainer.appendChild(materialEntry);
     }
   </script>
-
-
-
-
-
-
-            <h4>Add a vehicle:</h4>
-            {% for category in vehicle_categories %}
-            <div class="vehicle-option">
-                <input type="radio" id="{{ category }}" name="vehicleCategory" value="{{ category }}" onchange="toggleTextBox('{{ category }}')">
-                <label for="{{ category }}">{{ category }}</label>
-                <div id="{{ category }}-maxWeight" style="display: none;">
-                    <label for="{{ category }}-weight">Maximum cargo (in tons)</label>
-                    <input type="text" id="{{ category }}-weight" name="weight">
-                </div>
-            </div>
-            {% endfor %}
-
-            <h4>Price per hour estimate</h4>
-            <input type="text" id="price" name="price">€/h
-        </div>
-        <input type="submit" value="Submit">
-    </form>
-</div>
 
 <script>
     function toggleTextBox(category) {
