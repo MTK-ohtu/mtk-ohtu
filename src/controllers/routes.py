@@ -167,6 +167,7 @@ def listing(listing_id):
             listing_location = Location(listing["address"])
         route_to_product = route_calculator.Route(user_location, listing_location)
         route_to_product.calculate_route()  
+        logistics = db.db_get_logistics(DATABASE_CONFIG)
         return render_template(
             "product.html", 
             listing_id = listing_id,
