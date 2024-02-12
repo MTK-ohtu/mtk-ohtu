@@ -1,4 +1,4 @@
-from enum import Enum, auto
+from enum import Enum
 
 class BuyOrSell(Enum):
     BUY = 'buy'
@@ -16,9 +16,23 @@ class SupplyDemandType(Enum):
     ANUALLY = 'annually'
     WEEKLY = 'weekly'
 
-#CREATE TYPE batch_units_type AS ENUM ('tn', 'm3', 'kg', 'l', 'pcs', 'batch');
 
- #   CREATE TYPE vehichle_requirement_type AS ENUM ('dry', 'refrigerated', 'tanker', 'flatbed', 'container');
+class BatchUnitsType(Enum):
+    TN = 'tn'
+    M3 = 'm3'
+    KG = 'kg'
+    L = 'l'
+    PCS = 'pcs'
+    BATCH = 'batch'
+
+
+class VehicleRequirementType(Enum):
+    DRY = 'dry'
+    REFRIGERATED = 'refrigerated'
+    TANKER = 'tanker'
+    FLATBED = 'flatbed'
+    CONTAINER = 'container'
+    
 
 class CategoryType(Enum):
     MANURE = 'Manure' 
@@ -39,5 +53,7 @@ DEFINED_ENUMS = {
     "buying_or_selling" : BuyOrSell,
     "delivery_method_type": DeliveryMethodType,
     "supply_demand_type": SupplyDemandType,
-    "category_type": CategoryType
+    "batch_units_type": BatchUnitsType,
+    "category_type": CategoryType,
+    "vehicle_requirement_type": VehicleRequirementType
 }
