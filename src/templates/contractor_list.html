@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div>
+    <h2>Suitable contractors</h2>
+</div>
+
+{% for contractors in contractors %}
+
+<div class="card">
+    <h2><a href=“#”>{{ contractors.name }}</a></h2>
+    <p>{{ contractors.address}}</p>
+</div>
+
+{% endfor %}
+<div>
+    <!-- Include Leaflet JavaScript and CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+</div>
+
+<!-- Add a container for the map -->
+<div id="map" style="height: 400px;"></div>
+
+<!-- Setup leaflet  -->
+<script>
+
+    // Set coordinates to match viewers
+    var map = L.map('map').setView(['{{ x }}','{{ y }}'], 10); 
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    
+    //Funktion to show contractor name and address over map locations    
+    function onEachFeature(feature, layer) {
+        if (feature.properties && feature.properties.name && feature.properties.address) {
+            layer.bindPopup('<b>' + feature.properties.name + '</b><br>' + feature.properties.address);
+        }
+    }
+
+    // Add contractor locations (database)
+    var geojsonLayer = L.geoJSON(contractors, {
+        onEachFeature: onEachFeature
+    }).addTo(map);
+    
+
+    var bbox = route_geojson["features"][0]["bbox"];
+    var southWest = L.latLng(bbox[1], bbox[0]),
+        northEast = L.latLng(bbox[3], bbox[2]),
+        bounds = L.latLngBounds(southWest, northEast);
+
+    map.fitBounds(bounds);
+
+</script>
+
+
+{% endblock %}

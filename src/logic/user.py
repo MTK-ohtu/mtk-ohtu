@@ -2,7 +2,7 @@ from database import database as db
 from flask import session
 import secrets
 from werkzeug.security import check_password_hash, generate_password_hash
-from config import DATABASE_CONFIG
+from config import DATABASE_POOL
 
 
 """
@@ -29,10 +29,13 @@ def login(username, password):
         bool: True if the login is successful, False otherwise.
     """
 
-    user = db.db_get_user(username, password, DATABASE_CONFIG)
-    print("user", user[0])
-    if not user:
-        print("no user")
+    user = db.db_get_user(username, password, DATABASE_POOL)
+    if user:
+        if check_password_hash(user.password, password):
+            session["user_id"] = user.id
+            session["csrf_token"] = secrets.token_hex(16)
+            return True
+    else:
         return False
     else:
         session["user_id"] = user[0]

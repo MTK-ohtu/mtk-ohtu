@@ -4,7 +4,7 @@
 
 <div>
     <h2>Add your logistics service</h2>
-    <form id="logisticsForm" action="/addlogistics" method="post" onsubmit="return validateForm()">
+    <form id="logisticsForm" action="/addlogistics" method="post">
         <h4>Select service type</h4>
         
         <div class="service-option">
@@ -33,39 +33,86 @@
             <label for="address">Address:</label>
             <input type="text" id="address" name="address"><br>
 
-            <h4>Add a vehicle:</h4>
-            {% for category in vehicle_categories %}
-            <div class="vehicle-option">
-                <input type="radio" id="{{ category }}" name="vehicleCategory" value="{{ category }}" onchange="toggleTextBox('{{ category }}')">
-                <label for="{{ category }}">{{ category }}</label>
-                <div id="{{ category }}-maxWeight" style="display: none;">
-                    <label for="{{ category }}-weight">Maximum cargo (in tons)</label>
-                    <input type="text" id="{{ category }}-weight" name="weight">
+            <h4>Approximately how far can you deliver (leave empty for no limit)</h4>
+            <label for="radius"></label>
+            <input type="text" id="radius" name="radius"> kilometers
+
+
+
+
+
+
+            <h4>Add materials you can deliver</h4>
+
+            <div id="materials-container">
+      <!-- Initial dropdown and textbox -->
+                <div class="material-entry">
+                    <label for="dropdown">Select an option:</label>
+                    <select class="material-dropdown" name="dropdown">
+                        {% for material in material_categories %}
+                        <option value="{{ material }}">{{ material }}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="price_per_hour">€/h:</label>
+                    <input type="text" class="price-per-hour" name="price_per_hour">
                 </div>
             </div>
-            {% endfor %}
-
-            <h4>Price per hour estimate</h4>
-            <input type="text" id="price" name="price">€/h
+            <button type="button" onclick="saveMaterial()">Save</button>
+            <button type="button" onclick="addMaterial()">Add</button>
         </div>
         <input type="submit" value="Submit">
     </form>
 </div>
 
 <script>
+    function saveMaterial() {
+      // Get the selected category and price from the currently visible entry
+      const selectedCategory = document.querySelector('.material-entry .material-dropdown').value;
+      const pricePerHour = document.querySelector('.material-entry .price-per-hour').value;
+
+      // Implement your save logic here, for example, send data to the server
+      console.log('Saved:', selectedCategory, pricePerHour);
+    }
+
+    function addMaterial() {
+      // Clone the existing material entry
+      const materialsContainer = document.getElementById('materials-container');
+      const materialEntry = document.querySelector('.material-entry').cloneNode(true);
+
+      // Clear the values in the new entry
+      materialEntry.querySelector('.material-dropdown').value = '';
+      materialEntry.querySelector('.price-per-hour').value = '';
+
+      // Append the new entry to the container
+      materialsContainer.appendChild(materialEntry);
+    }
+  </script>
+
+<script>
     function toggleTextBox(category) {
         var maxWeightDiv = document.getElementById(category + '-maxWeight');
 
-        // Hide all textboxes
         var allDivs = document.querySelectorAll('.vehicle-option div');
         allDivs.forEach(function(div) {
             div.style.display = 'none';
         });
 
-        // Show the selected textbox
         if (maxWeightDiv.style.display === 'none') {
             maxWeightDiv.style.display = 'block';
         }
+    }    function validateForm() {
+        var serviceType = document.querySelector('input[name="serviceType"]:checked');
+        var fullName = document.getElementById("fullName");
+        var companyName = document.getElementById("companyName");
+        var businessId = document.getElementById("businessId");
+        var address = document.getElementById("address");
+
+        if (!serviceType || !fullName || !companyName || !businessId || !address) {
+            alert("Please fill in all required fields.");
+            return false;
+        }
+
+        return true;
     }
 
     function toggleQuestions() {
@@ -82,20 +129,7 @@
         }
     }
 
-    function validateForm() {
-        var serviceType = document.querySelector('input[name="serviceType"]:checked');
-        var fullName = document.getElementById("fullName");
-        var companyName = document.getElementById("companyName");
-        var businessId = document.getElementById("businessId");
-        var address = document.getElementById("address");
 
-        if (!serviceType || !fullName || !companyName || !businessId || !address) {
-            alert("Please fill in all required fields.");
-            return false;
-        }
-
-        return true;
-    }
 </script>
 
 {% endblock %}
