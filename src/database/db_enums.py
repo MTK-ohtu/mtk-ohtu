@@ -55,5 +55,5 @@ DEFINED_ENUMS = {
     "supply_demand_type": SupplyDemandType,
     "batch_units_type": BatchUnitsType,
     "category_type": CategoryType,
-    "vehicle_requirement_type": VehicleRequirementType
+    "vehichle_requirement_type": VehicleRequirementType
 }
