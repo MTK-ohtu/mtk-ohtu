@@ -45,7 +45,7 @@ def db_get_product_by_id(product_id: int, pool: ConnectionPool) -> tuple:
     return out
 
 
-def db_get_user(username: str, password: str, pool: ConnectionPool) -> bool:
+def db_get_user(username: str, pool: ConnectionPool) -> bool:
     """Gets user from database
     Args:
         config: Database config
@@ -59,9 +59,13 @@ def db_get_user(username: str, password: str, pool: ConnectionPool) -> bool:
         cursor.execute("SELECT id, password FROM users WHERE username=%s;", (username,))
         user = cursor.fetchone()
         if user:
-            out = user[1] == password
+            out = user
+    connection.close()
     return out
 
+
+def db_check_if_user_exists():
+    pass
 
 def db_add_user(
     username: str, password: str, email: str, pool: ConnectionPool
@@ -79,7 +83,7 @@ def db_add_user(
         cursor = connection.cursor()
         try:
             cursor.execute(
-                "INSERT INTO users (username, password, email) (%s,%s,%s)",
+                "INSERT INTO users (username, password, email) VALUES (%s,%s,%s) RETURNING id",
                 (username, password, email),
             )
         except psycopg.errors.UniqueViolation:
