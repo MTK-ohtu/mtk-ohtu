@@ -140,3 +140,8 @@ def listing(listing_id):
         return render_template("product.html", listing=listing)
     if request.method == "POST":
         return redirect("/")
+    
+@controller.route("/contractors", methods=["GET"])
+def get_contractors(x,y,r):
+    contractors = db.get_contractors_by_euclidean(x, y, r, DATABASE_CONFIG)
+    return render_template("contractor_list.html", x, y, contractors)

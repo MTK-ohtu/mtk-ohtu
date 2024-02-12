@@ -140,3 +140,23 @@ def db_get_vehicle_categories(config: DatabaseConfig) -> list:
         out = [row[0] for row in cursor.fetchall()]
     connection.close()
     return out
+
+def db_get_contractors_by_euclidean(x, y, r, config: DatabaseConfig) -> list:
+    """
+    Queries all logistic contractors inside given euclidean distance from x,y
+    Args:
+        x: source longitude
+        y: source latitude
+        r: distance
+        config: Database config
+    """
+    connection = db_connect(config)
+    out = False
+    with connection:
+        cursor = connection.cursor()
+        query = f"SELECT * FROM logistics_contractors WHERE x BETWEEN {x-r} AND {x+r} AND y BETWEEN {y-r} AND {y+r}"
+        cursor.execute(query)
+        out = list(cursor.fetchall())
+    connection.close()
+    return out
+
