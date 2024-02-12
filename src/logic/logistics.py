@@ -1,7 +1,7 @@
 from database import database as db
 from flask import session
 from config import DATABASE_CONFIG
-from location import Location as l
+
 
 
 def addlogistics(service_type, name, business_id, address, radius):
