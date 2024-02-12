@@ -12,22 +12,6 @@
 </head>
 
 <body>
-
-	<div class="row">
-		<div class="col-8">
-			{% if session.user_id %}
-			<a href="/logout"><button type="submit" class="btn btn-primary">Kirjaudu ulos</button></a>
-			<a href="/newpost"><button type="submit" class="btn btn-primary">Jätä ilmoitus</button></a>
-			Olet kirjautunut sisään.
-		  </div>
-			{% else %}
-		
-		  <div class="col-8">
-			<a href="/register">  <button type="submit" class="btn btn-primary">Tee Käyttäjä</button> </a>
-			<a href="/login"><button type="submit" class="btn btn-primary">Kirjaudu</button></a>
-		</div>
-		</div>
-		{% endif %}
 	<section class="h-100">
 		<div class="container h-100">
 			<div class="row justify-content-sm-center h-100">
@@ -37,7 +21,7 @@
 							<h1 class="fs-4 card-title fw-bold mb-4">Kirjaudu</h1>
 							<form method="POST" class="needs-validation" novalidate="" autocomplete="off">
 								<div class="mb-3">
-									<label class="mb-2 text-muted" for="email">Käyttäjätunnus</label>
+									<label class="mb-2 text-muted" for="email">Username</label>
 									<input id="username" type="text" class="form-control" name="username" value="" required autofocus>
 									<div class="invalid-feedback">
 										Syötä käyttäjätunnus
@@ -46,9 +30,9 @@
 
 								<div class="mb-3">
 									<div class="mb-2 w-100">
-										<label class="text-muted" for="password">Salasana</label>
+										<label class="text-muted" for="password">Password</label>
 										<a href="forgot.html" class="float-end">
-											Unohditko salasanasi?
+											Forgot your password?
 										</a>
 									</div>
 									<input id="password" type="password" class="form-control" name="password" required>
@@ -60,7 +44,7 @@
 								<div class="d-flex align-items-center">
 
 									<button type="submit" class="btn btn-primary ms-auto">
-										Kirjaudu
+										Login
 									</button>
 								</div>
 							</form>
@@ -71,7 +55,7 @@
 
 						<div class="card-footer py-3 border-0">
 							<div class="text-center">
-								Eikö sinulla ole tunnuksia? <a href="/register" class="text-dark">Tee ne tästä</a>
+								Don't have an account? <a href="/register" class="text-dark">Register here</a>
 							</div>
 						</div>
 					</div>

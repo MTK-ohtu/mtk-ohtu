@@ -62,6 +62,9 @@ def db_get_user(username: str, password: str, pool: ConnectionPool) -> bool:
     return out
 
 
+def db_check_if_user_exists():
+    pass
+
 def db_add_user(
     username: str, password: str, email: str, pool: ConnectionPool
 ) -> tuple:
@@ -78,7 +81,7 @@ def db_add_user(
         cursor = connection.cursor()
         try:
             cursor.execute(
-                "INSERT INTO users (username, password, email) (%s,%s,%s)",
+                "INSERT INTO users (username, password, email) VALUES (%s,%s,%s) RETURNING id",
                 (username, password, email),
             )
         except psycopg.errors.UniqueViolation:
