@@ -52,9 +52,12 @@ class TestSelecions(unittest.TestCase):
     def setUp(self):
         db_m.db_excecute_file("schema.sql", DATABASE_CONFIG)
         db_m.db_excecute_file("db_mock_data.sql", DATABASE_CONFIG)
+        self.pool = db_m.db_connection_pool(DATABASE_CONFIG)
 
-    def test_todo(self):
-        self.assertTrue(True)
+    def test_get_all_listings_correct_amount(self):
+        prodlist = db.db_get_product_list(self.pool)
+        self.assertEqual(len(prodlist), 13)
 
     def tearDown(self):
+        self.pool.close()
         db_m.db_drop_all(DATABASE_CONFIG)
