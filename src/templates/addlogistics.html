@@ -4,7 +4,7 @@
 
 <div>
     <h2>Add your logistics service</h2>
-    <form id="logisticsForm" action="/addlogistics" method="post" onsubmit="return validateForm()">
+    <form id="logisticsForm" action="/addlogistics" method="post">
         <h4>Select service type</h4>
         
         <div class="service-option">
@@ -32,6 +32,53 @@
         <div id="allQuestions">
             <label for="address">Address:</label>
             <input type="text" id="address" name="address"><br>
+
+            <h4>Approximately how far can you deliver (leave empty for whole Finland)</h4>
+            <label for="radius"></label>
+            <input type="text" id="radius" name="radius"> kilometers
+
+            <h4>Add materials you can deliver</h4>
+            <label for="materials">Select an option:</label>
+            <select id="materials" name="materials">
+                {% for material in material_categories %}
+                <option value="{{ material }}">{{ material }}</option>
+                {% endfor %}
+            <br>
+            <label for="price_per_hour">€/h</label>
+            <input type="text" id="price_per_hour" name="price_per_hour">€/h
+            </select>
+
+            <button onclick="saveMaterial()">Save</button>
+            <button onclick="addMaterial()">Add</button>
+
+  <script>
+    function saveMaterial() {
+      // Get the selected category and price from the currently visible entry
+      const selectedCategory = document.querySelector('.material-dropdown').value;
+      const pricePerHour = document.querySelector('.price-per-hour').value;
+
+      // Implement your save logic here, for example, send data to the server
+      console.log('Saved:', selectedCategory, pricePerHour);
+    }
+
+    function addMaterial() {
+      // Clone the existing material entry
+      const materialsContainer = document.getElementById('materials-container');
+      const materialEntry = document.querySelector('.material-entry').cloneNode(true);
+
+      // Clear the values in the new entry
+      materialEntry.querySelector('.material-dropdown').value = '';
+      materialEntry.querySelector('.price-per-hour').value = '';
+
+      // Append the new entry to the container
+      materialsContainer.appendChild(materialEntry);
+    }
+  </script>
+
+
+
+
+
 
             <h4>Add a vehicle:</h4>
             {% for category in vehicle_categories %}
@@ -64,6 +111,19 @@
         if (maxWeightDiv.style.display === 'none') {
             maxWeightDiv.style.display = 'block';
         }
+    }    function validateForm() {
+        var serviceType = document.querySelector('input[name="serviceType"]:checked');
+        var fullName = document.getElementById("fullName");
+        var companyName = document.getElementById("companyName");
+        var businessId = document.getElementById("businessId");
+        var address = document.getElementById("address");
+
+        if (!serviceType || !fullName || !companyName || !businessId || !address) {
+            alert("Please fill in all required fields.");
+            return false;
+        }
+
+        return true;
     }
 
     function toggleQuestions() {
@@ -80,20 +140,7 @@
         }
     }
 
-    function validateForm() {
-        var serviceType = document.querySelector('input[name="serviceType"]:checked');
-        var fullName = document.getElementById("fullName");
-        var companyName = document.getElementById("companyName");
-        var businessId = document.getElementById("businessId");
-        var address = document.getElementById("address");
 
-        if (!serviceType || !fullName || !companyName || !businessId || !address) {
-            alert("Please fill in all required fields.");
-            return false;
-        }
-
-        return true;
-    }
 </script>
 
 {% endblock %}

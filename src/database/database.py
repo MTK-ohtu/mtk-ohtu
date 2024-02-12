@@ -76,6 +76,7 @@ def db_add_logistics(
     name: str,
     business_id: str,
     address: str,
+    radius: int,
     config: DatabaseConfig
 ):
     """
@@ -95,8 +96,8 @@ def db_add_logistics(
         cursor = connection.cursor()
         try:
             cursor.execute(
-                "INSERT INTO logistics_contractors (name, business_id, address) VALUES (%s,%s,%s) RETURNING id",
-                (name, business_id, address),
+                "INSERT INTO logistics_contractors (name, business_id, address, delivery_radius) VALUES (%s,%s,%s,%s) RETURNING id",
+                (name, business_id, address, radius),
             )
             logistics_id = cursor.fetchone()[0]
         except psycopg.Error as e:
@@ -137,6 +138,16 @@ def db_get_vehicle_categories(config: DatabaseConfig) -> list:
     with connection:
         cursor = connection.cursor()
         cursor.execute("SELECT unnest(enum_range(NULL::vehichle_requirement_type))")
+        out = [row[0] for row in cursor.fetchall()]
+    connection.close()
+    return out
+
+def db_get_material_categories(config: DatabaseConfig) -> list:
+    connection = db_connect(config)
+    out = False
+    with connection:
+        cursor = connection.cursor()
+        cursor.execute("SELECT unnest(enum_range(NULL::category_type))")
         out = [row[0] for row in cursor.fetchall()]
     connection.close()
     return out

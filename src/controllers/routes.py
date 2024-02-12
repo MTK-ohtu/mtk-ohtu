@@ -108,8 +108,11 @@ def distance():
 def add_logistics():
     if request.method == "GET":
         vehicle_categories = db.db_get_vehicle_categories(DATABASE_CONFIG)
+        material_categories = db.db_get_material_categories(DATABASE_CONFIG)
         return render_template(
-            "addlogistics.html", vehicle_categories=vehicle_categories
+            "addlogistics.html",
+            vehicle_categories=vehicle_categories,
+            material_categories=material_categories
         )
 
     if request.method == "POST":
@@ -126,10 +129,13 @@ def add_logistics():
         vehicle_category = request.form.get("vehicleCategory")
         max_weight = request.form.get("weight")
         price_per_hour = request.form.get("price")
+        radius = request.form.get("radius")
 
-        logistics.addlogistics(
-            service_type, name, business_id, address, vehicle_category, max_weight, price_per_hour
-        )
+        logistics.addlogistics(service_type, name, business_id, address, radius)
+
+        #logistics.addlogistics(
+        #    service_type, name, business_id, address, vehicle_category, max_weight, price_per_hour
+        #)
 
         return redirect("/")
 
