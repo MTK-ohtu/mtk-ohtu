@@ -1,5 +1,10 @@
 from os import getenv
-from database.db_meta import DatabaseConfig, db_create, db_connection_pool, db_excecute_file
+from database.db_meta import (
+    DatabaseConfig,
+    db_create,
+    db_connection_pool,
+    db_excecute_file,
+)
 
 SECRET_KEY = getenv("SECRET_KEY")
 DATABASE_CONFIG = DatabaseConfig(

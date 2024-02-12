@@ -3,6 +3,7 @@ from psycopg_pool import ConnectionPool
 
 # pylint: disable=E1129
 
+
 def db_get_product_list(pool: ConnectionPool) -> list:
     """Gets list of products from database
     Args:
@@ -19,6 +20,7 @@ def db_get_product_list(pool: ConnectionPool) -> list:
         )
         out = list(cursor.fetchall())
     return out
+
 
 def db_get_product_by_id(product_id: int, pool: ConnectionPool) -> tuple:
     """Gets product from database by id
@@ -39,6 +41,7 @@ def db_get_product_by_id(product_id: int, pool: ConnectionPool) -> tuple:
         )
         out = cursor.fetchone()
     return out
+
 
 def db_get_user(username: str, password: str, pool: ConnectionPool) -> bool:
     """Gets user from database
@@ -90,7 +93,7 @@ def db_add_logistics(
     business_id: str,
     address: str,
     vehicle_category: str,
-    pool: ConnectionPool
+    pool: ConnectionPool,
 ):
     """
     Adds new logistics service to database
@@ -108,13 +111,14 @@ def db_add_logistics(
         cursor = connection.cursor()
         try:
             cursor.execute(
-                "INSERT INTO logistics_contractors (name, business_id, address) VALUES (%s,%s,%s)",
-                (name, business_id, address)
+                "INSERT INTO vehicles (logistic_id, name, vehicle_type, vehicle_capacity, price_per_hour) VALUES (%s,%s,%s,%s,%s)",
+                (logistics_id, name, vehicle, max_weight, price),
             )
         except psycopg.Error as e:
             print(f"Error inserting data: {e}")
         out = True
     return out
+
 
 def db_add_vehicle(vehicle: str, pool: ConnectionPool):
     pass
@@ -131,8 +135,36 @@ def db_get_vehicle_categories(pool: ConnectionPool) -> list:
         pool: Database connection pool
     Returns: Vehicle categories as a list"""
     out = False
-    with pool.connection() as connection:    
+    with pool.connection() as connection:
         cursor = connection.cursor()
         cursor.execute("SELECT unnest(enum_range(NULL::vehichle_requirement_type))")
         out = [row[0] for row in cursor.fetchall()]
     return out
+
+
+def db_get_material_categories(pool: ConnectionPool) -> list:
+    out = False
+    with pool.connection() as connection:
+        cursor = connection.cursor()
+        cursor.execute("SELECT unnest(enum_range(NULL::category_type))")
+        out = [row[0] for row in cursor.fetchall()]
+    return out
+
+
+def db_get_contractors_by_euclidean(x, y, r, pool: ConnectionPool) -> list:
+    """
+    Queries all logistic contractors inside given euclidean distance from x,y
+    Args:
+        x: source longitude
+        y: source latitude
+        r: distance
+        config: Database config
+    """
+    out = False
+    with pool.connection() as connection:
+        cursor = connection.cursor()
+        query = f"SELECT * FROM logistics_contractors WHERE x BETWEEN {x-r} AND {x+r} AND y BETWEEN {y-r} AND {y+r}"
+        cursor.execute(query)
+        out = list(cursor.fetchall())
+    return out
+
