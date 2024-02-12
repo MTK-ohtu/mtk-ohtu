@@ -14,7 +14,7 @@ def db_get_product_list(config: DatabaseConfig) -> list:
     with connection:
         cursor = connection.cursor()
         cursor.execute(
-            "SELECT l.category, l.price, l.address, l.description, u.username, l.longitude, l.latitude \
+            "SELECT l.category, l.price, l.address, l.description, u.username, l.longitude, l.latitude, l.id \
                         FROM listings as l \
                         LEFT JOIN users AS u ON u.id = l.user_id;"
         )
@@ -22,6 +22,26 @@ def db_get_product_list(config: DatabaseConfig) -> list:
     print(type(out[0][0]))
     return out
 
+def db_get_product_by_id(product_id: int, config: DatabaseConfig) -> tuple:
+    """Gets product from database by id
+    Args:
+        config: Database config
+        product_id: Product id
+    Returns: Tuple in format ('product name', 'product price', 'product location', 'product description', 'seller name', longitude, latitude)
+    """
+    connection = db_connect(config)
+    out = None
+    with connection:
+        cursor = connection.cursor()
+        cursor.execute(
+            "SELECT l.category, l.price, l.address, l.description, u.username, l.longitude, l.latitude \
+                        FROM listings as l \
+                        LEFT JOIN users AS u ON u.id = l.user_id \
+                        WHERE l.id=%s;",
+            (product_id,),
+        )
+        out = cursor.fetchone()
+    return out
 
 def db_get_user(username: str, password: str, config: DatabaseConfig) -> bool:
     """Gets user from database
@@ -95,7 +115,7 @@ def db_add_logistics(
         try:
             cursor.execute(
                 "INSERT INTO logistics_contractors (name, business_id, address) VALUES (%s,%s,%s)",
-                (name, business_id, address),
+                (name, business_id, address)
             )
         except psycopg.Error as e:
             print(f"Error inserting data: {e}")
