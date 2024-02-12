@@ -91,3 +91,6 @@ route = Route(loc1, loc2)
 route.calculate_route()
 print(route.distance)
 print(route.duration)
+
+print(route.calculate_emissions(FuelType.DIESEL, 7),"kg CO2")
+
