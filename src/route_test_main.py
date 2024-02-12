@@ -1,4 +1,4 @@
-from logic.route_calculator import Route
+from logic.route_calculator import Route, FuelType
 from logic.location import Location
 from geopy.geocoders import Nominatim
 import database.database as db
@@ -84,10 +84,13 @@ geolocator = Nominatim(user_agent=email)
 # print(test_route.duration)
 # print("route calculation", time.time() - start_time)
 
-loc1 = Location((24.962548, 60.205298))
-loc2 = Location((24.922388, 60.169232))
+loc1 = Location((24.962548,60.205298))
+loc2 = Location((25.571514,64.977991))
 print(loc1.latitude)
 route = Route(loc1, loc2)
 route.calculate_route()
 print(route.distance)
 print(route.duration)
+
+print(route.calculate_emissions(FuelType.DIESEL, 7),"kg CO2")
+

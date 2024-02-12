@@ -54,13 +54,14 @@ def listings():
             listings.append(
                 {
                     "listing_id": listing[7],
-                    "name": listing[0],
+                    "name": listing[0].value,
                     "price": listing[1],
                     "location": listing[2],
                     "seller": listing[3],
                     "distance": round(route_to_product.geodesic_distance() / 1000, 1),
                 }
             )
+            listings = sorted(listings, key=lambda x: x['distance'])
     return render_template(
         "listings.html",
         listings=listings,
