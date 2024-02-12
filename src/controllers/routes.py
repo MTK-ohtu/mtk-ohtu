@@ -46,7 +46,7 @@ def listings():
             listings.append(
                 {
                     "listing_id": listing[7],
-                    "name": listing[0],
+                    "name": listing[0].value,
                     "price": listing[1],
                     "location": listing[2],
                     "seller": listing[3],
