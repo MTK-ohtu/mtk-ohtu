@@ -4,6 +4,7 @@ from psycopg_pool import ConnectionPool
 from dataclasses import dataclass
 from psycopg.types.enum import EnumInfo, register_enum
 
+# pylint: disable=E1129
 
 @dataclass
 class DatabaseConfig:
