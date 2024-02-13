@@ -104,15 +104,17 @@ def db_add_logistics(
     pool: ConnectionPool
 ):
     """
-    Adds new logistics service to database
+    Adds new logistics contractor to database
     Args:
         name: name of the logistics service provider
         business_id: business identification number (y-tunnus) if exists
         address: addres of the logistics service provider
-        vehicle_categories: types of equipment the provider has
-        config: Database config
+        lon: longitude of the address
+        lat: latitude of the address
+        radius: how far is the contractor willing to deliver
+        pool: database pool
     Returns:
-        True if data was inserted succesfully
+        Returns the id of the new contractor
     """
     out = False
     with pool.connection() as connection:
@@ -128,13 +130,21 @@ def db_add_logistics(
     return out
 
 
-def db_add_cargo_category(id: int, type: CategoryType, price: int, base_rate: int, pool: ConnectionPool):
+def db_add_cargo_category(id: int, type: CategoryType, price_per_hour: int, base_rate: int, pool: ConnectionPool):
+    """
+    Adds new categories of materials that the contractor are capable to transport
+    Args:
+        id: id of the logistics contractor
+        type: material type
+        price_per_hour: price per hour for material transportation
+        base_rate: base payment for material transportation
+    """
     out = False
     with pool.connection() as connection:
         cursor = connection.cursor()
         cursor.execute(
             "INSERT INTO cargo_prices (logistic_id, type, price_per_km, base_rate) VALUES (%s,%s,%s,%s)",
-            (id, type, price, base_rate)
+            (id, type, price_per_hour, base_rate)
         )
         out = True
     return out

@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect
+from flask import Blueprint, render_template, request, redirect, url_for
 from config import DATABASE_POOL
 import database.database as db
 import logic.route_calculator as route_calculator
@@ -161,9 +161,15 @@ def add_logistics():
         base_rates = request.form.getlist("base_rates[]")
         prices_per_hour = request.form.getlist("prices_per_hour[]")
 
-        logistics.addlogistics(service_type, name, business_id, address, radius, categories, base_rates, prices_per_hour)
+        if logistics.addlogistics(service_type, name, business_id, address, radius, categories, base_rates, prices_per_hour):
+            return redirect(url_for('example.confirmation', message='Logistics submitted successfully'))
+        else:
+            return redirect(url_for('example.confirmation', message='An error occurred while submitting logistics'))
 
-        return redirect("/")
+@controller.route("/confirmation")
+def confirmation():
+    message = request.args.get('message', 'Confirmation message not provided')
+    return render_template("confirmation.html", message=message)
 
 
 @controller.route("/listing/<int:listing_id>", methods=["GET", "POST"])
