@@ -156,16 +156,12 @@ def add_logistics():
             request.form.get("businessId") if service_type == "company" else None
         )
         address = request.form.get("address")
-        vehicle_category = request.form.get("vehicleCategory")
-        max_weight = request.form.get("weight")
-        price_per_hour = request.form.get("price")
         radius = request.form.get("radius")
+        categories = request.form.getlist("materials[]")
+        base_rates = request.form.getlist("base_rates[]")
+        prices_per_hour = request.form.getlist("prices_per_hour[]")
 
-        logistics.addlogistics(service_type, name, business_id, address, radius)
-
-        #logistics.addlogistics(
-        #    service_type, name, business_id, address, vehicle_category, max_weight, price_per_hour
-        #)
+        logistics.addlogistics(service_type, name, business_id, address, radius, categories, base_rates, prices_per_hour)
 
         return redirect("/")
 

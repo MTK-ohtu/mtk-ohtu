@@ -5,7 +5,7 @@ from logic.location import Location as l
 from geopy.geocoders import Nominatim
 
 
-def addlogistics(service_type, name, business_id, address, radius):
+def addlogistics(service_type, name, business_id, address, radius, categories, base_rates, prices_per_hour):
     """
     Adds a new logistic company
 
@@ -25,10 +25,19 @@ def addlogistics(service_type, name, business_id, address, radius):
     print("Longitude:", lon)
     print("Latitude:", lat)
     print("Radius:", radius)
+    print("Categories", categories)
+    print("Base rates:", base_rates)
+    print("Prices:", prices_per_hour)
 
     id = db.db_add_logistics(
         name, business_id, address, lon, lat, radius, pool=DATABASE_POOL
     )
-    db.db_add_cargo_category(
-        id, type, price, base_rate, pool=DATABASE_POOL
-    )
+    i = 0
+    while i < len(categories):
+        type = categories[i]
+        price = prices_per_hour[i]
+        base_rate = base_rates[i]
+        db.db_add_cargo_category(
+            id, type, price, base_rate, pool=DATABASE_POOL
+        )
+        i += 1

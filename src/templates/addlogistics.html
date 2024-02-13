@@ -41,70 +41,47 @@
             <div id="materials-container">
                 <div class="material-entry">
                     <label for="dropdown">Select an option:</label>
-                    <select class="material-dropdown" name="dropdown">
+                    <select class="material-dropdown" name="materials[]">
                         {% for material in material_categories %}
                         <option value="{{ material }}">{{ material }}</option>
                         {% endfor %}
                     </select>
+                    <label for="base_rate">Base rate:</label>
+                    <input type="text" class="base-rate" name="base_rates[]">
                     <label for="price_per_hour">€/h:</label>
-                    <input type="text" class="price-per-hour" name="price_per_hour">
+                    <input type="text" class="price-per-hour" name="prices_per_hour[]">
                 </div>
             </div>
-            <button type="button" onclick="saveMaterial()">Save</button>
+
             <button type="button" onclick="addMaterial()">Add</button>
         </div>
-        <input type="submit" value="Submit">
+        <br>
+        <input type="submit" value="Submit your logistics service">
     </form>
 </div>
 
 <script>
-    function saveMaterial() {
-      const selectedCategory = document.querySelector('.material-entry .material-dropdown').value;
-      const pricePerHour = document.querySelector('.material-entry .price-per-hour').value;
-
-      // Implement your save logic here, for example, send data to the server
-      console.log('Saved:', selectedCategory, pricePerHour);
+    function deleteMaterial(entry) {
+        const materialsContainer = document.getElementById('materials-container');
+        materialsContainer.removeChild(entry);
     }
 
     function addMaterial() {
-      // Clone the existing material entry
-      const materialsContainer = document.getElementById('materials-container');
-      const materialEntry = document.querySelector('.material-entry').cloneNode(true);
+        const materialsContainer = document.getElementById('materials-container');
+        const materialEntry = document.querySelector('.material-entry').cloneNode(true);
 
-      // Clear the values in the new entry
-      materialEntry.querySelector('.material-dropdown').value = '';
-      materialEntry.querySelector('.price-per-hour').value = '';
+        materialEntry.querySelector('.material-dropdown').value = '';
+        materialEntry.querySelector('.price-per-hour').value = '';
+        materialEntry.querySelector('.base-rate').value = '';
 
-      // Append the new entry to the container
-      materialsContainer.appendChild(materialEntry);
-    }
-  </script>
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete field';
+        deleteButton.className = 'delete-material';
+        deleteButton.type = 'button';
+        deleteButton.onclick = function () { deleteMaterial(materialEntry); };
 
-<script>
-    function toggleTextBox(category) {
-        var maxWeightDiv = document.getElementById(category + '-maxWeight');
-
-        var allDivs = document.querySelectorAll('.vehicle-option div');
-        allDivs.forEach(function(div) {
-            div.style.display = 'none';
-        });
-
-        if (maxWeightDiv.style.display === 'none') {
-            maxWeightDiv.style.display = 'block';
-        }
-    }    function validateForm() {
-        var serviceType = document.querySelector('input[name="serviceType"]:checked');
-        var fullName = document.getElementById("fullName");
-        var companyName = document.getElementById("companyName");
-        var businessId = document.getElementById("businessId");
-        var address = document.getElementById("address");
-
-        if (!serviceType || !fullName || !companyName || !businessId || !address) {
-            alert("Please fill in all required fields.");
-            return false;
-        }
-
-        return true;
+        materialEntry.appendChild(deleteButton);
+        materialsContainer.appendChild(materialEntry);
     }
 
     function toggleQuestions() {
