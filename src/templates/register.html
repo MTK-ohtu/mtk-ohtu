@@ -17,31 +17,39 @@
 				<div class="col-xxl-4 col-xl-5 col-lg-5 col-md-7 col-sm-9">
 					<div class="card shadow-lg">
 						<div class="card-body p-5">
-							<h1 class="fs-4 card-title fw-bold mb-4">Rekisteröidy</h1>
+							<h1 class="fs-4 card-title fw-bold mb-4">Register</h1>
 							<form method="POST" class="needs-validation" novalidate autocomplete="off">
 
 								<div class="mb-3">
-									<label class="mb-2 text-muted" for="email">Käyttäjätunnus</label>
+									<label class="mb-2 text-muted" for="email">Email</label>
+									<input id="email" type="text" class="form-control" name="email" required autofocus>
+									<div class="invalid-feedback">
+										email required or it's already taken.
+									</div>
+								</div>
+
+								<div class="mb-3">
+									<label class="mb-2 text-muted" for="username">Username</label>
 									<input id="username" type="text" class="form-control" name="username" required autofocus>
 									<div class="invalid-feedback">
-										Käyttäjätunnus tarvitaan tai se on jo otettu.
+										Username required or it's already taken.
 									</div>
 								</div>
 
 								<div class="mb-3">
 									<div class="mb-2 w-100">
-										<label class="text-muted" for="password">Salasana</label>
+										<label class="text-muted" for="password">Password</label>
 									</div>
 									<input id="password" type="password" class="form-control" name="password" required>
 								    <div class="invalid-feedback">
-								    	Salasana tarvitaan
+								    	Password required
 							    	</div>
 								</div>
 
 								<div class="d-flex align-items-center">
 
 									<button type="submit" class="btn btn-primary ms-auto">
-										Rekisteröidy
+										Register
 								</div>
 							</form>
 						</div>

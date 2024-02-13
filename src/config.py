@@ -2,8 +2,7 @@ from os import getenv
 from database.db_meta import (
     DatabaseConfig,
     db_create,
-    db_connection_pool,
-    db_excecute_file,
+    db_connection_pool
 )
 
 SECRET_KEY = getenv("SECRET_KEY")
@@ -15,12 +14,9 @@ DATABASE_CONFIG = DatabaseConfig(
     port=getenv("DATABASE_PORT"),
 )
 
-
 def setup_db():
     db_create(DATABASE_CONFIG)
-    db_excecute_file("db_mock_data.sql", DATABASE_CONFIG)
     return db_connection_pool(DATABASE_CONFIG)
-
 
 DATABASE_POOL = setup_db()
 
