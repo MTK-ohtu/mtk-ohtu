@@ -26,13 +26,12 @@
 <script>
 
     // Set coordinates to match viewers
-    var map = L.map('map').setView(['{{ x }}','{{ y }}'], 10); 
+    var map = L.map('map').setView(['{{ lon }}','{{ lat }}'], 10); 
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors'
     }).addTo(map);
 
-    
     //Funktion to show contractor name and address over map locations    
     function onEachFeature(feature, layer) {
         if (feature.properties && feature.properties.name && feature.properties.address) {
@@ -44,14 +43,6 @@
     var geojsonLayer = L.geoJSON(contractors, {
         onEachFeature: onEachFeature
     }).addTo(map);
-    
-
-    var bbox = route_geojson["features"][0]["bbox"];
-    var southWest = L.latLng(bbox[1], bbox[0]),
-        northEast = L.latLng(bbox[3], bbox[2]),
-        bounds = L.latLngBounds(southWest, northEast);
-
-    map.fitBounds(bounds);
 
 </script>
 

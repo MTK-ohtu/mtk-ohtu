@@ -192,8 +192,11 @@ def listing(listing_id):
     
     
 @controller.route("/contractors", methods=["GET"])
-def get_contractors(x,y,r):
-    results = db.get_contractors_by_euclidean(x, y, r, DATABASE_CONFIG)
+def get_contractors():
+    lon = request.args.get('lon')
+    lat = request.args.get('lat')
+    r = request.args.get('r')
+    results = db.get_contractors_by_euclidean(lon, lat, r, DATABASE_POOL)
     features = []
     for r in results:
         feature = feature(
@@ -202,4 +205,4 @@ def get_contractors(x,y,r):
             )        
         features.append(feature)
     contractors = FeatureCollection(features)
-    return render_template("contractor_list.html", x, y, contractors)
+    return render_template("contractor_list.html", lon, lat, contractors)
