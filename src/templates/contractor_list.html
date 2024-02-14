@@ -34,7 +34,7 @@
         <script>
 
             // Set coordinates to match viewers
-            var map = L.map('map').setView(['{{ lon }}','{{ lat }}'], 10); 
+            var map = L.map('map', {zoomSnap: 0.05, zoomDelta: 0.25}).setView(['{{ lat }}','{{ lon }}'], 10); 
 
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '© OpenStreetMap contributors'
@@ -50,7 +50,7 @@
             });
 
             //Show location of user
-            L.marker(['{{ lon }}','{{ lat }}'], {icon: redIcon}).addTo(map);
+            L.marker(['{{ lat }}','{{ lon }}'], {icon: redIcon}).addTo(map);
             
             var gjson = JSON.parse('{{ contractors }}'.replaceAll('&#34;', '"'));
             

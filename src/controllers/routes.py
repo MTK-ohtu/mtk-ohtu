@@ -295,13 +295,13 @@ def list_contractors():
     # r = request.args.get('r')
 
     #TESTISIJAINTI
-    lon, lat, r = 61.8578385779706, 24.566428395979575, 300
+    lat, lon, r = 61.8578385779706, 24.566428395979575, 500
 
-    results = db.db_get_contractors_by_euclidean(lon, lat, r/(111.320 * math.cos(lat * math.pi /180)), r*0.00902, DATABASE_POOL)
+    results = db.db_get_contractors_by_euclidean(lat, lon, r*0.00902, r/(111.320 * math.cos(lat * math.pi /180)), DATABASE_POOL)
     features = []
     for r in results:
         feature = Feature(
-            geometry=Point((r[1], r[0])), 
+            geometry=Point((r[0], r[1])), 
             properties={"name": r[2], "address": r[3]}
             )        
         features.append(feature)

@@ -82,11 +82,11 @@ def db_add_user(
     out = False
     with pool.connection() as connection:
         cursor = connection.cursor()
+        #"INSERT INTO users (username, password, email) VALUES (%s,%s,%s) RETURNING id",
         try:
             cursor.execute(
                 "INSERT INTO users (username, password, email) VALUES (%s,%s,%s) RETURNING id",
-                "INSERT INTO users (username, password, email) VALUES (%s,%s,%s) RETURNING id",
-                (username, password, email),
+                (username, password, email)
             )
         except psycopg.errors.UniqueViolation:
             return (False, None)
@@ -183,7 +183,7 @@ def db_get_logistics(pool: ConnectionPool):
     return out
 
 
-def db_get_contractors_by_euclidean(lon, lat, lon_r, lat_r, pool: ConnectionPool) -> list:
+def db_get_contractors_by_euclidean(lat, lon, lat_r, lon_r, pool: ConnectionPool) -> list:
     """
     Queries all logistic contractors inside given euclidean distance from x,y
     Args:
