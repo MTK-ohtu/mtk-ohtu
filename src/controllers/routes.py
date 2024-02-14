@@ -155,13 +155,14 @@ def add_logistics():
         business_id = (
             request.form.get("businessId") if service_type == "company" else None
         )
+        user_id = users.user_id()
         address = request.form.get("address")
         radius = request.form.get("radius")
         categories = request.form.getlist("materials[]")
         base_rates = request.form.getlist("base_rates[]")
         prices_per_hour = request.form.getlist("prices_per_hour[]")
 
-        if logistics.addlogistics(service_type, name, business_id, address, radius, categories, base_rates, prices_per_hour):
+        if logistics.addlogistics(service_type, user_id, name, business_id, address, radius, categories, base_rates, prices_per_hour):
             return redirect(url_for('example.confirmation', message='Logistics submitted successfully'))
         else:
             return redirect(url_for('example.confirmation', message='An error occurred while submitting logistics'))
@@ -225,3 +226,31 @@ def listing(listing_id):
 def get_contractors(x,y,r):
     contractors = db.get_contractors_by_euclidean(x, y, r, DATABASE_CONFIG)
     return render_template("contractor_list.html", x, y, contractors)
+
+
+@controller.route("/contractor/", methods=["GET"])
+def contractor():
+    if request.method == "GET":
+        user_id = users.user_id()
+        contractor_db = db.db_get_contractor(user_id, DATABASE_POOL)
+        if not contractor_db:
+            return redirect("/addlogistics")
+
+        cargo_prices_db = db.db_get_cargo_prices(contractor_db[0], DATABASE_POOL)
+        contractor = {
+            "name": contractor_db[1],
+            "business_id": contractor_db[2],
+            "address": contractor_db[3],
+            "delivery_radius": contractor_db[4],
+        }
+
+        cargo_prices = []
+        for cargo in cargo_prices_db:
+            cargo_dict = {
+                "type": cargo[2].value,
+                "price_per_km": cargo[3],
+                "base_rate": cargo[4]
+            }
+            cargo_prices.append(cargo_dict)
+        
+        return render_template("contractor.html", contractor=contractor, cargo_prices=cargo_prices)

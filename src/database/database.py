@@ -60,7 +60,6 @@ def db_get_user(username: str, pool: ConnectionPool) -> bool:
         user = cursor.fetchone()
         if user:
             out = user
-    connection.close()
     return out
 
 
@@ -95,6 +94,7 @@ def db_add_user(
 
 
 def db_add_logistics(
+    user_id: int,
     name: str,
     business_id: str,
     address: str,
@@ -121,8 +121,8 @@ def db_add_logistics(
         cursor = connection.cursor()
         try:
             cursor.execute(
-                "INSERT INTO logistics_contractors (name, business_id, address, longitude, latitude, delivery_radius) VALUES (%s,%s,%s,%s,%s,%s) RETURNING id",
-                (name, business_id, address, lon, lat, radius),
+                "INSERT INTO logistics_contractors (user_id, name, business_id, address, longitude, latitude, delivery_radius) VALUES (%s,%s,%s,%s,%s,%s,%s) RETURNING id",
+                (user_id, name, business_id, address, lon, lat, radius),
             )
             out = cursor.fetchone()[0]
         except psycopg.Error as e:
@@ -150,6 +150,21 @@ def db_add_cargo_category(id: int, type: CategoryType, price_per_hour: int, base
     return out
 
 
+def db_get_cargo_prices(logistic_id: int, pool: ConnectionPool):
+    """
+    Gets contractor's prices for different cargo types
+
+    Args:
+        logistic_id: Contractor's id number
+    """
+    out = False
+    with pool.connection() as connection:
+        cursor = connection.cursor()
+        cursor.execute("SELECT * FROM cargo_prices WHERE logistic_id=%s", (logistic_id,))
+        out = cursor.fetchall()
+    return out
+
+
 def db_get_logistics(pool: ConnectionPool):
     pass
 
@@ -171,3 +186,17 @@ def db_get_contractors_by_euclidean(x, y, r, pool: ConnectionPool) -> list:
         out = list(cursor.fetchall())
     return out
 
+
+def db_get_contractor(user_id: int, pool: ConnectionPool):
+    """
+    Gets logistics contractor information connected to user
+
+    Args:
+        user_id: Owner's user id number
+    """
+    out = False
+    with pool.connection() as connection:
+        cursor = connection.cursor()
+        cursor.execute("SELECT id, name, business_id, address, delivery_radius FROM logistics_contractors WHERE user_id=%s", (user_id,))
+        out = cursor.fetchone()
+    return out
