@@ -61,8 +61,8 @@
 <form action="/submit_emission_info" method="post">
     <label for="fuelType">Choose a fuel type:</label>
     <select id="fuelType" name="fuelType">
-        <option value="petrol">Petrol</option>
         <option value="diesel">Diesel</option>
+        <option value="petrol">Petrol</option>
         <option value="biodiesel">Biodiesel</option>
         <option value="natural_gas">Natural Gas</option>
         <option value="bio_gas">Bio Gas</option>
@@ -80,7 +80,7 @@
     <h2>Delivery companies</h2>
     <ul>
         {% for company in companies %}
-        <li>{{company.name}}: {{company.price}} €</li>
+        <li>{{company.name}}: {{company.address}}, Radius = {{company.radius}} km </li>
         {% endfor %}
     </ul>
 </div>

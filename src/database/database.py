@@ -150,7 +150,18 @@ def db_add_cargo_category(id: int, type: CategoryType, price_per_hour: int, base
 
 
 def db_get_logistics(pool: ConnectionPool):
-    pass
+    """
+    Gets all logistics contractors from database
+    Args:
+        config: Database config
+    Returns: List of tuples, tuples in format ('name', 'business_id', 'address', 'longitude', 'latitude', 'delivery_radius')
+    """
+    out = False
+    with pool.connection() as connection:
+        cursor = connection.cursor()
+        cursor.execute("SELECT * FROM logistics_contractors")
+        out = list(cursor.fetchall())
+    return out
 
 
 def db_get_contractors_by_euclidean(x, y, r, pool: ConnectionPool) -> list:

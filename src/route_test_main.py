@@ -1,8 +1,8 @@
-from logic.route_calculator import Route, FuelType
+from logic.route_calculator import Route
 from logic.location import Location
 from geopy.geocoders import Nominatim
 import database.database as db
-from config import DATABASE_CONFIG
+from config import DATABASE_CONFIG, DATABASE_POOL
 import time
 
 
@@ -92,5 +92,7 @@ route.calculate_route()
 print(route.distance)
 print(route.duration)
 
-print(route.calculate_emissions(FuelType.DIESEL, 7),"kg CO2")
-
+companies = db.db_get_logistics(DATABASE_POOL)
+for company in companies:
+    print(company)
+    print(company[2], company[5])

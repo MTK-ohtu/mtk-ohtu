@@ -211,7 +211,18 @@ def listing(listing_id):
         route_to_product.calculate_route()
         session_handler.save_route_to_session(route_to_product)
         print(session_handler.get_route_from_session()["distance"])
-        logistics = db.db_get_logistics(DATABASE_POOL)        
+        logistics_db = db.db_get_logistics(DATABASE_POOL)
+        companies = []
+        for company in logistics_db:
+            companies.append(
+                {
+                    "name": company[2],
+                    "address": company[5],
+                    "radius": company[-1],
+                    "id": company[0],
+                }
+            )
+
         return render_template(
             "product.html",
             listing_id=listing_id,
@@ -222,6 +233,7 @@ def listing(listing_id):
             ),
             route_geojson=route_to_product.geojson,
             user_location=user_location.location,
+            companies=companies,
             show_route=True,
         )
 
