@@ -7,6 +7,8 @@ import datetime
 import logic.user as users
 import logic.logistics as logistics
 from database.db_enums import CategoryType
+import controllers.session_handler as session_handler
+import logic.route_stats as route_stats
 
 controller = Blueprint("example", __name__)
 
@@ -205,9 +207,11 @@ def listing(listing_id):
             listing_location = Location((listing["longitude"], listing["latitude"]))
         else:
             listing_location = Location(listing["address"])
-        route_to_product = route_calculator.Route(user_location, listing_location)
+        route_to_product = route_calculator.Route(listing_location, user_location)
         route_to_product.calculate_route()
-        logistics = db.db_get_logistics(DATABASE_POOL)
+        session_handler.save_route_to_session(route_to_product)
+        print(session_handler.get_route_from_session()["distance"])
+        logistics = db.db_get_logistics(DATABASE_POOL)        
         return render_template(
             "product.html",
             listing_id=listing_id,
@@ -223,5 +227,16 @@ def listing(listing_id):
 
 @controller.route("/contractors", methods=["GET"])
 def get_contractors(x,y,r):
-    contractors = db.get_contractors_by_euclidean(x, y, r, DATABASE_CONFIG)
+    contractors = db.get_contractors_by_euclidean(x, y, r, DATABASE_POOL)
     return render_template("contractor_list.html", x, y, contractors)
+
+
+@controller.route("/submit_emission_info", methods=["POST"])
+def submit_emission_info():
+    if request.method == "POST":
+        fuel = request.form["fuelType"]
+        fuel_consumption = request.form["fuel_efficiency"]
+        listing_id = request.form["listing_id"]
+        distance = session_handler.get_route_from_session()["distance"]
+        emissions = route_stats.calculate_emissions(fuel, fuel_consumption, distance)
+        return render_template("product.html", emissions=emissions)

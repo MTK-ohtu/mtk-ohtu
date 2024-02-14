@@ -3,14 +3,8 @@ import requests
 from logic.location import Location
 import datetime
 from enum import Enum
+from flask import session
 
-class FuelType(Enum):
-    PETROL = 2.31
-    DIESEL = 2.68
-    BIODIESEL = 2.0
-    NATURAL_GAS = 2.75
-    BIO_GAS = 1.97
-    ELECTRICITY = 0.0
 
 class Route:
 
@@ -88,11 +82,4 @@ class Route:
         else:
             return call
 
-    def calculate_emissions(self, fuel: FuelType, fuel_efficiency):
-        """Return route emissions.
-        
-        Args:
-            fuel: fuel type
-            fuel_efficiency: fuel consuption per 100 km
-        """
-        return self.distance/100000*fuel_efficiency*fuel.value
+

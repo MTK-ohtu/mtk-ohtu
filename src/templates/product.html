@@ -68,9 +68,9 @@
         <option value="bio_gas">Bio Gas</option>
         <option value="electricity">Electricity</option>
     </select>
-    <input type="number" name="fuel_efficiency" step="0.1" min="0" max="200">
+    <input type="number" name="fuel_efficiency" step="0.1" min="0" max="200" placeholder="l/100 km">
     <input type="hidden" name="listing_id" value="{{listing_id}}">
-    <button type="submit">Submit</button>
+    <button type="submit">Calculate emissions</button>
 </form>
 {% endif %}
 
