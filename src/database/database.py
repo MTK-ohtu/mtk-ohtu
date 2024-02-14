@@ -44,7 +44,6 @@ def db_get_product_by_id(product_id: int, pool: ConnectionPool) -> tuple:
         out = cursor.fetchone()
     return out
 
-
 def db_get_user(username: str, pool: ConnectionPool) -> bool:
     """Gets user from database
     Args:
@@ -66,6 +65,9 @@ def db_get_user(username: str, pool: ConnectionPool) -> bool:
 def db_check_if_user_exists():
     pass
 
+def db_check_if_user_exists():
+    pass
+
 def db_add_user(
     username: str, password: str, email: str, pool: ConnectionPool
 ) -> tuple:
@@ -80,10 +82,11 @@ def db_add_user(
     out = False
     with pool.connection() as connection:
         cursor = connection.cursor()
+        #"INSERT INTO users (username, password, email) VALUES (%s,%s,%s) RETURNING id",
         try:
             cursor.execute(
                 "INSERT INTO users (username, password, email) VALUES (%s,%s,%s) RETURNING id",
-                (username, password, email),
+                (username, password, email)
             )
         except psycopg.errors.UniqueViolation:
             return (False, None)
@@ -180,7 +183,7 @@ def db_get_logistics(pool: ConnectionPool):
     return out
 
 
-def db_get_contractors_by_euclidean(x, y, r, pool: ConnectionPool) -> list:
+def db_get_contractors_by_euclidean(lat, lon, lat_r, lon_r, pool: ConnectionPool) -> list:
     """
     Queries all logistic contractors inside given euclidean distance from x,y
     Args:
@@ -192,7 +195,7 @@ def db_get_contractors_by_euclidean(x, y, r, pool: ConnectionPool) -> list:
     out = False
     with pool.connection() as connection:
         cursor = connection.cursor()
-        query = f"SELECT * FROM logistics_contractors WHERE x BETWEEN {x-r} AND {x+r} AND y BETWEEN {y-r} AND {y+r}"
+        query = f"SELECT longitude, latitude, name, address FROM logistics_contractors WHERE longitude BETWEEN {lon-lon_r} AND {lon+lon_r} AND latitude BETWEEN {lat-lat_r} AND {lat+lat_r}"
         cursor.execute(query)
         out = list(cursor.fetchall())
     return out

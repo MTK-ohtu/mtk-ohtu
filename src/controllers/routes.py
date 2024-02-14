@@ -6,9 +6,11 @@ from logic.location import Location
 import datetime
 import logic.user as users
 import logic.logistics as logistics
+from geojson import Point, Feature, FeatureCollection
 from database.db_enums import CategoryType
 import controllers.session_handler as session_handler
 import logic.route_stats as route_stats
+import math
 
 controller = Blueprint("example", __name__)
 
@@ -90,10 +92,6 @@ def login():
                 "login.html", message="Salasana tai käyttäjätunnus väärin"
             )
         
-@controller.route("/logout")
-def logout():
-    users.logout()
-    return redirect("/")
 
 @controller.route("/register", methods=["GET", "POST"])
 def register():
@@ -109,6 +107,12 @@ def register():
             return render_template(
                 "register.html", message="Käyttäjätunnus on jo käytössä"
             )
+        
+@controller.route("/logout")
+def logout():
+    users.logout()
+    return redirect("/")
+
 
 @controller.route("/distance", methods=["get", "post"])
 def distance():
@@ -279,4 +283,26 @@ def submit_emission_info():
         listing_id = request.form["listing_id"]
         distance = session_handler.get_route_from_session()
         emissions = route_stats.calculate_emissions(fuel, fuel_consumption, distance)
-        return render_template("product.html", emissions=emissions, )
+        return render_template("product.html", emissions=emissions)
+
+
+@controller.route("/list_contractors", methods=["GET"])
+def list_contractors():
+    
+    # lon = request.args.get('lon')
+    # lat = request.args.get('lat')
+    # r = request.args.get('r')
+
+    #TESTISIJAINTI
+    lat, lon, r = 61.8578385779706, 24.566428395979575, 500
+
+    results = db.db_get_contractors_by_euclidean(lat, lon, r*0.00902, r/(111.320 * math.cos(lat * math.pi /180)), DATABASE_POOL)
+    features = []
+    for r in results:
+        feature = Feature(
+            geometry=Point((r[0], r[1])), 
+            properties={"name": r[2], "address": r[3]}
+            )        
+        features.append(feature)
+    contractors = FeatureCollection(features)
+    return render_template("contractor_list.html", lon=lon, lat=lat, contractors=contractors)

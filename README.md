@@ -7,21 +7,32 @@ To be used in: https://www.kiertoasuomesta.fi/
 
 ## Setting up
 
+First, clone the project to your computer:
+```
+git clone git@github.com:MTK-ohtu/mtk-ohtu.git
+```
+
 ### Configuration
 
-To run this app, enviroment variable need to be set. To do this, find `.env.template` on projects root folder and rename it to `.env`.
-Next, you need to generate a secret key. You can do this for example with command: `python3 -c 'import secrets; print(secrets.token_hex())'`. Replace PUT_THE_KEY_HERE with the generated secret key inside .env -file.
+To run this app, some enviroment variables need to be set. To do this, find `.env.template` in the project's root folder and rename it to `.env`. The environment variables are default-configured for running with Docker Compose. For running manually, configure the variables inside the file separately.
+
+Regardless of the method of execution, you need to generate a secret key. You can do this with the command: `python3 -c 'import secrets; print(secrets.token_hex())'`. Replace PUT_THE_KEY_HERE in the .env file with the generated secret key.
 
 ### Running with Docker Compose
 
-**To build and start** the application (add `--detached` if you want to run in detached mode):
+To build and start the **whole** application (add `--detached` if you want to run in detached mode):
 ```bash
 docker compose up --build
 ```
-**To shut the application down**, first exit the process (Ctrl+C) and then run:
+If you want to start the server yourself with `poetry run invoke start` (see: [Running manually](#running-manually)), but want to start the other containers necessary for local development, run the following command:
+```
+docker compose up postgres
+```
+To shut the application down, first exit the process (Ctrl+C) and then run:
 ```
 docker compose down
 ```
+<hr>
 Docker Compose will create a database folder `postgresql-data` in the project directory to store the PostgreSQL database. To delete and reset the database, simply delete the `postgresql-data` directory.
 
 To create mock data for the database, run the following commands after starting the application:
@@ -29,17 +40,17 @@ To create mock data for the database, run the following commands after starting 
 docker exec -it mtk-postgres bash
 psql -U postgres < db_mock_data.sql
 ```
+<hr>
 
 
 ### Running manually
 
 #### Installation
 
-1. Clone the project to your computer.
-2. Install dependencies with command: `poetry install`.
-3. Configure enviroment variables. See "Configuration".
-4. Start the app with command: `poetry run invoke start`.
-
+1. Install dependencies with the command: `poetry install`.
+2. Set up a PostgreSQL database.
+3. Configure enviroment variables. See: [Configuration](#configuration).
+4. Start the app with the command: `poetry run invoke start`.
 
 ## Documentation
 
