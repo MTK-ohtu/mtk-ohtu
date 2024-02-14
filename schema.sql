@@ -79,8 +79,8 @@ CREATE TABLE IF NOT EXISTS logistics_contractors (
     created_at TIMESTAMP DEFAULT NOW(),
     business_id VARCHAR(16),
     address TEXT NOT NULL,
-    longitude NUMERIC,
-    latitude NUMERIC,
+    longitude FLOAT,
+    latitude FLOAT,
     delivery_radius INTEGER NOT NULL
 );
 

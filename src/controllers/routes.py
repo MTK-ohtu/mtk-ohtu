@@ -7,9 +7,13 @@ import datetime
 import logic.user as users
 import logic.logistics as logistics
 from geojson import Point, Feature, FeatureCollection
+<<<<<<< HEAD
 from database.db_enums import CategoryType
 import controllers.session_handler as session_handler
 import logic.route_stats as route_stats
+=======
+from pyproj import Transformer
+>>>>>>> 0f15c0a (contractors view)
 
 controller = Blueprint("example", __name__)
 
@@ -242,6 +246,7 @@ def listing(listing_id):
         )
 
 @controller.route("/contractors", methods=["GET"])
+<<<<<<< HEAD
 def get_contractors(x,y,r):
     contractors = db.get_contractors_by_euclidean(x, y, r, DATABASE_POOL)
     return render_template("contractor_list.html", x, y, contractors)
@@ -284,3 +289,26 @@ def submit_emission_info():
         distance = session_handler.get_route_from_session()["distance"]
         emissions = route_stats.calculate_emissions(fuel, fuel_consumption, distance)
         return render_template("product.html", emissions=emissions)
+=======
+def get_contractors():
+    
+    # lon = request.args.get('lon')
+    # lat = request.args.get('lat')
+    # r = request.args.get('r')
+
+    #TESTISIJAINTI
+    lon, lat, r = 61.8578385779706, 24.566428395979575, 150
+
+    
+
+    results = db.db_get_contractors_by_euclidean(lon, lat, r, DATABASE_POOL)
+    features = []
+    for r in results:
+        feature = Feature(
+            geometry=Point((r[0], r[1])), 
+            properties={"name": r[2], "address": r[3]}
+            )        
+        features.append(feature)
+    contractors = FeatureCollection(features)
+    return render_template("contractor_list.html", lon=lon, lat=lat, contractors=contractors)
+>>>>>>> 0f15c0a (contractors view)
