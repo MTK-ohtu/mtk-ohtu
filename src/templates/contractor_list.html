@@ -36,16 +36,11 @@
             // Set coordinates to match viewers
             var map = L.map('map').setView(['{{ lon }}','{{ lat }}'], 10); 
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors'
-    }).addTo(map);
-
-    var contractors = JSON.parse('{{ contractors }}'.replaceAll('&#34;', '"'));
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '© OpenStreetMap contributors'
             }).addTo(map);
 
-            var greenIcon = new L.Icon({
+            var redIcon = new L.Icon({
                 iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
                 shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
                 iconSize: [25, 41],
@@ -55,12 +50,13 @@
             });
 
             //Show location of user
-            L.marker(['{{ lon }}','{{ lat }}'], {icon: greenIcon}).addTo(map);
+            L.marker(['{{ lon }}','{{ lat }}'], {icon: redIcon}).addTo(map);
             
             var gjson = JSON.parse('{{ contractors }}'.replaceAll('&#34;', '"'));
+            
             console.log(gjson);
 
-            //Funktion to show contractor name and address over map locations    
+            //Define functionality on features
             function onEachFeature(feature, layer) {
                 if (feature.properties && feature.properties.name && feature.properties.address) {
                     layer.bindPopup('<b>' + feature.properties.name + '</b><br>' + feature.properties.address);
