@@ -14,14 +14,19 @@ Next, you need to generate a secret key. You can do this for example with comman
 
 ### Running with Docker Compose
 
-**To build and start** the application (add `--detached` if you want to run in detached mode):
+To build and start the **whole** application (add `--detached` if you want to run in detached mode):
 ```bash
 docker compose up --build
 ```
-**To shut the application down**, first exit the process (Ctrl+C) and then run:
+If you want to start the server yourself with `flask run`, but want to start the other containers necessary for local development, run the following command:
+```
+docker compose up postgres
+```
+To shut the application down, first exit the process (Ctrl+C) and then run:
 ```
 docker compose down
 ```
+<hr>
 Docker Compose will create a database folder `postgresql-data` in the project directory to store the PostgreSQL database. To delete and reset the database, simply delete the `postgresql-data` directory.
 
 To create mock data for the database, run the following commands after starting the application:
@@ -29,6 +34,7 @@ To create mock data for the database, run the following commands after starting 
 docker exec -it mtk-postgres bash
 psql -U postgres < db_mock_data.sql
 ```
+<hr>
 
 
 ### Running manually
