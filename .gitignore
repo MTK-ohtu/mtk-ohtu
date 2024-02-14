@@ -5,3 +5,4 @@ htmlcov
 venv/
 *.pyc
 postgresql-data
+flask_session/
