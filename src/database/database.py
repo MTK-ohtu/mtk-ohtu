@@ -60,7 +60,6 @@ def db_get_user(username: str, pool: ConnectionPool) -> bool:
         user = cursor.fetchone()
         if user:
             out = user
-    connection.close()
     return out
 
 
