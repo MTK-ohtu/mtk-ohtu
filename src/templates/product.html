@@ -39,6 +39,7 @@
         // Adds geojson route to map
         L.geoJSON(route_geojson).addTo(map);
 
+        //var destination = L.marker(route_geojson["features"][0]["geometry"]["coordinates"].slice(-1).reverse()).addTo(map);
 
         var bbox = route_geojson["features"][0]["bbox"];
         var southWest = L.latLng(bbox[1], bbox[0]),
