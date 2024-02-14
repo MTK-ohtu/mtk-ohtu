@@ -26,6 +26,11 @@
 <!-- Add a container for the map -->
 <div id="map" style="height: 400px;"></div>
 
+<style>
+    img.huechange {
+        filter: hue-rotate(120deg);
+    }
+</style>
 <script>
     var map = L.map('map').setView(['{{listing.latitude}}', '{{listing.longitude}}'], 12);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -34,12 +39,17 @@
     var product = L.marker(['{{listing.latitude}}', '{{listing.longitude}}']).addTo(map);
 
     if ('{{show_route}}') {
+
         var route_geojson = JSON.parse('{{ route_geojson }}'.replaceAll('&#34;', '"'));
+        console.log(route_geojson);
 
         // Adds geojson route to map
         L.geoJSON(route_geojson).addTo(map);
+        var destination = route_geojson["features"][0]["geometry"]["coordinates"].pop().reverse();
+        console.log(destination);
 
-        //var destination = L.marker(route_geojson["features"][0]["geometry"]["coordinates"].slice(-1).reverse()).addTo(map);
+        var destinationMarker = L.marker(destination).addTo(map);
+        destinationMarker._icon.classList.add('huechange');
 
         var bbox = route_geojson["features"][0]["bbox"];
         var southWest = L.latLng(bbox[1], bbox[0]),
@@ -85,6 +95,5 @@
         {% endfor %}
     </ul>
 </div>
-
 
 {% endblock %}

@@ -211,7 +211,7 @@ def listing(listing_id):
         route_to_product = route_calculator.Route(listing_location, user_location)
         route_to_product.calculate_route()
         session_handler.save_route_to_session(route_to_product)
-        print(session_handler.get_route_from_session()["distance"])
+        #print(session_handler.get_route_from_session()["location2"]["location"])
         logistics_db = db.db_get_logistics(DATABASE_POOL)
         companies = []
         for company in logistics_db:
@@ -223,7 +223,6 @@ def listing(listing_id):
                     "id": company[0],
                 }
             )
-
         return render_template(
             "product.html",
             listing_id=listing_id,
@@ -278,6 +277,6 @@ def submit_emission_info():
         fuel = request.form["fuelType"]
         fuel_consumption = request.form["fuel_efficiency"]
         listing_id = request.form["listing_id"]
-        distance = session_handler.get_route_from_session()["distance"]
+        distance = session_handler.get_route_from_session()
         emissions = route_stats.calculate_emissions(fuel, fuel_consumption, distance)
-        return render_template("product.html", emissions=emissions)
+        return render_template("product.html", emissions=emissions, )

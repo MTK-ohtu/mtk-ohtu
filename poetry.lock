@@ -26,6 +26,17 @@ files = [
 ]
 
 [[package]]
+name = "cachelib"
+version = "0.12.0"
+description = "A collection of cache libraries in the same API interface."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "cachelib-0.12.0-py3-none-any.whl", hash = "sha256:038f4d855afc3eb8caab10458f6eac55c328911f9055824c22c2f259ef9ed3a3"},
+    {file = "cachelib-0.12.0.tar.gz", hash = "sha256:8243029a028436fd23229113dee517c0700bb43a8a289ec5a963e4af9ca2b194"},
+]
+
+[[package]]
 name = "certifi"
 version = "2024.2.2"
 description = "Python package for providing Mozilla's CA Bundle."
@@ -274,6 +285,21 @@ Werkzeug = ">=3.0.0"
 [package.extras]
 async = ["asgiref (>=3.2)"]
 dotenv = ["python-dotenv"]
+
+[[package]]
+name = "flask-session"
+version = "0.6.0"
+description = "Server-side session support for Flask"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "flask_session-0.6.0-py3-none-any.whl", hash = "sha256:dd77b6c5916021a540a8c188731c529596ad9ea382c07a24f9654355fa40c9ad"},
+    {file = "flask_session-0.6.0.tar.gz", hash = "sha256:b1ed06cf4c5a211305579a132e81307d242cec6fe2714a276405730ffd22a034"},
+]
+
+[package.dependencies]
+cachelib = "*"
+flask = ">=2.2"
 
 [[package]]
 name = "geographiclib"
@@ -818,4 +844,4 @@ watchdog = ["watchdog (>=2.3)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "289effa2e60d4d8aa97d3bf01cc1f689bc95775a1bf6cd8ff8a2e7568ca2247b"
+content-hash = "f2b5912bdcb501ea7418cd5de5b7a6481d43236c32caef2e016a4b7d4a12ad9f"
