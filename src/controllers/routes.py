@@ -283,7 +283,9 @@ def submit_emission_info():
         listing_id = request.form["listing_id"]
         distance = session_handler.get_route_from_session()["distance"]
         emissions = route_stats.calculate_emissions(fuel, fuel_consumption, distance)
+    return render_template("product.html", emissions=emissions)
     
+
 @controller.route("/list_contractors", methods=["GET"])
 def list_contractors():
     
@@ -293,8 +295,6 @@ def list_contractors():
 
     #TESTISIJAINTI
     lon, lat, r = 61.8578385779706, 24.566428395979575, 150
-
-    
 
     results = db.db_get_contractors_by_euclidean(lon, lat, r, DATABASE_POOL)
     features = []
@@ -306,4 +306,3 @@ def list_contractors():
         features.append(feature)
     contractors = FeatureCollection(features)
     return render_template("contractor_list.html", lon=lon, lat=lat, contractors=contractors)
-        return render_template("product.html", emissions=emissions)
