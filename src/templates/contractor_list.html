@@ -32,6 +32,8 @@
         attribution: '© OpenStreetMap contributors'
     }).addTo(map);
 
+    var contractors = JSON.parse('{{ contractors }}'.replaceAll('&#34;', '"'));
+
     //Funktion to show contractor name and address over map locations    
     function onEachFeature(feature, layer) {
         if (feature.properties && feature.properties.name && feature.properties.address) {
