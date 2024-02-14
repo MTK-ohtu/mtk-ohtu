@@ -64,10 +64,13 @@
             }
 
             // Add contractor locations (database)
-            L.geoJSON(gjson, {
+            var gj = L.geoJSON(gjson, {
                 onEachFeature: onEachFeature
             }).addTo(map);
 
+            map.flyToBounds(gj.getBounds());
+
+            L.control.scale().addTo(map);
         </script>
     </div>
 </div>

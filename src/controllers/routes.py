@@ -10,6 +10,7 @@ from geojson import Point, Feature, FeatureCollection
 from database.db_enums import CategoryType
 import controllers.session_handler as session_handler
 import logic.route_stats as route_stats
+import math
 
 controller = Blueprint("example", __name__)
 
@@ -294,13 +295,13 @@ def list_contractors():
     # r = request.args.get('r')
 
     #TESTISIJAINTI
-    lon, lat, r = 61.8578385779706, 24.566428395979575, 150
+    lon, lat, r = 61.8578385779706, 24.566428395979575, 300
 
-    results = db.db_get_contractors_by_euclidean(lon, lat, r, DATABASE_POOL)
+    results = db.db_get_contractors_by_euclidean(lon, lat, r/(111.320 * math.cos(lat * math.pi /180)), r*0.00902, DATABASE_POOL)
     features = []
     for r in results:
         feature = Feature(
-            geometry=Point((r[0], r[1])), 
+            geometry=Point((r[1], r[0])), 
             properties={"name": r[2], "address": r[3]}
             )        
         features.append(feature)
