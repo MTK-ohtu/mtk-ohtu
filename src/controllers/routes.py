@@ -91,10 +91,6 @@ def login():
                 "login.html", message="Salasana tai käyttäjätunnus väärin"
             )
         
-@controller.route("/logout")
-def logout():
-    users.logout()
-    return redirect("/")
 
 @controller.route("/register", methods=["GET", "POST"])
 def register():
@@ -116,20 +112,6 @@ def logout():
     users.logout()
     return redirect("/")
 
-@controller.route("/register", methods=["GET", "POST"])
-def register():
-    if request.method == "GET":
-        return render_template("register.html")
-    if request.method == "POST":
-        username = request.form["username"]
-        password = request.form["password"]
-        email = request.form["email"]
-        if users.register(username, password, email):
-            return redirect("/")
-        else:
-            return render_template(
-                "register.html", message="Käyttäjätunnus on jo käytössä"
-            )
 
 @controller.route("/distance", methods=["get", "post"])
 def distance():
