@@ -6,6 +6,7 @@ from logic.location import Location
 import datetime
 import logic.user as users
 import logic.logistics as logistics
+from geojson import Point, Feature, FeatureCollection
 from database.db_enums import CategoryType
 import controllers.session_handler as session_handler
 import logic.route_stats as route_stats
@@ -88,6 +89,26 @@ def login():
         else:
             return render_template(
                 "login.html", message="Salasana tai käyttäjätunnus väärin"
+            )
+        
+@controller.route("/logout")
+def logout():
+    users.logout()
+    return redirect("/")
+
+@controller.route("/register", methods=["GET", "POST"])
+def register():
+    if request.method == "GET":
+        return render_template("register.html")
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+        email = request.form["email"]
+        if users.register(username, password, email):
+            return redirect("/")
+        else:
+            return render_template(
+                "register.html", message="Käyttäjätunnus on jo käytössä"
             )
         
 @controller.route("/logout")

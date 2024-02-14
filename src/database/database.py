@@ -46,6 +46,7 @@ def db_get_product_by_id(product_id: int, pool: ConnectionPool) -> tuple:
 
 
 def db_get_user(username: str, pool: ConnectionPool) -> bool:
+def db_get_user(username: str, pool: ConnectionPool) -> bool:
     """Gets user from database
     Args:
         config: Database config
@@ -66,6 +67,9 @@ def db_get_user(username: str, pool: ConnectionPool) -> bool:
 def db_check_if_user_exists():
     pass
 
+def db_check_if_user_exists():
+    pass
+
 def db_add_user(
     username: str, password: str, email: str, pool: ConnectionPool
 ) -> tuple:
@@ -82,6 +86,7 @@ def db_add_user(
         cursor = connection.cursor()
         try:
             cursor.execute(
+                "INSERT INTO users (username, password, email) VALUES (%s,%s,%s) RETURNING id",
                 "INSERT INTO users (username, password, email) VALUES (%s,%s,%s) RETURNING id",
                 (username, password, email),
             )
@@ -192,7 +197,7 @@ def db_get_contractors_by_euclidean(x, y, r, pool: ConnectionPool) -> list:
     out = False
     with pool.connection() as connection:
         cursor = connection.cursor()
-        query = f"SELECT * FROM logistics_contractors WHERE x BETWEEN {x-r} AND {x+r} AND y BETWEEN {y-r} AND {y+r}"
+        query = f"SELECT longitude, latitude, name, address FROM logistics_contractors WHERE x BETWEEN {x-r} AND {x+r} AND y BETWEEN {y-r} AND {y+r}"
         cursor.execute(query)
         out = list(cursor.fetchall())
     return out

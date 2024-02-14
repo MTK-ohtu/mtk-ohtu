@@ -15,6 +15,7 @@ requests = "^2.31.0"
 geographiclib = "^2.0"
 werkzeug = "^3.0.1"
 psycopg = {extras = ["binary", "pool"], version = "^3.1.18"}
+geojson = "^3.1.0"
 
 
 [tool.poetry.group.dev.dependencies]

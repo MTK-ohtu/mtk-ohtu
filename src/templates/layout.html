@@ -84,12 +84,21 @@
             <a href="/logout">logout</a>
         </div> 
     </div>
+        {% if session.user_id %}
+        <div class="navbar-right">
+            <a href="/logout">logout</a>
+        </div> 
+    </div>
+
+        {% else %}
 
         {% else %}
         <div class="navbar-right">
             <a href="/login">Login</a>
         </div> 
+        </div> 
     </div>
+    {% endif %}
     {% endif %}
 
     <div class="content">
