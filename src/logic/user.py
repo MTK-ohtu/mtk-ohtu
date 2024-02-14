@@ -44,4 +44,4 @@ def logout():
 
 
 def user_id():
-    return session["user_id", 0]
+    return session.get("user_id", 0)

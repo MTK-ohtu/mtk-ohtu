@@ -4,7 +4,7 @@ from config import DATABASE_POOL
 from logic.location import Location as l
 
 
-def addlogistics(service_type, name, business_id, address, radius, categories, base_rates, prices_per_hour):
+def addlogistics(service_type, user_id, name, business_id, address, radius, categories, base_rates, prices_per_hour):
     """
     Adds a new logistic company and categories
     Args:
@@ -41,7 +41,7 @@ def addlogistics(service_type, name, business_id, address, radius, categories, b
     print("Prices:", prices_per_hour)
 
     id = db.db_add_logistics(
-        name, business_id, address, lon, lat, radius, pool=DATABASE_POOL
+        user_id, name, business_id, address, lon, lat, radius, pool=DATABASE_POOL
     )
     i = 0
     while i < len(categories):
