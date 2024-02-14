@@ -3,8 +3,8 @@
 {% block content %}
 
 <div>
-    <h2>Add your logistics service</h2>
-    <form id="logisticsForm" action="/addlogistics" method="post">
+    <h2>Add a logistics service</h2>
+    <form id="logisticsForm" action="/addlogistics" method="post" onsubmit="return validateForm()">
         <h4>Select service type</h4>
         
         <div class="service-option">
@@ -26,7 +26,7 @@
             <label for="companyName">Company name:</label>
             <input type="text" id="companyName" name="companyName"><br>
             <label for="businessId">Business ID:</label>
-            <input type="text" id="businessId" name="businessId"><br>
+            <input type="text" id="businessId" name="businessId"> <br>
         </div>
 
         <div id="allQuestions">
@@ -41,70 +41,47 @@
             <div id="materials-container">
                 <div class="material-entry">
                     <label for="dropdown">Select an option:</label>
-                    <select class="material-dropdown" name="dropdown">
+                    <select class="material-dropdown" name="materials[]">
                         {% for material in material_categories %}
                         <option value="{{ material }}">{{ material }}</option>
                         {% endfor %}
                     </select>
+                    <label for="base_rate">Base rate:</label>
+                    <input type="text" class="base-rate" name="base_rates[]">
                     <label for="price_per_hour">€/h:</label>
-                    <input type="text" class="price-per-hour" name="price_per_hour">
+                    <input type="text" class="price-per-hour" name="prices_per_hour[]">
                 </div>
             </div>
-            <button type="button" onclick="saveMaterial()">Save</button>
-            <button type="button" onclick="addMaterial()">Add</button>
+
+            <button type="button" onclick="addMaterial()">Add new</button>
         </div>
+        <br>
         <input type="submit" value="Submit">
     </form>
 </div>
 
 <script>
-    function saveMaterial() {
-      const selectedCategory = document.querySelector('.material-entry .material-dropdown').value;
-      const pricePerHour = document.querySelector('.material-entry .price-per-hour').value;
-
-      // Implement your save logic here, for example, send data to the server
-      console.log('Saved:', selectedCategory, pricePerHour);
+    function deleteMaterial(entry) {
+        const materialsContainer = document.getElementById('materials-container');
+        materialsContainer.removeChild(entry);
     }
 
     function addMaterial() {
-      // Clone the existing material entry
-      const materialsContainer = document.getElementById('materials-container');
-      const materialEntry = document.querySelector('.material-entry').cloneNode(true);
+        const materialsContainer = document.getElementById('materials-container');
+        const materialEntry = document.querySelector('.material-entry').cloneNode(true);
 
-      // Clear the values in the new entry
-      materialEntry.querySelector('.material-dropdown').value = '';
-      materialEntry.querySelector('.price-per-hour').value = '';
+        materialEntry.querySelector('.material-dropdown').value = '';
+        materialEntry.querySelector('.price-per-hour').value = '';
+        materialEntry.querySelector('.base-rate').value = '';
 
-      // Append the new entry to the container
-      materialsContainer.appendChild(materialEntry);
-    }
-  </script>
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete field';
+        deleteButton.className = 'delete-material';
+        deleteButton.type = 'button';
+        deleteButton.onclick = function () { deleteMaterial(materialEntry); };
 
-<script>
-    function toggleTextBox(category) {
-        var maxWeightDiv = document.getElementById(category + '-maxWeight');
-
-        var allDivs = document.querySelectorAll('.vehicle-option div');
-        allDivs.forEach(function(div) {
-            div.style.display = 'none';
-        });
-
-        if (maxWeightDiv.style.display === 'none') {
-            maxWeightDiv.style.display = 'block';
-        }
-    }    function validateForm() {
-        var serviceType = document.querySelector('input[name="serviceType"]:checked');
-        var fullName = document.getElementById("fullName");
-        var companyName = document.getElementById("companyName");
-        var businessId = document.getElementById("businessId");
-        var address = document.getElementById("address");
-
-        if (!serviceType || !fullName || !companyName || !businessId || !address) {
-            alert("Please fill in all required fields.");
-            return false;
-        }
-
-        return true;
+        materialEntry.appendChild(deleteButton);
+        materialsContainer.appendChild(materialEntry);
     }
 
     function toggleQuestions() {
@@ -121,7 +98,70 @@
         }
     }
 
+    function validateForm() {
+        var serviceType = document.querySelector('input[name="serviceType"]:checked');
+        var fullName = document.getElementById("fullName");
+        var companyName = document.getElementById("companyName");
+        var businessId = document.getElementById("businessId");
+        var address = document.getElementById("address");
+        var radius = document.getElementById("radius");
 
+        if (!serviceType) {
+            alert("Please choose a service type (private or company).");
+            return false;
+        }
+
+        if (serviceType.value === "private") {
+            if (!fullName || fullName.value.trim() === "") {
+                alert("Please enter your full name.");
+                return false;
+            }
+        } else if (serviceType.value === "company") {
+            if (!companyName || companyName.value.trim() === "") {
+                alert("Please enter the company name.");
+                return false;
+            }
+
+            if (!businessId || businessId.value.trim() === "") {
+                alert("Please enter the business ID.");
+                return false;
+            }
+        }
+
+        if (!address || address.value.trim() === "") {
+            alert("Please enter the address.");
+            return false;
+        }
+
+        if (radius.value.trim() !== "" && isNaN(radius.value.trim())) {
+            alert("Radius must be a number.");
+            return false;
+        }
+
+        var materialEntries = document.querySelectorAll('.material-entry');
+        for (var i = 0; i < materialEntries.length; i++) {
+            var materialDropdown = materialEntries[i].querySelector('.material-dropdown');
+            var pricePerHour = materialEntries[i].querySelector('.price-per-hour');
+            var baseRate = materialEntries[i].querySelector('.base-rate');
+
+            if (materialDropdown.value.trim() === "") {
+                alert("Please select a material type in entry " + (i + 1) + "or delete the field.");
+                return false;
+            }
+
+            if (pricePerHour.value.trim() === "" || isNaN(pricePerHour.value.trim())) {
+                alert("Please enter a valid price per hour in entry " + (i + 1) + "or delete the field.");
+                return false;
+            }
+
+            if (baseRate.value.trim() === "" || isNaN(baseRate.value.trim())) {
+                alert("Please enter a valid base rate in entry " + (i + 1) + "or delete the field.");
+                return false;
+            }
+        }
+
+        return true;
+    }
 </script>
 
 {% endblock %}
