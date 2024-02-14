@@ -19,38 +19,12 @@
     <p>{{listing.price}} €</p>
 </div>
 
-{% if show_route %}
-<div>
-    <h3>Route to {{user_location}}</h3>
-    <p>Distance: {{distance}} km</p>
-    <p>Duration: {{duration}}</p>
-</div>
-
-
-<form action="/submit_emission_info" method="post">
-    <label for="fuelType">Choose a fuel type:</label>
-    <select id="fuelType" name="fuelType">
-        <option value="petrol">Petrol</option>
-        <option value="diesel">Diesel</option>
-        <option value="biodiesel">Biodiesel</option>
-        <option value="natural_gas">Natural Gas</option>
-        <option value="bio_gas">Bio Gas</option>
-        <option value="electricity">Electricity</option>
-    </select>
-    <input type="number" name="fuel_efficiency" step="0.1" min="0" max="200">
-    <input type="hidden" name="listing_id" value="{{listing_id}}">
-    <button type="submit">Submit</button>
-</form>
-{% endif %}
-
 <!-- Include Leaflet JavaScript and CSS -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
 <!-- Add a container for the map -->
 <div id="map" style="height: 400px;"></div>
-
-
 
 <script>
     var map = L.map('map').setView(['{{listing.latitude}}', '{{listing.longitude}}'], 12);
@@ -74,9 +48,31 @@
         map.fitBounds(bounds);
     }
 
-
 </script>
 
+{% if show_route %}
+<div>
+    <h3>Route to {{user_location}}</h3>
+    <p>Distance: {{distance}} km</p>
+    <p>Duration: {{duration}}</p>
+</div>
+
+
+<form action="/submit_emission_info" method="post">
+    <label for="fuelType">Choose a fuel type:</label>
+    <select id="fuelType" name="fuelType">
+        <option value="petrol">Petrol</option>
+        <option value="diesel">Diesel</option>
+        <option value="biodiesel">Biodiesel</option>
+        <option value="natural_gas">Natural Gas</option>
+        <option value="bio_gas">Bio Gas</option>
+        <option value="electricity">Electricity</option>
+    </select>
+    <input type="number" name="fuel_efficiency" step="0.1" min="0" max="200" placeholder="l/100 km">
+    <input type="hidden" name="listing_id" value="{{listing_id}}">
+    <button type="submit">Calculate emissions</button>
+</form>
+{% endif %}
 
 
 <!--we need to list here the delivery companies-->
