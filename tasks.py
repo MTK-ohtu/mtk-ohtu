@@ -1,9 +1,11 @@
 from invoke import task
+from dotenv import load_dotenv
 
+load_dotenv()
 
 @task
 def start(ctx):
-    ctx.run('flask --app src/app run', pty = True)
+    ctx.run('flask --app mtk_ohtu.app run', pty = True)
 
 @task
 def reset_db(ctx):
