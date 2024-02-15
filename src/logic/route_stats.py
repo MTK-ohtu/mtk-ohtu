@@ -8,7 +8,7 @@ class FuelType(Enum):
     BIODIESEL = 2.0
     NATURAL_GAS = 2.75
     BIO_GAS = 1.97
-    ELECTRICITY = 0.0
+    ELECTRICITY = 0.04
 
 
 def calculate_emissions(fuel, distance, fuel_efficiency = 55.0):
@@ -18,8 +18,6 @@ def calculate_emissions(fuel, distance, fuel_efficiency = 55.0):
         fuel: fuel type
         fuel_efficiency: fuel consuption per 100 km
     """
-    print(f'fuel: {fuel}, distance: {distance}, fuel_efficiency: {fuel_efficiency}')
-
     fuels = {
         "diesel": FuelType.DIESEL,
         "petrol": FuelType.PETROL,
@@ -31,11 +29,8 @@ def calculate_emissions(fuel, distance, fuel_efficiency = 55.0):
     if fuel in fuels.keys():
         fuel = fuels[fuel]
 
-
     if type(fuel_efficiency) != float:
-        if type(fuel_efficiency) == int:
-            fuel_efficiency = float(fuel_efficiency)
-        elif type(fuel_efficiency) == str:
+        if type(fuel_efficiency) == str:
             if fuel_efficiency == "":
                 fuel_efficiency = 55.0
             else:
@@ -43,6 +38,10 @@ def calculate_emissions(fuel, distance, fuel_efficiency = 55.0):
                     fuel_efficiency = float(fuel_efficiency)
                 except:
                     raise ValueError(f"fuel_efficiency ({fuel_efficiency}) string conversion to float failed")
-        #raise ValueError("fuel_efficiency must be a float. Not a " + str(type(fuel_efficiency)))
+        else:
+            try:
+                fuel_efficiency = float(fuel_efficiency)
+            except:
+                raise ValueError("fuel_efficiency must be a float. Not a " + str(type(fuel_efficiency)))
 
     return distance/100000*float(fuel_efficiency)*fuel.value

@@ -228,6 +228,8 @@ def listing(listing_id):
                     "address": company[5],
                     "radius": company[-1],
                     "id": company[0],
+                    "longitude": company[6],
+                    "latitude": company[7],
                 }
             )
         return render_template(
@@ -278,18 +280,6 @@ def contractor():
             cargo_prices.append(cargo_dict)
         
         return render_template("contractor.html", contractor=contractor, cargo_prices=cargo_prices)
-
-
-@controller.route("/submit_emission_info", methods=["POST"])
-def submit_emission_info():
-    if request.method == "POST":
-        fuel = request.form["fuelType"]
-        fuel_consumption = request.form["fuel_efficiency"]
-        listing_id = request.form["listing_id"]
-        route_info = session_handler.get_route_from_session()
-        distance = route_info["distance"]
-        emissions = route_stats.calculate_emissions(fuel, fuel_consumption, distance)
-        return render_template("product.html", emissions=emissions)
 
 
 @controller.route("/list_contractors", methods=["GET"])
