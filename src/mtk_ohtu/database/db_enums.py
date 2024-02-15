@@ -1,6 +1,5 @@
 from enum import Enum
 
-
 class BuyOrSell(Enum):
     BUY = "buy"
     SELL = "sell"
