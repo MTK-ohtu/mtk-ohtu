@@ -22,7 +22,8 @@
         </p>
         <p>
             <label for="fuel_efficiency">Fuel efficiency:</label>
-            <input type="number" name="fuel_efficiency" step="0.1" min="0" max="200" value={{consumption}}> l/100 km
+            <input type="number" name="fuel_efficiency" step="0.1" min="0" max="200" value={{consumption}}>
+            <span id="unit">l/100 km</span>
             <input type="hidden" name="listing_id" value="{{listing_id}}">
         </p>
         <!-- <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}"> -->
@@ -48,6 +49,7 @@
     }
 </style>
 <script>
+    // Create a map object with route and markers and add it to the map container.
     var map = L.map('map').setView(['{{listing.latitude}}', '{{listing.longitude}}'], 12);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors'
@@ -76,6 +78,22 @@
     }
 
 </script>
+<script>
+    // Change fuel efficiency unit based on fuel type
+    document.getElementById('fuelType').addEventListener('change', function () {
+        var fuelType = this.value;
+        var unitDisplay = document.getElementById('unit');
+
+        if (fuelType === 'petrol' || fuelType === 'diesel' || fuelType === 'biodiesel') {
+            unitDisplay.textContent = 'l/100 km';
+        } else if (fuelType === 'natural_gas' || fuelType === 'bio_gas') {
+            unitDisplay.textContent = 'kg/100 km';
+        } else if (fuelType === 'electricity') {
+            unitDisplay.textContent = 'kWh/100 km';
+        }
+    });
+</script>
+
 
 {% if show_route %}
 <div>
