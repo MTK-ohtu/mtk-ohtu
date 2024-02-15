@@ -25,5 +25,3 @@ def setup_db():
 
 DATABASE_POOL = setup_db()
 
-# if SECRET_KEY in (None, "PUT_THE_KEY_HERE"):
-#    raise Exception("Missing SECRET_KEY enviroment variable.")
