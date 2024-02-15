@@ -1,4 +1,7 @@
 from geopy.geocoders import Nominatim
+from config import NOMINATIM_DOMAIN, NOMINATIM_USER_AGENT
+
+geolocator = Nominatim(domain=NOMINATIM_DOMAIN, user_agent=NOMINATIM_USER_AGENT, scheme="http")
 
 
 class Location:
@@ -10,14 +13,12 @@ class Location:
         longitude (float): The longitude of the address.
     """
 
-    def __init__(self, loc_input, user_email="miko.paajanen@gmail.com"):
+    def __init__(self, loc_input):
         """Initialize the Location class.
 
         Args:
             loc_input (str or tuple or list): The address or coordinates of the location.
-            user_email (str): The email address used for the API call.
         """
-        self.geolocator = Nominatim(user_agent=user_email)
         if type(loc_input) == str:
             self.location = self.location_from_address(loc_input)
             self.longitude = self.location.longitude
@@ -32,6 +33,6 @@ class Location:
     def location_from_address(self, address):
         """Return the coordinates of the address."""
         try:
-            return self.geolocator.geocode(address)
+            return geolocator.geocode(address)
         except:
             raise ValueError(f"Invalid address: {address}")

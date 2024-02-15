@@ -14,6 +14,9 @@ DATABASE_CONFIG = DatabaseConfig(
     port=getenv("DATABASE_PORT"),
 )
 
+NOMINATIM_DOMAIN = getenv("NOMINATIM_DOMAIN")
+NOMINATIM_USER_AGENT = getenv("NOMINATIM_USER_AGENT")
+
 def setup_db():
     db_create(DATABASE_CONFIG)
     return db_connection_pool(DATABASE_CONFIG)

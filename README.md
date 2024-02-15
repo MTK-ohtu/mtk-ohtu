@@ -24,9 +24,9 @@ To build and start the **whole** application (add `--detached` if you want to ru
 ```bash
 docker compose up --build
 ```
-If you want to start the server yourself with `poetry run invoke start` (see: [Running manually](#running-manually)), but want to start the other containers necessary for local development, run the following command:
+If you want to start the server yourself with `poetry run invoke start` (see: [Running manually](#running-manually)), but want to start the other containers necessary for local development (also see: [Setting up a local Nominatim server](#setting-up-a-local-nominatim-server)), run the following command:
 ```
-docker compose up postgres
+docker compose up postgres nominatim
 ```
 To shut the application down, first exit the process (Ctrl+C) and then run:
 ```
@@ -40,8 +40,22 @@ To create mock data for the database, run the following commands after starting 
 docker exec -it mtk-postgres bash
 psql -U postgres < db_mock_data.sql
 ```
-<hr>
 
+### Setting up a local Nominatim server
+To set up a local Nominatim server, some steps need to be taken:
+1. Create a folder with the name `nominatim` in the project root directory.
+1. Download an OSM PBF map of Finland and save it in the `nominatim` folder with the name `finland.osm.pbf`. An example source: https://download.openstreetmap.fr/extracts/europe/finland.osm.pbf
+3. In the `.env` file, change the environment variable `NOMINATIM_DOMAIN` to the proper domain. If you are running the serber manually, set it to `localhost:8080`. If you are running it inside Docker Compose, set it to `nominatim:8080`.
+
+Running the Nominatim server for the first time may take over half an hour. It is therefore recommended that you only run the Nominatim server with Docker Compose thusly:
+```
+docker compose up nominatim
+```
+
+Later, when running the **whole** application with Docker Compose, specify `--profile nominatim` so that the whole command is:
+```
+docker compose --profile nominatim up --build
+```
 
 ### Running manually
 

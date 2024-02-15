@@ -19,3 +19,18 @@ services:
       - ./postgresql-data:/var/lib/postgresql/data
       - ./db_mock_data.sql:/db_mock_data.sql
     container_name: mtk-postgres
+  
+  nominatim:
+    image: mediagis/nominatim:4.3
+    ports:
+      - 8080:8080
+    environment:
+      PBF_PATH: /finland.osm.pbf
+      REPLICATION_URL: https://download.geofabrik.de/europe/finland-updates/
+      NOMINATIM_PASSWORD: nominatim
+    volumes:
+      - ./nominatim/database:/var/lib/postgresql/14/main
+      - ./nominatim/finland.osm.pbf:/finland.osm.pbf
+    shm_size: 1gb
+    profiles: ["nominatim"]
+    stop_grace_period: 2s
