@@ -1,8 +1,8 @@
-from logic.route_calculator import Route
-from logic.location import Location
+from mtk_ohtu.logic.route_calculator import Route
+from mtk_ohtu.logic.location import Location
 from geopy.geocoders import Nominatim
-import database.database as db
-from config import DATABASE_CONFIG, DATABASE_POOL
+import mtk_ohtu.database.database as db
+from mtk_ohtu.config import DATABASE_CONFIG, DATABASE_POOL
 import time
 
 

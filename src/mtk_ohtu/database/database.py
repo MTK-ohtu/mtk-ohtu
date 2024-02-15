@@ -1,5 +1,5 @@
 import psycopg
-from database.db_enums import CategoryType
+from ..database.db_enums import CategoryType
 from psycopg_pool import ConnectionPool
 
 

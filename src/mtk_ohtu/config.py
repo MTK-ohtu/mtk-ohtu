@@ -1,5 +1,5 @@
 from os import getenv
-from database.db_meta import (
+from .database.db_meta import (
     DatabaseConfig,
     db_create,
     db_connection_pool

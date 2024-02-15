@@ -1,8 +1,8 @@
 import psycopg
-import database.db_enums as db_enums
 from psycopg_pool import ConnectionPool
 from dataclasses import dataclass
 from psycopg.types.enum import EnumInfo, register_enum
+from ..database import db_enums
 
 # pylint: disable=E1129
 

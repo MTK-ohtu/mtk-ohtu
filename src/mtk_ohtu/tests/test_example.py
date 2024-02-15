@@ -1,6 +1,6 @@
 import unittest
-from logic.route_calculator import Route
-from logic.location import Location
+from mtk_ohtu.logic.route_calculator import Route
+from mtk_ohtu.logic.location import Location
 
 
 class TestRoute(unittest.TestCase):

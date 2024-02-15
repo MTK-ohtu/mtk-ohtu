@@ -1,7 +1,7 @@
-from database import database as db
+from ..database import database as db
 from flask import session
-from config import DATABASE_POOL
-from logic.location import Location as l
+from ..config import DATABASE_POOL
+from ..logic.location import Location as l
 
 
 def addlogistics(service_type, user_id, name, business_id, address, radius, categories, base_rates, prices_per_hour):

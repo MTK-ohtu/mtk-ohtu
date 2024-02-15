@@ -1,5 +1,5 @@
 from geopy.geocoders import Nominatim
-from config import NOMINATIM_DOMAIN, NOMINATIM_USER_AGENT
+from ..config import NOMINATIM_DOMAIN, NOMINATIM_USER_AGENT
 
 geolocator = Nominatim(domain=NOMINATIM_DOMAIN, user_agent=NOMINATIM_USER_AGENT, scheme="http")
 

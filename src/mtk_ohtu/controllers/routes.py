@@ -1,16 +1,17 @@
-from flask import Blueprint, render_template, request, redirect, url_for
-from config import DATABASE_POOL
-import database.database as db
-import logic.route_calculator as route_calculator
-from logic.location import Location
-import datetime
-import logic.user as users
-import logic.logistics as logistics
-from geojson import Point, Feature, FeatureCollection
-from database.db_enums import CategoryType
-import controllers.session_handler as session_handler
-import logic.route_stats as route_stats
 import math
+import datetime
+from flask import Blueprint, render_template, request, redirect, url_for
+from ..config import DATABASE_POOL
+from ..database import database as db
+from ..logic import route_calculator
+from ..logic.location import Location
+from ..logic import user as users
+from ..logic import logistics
+from geojson import Point, Feature, FeatureCollection
+from ..database.db_enums import CategoryType
+from ..controllers import session_handler
+from ..logic import route_stats
+
 
 controller = Blueprint("example", __name__)
 

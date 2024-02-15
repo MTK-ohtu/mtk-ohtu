@@ -1,8 +1,8 @@
-from config import SECRET_KEY
+from .config import SECRET_KEY
 from flask import Flask
 from flask_session import Session
 from flask import Flask, session
-from controllers.routes import controller
+from .controllers.routes import controller
 
 
 def create_app():

@@ -1,6 +1,6 @@
 import geopy.distance
 import requests
-from logic.location import Location
+from ..logic.location import Location
 import datetime
 from enum import Enum
 from flask import session
