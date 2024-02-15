@@ -44,7 +44,11 @@
 <div id="map" style="height: 400px;"></div>
 
 <style>
-    img.huechange {
+    img.huechange1 {
+        filter: hue-rotate(-120deg);
+    }
+
+    img.huechange2 {
         filter: hue-rotate(120deg);
     }
 </style>
@@ -55,7 +59,8 @@
         attribution: '© OpenStreetMap contributors'
     }).addTo(map);
     var product = L.marker(['{{listing.latitude}}', '{{listing.longitude}}']).addTo(map);
-
+    product._icon.classList.add('huechange1');
+    product.bindPopup("{{listing.name}}\n{{listing.address}}");
     if ('{{show_route}}') {
 
         var route_geojson = JSON.parse('{{ route_geojson }}'.replaceAll('&#34;', '"'));
@@ -64,10 +69,22 @@
         // Adds geojson route to map
         L.geoJSON(route_geojson).addTo(map);
         var destination = route_geojson["features"][0]["geometry"]["coordinates"].pop().reverse();
-        console.log(destination);
 
         var destinationMarker = L.marker(destination).addTo(map);
-        destinationMarker._icon.classList.add('huechange');
+        destinationMarker._icon.classList.add('huechange2');
+        destinationMarker.bindPopup("Destination");
+
+
+        var contractors = JSON.parse('{{companies}}'.replaceAll('&#39;', '"'));
+        console.log(contractors);
+        for (var i = 0; i < contractors.length; i++) {
+            var contractor = contractors[i];
+            console.log(contractors[i]);
+            var logisticsMarker = L.marker([contractor.latitude, contractor.longitude]).addTo(map);
+            // var logisticsMarker = L.circle([contractor.latitude, contractor.longitude]).addTo(map);
+            // logisticsMarker.setRadius(contractor.radius * 1000);
+            logisticsMarker.bindPopup(contractor.name + " " + contractor.address);
+        }
 
         var bbox = route_geojson["features"][0]["bbox"];
         var southWest = L.latLng(bbox[1], bbox[0]),

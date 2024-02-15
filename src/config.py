@@ -2,7 +2,8 @@ from os import getenv
 from database.db_meta import (
     DatabaseConfig,
     db_create,
-    db_connection_pool
+    db_connection_pool,
+    db_excecute_file
 )
 
 SECRET_KEY = getenv("SECRET_KEY")
@@ -19,6 +20,7 @@ NOMINATIM_USER_AGENT = getenv("NOMINATIM_USER_AGENT")
 
 def setup_db():
     db_create(DATABASE_CONFIG)
+    #db_excecute_file("db_mock_data.sql", DATABASE_CONFIG)
     return db_connection_pool(DATABASE_CONFIG)
 
 DATABASE_POOL = setup_db()
