@@ -37,8 +37,20 @@ def add_logistics():
         categories = request.form.getlist("materials[]")
         base_rates = request.form.getlist("base_rates[]")
         prices_per_hour = request.form.getlist("prices_per_hour[]")
+        maximum_capacities = request.form.getlist("max_capacities[]")
 
-        if logistics.addlogistics(service_type, user_id, name, business_id, address, radius, categories, base_rates, prices_per_hour):
+        if logistics.addlogistics(
+            service_type, 
+            user_id, 
+            name, 
+            business_id, 
+            address, 
+            radius, 
+            categories, 
+            base_rates, 
+            prices_per_hour, 
+            maximum_capacities
+        ):
             return redirect(url_for('contractor_bp.confirmation', message='Logistics submitted successfully'))
         else:
             return redirect(url_for('contractor_bp.confirmation', message='An error occurred while submitting logistics'))
