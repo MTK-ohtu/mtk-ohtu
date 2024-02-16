@@ -52,6 +52,8 @@
                     <input type="text" class="price-per-hour" name="prices_per_hour[]">
                     <label for="max_capacity">Maximum capacity:</label>
                     <input type="text" class="max-capacity" name="max_capacities[]"> tons
+                    <label for="max_distance">Maximum delivery distance:</label>
+                    <input type="text" class="max-distance" name="max_distances[]"> kilometers
                 </div>
             </div>
 
@@ -76,6 +78,7 @@
         materialEntry.querySelector('.price-per-hour').value = '';
         materialEntry.querySelector('.base-rate').value = '';
         materialEntry.querySelector('.max-capacity').value = '';
+        materialEntry.querySelector('.max-distance').value = '';
 
         const deleteButton = document.createElement('button');
         deleteButton.textContent = 'Delete field';
@@ -147,6 +150,7 @@
             var pricePerHour = materialEntries[i].querySelector('.price-per-hour');
             var baseRate = materialEntries[i].querySelector('.base-rate');
             var maxCapacity = materialEntries[i].querySelector('.max-capacity');
+            var maxDistance = materialEntries[i].querySelector('.max-distance');
 
             if (materialDropdown.value.trim() === "") {
                 alert("Please select a material type in entry " + (i + 1) + "or delete the field.");
@@ -163,8 +167,13 @@
                 return false;
             }
 
-            if (maxCapacity.value.trim() === "" || isNaN(pricePerHour.value.trim())) {
+            if (maxCapacity.value.trim() === "" || isNaN(maxCapacity.value.trim())) {
                 alert("Please enter a valid maximum capacity in entry " + (i + 1) + "or delete the field.");
+                return false;
+            }
+
+            if (maxDistance.value.trim() === "" || isNaN(maxDistance.value.trim())) {
+                alert("Please enter a valid maximum delivery distance in entry " + (i + 1) + "or delete the field.");
                 return false;
             }
         }

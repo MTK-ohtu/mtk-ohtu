@@ -38,6 +38,7 @@ def add_logistics():
         base_rates = request.form.getlist("base_rates[]")
         prices_per_hour = request.form.getlist("prices_per_hour[]")
         maximum_capacities = request.form.getlist("max_capacities[]")
+        maximum_distances = request.form.getlist("max_distances[]")
 
         if logistics.addlogistics(
             service_type, 
@@ -49,7 +50,8 @@ def add_logistics():
             categories, 
             base_rates, 
             prices_per_hour, 
-            maximum_capacities
+            maximum_capacities,
+            maximum_distances
         ):
             return redirect(url_for('contractor_bp.confirmation', message='Logistics submitted successfully'))
         else:

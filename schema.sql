@@ -99,5 +99,6 @@ CREATE TABLE IF NOT EXISTS cargo_prices (
     type category_type NOT NULL,
     price_per_km INTEGER NOT NULL,
     base_rate INTEGER,
-    max_capacity INTEGER
+    max_capacity INTEGER,
+    max_distance INTEGER
 );
