@@ -13,14 +13,14 @@ class Location:
         longitude (float): The longitude of the address.
     """
 
-    def __init__(self, loc_input):
+    def __init__(self, loc_input: str):
         """Initialize the Location class.
 
         Args:
             loc_input (str or tuple or list): The address or coordinates of the location.
         """
         if type(loc_input) == str:
-            self.location = self.location_from_address(loc_input)
+            self.location = self._location_from_address(loc_input)
             self.longitude = self.location.longitude
             self.latitude = self.location.latitude
         elif type(loc_input) == tuple or type(loc_input) == list:
@@ -28,11 +28,14 @@ class Location:
             self.longitude = loc_input[0]
             self.latitude = loc_input[1]
         else:
-            raise ValueError("Invalid input")
+            raise ValueError("Invalid location input")
 
-    def location_from_address(self, address):
+    def _location_from_address(self, address):
         """Return the coordinates of the address."""
         try:
-            return geolocator.geocode(address)
+            loc = geolocator.geocode(address)
+            if loc is None:
+                raise ValueError(f"No result found for address {address}")
+            return loc
         except:
             raise ValueError(f"Invalid address: {address}")
