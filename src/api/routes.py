@@ -4,6 +4,7 @@ from logic.location import Location
 from flask import Blueprint, request
 from api.logistics_info_schema import LogisticsInfoSchema
 from logic.logistics_info import get_logistics_info
+from routes.listing import get_url_for_listing
 
 api_bp = Blueprint("api_bp", __name__)
 
@@ -36,5 +37,5 @@ def logistics_info():
     return {
         "distance": distance,
         "num_providers": num_providers,
-        "link": "TODO"
+        "link": get_url_for_listing(listing)
     }

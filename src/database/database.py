@@ -29,7 +29,9 @@ def db_get_product_by_id(product_id: int, pool: ConnectionPool) -> tuple:
     Args:
         config: Database config
         product_id: Product id
-    Returns: Tuple in format ('product name', 'product price', 'product location', 'product description', 'seller name', longitude, latitude)
+    Returns:
+        Tuple in format ('product name', 'product price', 'product location (address)', 'product description', 'seller name', longitude, latitude)
+        None if no product is found
     """
     out = None
     with pool.connection() as connection:

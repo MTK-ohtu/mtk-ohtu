@@ -13,7 +13,7 @@ class Location:
         longitude (float): The longitude of the address.
     """
 
-    def __init__(self, loc_input: str):
+    def __init__(self, loc_input: str | tuple | list):
         """Initialize the Location class.
 
         Args:

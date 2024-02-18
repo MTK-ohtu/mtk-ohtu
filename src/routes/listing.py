@@ -6,10 +6,10 @@ import logic.route_stats as route_stats
 from flask import Blueprint, render_template, request, redirect
 from config import DATABASE_POOL
 from logic.location import Location
+from logic.listing import Listing
 
 
 listing_bp = Blueprint("listing_bp", __name__)
-
 
 @listing_bp.route("/")
 def index():
@@ -72,6 +72,10 @@ def listings():
 @listing_bp.route("/createpost")
 def create_listing():
     return render_template("createpost.html")
+
+
+def get_url_for_listing(listing: Listing) -> str:
+    return request.url_root + "listing/" + str(listing.id)
 
 
 @listing_bp.route("/listing/<int:listing_id>", methods=["GET", "POST"])
