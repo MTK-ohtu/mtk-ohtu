@@ -1,7 +1,7 @@
 from marshmallow import Schema, post_load
-from logic.location import Location
-from logic.listing import Listing
-from api.class_field import ClassField
+from ..logic.location import Location
+from ..logic.listing import Listing
+from ..api.class_field import ClassField
 
 class LogisticsInfoSchema(Schema):
     '''A Marshmallow schema for the API3 endpoint (getting logistics info when provided a listing ID and a user's location)

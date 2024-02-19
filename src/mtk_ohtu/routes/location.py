@@ -1,7 +1,7 @@
 import datetime
-import logic.route_calculator as route_calculator
+from ..logic import route_calculator
 from flask import Blueprint, render_template, request
-from logic.location import Location
+from ..logic.location import Location
 
 
 location_bp = Blueprint("location_bp", __name__)

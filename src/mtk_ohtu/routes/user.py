@@ -1,4 +1,4 @@
-import logic.user as users
+from ..logic import user as users
 from flask import Blueprint, render_template, request, redirect
 
 
