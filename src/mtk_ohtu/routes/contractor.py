@@ -77,7 +77,7 @@ def contractor():
         if not contractor_db:
             return redirect("/addlogistics")
 
-        cargo_prices_db = db.db_get_cargo_prices(contractor_db[0], DATABASE_POOL)
+        cargo_prices = db.db_get_cargo_prices(contractor_db[0], DATABASE_POOL)
         contractor = {
             "name": contractor_db[1],
             "business_id": contractor_db[2],
@@ -85,15 +85,6 @@ def contractor():
             "delivery_radius": contractor_db[4],
         }
 
-        cargo_prices = []
-        for cargo in cargo_prices_db:
-            cargo_dict = {
-                "type": cargo[2].value,
-                "price_per_km": cargo[3],
-                "base_rate": cargo[4]
-            }
-            cargo_prices.append(cargo_dict)
-        
         return render_template("contractor.html", contractor=contractor, cargo_prices=cargo_prices)
 
 

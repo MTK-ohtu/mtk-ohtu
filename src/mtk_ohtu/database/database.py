@@ -4,6 +4,7 @@ from psycopg_pool import ConnectionPool
 from ..logic.listing import Listing
 from ..logic.location import Location
 from ..logic.logistics_node import LogisticsNode
+from ..logic.cargo_type_info import CargoTypeInfo
 
 # pylint: disable=E1129
 
@@ -168,19 +169,22 @@ def db_add_cargo_category(
     return out
 
 
-def db_get_cargo_prices(logistic_id: int, pool: ConnectionPool):
+def db_get_cargo_prices(logistic_id: int, pool: ConnectionPool) -> list[CargoTypeInfo]:
     """
     Gets contractor's prices for different cargo types
 
     Args:
         logistic_id: Contractor's id number
+    
+    Returns:
+        a list of CargoTypeInfos
     """
     out = False
     with pool.connection() as connection:
         cursor = connection.cursor()
         cursor.execute("SELECT * FROM cargo_prices WHERE logistic_id=%s", (logistic_id,))
         out = cursor.fetchall()
-    return out
+    return [CargoTypeInfo(*x[1:]) for x in out]
 
 
 def db_get_logistics(pool: ConnectionPool) -> list[LogisticsNode]:
