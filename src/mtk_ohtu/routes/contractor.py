@@ -43,7 +43,6 @@ def add_logistics():
         maximum_distances = request.form.getlist("max_distances[]")
 
         if logistics.addlogistics(
-            service_type, 
             user_id, 
             name, 
             business_id, 

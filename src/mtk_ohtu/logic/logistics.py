@@ -5,8 +5,8 @@ from ..logic.location import Location as l
 
 
 def addlogistics(
-        service_type, 
-        user_id, name, 
+        user_id,
+        name, 
         business_id, 
         address, radius, 
         categories, 
@@ -38,19 +38,6 @@ def addlogistics(
         return False
     lon = coordinates.longitude
     lat = coordinates.latitude
-
-    print("Service Type:", service_type)
-    print("Name:", name)
-    print("Business ID:", business_id)
-    print("Address:", address)
-    print("Longitude:", lon)
-    print("Latitude:", lat)
-    print("Radius:", radius)
-    print("Categories", categories)
-    print("Base rates:", base_rates)
-    print("Prices:", prices_per_hour)
-    print("Max capacities:", max_capacities)
-    print("Max distances:", max_distances)
 
     id = db.db_add_logistics(
         user_id, name, business_id, address, lon, lat, radius, pool=DATABASE_POOL
