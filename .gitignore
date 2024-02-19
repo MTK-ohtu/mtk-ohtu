@@ -5,3 +5,6 @@ htmlcov
 venv/
 *.pyc
 postgresql-data
+flask_session/
+nominatim
+.pytest_cache

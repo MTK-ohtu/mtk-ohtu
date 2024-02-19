@@ -98,5 +98,7 @@ CREATE TABLE IF NOT EXISTS cargo_prices (
     logistic_id INTEGER REFERENCES logistics_contractors(id),
     type category_type NOT NULL,
     price_per_km INTEGER NOT NULL,
-    base_rate INTEGER
+    base_rate INTEGER,
+    max_capacity INTEGER,
+    max_distance INTEGER
 );

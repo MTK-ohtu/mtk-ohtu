@@ -7,12 +7,7 @@ services:
       - 5000:5000
     depends_on:
       - postgres
-    environment:
-      - DATABASE_URL=postgres
-      - DATABASE_NAME=postgres
-      - DATABASE_USER=postgres
-      - DATABASE_PASSWORD=postgres
-      - DATABASE_PORT=5432
+    stop_grace_period: 100ms
 
   postgres:
     image: postgres:16-alpine
@@ -24,3 +19,18 @@ services:
       - ./postgresql-data:/var/lib/postgresql/data
       - ./db_mock_data.sql:/db_mock_data.sql
     container_name: mtk-postgres
+  
+  nominatim:
+    image: mediagis/nominatim:4.3
+    ports:
+      - 8080:8080
+    environment:
+      PBF_PATH: /finland.osm.pbf
+      REPLICATION_URL: https://download.geofabrik.de/europe/finland-updates/
+      NOMINATIM_PASSWORD: nominatim
+    volumes:
+      - ./nominatim/database:/var/lib/postgresql/14/main
+      - ./nominatim/finland.osm.pbf:/finland.osm.pbf
+    shm_size: 1gb
+    profiles: ["nominatim"]
+    stop_grace_period: 2s
