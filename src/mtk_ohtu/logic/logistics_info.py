@@ -2,6 +2,8 @@ from ..logic.listing import Listing
 from ..logic.location import Location
 from .logistics_node import LogisticsNode
 from .route_calculator import Route
+from ..database.database import db_get_logistics
+from ..config import DATABASE_POOL
 
 def get_logistics_info(listing: Listing, user_location: Location) -> tuple[float, int]:
     '''Gets the necessary logistics info for API3 when supplied the listing and the location of the user.
@@ -32,4 +34,15 @@ def get_logistics_providers(listing: Listing, user_location: Location) -> list[L
         a list of LogisticsNodes
     '''
 
-    return []
+    query = db_get_logistics(DATABASE_POOL)
+    nodes = [LogisticsNode(x[0], x[1], x[2], x[4], x[5], Location((x[6], x[7])), x[8]) for x in query]
+    accepted = []
+
+    for node in nodes:
+        route_to_listing = Route(listing.location, node.location)
+        if route_to_listing.geodesic_distance() / 1000.0 <= node.delivery_radius:
+            route_to_user = Route(user_location, node.location)
+            if route_to_user.geodesic_distance() / 1000.0 <= node.delivery_radius:
+                accepted.append(node)
+    
+    return accepted

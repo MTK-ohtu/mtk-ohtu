@@ -56,11 +56,17 @@ class Route:
             self.geojson = call.text
         except:
             raise ValueError("Error in route call")
-        self.distance = route_summary["distance"]
-        self.duration = route_summary["duration"]
 
-    def geodesic_distance(self):
-        """Return the geodesic distance (bee-line) between the two locations in kilometers."""
+        # if the two locations are the same, the summary is an empty dict
+        if "distance" not in route_summary:
+            self.distance = 0
+            self.duration = 0
+        else:
+            self.distance = route_summary["distance"]
+            self.duration = route_summary["duration"]
+
+    def geodesic_distance(self) -> float:
+        """Return the geodesic distance (bee-line) between the two locations in meters."""
         self.geodesic_distance_meters = geopy.distance.geodesic(
             (self.location1.latitude, self.location1.longitude),
             (self.location2.latitude, self.location2.longitude),
