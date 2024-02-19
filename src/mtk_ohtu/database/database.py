@@ -220,16 +220,20 @@ def db_get_contractors_by_fields(fields: list, pool: ConnectionPool) -> list:
     return out
 
 
-def db_get_contractor(user_id: int, pool: ConnectionPool):
+def db_get_contractor(user_id: int, pool: ConnectionPool) -> LogisticsNode:
     """
     Gets logistics contractor information connected to user
 
     Args:
         user_id: Owner's user id number
+    
+    Returns:
+        a LogisticsNode |
+        None if no info is found
     """
-    out = False
+    out = None
     with pool.connection() as connection:
         cursor = connection.cursor()
-        cursor.execute("SELECT id, name, business_id, address, delivery_radius FROM logistics_contractors WHERE user_id=%s", (user_id,))
+        cursor.execute("SELECT * FROM logistics_contractors WHERE user_id=%s", (user_id,))
         out = cursor.fetchone()
-    return out
+    return LogisticsNode(*out[:3], out[4], out[5], Location((out[6], out[7])), out[8])

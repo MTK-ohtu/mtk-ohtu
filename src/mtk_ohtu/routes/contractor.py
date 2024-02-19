@@ -77,15 +77,8 @@ def contractor():
         if not contractor_db:
             return redirect("/addlogistics")
 
-        cargo_prices = db.db_get_cargo_prices(contractor_db[0], DATABASE_POOL)
-        contractor = {
-            "name": contractor_db[1],
-            "business_id": contractor_db[2],
-            "address": contractor_db[3],
-            "delivery_radius": contractor_db[4],
-        }
-
-        return render_template("contractor.html", contractor=contractor, cargo_prices=cargo_prices)
+        cargo_prices = db.db_get_cargo_prices(contractor_db.id, DATABASE_POOL)
+        return render_template("contractor.html", contractor=contractor_db, cargo_prices=cargo_prices)
 
 
 @contractor_bp.route("/list_contractors", methods=["GET"])

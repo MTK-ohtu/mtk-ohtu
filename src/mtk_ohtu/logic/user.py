@@ -38,7 +38,7 @@ def login(username, password):
 
         contractor = db.db_get_contractor(user[0], DATABASE_POOL)
         if contractor:
-            session["contractor_id"] = contractor[0]
+            session["contractor_id"] = contractor.id
         return True
 
 
