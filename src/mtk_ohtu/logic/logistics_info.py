@@ -1,7 +1,9 @@
 from ..logic.listing import Listing
 from ..logic.location import Location
+from .logistics_node import LogisticsNode
+from .route_calculator import Route
 
-def get_logistics_info(listing: Listing, location: Location) -> tuple[float, int]:
+def get_logistics_info(listing: Listing, user_location: Location) -> tuple[float, int]:
     '''Gets the necessary logistics info for API3 when supplied the listing and the location of the user.
 
     Args:
@@ -9,7 +11,25 @@ def get_logistics_info(listing: Listing, location: Location) -> tuple[float, int
         location (Location): the location of the user, according to which to calculate the 
     
     Returns:
-        a tuple: (float: the distance from the listing to the user, int: the number of available logistics providers)
+        a tuple: (float: the distance from the listing to the user in km, int: the number of available logistics providers)
     '''
 
-    return (0.0, 123)
+    route = Route(listing.location, user_location)
+    route.calculate_route()
+
+    providers = get_logistics_providers(listing, user_location)
+
+    return (float(route.distance) / 1000.0, len(providers))
+
+def get_logistics_providers(listing: Listing, user_location: Location) -> list[LogisticsNode]:
+    '''Gets the available logistics providers / nodes for the user's location & listing
+
+    Args:
+        listing (Listing): the listing in question,
+        location (Location): the buyer's location,
+
+    Returns:
+        a list of LogisticsNodes
+    '''
+
+    return []
