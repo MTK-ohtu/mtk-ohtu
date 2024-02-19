@@ -106,9 +106,11 @@ def list_contractors():
     # r = request.args.get('r')
 
     #TESTISIJAINTI
+    address, content = 'Hirvijärvi, Juupajoki', 'Hakkuujäte'
     lat, lon, r = 61.8578385779706, 24.566428395979575, 500
 
-    results = db.db_get_contractors_by_euclidean(lat, lon, r*0.00902, r/(111.320 * math.cos(lat * math.pi /180)), DATABASE_POOL)
+    #results = db.db_get_contractors_by_euclidean(lat, lon, r*0.00902, r/(111.320 * math.cos(lat * math.pi /180)), DATABASE_POOL)
+    results = db.db_get_logistics
     features = []
     for r in results:
         feature = Feature(
@@ -117,4 +119,7 @@ def list_contractors():
             )        
         features.append(feature)
     contractors = FeatureCollection(features)
-    return render_template("contractor_list.html", lon=lon, lat=lat, contractors=contractors)
+    return render_template("contractor_list.html",
+                           content=content, address=address,  
+                           lon=lon, lat=lat, 
+                           contractors=contractors)

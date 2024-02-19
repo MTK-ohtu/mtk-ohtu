@@ -8,6 +8,8 @@
 
         <div>
             <h2 style="align-self: center;">Suitable contractors</h2>
+            <input type="checkbox" id="selectAll">
+            <label for="selectAll">Select all contractors</label>
         </div>
         <div style ="overflow: auto;border: 1px solid #ccc;">
             {% for contractors in contractors %}
@@ -32,6 +34,18 @@
 
         <!-- Setup leaflet  -->
         <script>
+            console.log("Setting up")
+
+            const selectAll = document.getElementById('selectAll');
+
+            selectAll.addEventListener("change", function(){
+                if (this.checked) {
+                    console.log("All selected")
+                }
+                else {
+                    console.log("Limited group selected")
+                }
+            });
 
             // Set coordinates to match viewers
             var map = L.map('map', {zoomSnap: 0.05, zoomDelta: 0.25}).setView(['{{ lat }}','{{ lon }}'], 10); 
@@ -49,8 +63,9 @@
                 shadowSize: [41, 41]
             });
 
-            //Show location of user
-            L.marker(['{{ lat }}','{{ lon }}'], {icon: redIcon}).addTo(map);
+            //Show location of source
+            var source = L.marker(['{{ lat }}','{{ lon }}'], {icon: redIcon}).addTo(map);
+            source.bindPopup('<b>' + '{{ content }}' + '</b><br>' + '{{ address }}').openPopup();
             
             var gjson = JSON.parse('{{ contractors }}'.replaceAll('&#34;', '"'));
             

@@ -194,9 +194,9 @@ def db_get_logistics(pool: ConnectionPool):
     return out
 
 
-def db_get_contractors_by_euclidean(lat, lon, lat_r, lon_r, pool: ConnectionPool) -> list:
+def db_get_contractors_by_fields(fields: list, pool: ConnectionPool) -> list:
     """
-    Queries all logistic contractors inside given euclidean distance from x,y
+    Queries all logistic contractors by fieldnames
     Args:
         x: source longitude
         y: source latitude
@@ -206,7 +206,7 @@ def db_get_contractors_by_euclidean(lat, lon, lat_r, lon_r, pool: ConnectionPool
     out = False
     with pool.connection() as connection:
         cursor = connection.cursor()
-        query = f"SELECT longitude, latitude, name, address FROM logistics_contractors WHERE longitude BETWEEN {lon-lon_r} AND {lon+lon_r} AND latitude BETWEEN {lat-lat_r} AND {lat+lat_r}"
+        query = f"SELECT {', '.join(fields)} FROM logistics_contractors"
         cursor.execute(query)
         out = list(cursor.fetchall())
     return out
