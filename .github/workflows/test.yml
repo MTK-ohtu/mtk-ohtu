@@ -47,6 +47,8 @@ jobs:
           DATABASE_USER: testuser
           DATABASE_PASSWORD: testpass
           DATABASE_PORT: 5432
+          NOMINATIM_DOMAIN: nominatim.openstreetmap.org
+          NOMINATIM_USER_AGENT: mtk-ohtu-app
 
       - name: Coverage report
         run: poetry run coverage xml
