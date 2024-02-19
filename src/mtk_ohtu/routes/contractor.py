@@ -14,9 +14,6 @@ contractor_bp = Blueprint("contractor_bp", __name__)
 @contractor_bp.route("/addlogistics", methods=["GET", "POST"])
 def add_logistics():
     if request.method == "GET":
-        if logistics.contractor_id():
-            abort(403)
-
         material_categories = [e.value for e in CategoryType]
         return render_template(
             "addlogistics.html",
