@@ -54,7 +54,6 @@ class Route:
             call = self.__get_route_call()
             route_summary = call.json()["features"][0]["properties"]["summary"]
             self.geojson = call.text
-            print(self.geojson)
         except:
             raise ValueError("Error in route call")
 

@@ -18,6 +18,7 @@ class Location:
 
         Args:
             loc_input (str or tuple or list): The address or coordinates of the location.
+                If coordinates, then the format is (longitude, latitude)
         """
         if type(loc_input) == str:
             self.location = self._location_from_address(loc_input)

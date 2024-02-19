@@ -82,39 +82,16 @@ def get_url_for_listing(listing: Listing) -> str:
 def listing(listing_id):
     if request.method == "GET":
         db_listing = db.db_get_product_by_id(listing_id, DATABASE_POOL)
-        print(db_listing)
-        listing = {
-            "name": db_listing[0].value,
-            "price": db_listing[1],
-            "address": db_listing[2],
-            "description": db_listing[3],
-            "seller": db_listing[4],
-            "longitude": db_listing[5],
-            "latitude": db_listing[6],
-        }
         return render_template(
-            "product.html", listing=listing, listing_id=listing_id, show_route=False, consumption=55
+            "product.html", listing=db_listing, listing_id=listing_id, show_route=False, consumption=55
         )
+
     if request.method == "POST":
-        db_listing = db.db_get_product_by_id(listing_id, DATABASE_POOL)
-        listing = {
-            "name": db_listing[0].value,
-            "price": db_listing[1],
-            "address": db_listing[2],
-            "description": db_listing[3],
-            "seller": db_listing[4],
-            "longitude": db_listing[5],
-            "latitude": db_listing[6],
-        }
+        listing = db.db_get_product_by_id(listing_id, DATABASE_POOL)
         user_location = Location(request.form["address"])
-        if listing["longitude"] is not None and listing["latitude"] is not None:
-            listing_location = Location((listing["longitude"], listing["latitude"]))
-        else:
-            listing_location = Location(listing["address"])
-        route_to_product = route_calculator.Route(listing_location, user_location)
+        route_to_product = route_calculator.Route(listing.location, user_location)
         route_to_product.calculate_route()
         session_handler.save_route_to_session(route_to_product)
-        #print(session_handler.get_route_from_session()["location2"]["location"])
         fuel = request.form["fuelType"]
         fuel_consumption = request.form["fuel_efficiency"]
         emissions = route_stats.calculate_emissions(fuel, route_to_product.distance,fuel_consumption)

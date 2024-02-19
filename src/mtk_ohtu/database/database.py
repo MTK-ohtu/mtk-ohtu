@@ -1,7 +1,8 @@
 import psycopg
 from ..database.db_enums import CategoryType
 from psycopg_pool import ConnectionPool
-
+from ..logic.listing import Listing
+from ..logic.location import Location
 
 # pylint: disable=E1129
 
@@ -24,13 +25,13 @@ def db_get_product_list(pool: ConnectionPool) -> list:
     return out
 
 
-def db_get_product_by_id(product_id: int, pool: ConnectionPool) -> tuple:
+def db_get_product_by_id(product_id: int, pool: ConnectionPool) -> Listing | None:
     """Gets product from database by id
     Args:
         config: Database config
         product_id: Product id
     Returns:
-        Tuple in format ('product name', 'product price', 'product location (address)', 'product description', 'seller name', longitude, latitude)
+        a Listing
         None if no product is found
     """
     out = None
@@ -44,7 +45,9 @@ def db_get_product_by_id(product_id: int, pool: ConnectionPool) -> tuple:
             (product_id,),
         )
         out = cursor.fetchone()
-    return out
+    
+    l = Listing(product_id, *out[0:5], Location((out[5], out[6])))
+    return l
 
 def db_get_user(username: str, pool: ConnectionPool) -> bool:
     """Gets user from database
