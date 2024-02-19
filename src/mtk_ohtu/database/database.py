@@ -3,6 +3,7 @@ from ..database.db_enums import CategoryType
 from psycopg_pool import ConnectionPool
 from ..logic.listing import Listing
 from ..logic.location import Location
+from ..logic.logistics_node import LogisticsNode
 
 # pylint: disable=E1129
 
@@ -182,18 +183,18 @@ def db_get_cargo_prices(logistic_id: int, pool: ConnectionPool):
     return out
 
 
-def db_get_logistics(pool: ConnectionPool):
+def db_get_logistics(pool: ConnectionPool) -> list[LogisticsNode]:
     """
     Gets all logistics contractors from database
     Args:
-        config: Database config
-    Returns: List of tuples, tuples in format ('name', 'business_id', 'address', 'longitude', 'latitude', 'delivery_radius')
+        pool: a database connection pool
+    Returns: List of LogisticsNodes
     """
     out = False
     with pool.connection() as connection:
         cursor = connection.cursor()
         cursor.execute("SELECT * FROM logistics_contractors")
-        out = list(cursor.fetchall())
+        out = [LogisticsNode(x[0], x[1], x[2], x[4], x[5], Location((x[6], x[7])), x[8]) for x in cursor.fetchall()]
     return out
 
 

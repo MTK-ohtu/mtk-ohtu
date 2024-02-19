@@ -34,8 +34,7 @@ def get_logistics_providers(listing: Listing, user_location: Location) -> list[L
         a list of LogisticsNodes
     '''
 
-    query = db_get_logistics(DATABASE_POOL)
-    nodes = [LogisticsNode(x[0], x[1], x[2], x[4], x[5], Location((x[6], x[7])), x[8]) for x in query]
+    nodes = db_get_logistics(DATABASE_POOL)
     accepted = []
 
     for node in nodes:

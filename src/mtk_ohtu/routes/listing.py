@@ -66,19 +66,7 @@ def listing(listing_id):
         fuel = request.form["fuelType"]
         fuel_consumption = request.form["fuel_efficiency"]
         emissions = route_stats.calculate_emissions(fuel, route_to_product.distance,fuel_consumption)
-        logistics_db = db.db_get_logistics(DATABASE_POOL)
-        companies = []
-        for company in logistics_db:
-            companies.append(
-                {
-                    "name": company[2],
-                    "address": company[5],
-                    "radius": company[-1],
-                    "id": company[0],
-                    "longitude": company[6],
-                    "latitude": company[7],
-                }
-            )
+        logistics_nodes = db.db_get_logistics(DATABASE_POOL)
         return render_template(
             "product.html",
             listing_id=listing_id,
@@ -90,7 +78,7 @@ def listing(listing_id):
             route_geojson=route_to_product.geojson,
             user_location=user_location.location,
             emissions=round(emissions),
-            companies=companies,
+            companies=logistics_nodes,
             consumption=fuel_consumption,
             show_route=True,
         )
