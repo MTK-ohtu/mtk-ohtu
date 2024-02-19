@@ -21,8 +21,8 @@ class Route:
 
     def __init__(
         self,
-        start,
-        end,
+        start: Location,
+        end: Location,
         key="5b3ce3597851110001cf6248179f16aaf79a4d89aaeae99d8a17421b",
     ):
         """Initialize the Route class.
