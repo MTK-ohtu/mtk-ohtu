@@ -18,54 +18,25 @@ def index():
 
 @listing_bp.route("/listings", methods=["GET", "POST"])
 def listings():
-    db_listings = db.db_get_product_list(DATABASE_POOL)
+    listings = db.db_get_product_list(DATABASE_POOL)
+    distances = {}
+
+    if request.method == "GET":
+        for listing in listings:
+            distances[listing.id] = "Submit address to get a distance estimate"
+
     if request.method == "POST":
         user_location = Location(request.form["address"])
-    listings = []
-    for listing in db_listings:
-        if request.method == "GET":
-            listings.append(
-                {
-                    "listing_id": listing[7],
-                    "name": listing[0].value,
-                    "price": listing[1],
-                    "location": listing[2],
-                    "seller": listing[3],
-                    "distance": "Submit location to see distance in",
-                }
-            )
-        if request.method == "POST":
-            start_time = datetime.datetime.now()
-            if listing[5] is not None and listing[6] is not None:
-                listing_location = Location((listing[5], listing[6]))
-                print(
-                    "calc with coords: ",
-                    (datetime.datetime.now() - start_time).microseconds / 1000,
-                    "ms",
-                )
+        for listing in listings:
+            route_to_product = route_calculator.Route(user_location, listing.location)
+            distances[listing.id] = round(route_to_product.geodesic_distance() / 1000, 1)
+        
+        listings = sorted(listings, key=lambda x: distances[x.id])
 
-            else:
-                listing_location = Location(listing[2])
-                print(
-                    "calc with address:",
-                    (datetime.datetime.now() - start_time).microseconds / 1000,
-                    "ms",
-                )
-            route_to_product = route_calculator.Route(user_location, listing_location)
-            listings.append(
-                {
-                    "listing_id": listing[7],
-                    "name": listing[0].value,
-                    "price": listing[1],
-                    "location": listing[2],
-                    "seller": listing[3],
-                    "distance": round(route_to_product.geodesic_distance() / 1000, 1),
-                }
-            )
-            listings = sorted(listings, key=lambda x: x['distance'])
     return render_template(
         "listings.html",
         listings=listings,
+        distances=distances
     )
 
 
