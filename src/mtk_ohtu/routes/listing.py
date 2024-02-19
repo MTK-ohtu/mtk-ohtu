@@ -1,5 +1,5 @@
 import datetime
-import database.database as db
+from ..database import database as db
 from ..logic import route_calculator
 from ..logic import session_handler
 from ..logic import route_stats
