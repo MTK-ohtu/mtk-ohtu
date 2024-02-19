@@ -1,5 +1,5 @@
 import math
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect, url_for, abort
 from geojson import Point, Feature, FeatureCollection
 from ..database.db_enums import CategoryType
 from ..config import DATABASE_POOL
@@ -14,6 +14,8 @@ contractor_bp = Blueprint("contractor_bp", __name__)
 @contractor_bp.route("/addlogistics", methods=["GET", "POST"])
 def add_logistics():
     if request.method == "GET":
+        if logistics.contractor_id():
+            abort(403)
 
         material_categories = [e.value for e in CategoryType]
         return render_template(

@@ -64,4 +64,9 @@ def addlogistics(
         db.db_add_cargo_category(
             id, type, price, base_rate, max_capacity, max_distance, pool=DATABASE_POOL
         )
+    
+    session["contractor_id"] = id
     return True
+
+def contractor_id():
+    return session["contractor_id"]

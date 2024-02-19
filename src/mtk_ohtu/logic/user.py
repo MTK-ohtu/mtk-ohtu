@@ -31,16 +31,20 @@ def login(username, password):
 
     user = db.db_get_user(username, DATABASE_POOL)
     if not user:
-        print("no user")
         return False
     elif user and check_password_hash(user[1], password):
         session["user_id"] = user[0]
         session["csrf_token"] = secrets.token_hex(16)
+
+        contractor = db.db_get_contractor(user[0], DATABASE_POOL)
+        if contractor:
+            session["contractor_id"] = contractor[0]
         return True
 
 
 def logout():
     del session["user_id"]
+    session.pop("contractor_id", None)
 
 
 def user_id():
