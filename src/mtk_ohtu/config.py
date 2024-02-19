@@ -1,9 +1,12 @@
+from dotenv import load_dotenv, find_dotenv
 from os import getenv
 from .database.db_meta import (
     DatabaseConfig,
     db_create,
     db_connection_pool
 )
+
+load_dotenv(find_dotenv(usecwd=True))
 
 SECRET_KEY = getenv("SECRET_KEY")
 DATABASE_CONFIG = DatabaseConfig(
@@ -23,5 +26,3 @@ def setup_db():
 
 DATABASE_POOL = setup_db()
 
-# if SECRET_KEY in (None, "PUT_THE_KEY_HERE"):
-#    raise Exception("Missing SECRET_KEY enviroment variable.")

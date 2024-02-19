@@ -29,7 +29,9 @@ def db_get_product_by_id(product_id: int, pool: ConnectionPool) -> tuple:
     Args:
         config: Database config
         product_id: Product id
-    Returns: Tuple in format ('product name', 'product price', 'product location', 'product description', 'seller name', longitude, latitude)
+    Returns:
+        Tuple in format ('product name', 'product price', 'product location (address)', 'product description', 'seller name', longitude, latitude)
+        None if no product is found
     """
     out = None
     with pool.connection() as connection:
@@ -133,21 +135,30 @@ def db_add_logistics(
     return out
 
 
-def db_add_cargo_category(id: int, type: CategoryType, price_per_hour: int, base_rate: int, pool: ConnectionPool):
+def db_add_cargo_category(
+        id: int, 
+        type: CategoryType, 
+        price_per_hour: int, 
+        base_rate: int, 
+        max_capacity: int, 
+        max_distance: int, 
+        pool: ConnectionPool
+    ):
     """
     Adds new categories of materials that the contractor are capable to transport
     Args:
         id: id of the logistics contractor
-        type: material type
-        price_per_hour: price per hour for material transportation
-        base_rate: base payment for material transportation
+        type: product type
+        price_per_hour: price per hour for product transportation
+        base_rate: base payment for product transportation
+        max_capacity: maximum capacity for a single product
     """
     out = False
     with pool.connection() as connection:
         cursor = connection.cursor()
         cursor.execute(
-            "INSERT INTO cargo_prices (logistic_id, type, price_per_km, base_rate) VALUES (%s,%s,%s,%s)",
-            (id, type, price_per_hour, base_rate)
+            "INSERT INTO cargo_prices (logistic_id, type, price_per_km, base_rate, max_capacity, max_distance) VALUES (%s,%s,%s,%s,%s,%s)",
+            (id, type, price_per_hour, base_rate, max_capacity, max_distance)
         )
         out = True
     return out

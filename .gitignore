@@ -7,3 +7,4 @@ venv/
 postgresql-data
 flask_session/
 nominatim
+.pytest_cache
