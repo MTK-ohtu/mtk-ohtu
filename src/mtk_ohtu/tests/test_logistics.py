@@ -9,10 +9,9 @@ class TestLogistics(unittest.TestCase):
         db_m.db_excecute_file("db_mock_data.sql", DATABASE_CONFIG)
         self.pool = db_m.db_connection_pool(DATABASE_CONFIG)
 
-        self.type = "private"
         self.userid = 1
         self.name  = "rekka oy"
-        self.business = None
+        self.business = "1234567-1"
         self.address = "Simonkatu 6"
         self.radius = 200
         self.categories = ['Manure']
@@ -24,7 +23,6 @@ class TestLogistics(unittest.TestCase):
     def test_addlogistics_returns_false_when_address_not_found(self):
         self.address = "aaaaaaaaaaaaaaaaaaaaa"
         result = l.addlogistics(
-            self.type, 
             self.userid, 
             self.name, 
             self.business, 
@@ -40,7 +38,6 @@ class TestLogistics(unittest.TestCase):
 
     def test_addlogistics_returns_true_when_data_is_correct(self):
         result = l.addlogistics(
-            self.type, 
             self.userid, 
             self.name, 
             self.business, 
