@@ -54,14 +54,12 @@ class ContractorList:
         return collection
 
     '''
-    Create a feature collection
+    Create a feature collection from a list of LogisticsNodes
     Args:
-        list of typ []
+        contractor_list: list(LogisticsNode)
     '''
     def to_featurecollection(self, contractor_list: list):
         features = []
-        for c in contractor_list:
-            print(f"lat: {c.location.latitude}, lon: {c.location.longitude}")
         for contractor in contractor_list:
             properties = {'name':contractor.name, 'address': contractor.address}
             feature = Feature(
@@ -72,7 +70,10 @@ class ContractorList:
         collection = FeatureCollection(features)
         
         return collection
-
+    
+    '''
+    Calculate great-circle distances
+    '''
     def haversine(self, lat1, lon1, lat2, lon2):
         dLat = (lat2 - lat1) * math.pi / 180.0
         dLon = (lon2 - lon1) * math.pi / 180.0
