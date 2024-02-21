@@ -19,10 +19,6 @@ body {
     margin-bottom: 20px;
 }
 
-.hidden {
-    display: none;
-}
-
 .clickable_list_element {
     background-color: #dedede;
     width: 100%;

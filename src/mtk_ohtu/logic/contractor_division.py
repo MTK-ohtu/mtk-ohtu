@@ -5,7 +5,6 @@ from ..config import DATABASE_POOL
 from ..logic.logistics_node import LogisticsNode
 from ..logic.location import Location
 
-
 class ContractorList:
 
     """
@@ -18,11 +17,11 @@ class ContractorList:
 
     def __init__(self, fields: list):
         self.contractors = db_get_logistics(DATABASE_POOL)
-        self.in_range = None
-        self.out_range = None
+        self.optimal = None
+        self.suboptimal = None
 
     """
-    Splits all contractors into 'out of range'/'in range' lists by given
+    Splits all contractors into 'optimal'/'suboptimal' lists by given
     Args:
         latitude: float
         longitude: float
@@ -66,9 +65,9 @@ class ContractorList:
     """
 
     def get_in_range(self):
-        if self.in_range is None:
+        if self.optimal is None:
             return self.to_featurecollection(self.contractors)
-        collection = self.to_featurecollection(self.in_range)
+        collection = self.to_featurecollection(self.optimal)
         return collection
 
     """
@@ -77,9 +76,9 @@ class ContractorList:
     """
 
     def get_out_range(self):
-        if self.out_range is None:
+        if self.suboptimal is None:
             return self.to_featurecollection(self.contractors)
-        collection = self.to_featurecollection(self.out_range)
+        collection = self.to_featurecollection(self.suboptimal)
         return collection
 
     """
@@ -116,5 +115,4 @@ class ContractorList:
             lat1
         ) * math.cos(lat2)
         rad = 6371
-        c = 2 * math.asin(math.sqrt(a))
         return float(rad * c)
