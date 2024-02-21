@@ -3,7 +3,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, abort,
 from geojson import Point, Feature, FeatureCollection
 from ..database.db_enums import CategoryType
 from ..config import DATABASE_POOL
-from ..logic import user as users 
+from ..logic import user as users
 from ..logic import logistics
 from ..database import database as db
 from ..logic.contractor_division import ContractorList
@@ -16,8 +16,7 @@ def add_logistics():
     if request.method == "GET":
         material_categories = [e.value for e in CategoryType]
         return render_template(
-            "addlogistics.html",
-            material_categories=material_categories
+            "addlogistics.html", material_categories=material_categories
         )
 
     if request.method == "POST":
@@ -40,31 +39,41 @@ def add_logistics():
         maximum_distances = request.form.getlist("max_distances[]")
 
         if logistics.addlogistics(
-            user_id, 
-            name, 
-            business_id, 
-            address, 
-            radius, 
-            categories, 
-            base_rates, 
-            prices_per_hour, 
+            user_id,
+            name,
+            business_id,
+            address,
+            radius,
+            categories,
+            base_rates,
+            prices_per_hour,
             maximum_capacities,
-            maximum_distances
+            maximum_distances,
         ):
             session["contractor_id"] = id
-            return redirect(url_for('contractor_bp.confirmation', message='Logistics submitted successfully'))
+            return redirect(
+                url_for(
+                    "contractor_bp.confirmation",
+                    message="Logistics submitted successfully",
+                )
+            )
         else:
-            return redirect(url_for('contractor_bp.confirmation', message='An error occurred while submitting logistics'))
+            return redirect(
+                url_for(
+                    "contractor_bp.confirmation",
+                    message="An error occurred while submitting logistics",
+                )
+            )
 
 
 @contractor_bp.route("/confirmation")
 def confirmation():
-    message = request.args.get('message', 'Confirmation message not provided')
+    message = request.args.get("message", "Confirmation message not provided")
     return render_template("confirmation.html", message=message)
 
 
 @contractor_bp.route("/contractors", methods=["GET"])
-def get_contractors(x,y,r):
+def get_contractors(x, y, r):
     contractors = db.get_contractors_by_euclidean(x, y, r, DATABASE_POOL)
     return render_template("contractor_list.html", x, y, contractors)
 
@@ -78,25 +87,29 @@ def contractor():
             return redirect("/addlogistics")
 
         cargo_prices = db.db_get_cargo_prices(contractor_db.id, DATABASE_POOL)
-        return render_template("contractor.html", contractor=contractor_db, cargo_prices=cargo_prices)
+        return render_template(
+            "contractor.html", contractor=contractor_db, cargo_prices=cargo_prices
+        )
 
 
 @contractor_bp.route("/list_contractors", methods=["GET"])
 def list_contractors():
-    
     # lon = request.args.get('lon')
     # lat = request.args.get('lat')
     # r = request.args.get('r')
 
-    #TESTISIJAINTI
-    address, content = 'Hirvijärvi, Juupajoki', 'Hakkuujäte'
+    # TESTISIJAINTI
+    address, content = "Hirvijärvi, Juupajoki", "Hakkuujäte"
     lon, lat, r = 24.566428395979575, 61.8578385779706, 300
 
-    contractors = ContractorList(['name', 'address', 'latitude', 'longitude'])
+    contractors = ContractorList(["name", "address", "latitude", "longitude"])
     contractors.split_by_range(lat, lon, r)
-    return render_template("contractor_list.html",
-                           content=content, address=address,  
-                           lat=lat, lon=lon,
-                           in_range=contractors.get_in_range(),
-                           out_range=contractors.get_out_range(),
-                           )
+    return render_template(
+        "contractor_list.html",
+        content=content,
+        address=address,
+        lat=lat,
+        lon=lon,
+        in_range=contractors.get_in_range(),
+        out_range=contractors.get_out_range(),
+    )

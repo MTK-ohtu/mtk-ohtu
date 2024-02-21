@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from ..logic.location import Location
 
+
 @dataclass
 class LogisticsNode:
     id: int
@@ -9,4 +10,4 @@ class LogisticsNode:
     business_id: str
     address: str
     location: Location
-    delivery_radius: float # in kilometers
+    delivery_radius: float  # in kilometers

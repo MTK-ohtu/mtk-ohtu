@@ -5,17 +5,17 @@ from ..logic.location import Location as l
 
 
 def addlogistics(
-        user_id,
-        name, 
-        business_id, 
-        address,
-        radius, 
-        categories, 
-        base_rates, 
-        prices_per_hour, 
-        max_capacities, 
-        max_distances
-    ):
+    user_id,
+    name,
+    business_id,
+    address,
+    radius,
+    categories,
+    base_rates,
+    prices_per_hour,
+    max_capacities,
+    max_distances,
+):
     """
     Adds a new logistic company and categories
     Args:
@@ -31,9 +31,20 @@ def addlogistics(
         Contractor id if adding is complete
         False if address is not correct
     """
-    if not all([user_id, name, address, categories, base_rates, prices_per_hour, max_capacities, max_distances]):
+    if not all(
+        [
+            user_id,
+            name,
+            address,
+            categories,
+            base_rates,
+            prices_per_hour,
+            max_capacities,
+            max_distances,
+        ]
+    ):
         return False
-    
+
     if radius == "":
         radius = -1
     try:
@@ -51,10 +62,15 @@ def addlogistics(
             max_distance = max_distances[i]
 
             db.db_add_cargo_category(
-                id, cargo_type, price, base_rate, max_capacity, max_distance, pool=DATABASE_POOL
+                id,
+                cargo_type,
+                price,
+                base_rate,
+                max_capacity,
+                max_distance,
+                pool=DATABASE_POOL,
             )
         return id
     except Exception as er:
         logging.error(er)
         return False
-

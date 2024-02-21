@@ -19,7 +19,7 @@ def create_app():
     app.register_blueprint(api_bp, url_prefix="/api")
 
     app.config.from_object(__name__)
-    app.config['SESSION_TYPE'] = 'filesystem'
+    app.config["SESSION_TYPE"] = "filesystem"
     Session(app)
 
     return app

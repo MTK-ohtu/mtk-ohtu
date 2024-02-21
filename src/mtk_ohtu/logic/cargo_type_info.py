@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from ..database.db_enums import CategoryType
 
+
 @dataclass
 class CargoTypeInfo:
     logistics_id: int

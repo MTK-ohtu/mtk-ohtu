@@ -5,7 +5,6 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from ..config import DATABASE_POOL
 
 
-
 def register(username, password, email):
     hash_value = generate_password_hash(password)
 
@@ -13,8 +12,8 @@ def register(username, password, email):
 
     if login(username, password):
         return True
-    else: return False
-
+    else:
+        return False
 
 
 def login(username, password):

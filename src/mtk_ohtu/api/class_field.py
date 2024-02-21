@@ -1,16 +1,17 @@
 from marshmallow import fields, ValidationError
 
+
 class ClassField(fields.Field):
-    '''A custom Field to be used in Marshmallow Schemas where a class constructing correctly is the only required validation.
+    """A custom Field to be used in Marshmallow Schemas where a class constructing correctly is the only required validation.
     The class can only have one constructor parameter.
-    '''
+    """
 
     def __init__(self, class_type, **kwargs):
-        '''Constructor.
-        
+        """Constructor.
+
         Args:
             class_type: the type of the class that needs to be validated.
-        '''
+        """
         self.class_type = class_type
         super().__init__(**kwargs)
 
@@ -22,5 +23,5 @@ class ClassField(fields.Field):
             obj = self.class_type(value)
         except ValueError as err:
             raise ValidationError(err.args)
-        
+
         return obj

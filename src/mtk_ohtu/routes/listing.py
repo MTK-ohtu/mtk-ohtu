@@ -11,6 +11,7 @@ from ..logic.listing import Listing
 
 listing_bp = Blueprint("listing_bp", __name__)
 
+
 @listing_bp.route("/")
 def index():
     return render_template("index.html")
@@ -29,15 +30,13 @@ def listings():
         user_location = Location(request.form["address"])
         for listing in listings:
             route_to_product = route_calculator.Route(user_location, listing.location)
-            distances[listing.id] = round(route_to_product.geodesic_distance() / 1000, 1)
-        
+            distances[listing.id] = round(
+                route_to_product.geodesic_distance() / 1000, 1
+            )
+
         listings = sorted(listings, key=lambda x: distances[x.id])
 
-    return render_template(
-        "listings.html",
-        listings=listings,
-        distances=distances
-    )
+    return render_template("listings.html", listings=listings, distances=distances)
 
 
 @listing_bp.route("/createpost")
@@ -54,7 +53,11 @@ def listing(listing_id):
     if request.method == "GET":
         db_listing = db.db_get_product_by_id(listing_id, DATABASE_POOL)
         return render_template(
-            "product.html", listing=db_listing, listing_id=listing_id, show_route=False, consumption=55
+            "product.html",
+            listing=db_listing,
+            listing_id=listing_id,
+            show_route=False,
+            consumption=55,
         )
 
     if request.method == "POST":
@@ -65,7 +68,9 @@ def listing(listing_id):
         session_handler.save_route_to_session(route_to_product)
         fuel = request.form["fuelType"]
         fuel_consumption = request.form["fuel_efficiency"]
-        emissions = route_stats.calculate_emissions(fuel, route_to_product.distance,fuel_consumption)
+        emissions = route_stats.calculate_emissions(
+            fuel, route_to_product.distance, fuel_consumption
+        )
         logistics_nodes = db.db_get_logistics(DATABASE_POOL)
         return render_template(
             "product.html",

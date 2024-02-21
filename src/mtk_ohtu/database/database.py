@@ -47,9 +47,10 @@ def db_get_product_by_id(product_id: int, pool: ConnectionPool) -> Listing | Non
             (product_id,),
         )
         out = cursor.fetchone()
-    
+
     l = Listing(product_id, *out[0:5], Location((out[5], out[6])))
     return l
+
 
 def db_get_user(username: str, pool: ConnectionPool) -> bool:
     """Gets user from database
@@ -72,8 +73,10 @@ def db_get_user(username: str, pool: ConnectionPool) -> bool:
 def db_check_if_user_exists():
     pass
 
+
 def db_check_if_user_exists():
     pass
+
 
 def db_add_user(
     username: str, password: str, email: str, pool: ConnectionPool
@@ -89,11 +92,11 @@ def db_add_user(
     out = False
     with pool.connection() as connection:
         cursor = connection.cursor()
-        #"INSERT INTO users (username, password, email) VALUES (%s,%s,%s) RETURNING id",
+        # "INSERT INTO users (username, password, email) VALUES (%s,%s,%s) RETURNING id",
         try:
             cursor.execute(
                 "INSERT INTO users (username, password, email) VALUES (%s,%s,%s) RETURNING id",
-                (username, password, email)
+                (username, password, email),
             )
         except psycopg.errors.UniqueViolation:
             return (False, None)
@@ -111,7 +114,7 @@ def db_add_logistics(
     lon: float,
     lat: float,
     radius: int,
-    pool: ConnectionPool
+    pool: ConnectionPool,
 ):
     """
     Adds new logistics contractor to database
@@ -141,14 +144,14 @@ def db_add_logistics(
 
 
 def db_add_cargo_category(
-        id: int, 
-        type: CategoryType, 
-        price_per_hour: int, 
-        base_rate: int, 
-        max_capacity: int, 
-        max_distance: int, 
-        pool: ConnectionPool
-    ):
+    id: int,
+    type: CategoryType,
+    price_per_hour: int,
+    base_rate: int,
+    max_capacity: int,
+    max_distance: int,
+    pool: ConnectionPool,
+):
     """
     Adds new categories of materials that the contractor are capable to transport
     Args:
@@ -163,7 +166,7 @@ def db_add_cargo_category(
         cursor = connection.cursor()
         cursor.execute(
             "INSERT INTO cargo_prices (logistic_id, type, price_per_km, base_rate, max_capacity, max_distance) VALUES (%s,%s,%s,%s,%s,%s)",
-            (id, type, price_per_hour, base_rate, max_capacity, max_distance)
+            (id, type, price_per_hour, base_rate, max_capacity, max_distance),
         )
         out = True
     return out
@@ -175,14 +178,16 @@ def db_get_cargo_prices(logistic_id: int, pool: ConnectionPool) -> list[CargoTyp
 
     Args:
         logistic_id: Contractor's id number
-    
+
     Returns:
         a list of CargoTypeInfos
     """
     out = False
     with pool.connection() as connection:
         cursor = connection.cursor()
-        cursor.execute("SELECT * FROM cargo_prices WHERE logistic_id=%s", (logistic_id,))
+        cursor.execute(
+            "SELECT * FROM cargo_prices WHERE logistic_id=%s", (logistic_id,)
+        )
         out = cursor.fetchall()
     return [CargoTypeInfo(*x[1:]) for x in out]
 
@@ -198,7 +203,10 @@ def db_get_logistics(pool: ConnectionPool) -> list[LogisticsNode]:
     with pool.connection() as connection:
         cursor = connection.cursor()
         cursor.execute("SELECT * FROM logistics_contractors")
-        out = [LogisticsNode(x[0], x[1], x[2], x[4], x[5], Location((x[6], x[7])), x[8]) for x in cursor.fetchall()]
+        out = [
+            LogisticsNode(x[0], x[1], x[2], x[4], x[5], Location((x[6], x[7])), x[8])
+            for x in cursor.fetchall()
+        ]
     return out
 
 
@@ -208,7 +216,7 @@ def db_get_contractor(user_id: int, pool: ConnectionPool) -> LogisticsNode:
 
     Args:
         user_id: Owner's user id number
-    
+
     Returns:
         a LogisticsNode |
         None if no info is found
@@ -216,6 +224,8 @@ def db_get_contractor(user_id: int, pool: ConnectionPool) -> LogisticsNode:
     out = None
     with pool.connection() as connection:
         cursor = connection.cursor()
-        cursor.execute("SELECT * FROM logistics_contractors WHERE user_id=%s", (user_id,))
+        cursor.execute(
+            "SELECT * FROM logistics_contractors WHERE user_id=%s", (user_id,)
+        )
         out = cursor.fetchone()
     return LogisticsNode(*out[:3], out[4], out[5], Location((out[6], out[7])), out[8])
