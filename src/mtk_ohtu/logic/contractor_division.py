@@ -20,10 +20,8 @@ class ContractorList:
         self.optimal = None
         self.suboptimal = None
 
-    '''
-    Splits all contractors into 'optimal'/'suboptimal' lists by given
     """
-    Splits all contractors into 'out of range'/'in range' lists by given
+    Splits all contractors into 'optimal'/'suboptimal' lists by given
     Args:
         latitude: float
         longitude: float
