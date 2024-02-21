@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div>
+    <form action="/listings" method="POST">
+        <p>
+            Toimitusosoite: <br>
+            <input type="text" name="address" minlength="1" maxlength="200">
+            <input type="submit" value="Calculate distance">
+        </p>
+
+        <!-- <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}"> -->
+    </form>
+</div>
+
+
+
+{% for listing in listings %}
+
+<div class="card">
+    <h2><a href="listing/{{listing.id}}">{{ listing.category.value }}</a></h2>
+    <p>Price: {{ listing.price }} €</p>
+    <p>{{ listing.address }}</p>
+    <p>Distance: {{ distances[listing.id]}} km</p>
+</div>
+
+{% endfor %}
+
+{% endblock %}

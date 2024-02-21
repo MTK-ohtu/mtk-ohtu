@@ -14,6 +14,6 @@ EXPOSE 5000
 
 RUN poetry config installer.max-workers 10
 
-RUN poetry install --no-root
+RUN poetry install
 
-ENTRYPOINT ["poetry", "run", "flask", "--app", "src/app.py", "run", "--host", "0.0.0.0"]
+ENTRYPOINT ["poetry", "run", "flask", "--app", "mtk_ohtu.app", "run", "--host", "0.0.0.0"]

@@ -1,6 +1,6 @@
 [tool.poetry]
-name = "mtk-ohtu"
-version = "0.1.0"
+name = "mtk_ohtu"
+version = "0.2.0"
 description = "A logistics optimization tool for connecting biomass sidestream sellers, buyers and logistics providers."
 authors = ["MTK-Ohtu group"]
 readme = "README.md"
@@ -17,6 +17,7 @@ werkzeug = "^3.0.1"
 psycopg = {extras = ["binary", "pool"], version = "^3.1.18"}
 flask-session = "^0.6.0"
 geojson = "^3.1.0"
+marshmallow = "^3.20.2"
 
 
 [tool.poetry.group.dev.dependencies]
