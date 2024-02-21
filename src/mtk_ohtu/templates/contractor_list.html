@@ -36,17 +36,6 @@
         <script>
             console.log("Setting up")
 
-            const selectAll = document.getElementById('selectAll');
-
-            selectAll.addEventListener("change", function(){
-                if (this.checked) {
-                    console.log("All selected")
-                }
-                else {
-                    console.log("Limited group selected")
-                }
-            });
-
             // Set coordinates to match viewers
             var map = L.map('map', {zoomSnap: 0.05, zoomDelta: 0.25}).setView(['{{ lat }}','{{ lon }}'], 10); 
 
@@ -63,29 +52,54 @@
                 shadowSize: [41, 41]
             });
 
+            var out_range_style = {
+                "color": "#ff7800",
+                "opacity": 0.5
+            }
             //Show location of source
             var source = L.marker(['{{ lat }}','{{ lon }}'], {icon: redIcon}).addTo(map);
             source.bindPopup('<b>' + '{{ content }}' + '</b><br>' + '{{ address }}').openPopup();
-            
-            var gjson = JSON.parse('{{ contractors }}'.replaceAll('&#34;', '"'));
-            
-            console.log(gjson);
 
-            //Define functionality on features
+            var in_range_gjson = JSON.parse('{{ in_range | tojson | safe }}');
+            var out_range_gjson = JSON.parse('{{ out_range | tojson | safe }}');
+
+            console.log(out_range_gjson)
+            //Define popups
             function onEachFeature(feature, layer) {
+                if (feature.geometry && feature.geometry.type === 'Point') {
+                    // Lisää marker käyttäen kustomoitua ikonia
+                    L.marker(feature.geometry.coordinates, {icon: redIcon}).addTo(map);
+                }           
                 if (feature.properties && feature.properties.name && feature.properties.address) {
                     layer.bindPopup('<b>' + feature.properties.name + '</b><br>' + feature.properties.address);
                 }
             }
 
             // Add contractor locations (database)
-            var gj = L.geoJSON(gjson, {
-                onEachFeature: onEachFeature
-            }).addTo(map);
+            in_gjson = L.geoJSON(in_range_gjson, {onEachFeature: onEachFeature});
+            out_gjson = L.geoJSON(out_range_gjson, {onEachFeature: onEachFeature});
 
-            map.flyToBounds(gj.getBounds());
+            var baseLayer = {"In Range": in_gjson}
+            var overlayLayers = {"Out of Range": out_gjson}
+
+            var layerControl = L.control.layers(baseLayer, overlayLayers).addTo(map).addTo(map);
+
+            in_gjson.addTo(map);
+            out_gjson.addTo(map);
+            map.removeLayer(out_gjson);
+            map.flyToBounds(in_gjson.getBounds());
 
             L.control.scale().addTo(map);
+
+            const selectAll = document.getElementById('selectAll');
+            selectAll.addEventListener("change", function(){
+                if (this.checked) {
+                    out_gjson.addTo(map)
+                }
+                else {
+                    map.removeLayer(out_gjson);
+                }
+            });
         </script>
     </div>
 </div>
