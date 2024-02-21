@@ -10,10 +10,7 @@ def register(username, password, email):
 
     db.db_add_user(username, hash_value, email, DATABASE_POOL)
 
-    if login(username, password):
-        return True
-    else:
-        return False
+    return login(username, password)
 
 
 def login(username, password):
@@ -37,7 +34,7 @@ def login(username, password):
 
         contractor = db.db_get_contractor(user[0], DATABASE_POOL)
         if contractor:
-            session["contractor_id"] = contractor.id
+           session["contractor_id"] = contractor.id
         return True
 
 

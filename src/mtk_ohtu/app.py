@@ -1,6 +1,6 @@
-from .config import SECRET_KEY
+from flask import Flask
 from flask_session import Session
-from flask import Flask, session
+from .config import SECRET_KEY
 from .routes.listing import listing_bp
 from .routes.contractor import contractor_bp
 from .routes.location import location_bp

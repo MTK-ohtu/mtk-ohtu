@@ -1,15 +1,14 @@
-from flask import Flask, session
-from flask_session import Session
-import datetime
-
 """ A module for handling session data. """
+
+import datetime
+from flask import session
 
 
 def save_route_to_session(route):
     """Saves the route details to the session."""
     session["route_details"] = {
         "distance": round(route.distance / 1000, 1),
-        "duration": str(datetime.timedelta(seconds=(round(route.duration)))),
+        "duration": str(datetime.timedelta(seconds=round(route.duration))),
         "location1": {
             "location": route.location1.location,
             "longitude": route.location1.longitude,

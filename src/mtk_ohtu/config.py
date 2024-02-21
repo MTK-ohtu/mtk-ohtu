@@ -1,5 +1,5 @@
-from dotenv import load_dotenv, find_dotenv
 from os import getenv
+from dotenv import load_dotenv, find_dotenv
 from .database.db_meta import DatabaseConfig, db_create, db_connection_pool
 
 load_dotenv(find_dotenv(usecwd=True))
