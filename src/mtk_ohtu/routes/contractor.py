@@ -1,12 +1,16 @@
+<<<<<<< HEAD
 import math
 from flask import Blueprint, render_template, request, redirect, url_for, abort, session
 from geojson import Point, Feature, FeatureCollection
+=======
+from flask import Blueprint, render_template, request, redirect, url_for, abort
+>>>>>>> cc890d2 (modification)
 from ..database.db_enums import CategoryType
 from ..config import DATABASE_POOL
 from ..logic import user as users
 from ..logic import logistics
 from ..database import database as db
-from ..logic.contractor_division import ContractorList
+from ..logic.contractor_division import ContractorDivision
 
 contractor_bp = Blueprint("contractor_bp", __name__)
 
@@ -102,7 +106,7 @@ def list_contractors():
     address, content = "Hirvijärvi, Juupajoki", "Hakkuujäte"
     lon, lat, r = 24.566428395979575, 61.8578385779706, 300
 
-    contractors = ContractorList(["name", "address", "latitude", "longitude"])
+    contractors = ContractorDivision(['name', 'address', 'latitude', 'longitude'])
     contractors.split_by_range(lat, lon, r)
     return render_template(
         "contractor_list.html",
