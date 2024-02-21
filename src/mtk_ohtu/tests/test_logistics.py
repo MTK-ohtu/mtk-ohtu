@@ -21,12 +21,12 @@ class TestLogistics(unittest.TestCase):
         self.max_distances = ['300']
 
     def test_addlogistics_returns_false_when_address_not_found(self):
-        self.address = "aaaaaaaaaaaaaaaaaaaaa"
+        address = "aaaaaaaaaaaaaaaaaaaaa"
         result = l.addlogistics(
             self.userid, 
             self.name, 
             self.business, 
-            self.address, 
+            address, 
             self.radius, 
             self.categories, 
             self.base_rates,

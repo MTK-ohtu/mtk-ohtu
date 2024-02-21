@@ -1,5 +1,5 @@
 import math
-from flask import Blueprint, render_template, request, redirect, url_for, abort
+from flask import Blueprint, render_template, request, redirect, url_for, abort, session
 from geojson import Point, Feature, FeatureCollection
 from ..database.db_enums import CategoryType
 from ..config import DATABASE_POOL
@@ -51,6 +51,7 @@ def add_logistics():
             maximum_capacities,
             maximum_distances
         ):
+            session["contractor_id"] = id
             return redirect(url_for('contractor_bp.confirmation', message='Logistics submitted successfully'))
         else:
             return redirect(url_for('contractor_bp.confirmation', message='An error occurred while submitting logistics'))

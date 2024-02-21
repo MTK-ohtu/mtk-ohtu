@@ -1,5 +1,5 @@
+import logging
 from ..database import database as db
-from flask import session
 from ..config import DATABASE_POOL
 from ..logic.location import Location as l
 
@@ -28,7 +28,7 @@ def addlogistics(
         base_rates: base payments for different materials
         prices_per_hour: hourly prices for different materials
     Returns:
-        True if adding is complete
+        Contractor id if adding is complete
         False if address is not correct
     """
     if not all([user_id, name, address, categories, base_rates, prices_per_hour, max_capacities, max_distances]):
@@ -40,7 +40,6 @@ def addlogistics(
         coordinates = l(address)
         lon = coordinates.longitude
         lat = coordinates.latitude
-
         id = db.db_add_logistics(
             user_id, name, business_id, address, lon, lat, radius, pool=DATABASE_POOL
         )
@@ -54,10 +53,8 @@ def addlogistics(
             db.db_add_cargo_category(
                 id, cargo_type, price, base_rate, max_capacity, max_distance, pool=DATABASE_POOL
             )
-        session["contractor_id"] = id
-        return True
-    except:
+        return id
+    except Exception as er:
+        logging.error(er)
         return False
 
-def contractor_id():
-    return session["contractor_id"]
