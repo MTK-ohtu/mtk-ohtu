@@ -63,7 +63,11 @@ def db_connection_pool(config: DatabaseConfig) -> ConnectionPool:
     conn_args = _db_connection_string(config)
 
     connection_pool = ConnectionPool(
-        conninfo=conn_args, min_size=1, max_size=5, configure=db_register_enums, open=True
+        conninfo=conn_args,
+        min_size=1,
+        max_size=5,
+        configure=db_register_enums,
+        open=True,
     )
     return connection_pool
 

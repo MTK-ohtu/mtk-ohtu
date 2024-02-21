@@ -1,6 +1,6 @@
-from .config import SECRET_KEY
+from flask import Flask
 from flask_session import Session
-from flask import Flask, session
+from .config import SECRET_KEY
 from .routes.listing import listing_bp
 from .routes.contractor import contractor_bp
 from .routes.location import location_bp
@@ -19,7 +19,7 @@ def create_app():
     app.register_blueprint(api_bp, url_prefix="/api")
 
     app.config.from_object(__name__)
-    app.config['SESSION_TYPE'] = 'filesystem'
+    app.config["SESSION_TYPE"] = "filesystem"
     Session(app)
 
     return app

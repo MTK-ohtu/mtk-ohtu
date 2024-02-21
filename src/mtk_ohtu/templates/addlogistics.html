@@ -9,7 +9,7 @@
         
         <div class="service-option">
             <input type="radio" id="private" name="serviceType" value="private" onclick="toggleQuestions()">
-            <label for="private" class="circle-label">Private Logistics Service</label>
+            <label for="private" class="circle-label">Private contractor</label>
         </div>
 
         <div class="service-option">
@@ -40,20 +40,24 @@
             <h4>Add materials you can deliver</h4>
             <div id="materials-container">
                 <div class="material-entry">
-                    <label for="dropdown">Select an option:</label>
-                    <select class="material-dropdown" name="materials[]">
-                        {% for material in material_categories %}
-                        <option value="{{ material }}">{{ material }}</option>
-                        {% endfor %}
-                    </select>
-                    <label for="base_rate">Base rate:</label>
-                    <input type="text" class="base-rate" name="base_rates[]">
-                    <label for="price_per_hour">€/h:</label>
-                    <input type="text" class="price-per-hour" name="prices_per_hour[]">
-                    <label for="max_capacity">Maximum capacity:</label>
-                    <input type="text" class="max-capacity" name="max_capacities[]"> tons
-                    <label for="max_distance">Maximum delivery distance:</label>
-                    <input type="text" class="max-distance" name="max_distances[]"> kilometers
+                    <div class="card">
+                        <h3>New material</h3>
+                        <label for="dropdown">Select material:</label>
+                        <select class="material-dropdown" name="materials[]">
+                            {% for material in material_categories %}
+                            <option value="{{ material }}">{{ material }}</option>
+                            {% endfor %}
+                        </select>
+                        <br>
+                        <label for="base_rate">Base rate:</label>
+                        <input type="text" class="base-rate" name="base_rates[]"> €<br> 
+                        <label for="price_per_hour">Price per hour:</label>
+                        <input type="text" class="price-per-hour" name="prices_per_hour[]"> €<br>
+                        <label for="max_capacity">Maximum capacity:</label>
+                        <input type="text" class="max-capacity" name="max_capacities[]"> tons<br>
+                        <label for="max_distance">Maximum delivery distance:</label>
+                        <input type="text" class="max-distance" name="max_distances[]"> kilometers
+                    </div>
                 </div>
             </div>
 

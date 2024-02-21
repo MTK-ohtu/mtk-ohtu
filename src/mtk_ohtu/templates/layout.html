@@ -80,8 +80,11 @@
         </div>
         {% if session.user_id %}
         <div class="navbar-right">
-            <a href="/addlogistics">Add Logistics Service</a>
+        {% if session.contractor_id%}
             <a href="/contractor">MyLogistics</a>
+        {% else %}
+            <a href="/addlogistics">Add Logistics Service</a>
+        {% endif %}
             <a href="/logout">logout</a>
         </div> 
 

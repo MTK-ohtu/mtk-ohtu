@@ -1,7 +1,9 @@
 from geopy.geocoders import Nominatim
 from ..config import NOMINATIM_DOMAIN, NOMINATIM_USER_AGENT
 
-geolocator = Nominatim(domain=NOMINATIM_DOMAIN, user_agent=NOMINATIM_USER_AGENT, scheme="http")
+geolocator = Nominatim(
+    domain=NOMINATIM_DOMAIN, user_agent=NOMINATIM_USER_AGENT, scheme="http"
+)
 
 
 class Location:
@@ -18,6 +20,7 @@ class Location:
 
         Args:
             loc_input (str or tuple or list): The address or coordinates of the location.
+                If coordinates, then the format is (longitude, latitude)
         """
         if type(loc_input) == str:
             self.location = self._location_from_address(loc_input)

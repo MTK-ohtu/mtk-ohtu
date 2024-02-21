@@ -1,10 +1,6 @@
-from dotenv import load_dotenv, find_dotenv
 from os import getenv
-from .database.db_meta import (
-    DatabaseConfig,
-    db_create,
-    db_connection_pool
-)
+from dotenv import load_dotenv, find_dotenv
+from .database.db_meta import DatabaseConfig, db_create, db_connection_pool
 
 load_dotenv(find_dotenv(usecwd=True))
 
@@ -20,9 +16,10 @@ DATABASE_CONFIG = DatabaseConfig(
 NOMINATIM_DOMAIN = getenv("NOMINATIM_DOMAIN")
 NOMINATIM_USER_AGENT = getenv("NOMINATIM_USER_AGENT")
 
+
 def setup_db():
     db_create(DATABASE_CONFIG)
     return db_connection_pool(DATABASE_CONFIG)
 
-DATABASE_POOL = setup_db()
 
+DATABASE_POOL = setup_db()

@@ -8,9 +8,10 @@ from ..routes.listing import get_url_for_listing
 
 api_bp = Blueprint("api_bp", __name__)
 
+
 @api_bp.route("/logistics_info", methods=["GET"])
 def logistics_info():
-    '''API3 implementation. 
+    """API3 implementation.
     Excepts the mimetype of the GET request to be application/json.
 
     The json body should have the form:
@@ -25,7 +26,7 @@ def logistics_info():
             "num_providers": (int) the number of available logistics providers,
             "link": (str) a full (not relative) URL leading to the logistics page providing more info
         }
-    '''
+    """
 
     try:
         listing, location = LogisticsInfoSchema().load(request.get_json())
@@ -37,5 +38,5 @@ def logistics_info():
     return {
         "distance": distance,
         "num_providers": num_providers,
-        "link": get_url_for_listing(listing)
+        "link": get_url_for_listing(listing),
     }

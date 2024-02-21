@@ -1,36 +1,39 @@
 import psycopg
 from ..database.db_enums import CategoryType
 from psycopg_pool import ConnectionPool
-
+from ..logic.listing import Listing
+from ..logic.location import Location
+from ..logic.logistics_node import LogisticsNode
+from ..logic.cargo_type_info import CargoTypeInfo
 
 # pylint: disable=E1129
 
 
-def db_get_product_list(pool: ConnectionPool) -> list:
+def db_get_product_list(pool: ConnectionPool) -> list[Listing]:
     """Gets list of products from database
     Args:
-        config: Database config
-    Returns: List of tuples, tuples in format ('product name', 'product price', 'product location', 'product description', 'seller name', longitude, latitude)
+        pool: a database connection pool
+    Returns: list of Listings
     """
     out = None
     with pool.connection() as connection:
         cursor = connection.cursor()
         cursor.execute(
-            "SELECT l.category, l.price, l.address, l.description, u.username, l.longitude, l.latitude, l.id \
+            "SELECT l.id, l.category, l.price, l.address, l.description, u.username, l.longitude, l.latitude \
                         FROM listings as l \
                         LEFT JOIN users AS u ON u.id = l.user_id;"
         )
-        out = list(cursor.fetchall())
+        out = [Listing(*x[0:6], Location((x[6], x[7]))) for x in cursor.fetchall()]
     return out
 
 
-def db_get_product_by_id(product_id: int, pool: ConnectionPool) -> tuple:
+def db_get_product_by_id(product_id: int, pool: ConnectionPool) -> Listing | None:
     """Gets product from database by id
     Args:
         config: Database config
         product_id: Product id
     Returns:
-        Tuple in format ('product name', 'product price', 'product location (address)', 'product description', 'seller name', longitude, latitude)
+        a Listing
         None if no product is found
     """
     out = None
@@ -44,7 +47,10 @@ def db_get_product_by_id(product_id: int, pool: ConnectionPool) -> tuple:
             (product_id,),
         )
         out = cursor.fetchone()
-    return out
+
+    l = Listing(product_id, *out[0:5], Location((out[5], out[6])))
+    return l
+
 
 def db_get_user(username: str, pool: ConnectionPool) -> bool:
     """Gets user from database
@@ -67,8 +73,10 @@ def db_get_user(username: str, pool: ConnectionPool) -> bool:
 def db_check_if_user_exists():
     pass
 
+
 def db_check_if_user_exists():
     pass
+
 
 def db_add_user(
     username: str, password: str, email: str, pool: ConnectionPool
@@ -84,11 +92,11 @@ def db_add_user(
     out = False
     with pool.connection() as connection:
         cursor = connection.cursor()
-        #"INSERT INTO users (username, password, email) VALUES (%s,%s,%s) RETURNING id",
+        # "INSERT INTO users (username, password, email) VALUES (%s,%s,%s) RETURNING id",
         try:
             cursor.execute(
                 "INSERT INTO users (username, password, email) VALUES (%s,%s,%s) RETURNING id",
-                (username, password, email)
+                (username, password, email),
             )
         except psycopg.errors.UniqueViolation:
             return (False, None)
@@ -106,7 +114,7 @@ def db_add_logistics(
     lon: float,
     lat: float,
     radius: int,
-    pool: ConnectionPool
+    pool: ConnectionPool,
 ):
     """
     Adds new logistics contractor to database
@@ -136,14 +144,14 @@ def db_add_logistics(
 
 
 def db_add_cargo_category(
-        id: int, 
-        type: CategoryType, 
-        price_per_hour: int, 
-        base_rate: int, 
-        max_capacity: int, 
-        max_distance: int, 
-        pool: ConnectionPool
-    ):
+    id: int,
+    type: CategoryType,
+    price_per_hour: int,
+    base_rate: int,
+    max_capacity: int,
+    max_distance: int,
+    pool: ConnectionPool,
+):
     """
     Adds new categories of materials that the contractor are capable to transport
     Args:
@@ -158,70 +166,66 @@ def db_add_cargo_category(
         cursor = connection.cursor()
         cursor.execute(
             "INSERT INTO cargo_prices (logistic_id, type, price_per_km, base_rate, max_capacity, max_distance) VALUES (%s,%s,%s,%s,%s,%s)",
-            (id, type, price_per_hour, base_rate, max_capacity, max_distance)
+            (id, type, price_per_hour, base_rate, max_capacity, max_distance),
         )
         out = True
     return out
 
 
-def db_get_cargo_prices(logistic_id: int, pool: ConnectionPool):
+def db_get_cargo_prices(logistic_id: int, pool: ConnectionPool) -> list[CargoTypeInfo]:
     """
     Gets contractor's prices for different cargo types
 
     Args:
         logistic_id: Contractor's id number
+
+    Returns:
+        a list of CargoTypeInfos
     """
     out = False
     with pool.connection() as connection:
         cursor = connection.cursor()
-        cursor.execute("SELECT * FROM cargo_prices WHERE logistic_id=%s", (logistic_id,))
+        cursor.execute(
+            "SELECT * FROM cargo_prices WHERE logistic_id=%s", (logistic_id,)
+        )
         out = cursor.fetchall()
-    return out
+    return [CargoTypeInfo(*x[1:]) for x in out]
 
 
-def db_get_logistics(pool: ConnectionPool):
+def db_get_logistics(pool: ConnectionPool) -> list[LogisticsNode]:
     """
     Gets all logistics contractors from database
     Args:
-        config: Database config
-    Returns: List of tuples, tuples in format ('name', 'business_id', 'address', 'longitude', 'latitude', 'delivery_radius')
+        pool: a database connection pool
+    Returns: List of LogisticsNodes
     """
     out = False
     with pool.connection() as connection:
         cursor = connection.cursor()
         cursor.execute("SELECT * FROM logistics_contractors")
-        out = list(cursor.fetchall())
+        out = [
+            LogisticsNode(x[0], x[1], x[2], x[4], x[5], Location((x[6], x[7])), x[8])
+            for x in cursor.fetchall()
+        ]
     return out
 
 
-def db_get_contractors_by_euclidean(lat, lon, lat_r, lon_r, pool: ConnectionPool) -> list:
-    """
-    Queries all logistic contractors inside given euclidean distance from x,y
-    Args:
-        x: source longitude
-        y: source latitude
-        r: distance
-        config: Database config
-    """
-    out = False
-    with pool.connection() as connection:
-        cursor = connection.cursor()
-        query = f"SELECT longitude, latitude, name, address FROM logistics_contractors WHERE longitude BETWEEN {lon-lon_r} AND {lon+lon_r} AND latitude BETWEEN {lat-lat_r} AND {lat+lat_r}"
-        cursor.execute(query)
-        out = list(cursor.fetchall())
-    return out
-
-
-def db_get_contractor(user_id: int, pool: ConnectionPool):
+def db_get_contractor(user_id: int, pool: ConnectionPool) -> LogisticsNode:
     """
     Gets logistics contractor information connected to user
 
     Args:
         user_id: Owner's user id number
+
+    Returns:
+        a LogisticsNode |
+        None if no info is found
     """
-    out = False
+    out = None
     with pool.connection() as connection:
         cursor = connection.cursor()
-        cursor.execute("SELECT id, name, business_id, address, delivery_radius FROM logistics_contractors WHERE user_id=%s", (user_id,))
+        cursor.execute(
+            "SELECT * FROM logistics_contractors WHERE user_id=%s", (user_id,)
+        )
         out = cursor.fetchone()
-    return out
+    return LogisticsNode(*out[:3], out[4], out[5], Location((out[6], out[7])), out[8])

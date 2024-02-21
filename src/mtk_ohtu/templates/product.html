@@ -30,8 +30,8 @@
     </form>
 </div>
 <div>
-    <h2>{{listing.name}}</h2>
-    <p>{{listing.address}} ({{listing.longitude}}, {{listing.latitude}})</p>
+    <h2>{{listing.category.value}}</h2>
+    <p>{{listing.address}} ({{listing.location.longitude}}, {{listing.location.latitude}})</p>
     <p>{{listing.description}}</p>
     <p>{{listing.price}} €</p>
 </div>
@@ -54,13 +54,13 @@
 </style>
 <script>
     // Create a map object with route and markers and add it to the map container.
-    var map = L.map('map').setView(['{{listing.latitude}}', '{{listing.longitude}}'], 12);
+    var map = L.map('map').setView(['{{listing.location.latitude}}', '{{listing.location.longitude}}'], 12);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors'
     }).addTo(map);
-    var product = L.marker(['{{listing.latitude}}', '{{listing.longitude}}']).addTo(map);
+    var product = L.marker(['{{listing.location.latitude}}', '{{listing.location.longitude}}']).addTo(map);
     product._icon.classList.add('huechange1');
-    product.bindPopup("{{listing.name}}\n{{listing.address}}");
+    product.bindPopup("{{listing.category.value}}\n{{listing.address}}");
     if ('{{show_route}}') {
 
         var route_geojson = JSON.parse('{{ route_geojson }}'.replaceAll('&#34;', '"'));
