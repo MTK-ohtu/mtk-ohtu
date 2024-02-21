@@ -89,13 +89,13 @@ def list_contractors():
 
     #TESTISIJAINTI
     address, content = 'Hirvijärvi, Juupajoki', 'Hakkuujäte'
-    lat, lon, r = 61.8578385779706, 24.566428395979575, 300
+    lon, lat, r = 24.566428395979575, 61.8578385779706, 300
 
-    contractors = ContractorList(lat, lon, ['name', 'address', 'latitude', 'longitude'])
-    contractors.split_by_range(r)
+    contractors = ContractorList(['name', 'address', 'latitude', 'longitude'])
+    contractors.split_by_range(lat, lon, r)
     return render_template("contractor_list.html",
                            content=content, address=address,  
-                           lon=lon, lat=lat, 
+                           lat=lat, lon=lon,
                            in_range=contractors.get_in_range(),
                            out_range=contractors.get_out_range(),
                            )

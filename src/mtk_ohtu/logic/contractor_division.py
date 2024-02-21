@@ -1,57 +1,76 @@
-from ..database.database import db_get_logistics, db_get_contractors_by_fields
+from ..database.database import db_get_logistics
 from geojson import Point, Feature, FeatureCollection
-from flask import jsonify
 import math
 from ..config import DATABASE_POOL
-from geopy.distance import geodesic
+from ..logic.logistics_node import LogisticsNode
+from ..logic.location import Location
 
 class ContractorList:
 
-    def __init__(self, source_lat, source_lon, fields: list):
-        self.lat = source_lat
-        self.lon = source_lon
-        self.contractors = db_get_contractors_by_fields(fields, DATABASE_POOL)
-        self.in_range = None
-        self.out_range = None    
     '''
-    Splits all contractors for out range and in range lists
+    Given a coordinate, queries all logistic contractors from DB by given fields.
+    Divides contractors into two lists: suiteable/ rest.
+    Creates leaflet compatible featurecollections from these
+    Args:
+        source_lat, source_lon:
+    '''
+    def __init__(self, fields: list):
+        self.contractors = db_get_logistics(DATABASE_POOL)
+        self.in_range = None
+        self.out_range = None
+
+    '''
+    Splits all contractors into 'out of range'/'in range' lists by given
     Args:
         latitude: float
         longitude: float
         limit: float, straight line distance in kilometers
     Return: tuple (pair) of lists, first containing contractors inside range, second contains the rest 
     '''
-    
-    def split_by_range(self, range: float):
-        self.in_range = list(filter(lambda x: (self.haversine(self.lat, self.lon, x[2], x[3])) < range, self.contractors))
-        self.out_range = list(filter(lambda x: (self.haversine(self.lat, self.lon, x[2], x[3])) > range, self.contractors))
+    def split_by_range(self, source_lat: float, source_lon: float, range: float):
+        self.in_range = list(filter(lambda x: (
+            self.haversine(source_lat, source_lon, x.location.latitude, x.location.longitude)) < range, self.contractors))
+        self.out_range = list(filter(lambda x: (
+            self.haversine(source_lat, source_lon, x.location.latitude, x.location.longitude)) > range, self.contractors))
 
-    def get_all(self):
-        return self.to_featurecollection(self.contractors)
-
+    '''
+    Creates featurecollection of contractors listed as 'in range'.
+    Returns all if not splitted.
+    '''
     def get_in_range(self):
         if self.in_range is None:
             return self.to_featurecollection(self.contractors)
         collection = self.to_featurecollection(self.in_range)
         return collection
     
+    '''
+    Creates featurecollection of contractors listed as 'out of range'
+    Returns all if not splitted.
+    '''
     def get_out_range(self):
-        if self.in_range is None:
+        if self.out_range is None:
             return self.to_featurecollection(self.contractors)
         collection = self.to_featurecollection(self.out_range)
         return collection
 
-    def to_featurecollection(self, div: list):
+    '''
+    Create a feature collection
+    Args:
+        list of typ []
+    '''
+    def to_featurecollection(self, contractor_list: list):
         features = []
-        for contractor in div:
-            properties = {'name':contractor[0], 'address': contractor[1]}
+        for c in contractor_list:
+            print(f"lat: {c.location.latitude}, lon: {c.location.longitude}")
+        for contractor in contractor_list:
+            properties = {'name':contractor.name, 'address': contractor.address}
             feature = Feature(
-                geometry=Point((contractor[3], contractor[2])),
+                geometry=Point((contractor.location.longitude, contractor.location.latitude)),
                 properties=properties
             )
             features.append(feature)
         collection = FeatureCollection(features)
-        print(collection)
+        
         return collection
 
     def haversine(self, lat1, lon1, lat2, lon2):

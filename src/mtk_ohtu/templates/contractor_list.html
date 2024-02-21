@@ -63,13 +63,10 @@
             var in_range_gjson = JSON.parse('{{ in_range | tojson | safe }}');
             var out_range_gjson = JSON.parse('{{ out_range | tojson | safe }}');
 
+            console.log(in_range_gjson)
             console.log(out_range_gjson)
             //Define popups
             function onEachFeature(feature, layer) {
-                if (feature.geometry && feature.geometry.type === 'Point') {
-                    // Lisää marker käyttäen kustomoitua ikonia
-                    L.marker(feature.geometry.coordinates, {icon: redIcon}).addTo(map);
-                }           
                 if (feature.properties && feature.properties.name && feature.properties.address) {
                     layer.bindPopup('<b>' + feature.properties.name + '</b><br>' + feature.properties.address);
                 }

@@ -202,24 +202,6 @@ def db_get_logistics(pool: ConnectionPool) -> list[LogisticsNode]:
     return out
 
 
-def db_get_contractors_by_fields(fields: list, pool: ConnectionPool) -> list:
-    """
-    Queries all logistic contractors by fieldnames
-    Args:
-        x: source longitude
-        y: source latitude
-        r: distance
-        config: Database config
-    """
-    out = False
-    with pool.connection() as connection:
-        cursor = connection.cursor()
-        query = f"SELECT {', '.join(fields)} FROM logistics_contractors"
-        cursor.execute(query)
-        out = list(cursor.fetchall())
-    return out
-
-
 def db_get_contractor(user_id: int, pool: ConnectionPool) -> LogisticsNode:
     """
     Gets logistics contractor information connected to user
