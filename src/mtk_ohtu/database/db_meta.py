@@ -38,7 +38,7 @@ def db_drop_all(config: DatabaseConfig):
         cursor.execute(
             f"DROP SCHEMA public CASCADE; \
                         CREATE SCHEMA public; \
-                        GRANT ALL ON SCHEMA public TO {config.user}; \
+                        GRANT ALL ON SCHEMA public TO \"{config.user}\"; \
                         GRANT ALL ON SCHEMA public TO public;"
         )
 
