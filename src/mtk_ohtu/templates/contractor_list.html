@@ -4,25 +4,61 @@
 
 
 <div class = "card" style="  display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
-    <div style="background-color: #f1f1f1; padding: 20px; font-size: 18px;">    
+    
+    <div  style="background-color: #f1f1f1; padding: 20px; font-size: 18px; height: 65vh;">    
 
         <div>
-            <h2 style="align-self: center;">Suitable contractors</h2>
+            <h2 style="align-self: center;">Suositellut kuljetuspalvelut</h2>
             <input type="checkbox" id="selectAll">
-            <label for="selectAll">Select all contractors</label>
+            <label for="selectAll">Näytä kaikki</label>
         </div>
-        <div style ="overflow: auto;border: 1px solid #ccc;">
-            {% for contractors in contractors %}
-            <div class="card">
-                <h2><a href=“#”>{{ contractors.name }}</a></h2>
-                <p>{{ contractors.address}}</p>
-            </div>
-            {% endfor %}
+
+        <div id="list_div" style ="overflow: auto;border: 1px solid #ccc; overflow-y: scroll; height: 80%;">
+            
+            <script>
+
+                hidden_elements = []
+
+                function addElement(feature, hide){
+                    var listElement = document.createElement('button');
+                    listElement.classList.add('clickable_list_element')
+                    listElement.innerHTML = '<strong>' + feature.properties.name + '</strong><br>' + feature.properties.address;
+
+                    var info = document.createElement('div');
+                    info.style.display = 'none';
+                    info.classList.add('card');
+                    info.innerHTML = '<div><br>Palveluinfo</br></div>'
+
+                    listElement.appendChild(info)
+                    document.currentScript.parentNode.appendChild(listElement);
+
+                    if (hide) {
+                        listElement.style.display = 'none';
+                        hidden_elements.add(listElement);
+                    }
+                    listElement.addEventListener('click', function() {
+                        var info = listElement.querySelector('div');
+                        if (info.style.display === 'none') {
+                            info.style.display = 'block';
+                            listElement.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                        } else {
+                            info.style.display = 'none';
+                        }
+                    });
+                }
+
+                var in_range_gjson = JSON.parse('{{ in_range | tojson | safe }}');
+                var out_range_gjson = JSON.parse('{{ out_range | tojson | safe }}');
+                
+                in_range_gjson.features.forEach(feature => addElement(feature, false));
+                out_range_gjson.features.forEach(feature => addElement(feature, true));
+
+            </script>
         </div>
         
     </div>
 
-    <div style="background-color: #f1f1f1; padding: 20px; font-size: 18px;">
+    <div name="map_div" style="background-color: #f1f1f1; padding: 20px; font-size: 18px;">
         <div>
             <!-- Include Leaflet JavaScript and CSS -->
             <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
@@ -60,11 +96,6 @@
             var source = L.marker(['{{ lat }}','{{ lon }}'], {icon: redIcon}).addTo(map);
             source.bindPopup('<b>' + '{{ content }}' + '</b><br>' + '{{ address }}').openPopup();
 
-            var in_range_gjson = JSON.parse('{{ in_range | tojson | safe }}');
-            var out_range_gjson = JSON.parse('{{ out_range | tojson | safe }}');
-
-            console.log(in_range_gjson)
-            console.log(out_range_gjson)
             //Define popups
             function onEachFeature(feature, layer) {
                 if (feature.properties && feature.properties.name && feature.properties.address) {
@@ -76,15 +107,10 @@
             in_gjson = L.geoJSON(in_range_gjson, {onEachFeature: onEachFeature});
             out_gjson = L.geoJSON(out_range_gjson, {onEachFeature: onEachFeature});
 
-            var baseLayer = {"In Range": in_gjson}
-            var overlayLayers = {"Out of Range": out_gjson}
-
-            var layerControl = L.control.layers(baseLayer, overlayLayers).addTo(map).addTo(map);
+            var combinedBounds = in_gjson.getBounds().pad(0.1).extend(out_gjson.getBounds().pad(0.1));
 
             in_gjson.addTo(map);
-            out_gjson.addTo(map);
-            map.removeLayer(out_gjson);
-            map.flyToBounds(in_gjson.getBounds());
+            map.flyToBounds(in_gjson.getBounds().pad(0.1));
 
             L.control.scale().addTo(map);
 
@@ -92,9 +118,11 @@
             selectAll.addEventListener("change", function(){
                 if (this.checked) {
                     out_gjson.addTo(map)
+                    map.flyToBounds(combinedBounds);
                 }
                 else {
                     map.removeLayer(out_gjson);
+                    map.flyToBounds(in_gjson.getBounds().pad(0.1));
                 }
             });
         </script>
