@@ -8,6 +8,7 @@ INSERT INTO users (username, password, email) VALUES ('testikayttaja5', 'salasan
 INSERT INTO users (username, password, email) VALUES ('testikuljettaja1', 'salasana123', 'testi6@gmail.com') ON CONFLICT DO NOTHING;
 INSERT INTO users (username, password, email) VALUES ('testikuljettaja2', 'salasana123', 'testi7@gmail.com') ON CONFLICT DO NOTHING;
 INSERT INTO users (username, password, email) VALUES ('testikuljettaja3', 'salasana123', 'testi8@gmail.com') ON CONFLICT DO NOTHING;
+INSERT INTO users (username, password, email) VALUES ('testuser', 'scrypt:32768:8:1$Yu7GsrH9WAn3PKS5$da21d2d2d46ac35eb018cf7aff7597fb1128e6fad5ce643b15ebc2274965f6d221b845dc7fb0f3273eb994c3157b5f614b2d2f18404c7e9b585da852dfcc9bbb', 'test@test.com'); -- pass: testpassword
 
 INSERT INTO listings (user_id, listing_type, category, delivery_method, supply_demand, batch_size, batch_units, price, description, address, complies_with_regulations) VALUES (1, 'sell', 'Digestion', 'pickup', 'one time', 1, 'tn', 250, 'Keskustassa.', 'Karkkila', '1') ON CONFLICT DO NOTHING;
 INSERT INTO listings (user_id, listing_type, category, delivery_method, supply_demand, batch_size, batch_units, price, description, address, longitude, latitude, complies_with_regulations) VALUES (4, 'sell', 'Basket fodder',  'pickup', 'one time', 1, 'tn', 35, 'Vuoden 2022 säilörehupaaleja, verkot ja muovit osin rikki.', 'Männiköntie 10, 41400 Jyväskylä',26.214065536083947, 62.264343999999994, '1') ON CONFLICT DO NOTHING;
@@ -23,47 +24,50 @@ INSERT INTO listings (user_id, listing_type, category, delivery_method, supply_d
 INSERT INTO listings (user_id, listing_type, category, delivery_method, supply_demand, batch_size, batch_units, price, description, address, longitude, latitude, complies_with_regulations) VALUES (1, 'sell', 'Wood',  'pickup', 'one time', 1, 'tn', 700, 'Kuivaa jalavaa, vaahteraa ja harvennuspuuta metsätien varrelta.', 'Tampereentie 5, 31670 Urjala', 23.5494974, 61.0815604, '1') ON CONFLICT DO NOTHING;
 INSERT INTO listings (user_id, listing_type, category, delivery_method, supply_demand, batch_size, batch_units, price, description, address, longitude, latitude, complies_with_regulations) VALUES (4, 'sell', 'Wood',  'pickup', 'one time', 1, 'tn', 710, 'Rikkinäisiä kuorma-lavoja.', 'Rantakankaantie 16, Alajärvi', 23.9481132, 62.8319709, '1') ON CONFLICT DO NOTHING;
 
--- INSERT INTO logistics_contractors (user_id, name, created_at, business_id, address, longitude, latitude, delivery_radius) VALUES (6, 'TestContractor1', NOW(), '1234567-A', 'Urpunistintie 8, 03400 Vihti', 60.41596, 24.33768, 500) ON CONFLICT DO NOTHING;
--- INSERT INTO logistics_contractors (user_id, name, created_at, business_id, address, longitude, latitude, delivery_radius) VALUES (6, 'TestContractor2', NOW(), '1234567-B', 'Kehäkatu, 86300 oululainen', 64.27193, 24.81586, 200) ON CONFLICT DO NOTHING;
--- INSERT INTO logistics_contractors (user_id, name, created_at, business_id, address, longitude, latitude, delivery_radius) VALUES (6, 'TestContractor3', NOW(), '1234567-C', 'Saaninranta, 448800 Pihtipudas', 63.845, 25.60259, 700) ON CONFLICT DO NOTHING;
--- INSERT INTO logistics_contractors (user_id, name, created_at, business_id, address, longitude, latitude, delivery_radius) VALUES (6, 'TestContractor4', NOW(), '1234567-D', 'Kullaantie, 29350 Ulvila', 61.46592, 22.16209, 500) ON CONFLICT DO NOTHING;
--- INSERT INTO logistics_contractors (user_id, name, created_at, business_id, address, longitude, latitude, delivery_radius) VALUES (6, 'TestContractor5', NOW(), '1234567-E', 'Saukkolantie, 08500 Lohja', 60.27905, 24.10896, 350) ON CONFLICT DO NOTHING;
--- INSERT INTO logistics_contractors (user_id, name, created_at, business_id, address, longitude, latitude, delivery_radius) VALUES (6, 'TestContractor6', NOW(), '1234567-F', 'Käpykankaantie, 78210 Lohja', 62.3068, 27.8562, 600) ON CONFLICT DO NOTHING;
--- INSERT INTO logistics_contractors (user_id, name, created_at, business_id, address, longitude, latitude, delivery_radius) VALUES (6, 'TestContractor7', NOW(), '1234567-G', 'Talonpojankatu, 67100 Kokkola', 63.83384, 23.15841, 550) ON CONFLICT DO NOTHING;
--- INSERT INTO logistics_contractors (user_id, name, created_at, business_id, address, longitude, latitude, delivery_radius) VALUES (6, 'TestContractor8', NOW(), '1234567-H', 'Karjakatu, 90130 Oulu', 65.0073, 25.48896, 400) ON CONFLICT DO NOTHING;
--- INSERT INTO logistics_contractors (user_id, name, created_at, business_id, address, longitude, latitude, delivery_radius) VALUES (6, 'TestContractor9', NOW(), '1234567-I', 'Ranniotie, 99600 Sodankylä', 67.4292, 26.5722, 600) ON CONFLICT DO NOTHING;
--- INSERT INTO logistics_contractors (user_id, name, created_at, business_id, address, longitude, latitude, delivery_radius) VALUES (6, 'TestContractor10', NOW(), '1234567-J', 'Launeenkatu, 15610 Lahti', 60.96962, 25.65424, 200) ON CONFLICT DO NOTHING;
-
-INSERT INTO logistics_contractors (user_id, name, created_at, business_id, address, longitude, latitude, delivery_radius) 
+INSERT INTO contractors (user_id, name, created_at, business_id) 
 VALUES 
-    (6, 'TestContractor1', NOW(), '1234567-A', 'Urpunistintie 8, 03400 Vihti', 24.33768, 60.41596, 500), 
-    (6, 'TestContractor2', NOW(), '1234567-B', 'Kehäkatu, 86300 oululainen', 24.81586, 64.27193, 200), 
-    (6, 'TestContractor3', NOW(), '1234567-C', 'Saaninranta, 448800 Pihtipudas', 25.60259, 63.845, 700), 
-    (6, 'TestContractor4', NOW(), '1234567-D', 'Kullaantie, 29350 Ulvila', 22.16209, 61.46592, 500), 
-    (6, 'TestContractor5', NOW(), '1234567-E', 'Saukkolantie, 08500 Lohja', 24.10896, 60.27905, 350), 
-    (6, 'TestContractor6', NOW(), '1234567-F', 'Käpykankaantie, 78210 Lohja', 27.8562, 62.3068, 600), 
-    (6, 'TestContractor7', NOW(), '1234567-G', 'Talonpojankatu, 67100 Kokkola', 23.15841, 63.83384, 550), 
-    (6, 'TestContractor8', NOW(), '1234567-H', 'Karjakatu, 90130 Oulu', 25.48896, 65.0073, 400), 
-    (6, 'TestContractor9', NOW(), '1234567-I', 'Ranniotie, 99600 Sodankylä', 26.5722, 67.4292, 600), 
-    (6, 'TestContractor10', NOW(), '1234567-J', 'Launeenkatu, 15610 Lahti', 25.65424, 60.96962, 200) 
+    (1, 'TestContractor1', NOW(), '1234567-A'), 
+    (2, 'TestContractor2', NOW(), '1234567-B'), 
+    (3, 'TestContractor3', NOW(), '1234567-C'), 
+    (4, 'TestContractor4', NOW(), '1234567-D'), 
+    (5, 'TestContractor5', NOW(), '1234567-E'), 
+    (6, 'TestContractor6', NOW(), '1234567-F'), 
+    (7, 'TestContractor7', NOW(), '1234567-G'), 
+    (8, 'TestContractor8', NOW(), '1234567-H')
 ON CONFLICT DO NOTHING;
 
-INSERT INTO cargo_prices (logistic_id, type, price_per_km, base_rate) VALUES (1, 'Manure', 5, 60) ON CONFLICT DO NOTHING;
-INSERT INTO cargo_prices (logistic_id, type, price_per_km, base_rate) VALUES (1, 'Wood', 6, 100) ON CONFLICT DO NOTHING;
-INSERT INTO cargo_prices (logistic_id, type, price_per_km, base_rate) VALUES (2, 'Plant-based biomasses', 3, 45) ON CONFLICT DO NOTHING;
-INSERT INTO cargo_prices (logistic_id, type, price_per_km, base_rate) VALUES (2, 'Animal-based biomasses', 7, 178) ON CONFLICT DO NOTHING;
-INSERT INTO cargo_prices (logistic_id, type, price_per_km, base_rate) VALUES (3, 'Digestion', 3, 60) ON CONFLICT DO NOTHING;
-INSERT INTO cargo_prices (logistic_id, type, price_per_km, base_rate) VALUES (3, 'Soil and growing media', 9, 220) ON CONFLICT DO NOTHING;
-INSERT INTO cargo_prices (logistic_id, type, price_per_km, base_rate) VALUES (4, 'Wood', 6, 100) ON CONFLICT DO NOTHING;
-INSERT INTO cargo_prices (logistic_id, type, price_per_km, base_rate) VALUES (4, 'Animal-based biomasses', 6, 178) ON CONFLICT DO NOTHING;
-INSERT INTO cargo_prices (logistic_id, type, price_per_km, base_rate) VALUES (5, 'Plant-based biomasses', 5, 119) ON CONFLICT DO NOTHING;
-INSERT INTO cargo_prices (logistic_id, type, price_per_km, base_rate) VALUES (5, 'Soil and growing media', 5, 600) ON CONFLICT DO NOTHING;
-INSERT INTO cargo_prices (logistic_id, type, price_per_km, base_rate) VALUES (6, 'Manure', 5, 60) ON CONFLICT DO NOTHING;
-INSERT INTO cargo_prices (logistic_id, type, price_per_km, base_rate) VALUES (6, 'Soil and growing media', 5, 125) ON CONFLICT DO NOTHING;
-INSERT INTO cargo_prices (logistic_id, type, price_per_km, base_rate) VALUES (7, 'Digestion', 3, 60) ON CONFLICT DO NOTHING;
-INSERT INTO cargo_prices (logistic_id, type, price_per_km, base_rate) VALUES (7, 'Wood', 7, 100) ON CONFLICT DO NOTHING;
-INSERT INTO cargo_prices (logistic_id, type, price_per_km, base_rate) VALUES (8, 'Animal-based biomasses', 4, 120) ON CONFLICT DO NOTHING;
-INSERT INTO cargo_prices (logistic_id, type, price_per_km, base_rate) VALUES (8, 'Manure', 5, 60) ON CONFLICT DO NOTHING;
-INSERT INTO cargo_prices (logistic_id, type, price_per_km, base_rate) VALUES (9, 'Soil and growing media', 5, 800) ON CONFLICT DO NOTHING;
-INSERT INTO cargo_prices (logistic_id, type, price_per_km, base_rate) VALUES (9, 'Plant-based biomasses', 7, 90) ON CONFLICT DO NOTHING;
-INSERT INTO cargo_prices (logistic_id, type, price_per_km, base_rate) VALUES (10, 'Digestion', 3, 77) ON CONFLICT DO NOTHING;
+INSERT INTO contractor_locations (contractor_id, address, telephone, email, longitude, latitude, delivery_radius)
+VALUES
+    (1, 'Urpunistintie 8, 03400 Vihti', '040-123456', 'testilocation@gmail.com', 24.33768, 60.41596, 500),
+    (1, 'Kehäkatu, 86300 oululainen', '040-123456', 'testilocation@gmail.com', 24.81586, 64.27193, 200),
+    (1, 'Saaninranta, 448800 Pihtipudas', '040-123456', 'testilocatin@gmail.com', 25.60259, 63.845, 700),
+    (2, 'Kullaantie, 29350 Ulvila', '040-123456', 'testilocation@gmail.com', 22.16209, 61.46592, 500),
+    (2, 'Saukkolantie, 08500 Lohja', '040-123456', 'testilocation@gmail.com', 24.10896, 60.27905, 350),
+    (3, 'Käpykankaantie, 78210 Lohja', '040-123456', 'testilocation@gmail.com', 27.8562, 62.3068, 600),
+    (4, 'Talonpojankatu, 67100 Kokkola', '040-123456', 'testilocation@gmail.com', 23.15841, 63.83384, 550),
+    (5, 'Karjakatu, 90130 Oulu', '040-123456', 'testilocation@gmail.com', 25.48896, 65.0073, 400),
+    (6, 'Ranniotie, 99600 Sodankylä', '040-123456', 'testilocation@gmail.com', 26.5722, 67.4292, 600),
+    (7, 'Launeenkatu, 15610 Lahti', '040-123456', 'testilocation@gmail.com', 25.65424, 60.96962, 200)
+ON CONFLICT DO NOTHING;
+
+INSERT INTO cargo_capabilities (contractor_location_id, type, price_per_km, base_rate, max_capacity, max_distance)
+VALUES
+    (1, 'Wood', 6, 100, 5, 500),
+    (2, 'Plant-based biomasses', 3, 45, 3, 300),
+    (2, 'Animal-based biomasses', 7, 178, 1, 400),
+    (3, 'Digestion', 3, 60, 4, 400),
+    (3, 'Soil and growing media', 9, 220, 3, 600),
+    (3, 'Wood', 6, 100, 10, 300),
+    (4, 'Animal-based biomasses', 6, 178, 3, 300),
+    (4, 'Plant-based biomasses', 5, 119, 2, 600),
+    (4, 'Soil and growing media', 5, 600, 2, 400),
+    (4, 'Manure', 5, 60, 2, 300),
+    (5, 'Soil and growing media', 5, 125, 2, 400),
+    (5, 'Digestion', 3, 60, 2, 600),
+    (5, 'Wood', 7, 100, 8, 500),
+    (5, 'Animal-based biomasses', 4, 120, 2, 300),
+    (6, 'Manure', 5, 60, 3, 500),
+    (7, 'Soil and growing media', 5, 800, 2, 300),
+    (8, 'Plant-based biomasses', 7, 90, 1, 500),
+    (9, 'Digestion', 3, 77, 2, 600)
+ON CONFLICT DO NOTHING;

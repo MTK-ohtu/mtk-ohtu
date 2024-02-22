@@ -16,8 +16,10 @@
         <div id="list_div" style ="overflow: auto;border: 1px solid #ccc; overflow-y: scroll; height: 80%;">
             
             <script>
-
-                hidden_elements = []
+                var padding = 0.02;
+                var hidden_elements = [];
+                var in_range_gjson = JSON.parse('{{ in_range | tojson | safe }}');
+                var out_range_gjson = JSON.parse('{{ out_range | tojson | safe }}');
 
                 function addElement(feature, hide){
                     var listElement = document.createElement('button');
@@ -34,7 +36,8 @@
 
                     if (hide) {
                         listElement.style.display = 'none';
-                        hidden_elements.add(listElement);
+                        listElement.style.backgroundColor = 'red';
+                        hidden_elements.push(listElement);
                     }
                     listElement.addEventListener('click', function() {
                         var info = listElement.querySelector('div');
@@ -47,8 +50,8 @@
                     });
                 }
 
-                var in_range_gjson = JSON.parse('{{ in_range | tojson | safe }}');
-                var out_range_gjson = JSON.parse('{{ out_range | tojson | safe }}');
+                console.log(in_range_gjson)
+                console.log(out_range_gjson)
                 
                 in_range_gjson.features.forEach(feature => addElement(feature, false));
                 out_range_gjson.features.forEach(feature => addElement(feature, true));
@@ -73,19 +76,18 @@
             console.log("Setting up")
 
             // Set coordinates to match viewers
-            var map = L.map('map').setView(['{{ lon }}','{{ lat }}'], 10); 
+            var map = L.map('map').setView(['{{ lat }}','{{ lon }}'], 10); 
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors'
-    }).addTo(map);
-
-    var contractors = JSON.parse('{{ contractors }}'.replaceAll('&#34;', '"'));
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '© OpenStreetMap contributors'
             }).addTo(map);
 
 
-            var greenIcon = new L.Icon({
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+
+            var redIcon = new L.Icon({
                 iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
                 shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
                 iconSize: [25, 41],
@@ -104,19 +106,22 @@
 
             //Define popups
             function onEachFeature(feature, layer) {
+                L.marker(feature.geometry.coordinates, {
+                    icon: redIcon // Tässä voit asettaa haluamasi ikonin
+                }).addTo(map);
                 if (feature.properties && feature.properties.name && feature.properties.address) {
                     layer.bindPopup('<b>' + feature.properties.name + '</b><br>' + feature.properties.address);
                 }
             }
-
+            
             // Add contractor locations (database)
             in_gjson = L.geoJSON(in_range_gjson, {onEachFeature: onEachFeature});
             out_gjson = L.geoJSON(out_range_gjson, {onEachFeature: onEachFeature});
 
-            var combinedBounds = in_gjson.getBounds().pad(0.1).extend(out_gjson.getBounds().pad(0.1));
+            var combinedBounds = in_gjson.getBounds().pad(padding).extend(out_gjson.getBounds().pad(padding));
 
             in_gjson.addTo(map);
-            map.flyToBounds(in_gjson.getBounds().pad(0.1));
+            map.flyToBounds(in_gjson.getBounds().pad(padding));
 
             L.control.scale().addTo(map);
 
@@ -126,10 +131,12 @@
                 if (this.checked) {
                     out_gjson.addTo(map)
                     map.flyToBounds(combinedBounds);
+                    hidden_elements.forEach(element => {element.style.display ='block'})
                 }
                 else {
                     map.removeLayer(out_gjson);
-                    map.flyToBounds(in_gjson.getBounds().pad(0.1));
+                    map.flyToBounds(in_gjson.getBounds().pad(padding));
+                    hidden_elements.forEach(element => {element.style.display ='none'})
                 }
             });
         </script>

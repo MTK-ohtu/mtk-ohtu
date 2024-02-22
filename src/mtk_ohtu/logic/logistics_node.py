@@ -5,9 +5,8 @@ from ..logic.location import Location
 @dataclass
 class LogisticsNode:
     id: int
-    user_id: int
-    name: str
-    business_id: str
+    contractor_id: int
     address: str
+    name: str
     location: Location
-    delivery_radius: float  # in kilometers
+    delivery_radius: int

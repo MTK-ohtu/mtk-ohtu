@@ -33,64 +33,72 @@
             <label for="address">Address:</label>
             <input type="text" id="address" name="address"><br>
 
+            <label for="telephone">Phone number:</label>
+            <input type="text" id="telephone" name="telephone"><br>
+
+            <label for="email">Email address:</label>
+            <input type="text" id="email" name="email"><br>
+
             <h4>Approximately how far can you deliver (leave empty for no limit)</h4>
             <label for="radius"></label>
             <input type="text" id="radius" name="radius"> kilometers
 
             <h4>Add materials you can deliver</h4>
             <div id="materials-container">
-                <div class="material-entry">
-                    <div class="card">
-                        <h3>New material</h3>
-                        <label for="dropdown">Select material:</label>
-                        <select class="material-dropdown" name="materials[]">
-                            {% for material in material_categories %}
-                            <option value="{{ material }}">{{ material }}</option>
-                            {% endfor %}
-                        </select>
-                        <br>
-                        <label for="base_rate">Base rate:</label>
-                        <input type="text" class="base-rate" name="base_rates[]"> €<br> 
-                        <label for="price_per_hour">Price per hour:</label>
-                        <input type="text" class="price-per-hour" name="prices_per_hour[]"> €<br>
-                        <label for="max_capacity">Maximum capacity:</label>
-                        <input type="text" class="max-capacity" name="max_capacities[]"> tons<br>
-                        <label for="max_distance">Maximum delivery distance:</label>
-                        <input type="text" class="max-distance" name="max_distances[]"> kilometers
-                    </div>
-                </div>
+                <button type="button" onclick="addMaterial()">Add new material</button>
             </div>
-
-            <button type="button" onclick="addMaterial()">Add new</button>
         </div>
         <br>
         <input type="submit" value="Submit">
     </form>
 </div>
 
+<div id="material-card-template" style="display: none;">
+    <div class="material-entry">
+        <div class="card">
+            <h3>New material</h3>
+            <label for="dropdown">Select material:</label>
+            <select class="material-dropdown" name="materials[]">
+                {% for material in material_categories %}
+                <option value="{{ material }}">{{ material }}</option>
+                {% endfor %}
+            </select>
+            <br>
+            <label for="base_rate">Base rate:</label>
+            <input type="text" class="base-rate" name="base_rates[]"> €<br> 
+            <label for="price_per_hour">Price per hour:</label>
+            <input type="text" class="price-per-hour" name="prices_per_hour[]"> €<br>
+            <label for="max_capacity">Maximum capacity:</label>
+            <input type="text" class="max-capacity" name="max_capacities[]"> tons<br>
+            <label for="max_distance">Maximum delivery distance:</label>
+            <input type="text" class="max-distance" name="max_distances[]"> kilometers
+
+            <button type="button" onclick="deleteMaterial(this.parentNode.parentNode.id)">Delete field</button>
+        </div>
+    </div>
+</div>
+
 <script>
-    function deleteMaterial(entry) {
+    function deleteMaterial(materialEntryId) {
+        const materialEntry = document.getElementById(materialEntryId);
         const materialsContainer = document.getElementById('materials-container');
-        materialsContainer.removeChild(entry);
+
+        if (materialEntry) {
+            materialsContainer.removeChild(materialEntry);
+        }
     }
 
     function addMaterial() {
         const materialsContainer = document.getElementById('materials-container');
-        const materialEntry = document.querySelector('.material-entry').cloneNode(true);
+        const materialEntry = document.getElementById('material-card-template').cloneNode(true);
+        materialEntry.style.display = 'block';
 
-        materialEntry.querySelector('.material-dropdown').value = '';
-        materialEntry.querySelector('.price-per-hour').value = '';
-        materialEntry.querySelector('.base-rate').value = '';
-        materialEntry.querySelector('.max-capacity').value = '';
-        materialEntry.querySelector('.max-distance').value = '';
+        const uniqueId = 'material-entry-' + Date.now();
+        materialEntry.setAttribute('id', uniqueId);
 
-        const deleteButton = document.createElement('button');
-        deleteButton.textContent = 'Delete field';
-        deleteButton.className = 'delete-material';
-        deleteButton.type = 'button';
-        deleteButton.onclick = function () { deleteMaterial(materialEntry); };
+        const deleteButton = materialEntry.querySelector('.card button');
+        deleteButton.setAttribute('onclick', 'deleteMaterial("' + uniqueId + '")');
 
-        materialEntry.appendChild(deleteButton);
         materialsContainer.appendChild(materialEntry);
     }
 
@@ -146,40 +154,6 @@
         if (radius.value.trim() !== "" && isNaN(radius.value.trim())) {
             alert("Radius must be a number.");
             return false;
-        }
-
-        var materialEntries = document.querySelectorAll('.material-entry');
-        for (var i = 0; i < materialEntries.length; i++) {
-            var materialDropdown = materialEntries[i].querySelector('.material-dropdown');
-            var pricePerHour = materialEntries[i].querySelector('.price-per-hour');
-            var baseRate = materialEntries[i].querySelector('.base-rate');
-            var maxCapacity = materialEntries[i].querySelector('.max-capacity');
-            var maxDistance = materialEntries[i].querySelector('.max-distance');
-
-            if (materialDropdown.value.trim() === "") {
-                alert("Please select a material type in entry " + (i + 1) + "or delete the field.");
-                return false;
-            }
-
-            if (pricePerHour.value.trim() === "" || isNaN(pricePerHour.value.trim())) {
-                alert("Please enter a valid price per hour in entry " + (i + 1) + "or delete the field.");
-                return false;
-            }
-
-            if (baseRate.value.trim() === "" || isNaN(baseRate.value.trim())) {
-                alert("Please enter a valid base rate in entry " + (i + 1) + "or delete the field.");
-                return false;
-            }
-
-            if (maxCapacity.value.trim() === "" || isNaN(maxCapacity.value.trim())) {
-                alert("Please enter a valid maximum capacity in entry " + (i + 1) + "or delete the field.");
-                return false;
-            }
-
-            if (maxDistance.value.trim() === "" || isNaN(maxDistance.value.trim())) {
-                alert("Please enter a valid maximum delivery distance in entry " + (i + 1) + "or delete the field.");
-                return false;
-            }
         }
 
         return true;

@@ -72,21 +72,28 @@ CREATE TABLE IF NOT EXISTS purchases (
     delivery_address TEXT NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS logistics_contractors (
+CREATE TABLE IF NOT EXISTS contractors (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id),
     name TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT NOW(),
-    business_id VARCHAR(16),
+    business_id VARCHAR(16)
+);
+
+CREATE TABLE IF NOT EXISTS contractor_locations (
+    id SERIAL PRIMARY KEY,
+    contractor_id INTEGER REFERENCES contractors(id),
     address TEXT NOT NULL,
+    telephone TEXT,
+    email TEXT,
     longitude FLOAT,
     latitude FLOAT,
     delivery_radius INTEGER NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS cargo_prices (
+CREATE TABLE IF NOT EXISTS cargo_capabilities (
     id SERIAL PRIMARY KEY,
-    logistic_id INTEGER REFERENCES logistics_contractors(id),
+    contractor_location_id INTEGER REFERENCES contractor_locations(id),
     type category_type NOT NULL,
     price_per_km INTEGER NOT NULL,
     base_rate INTEGER,
