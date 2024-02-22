@@ -162,6 +162,32 @@ def db_add_contractor_location(
             print(f"Error inserting data: {e}")
     return out
 
+
+def db_get_contractor_locations(contractor_id: int, pool: ConnectionPool) -> list[LogisticsNode]:
+    """
+    Gets contractors delivery locations
+
+    Args:
+        contractor_id: contractor's identifying number
+        pool: a database connection
+
+    Returns:
+        List[LogisticsNode]: list of locations
+    """
+    out = None
+    with pool.connection() as connection:
+        cursor = connection.execute(
+            "SELECT * FROM contractor_locations WHERE contractor_id=%s", (contractor_id,)
+        )
+        out = [
+            LogisticsNode(x[0], x[1], x[2], None, Location((x[5], x[6])), x[7])
+            for x in cursor.fetchall()
+        ]
+    if not out:
+        return None
+    return out
+
+
 def db_add_cargo_capability(
     id: int,
     type: CategoryType,

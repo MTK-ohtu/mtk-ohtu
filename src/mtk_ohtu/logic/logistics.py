@@ -82,3 +82,33 @@ def add_cargo_capability(
                 max_distance,
                 pool=DATABASE_POOL,
             )
+
+
+def get_locations_and_cargo_capability(contractor_id):
+    """
+    Creates an array of contractor's locations and available cargo capabilities
+    Args:
+        contractor_id: contractor's identifying number
+
+    Returns:
+        array of tuples: (LogisticsNode, [CargoTypeInfo])
+    """
+    locations = contractor_locations(contractor_id)
+
+    capability = []
+    for location in locations:
+        capability.append((location, cargo_capability(location.id)))
+
+    return capability
+
+def contractor_locations(contractor_id):
+    """
+    Returns contractor's locations on a list
+    """
+    return db.db_get_contractor_locations(contractor_id, DATABASE_POOL)
+
+def cargo_capability(contractor_location_id):
+    """
+    Returns a list of locations cargo hauling capabilities
+    """
+    return db.db_get_location_cargo_capabilities(contractor_location_id, DATABASE_POOL)
