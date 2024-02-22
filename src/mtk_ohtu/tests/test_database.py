@@ -20,6 +20,7 @@ class TestConnectionAndCreation(unittest.TestCase):
         self.assertTrue(True)
 
     def test_database_schema_creation_mock_data_and_removal_works(self):
+        db_m.db_drop_all(DATABASE_CONFIG)
         db_m.db_excecute_file("schema.sql", DATABASE_CONFIG)
         connection = db_m.db_connect(DATABASE_CONFIG)
         cursor = connection.cursor()
