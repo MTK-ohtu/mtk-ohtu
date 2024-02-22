@@ -8,6 +8,7 @@ INSERT INTO users (username, password, email) VALUES ('testikayttaja5', 'salasan
 INSERT INTO users (username, password, email) VALUES ('testikuljettaja1', 'salasana123', 'testi6@gmail.com') ON CONFLICT DO NOTHING;
 INSERT INTO users (username, password, email) VALUES ('testikuljettaja2', 'salasana123', 'testi7@gmail.com') ON CONFLICT DO NOTHING;
 INSERT INTO users (username, password, email) VALUES ('testikuljettaja3', 'salasana123', 'testi8@gmail.com') ON CONFLICT DO NOTHING;
+INSERT INTO users (username, password, email) VALUES ('testuser', 'scrypt:32768:8:1$Yu7GsrH9WAn3PKS5$da21d2d2d46ac35eb018cf7aff7597fb1128e6fad5ce643b15ebc2274965f6d221b845dc7fb0f3273eb994c3157b5f614b2d2f18404c7e9b585da852dfcc9bbb', 'test@test.com'); -- pass: testpassword
 
 INSERT INTO listings (user_id, listing_type, category, delivery_method, supply_demand, batch_size, batch_units, price, description, address, complies_with_regulations) VALUES (1, 'sell', 'Digestion', 'pickup', 'one time', 1, 'tn', 250, 'Keskustassa.', 'Karkkila', '1') ON CONFLICT DO NOTHING;
 INSERT INTO listings (user_id, listing_type, category, delivery_method, supply_demand, batch_size, batch_units, price, description, address, longitude, latitude, complies_with_regulations) VALUES (4, 'sell', 'Basket fodder',  'pickup', 'one time', 1, 'tn', 35, 'Vuoden 2022 säilörehupaaleja, verkot ja muovit osin rikki.', 'Männiköntie 10, 41400 Jyväskylä',26.214065536083947, 62.264343999999994, '1') ON CONFLICT DO NOTHING;

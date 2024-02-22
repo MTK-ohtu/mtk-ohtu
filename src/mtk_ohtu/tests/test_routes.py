@@ -1,5 +1,6 @@
 import pytest
 import unittest
+from flask import session
 from mtk_ohtu import app as mtkapp
 from mtk_ohtu.database import db_meta as dbm
 from mtk_ohtu.config import DATABASE_CONFIG
@@ -10,7 +11,7 @@ def app():
     app.config.update({
         "TESTING": True,
     })
-
+    dbm.db_drop_all(DATABASE_CONFIG)
     dbm.db_create(DATABASE_CONFIG)
     dbm.db_excecute_file("db_mock_data.sql", DATABASE_CONFIG)
 
@@ -33,3 +34,13 @@ def test_index(client):
     response = client.get("/")
     assert b"<h1>Welcome to the MTK - OhTU project page</h1>" in response.data
 
+
+# user route tests
+    
+def test_login_as_test_user(client):
+    with client:
+        client.post("/login", data={
+            "username": "testuser",
+            "password": "testpassword"})
+        assert session["user_id"] == 9
+    
