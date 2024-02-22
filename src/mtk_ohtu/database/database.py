@@ -191,15 +191,16 @@ def db_add_cargo_capability(
     return out
 
 
-def db_get_cargo_capabilities(contractor_location_id: int, pool: ConnectionPool) -> list[CargoTypeInfo]:
+def db_get_location_cargo_capabilities(contractor_location_id: int, pool: ConnectionPool) -> list[CargoTypeInfo]:
     """
-    Gets the car
-
+    Gets a list of sidestreams the location is available to deliver
     Args:
-        contractor_location_id: Contractor's 
+        contractor_location_id: location's identifying number
+        pool: a database connection
 
     Returns:
         a list of CargoTypeInfos
+        None if not available to deliver
     """
     out = None
     with pool.connection() as connection:
@@ -233,16 +234,17 @@ def db_get_logistics(pool: ConnectionPool) -> list[LogisticsNode]:
     return out
 
 
-def db_get_contractor(user_id: int, pool: ConnectionPool) -> LogisticsNode:
+def db_get_contractor(user_id: int, pool: ConnectionPool) -> LogisticsContractor:
     """
-    Gets logistics contractor information connected to user
+    Gets contractor information connected to user
 
     Args:
-        user_id: Owner's user id number
+        user_id: Owner's identifying number
+        pool: a database connection
 
     Returns:
-        a LogisticsContractor |
-        None if no info is found
+        a LogisticsContractor
+        None if contractor doesnt't exist
     """
     out = None
     with pool.connection() as connection:
