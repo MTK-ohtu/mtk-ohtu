@@ -109,9 +109,11 @@
                 }
             }
 
+            
             // Add contractor locations (database)
             in_gjson = L.geoJSON(in_range_gjson, {onEachFeature: onEachFeature});
             out_gjson = L.geoJSON(out_range_gjson, {onEachFeature: onEachFeature});
+            console.log(in_gjson)
 
             var combinedBounds = in_gjson.getBounds().pad(0.1).extend(out_gjson.getBounds().pad(0.1));
 

@@ -115,4 +115,5 @@ class ContractorDivision:
             lat1
         ) * math.cos(lat2)
         rad = 6371
+        c = 2 * math.asin(math.sqrt(a))
         return float(rad * c)
