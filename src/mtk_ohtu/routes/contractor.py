@@ -37,8 +37,8 @@ def add_logistics():
         prices_per_hour = request.form.getlist("prices_per_hour[]")
         maximum_capacities = request.form.getlist("max_capacities[]")
         maximum_distances = request.form.getlist("max_distances[]")
-        telephone = "4039"
-        email = "s"
+        telephone = request.form.get("telephone")
+        email = request.form.get("email")
 
         contractor_id = logistics.add_contractor(user_id, name, business_id)
         contractor_location_id = logistics.add_contractor_location(contractor_id, address, telephone, email, radius)
