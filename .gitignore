@@ -8,4 +8,4 @@ postgresql-data
 flask_session/
 nominatim
 .pytest_cache
-src/mtk_ohtu/oma_testikoodi.py
+oma_testikoodi.py

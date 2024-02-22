@@ -72,6 +72,17 @@ def listing(listing_id):
             fuel, route_to_product.distance, fuel_consumption
         )
         logistics_nodes = db.db_get_logistics(DATABASE_POOL)
+        contractor_list = []
+        for company in logistics_nodes:
+            contractor_list.append(
+                {
+                    "name": company.name,
+                    "address": company.address,
+                    "lat": company.location.latitude,
+                    "lon": company.location.longitude,
+                    "radius": company.delivery_radius,
+                }
+            )
         return render_template(
             "product.html",
             listing_id=listing_id,
@@ -84,6 +95,7 @@ def listing(listing_id):
             user_location=user_location.location,
             emissions=round(emissions),
             companies=logistics_nodes,
+            contractor_list=contractor_list,
             consumption=fuel_consumption,
             show_route=True,
         )
