@@ -4,6 +4,7 @@ from psycopg_pool import ConnectionPool
 from ..logic.listing import Listing
 from ..logic.location import Location
 from ..logic.logistics_node import LogisticsNode
+from ..logic.logistics_contractor import LogisticsContractor
 from ..logic.cargo_type_info import CargoTypeInfo
 
 # pylint: disable=E1129
@@ -190,41 +191,45 @@ def db_add_cargo_capability(
     return out
 
 
-def db_get_cargo_prices(logistic_id: int, pool: ConnectionPool) -> list[CargoTypeInfo]:
+def db_get_cargo_capabilities(contractor_location_id: int, pool: ConnectionPool) -> list[CargoTypeInfo]:
     """
-    Gets contractor's prices for different cargo types
+    Gets the car
 
     Args:
-        logistic_id: Contractor's id number
+        contractor_location_id: Contractor's 
 
     Returns:
         a list of CargoTypeInfos
     """
-    out = False
+    out = None
     with pool.connection() as connection:
         cursor = connection.cursor()
         cursor.execute(
-            "SELECT * FROM cargo_capabilities WHERE contractor_location_id=%s", (logistic_id,)
+            "SELECT * FROM cargo_capabilities WHERE contractor_location_id=%s", (contractor_location_id,)
         )
         out = cursor.fetchall()
+    if not out:
+        return None
     return [CargoTypeInfo(*x[1:]) for x in out]
 
 
 def db_get_logistics(pool: ConnectionPool) -> list[LogisticsNode]:
     """
-    Gets all logistics contractors from database
+    Gets all logistics contractor locations from database
     Args:
         pool: a database connection pool
     Returns: List of LogisticsNodes
     """
-    out = False
+    out = None
     with pool.connection() as connection:
         cursor = connection.cursor()
-        cursor.execute("SELECT * FROM contractors")
+        cursor.execute("SELECT * FROM contractor_locations AS c LEFT JOIN contractors AS s ON c.contractor_id=s.id")
         out = [
-            LogisticsNode(x[0], x[1], x[2], x[4], x[5], Location((x[6], x[7])), x[8])
+            LogisticsNode(x[0], x[1], x[2], x[10], Location((x[5], x[6])), x[7])
             for x in cursor.fetchall()
         ]
+    if not out:
+        return None
     return out
 
 
@@ -236,7 +241,7 @@ def db_get_contractor(user_id: int, pool: ConnectionPool) -> LogisticsNode:
         user_id: Owner's user id number
 
     Returns:
-        a LogisticsNode |
+        a LogisticsContractor |
         None if no info is found
     """
     out = None
@@ -246,4 +251,6 @@ def db_get_contractor(user_id: int, pool: ConnectionPool) -> LogisticsNode:
             "SELECT * FROM contractors WHERE user_id=%s", (user_id,)
         )
         out = cursor.fetchone()
-    return LogisticsNode(*out[:3], out[4], out[5], Location((out[6], out[7])), out[8])
+    if not out:
+        return None
+    return LogisticsContractor(out[0], out[1], out[2], out[4])
