@@ -74,17 +74,19 @@
         destinationMarker._icon.classList.add('huechange2');
         destinationMarker.bindPopup("Destination");
 
-
-        var contractors = JSON.parse('{{companies}}'.replaceAll('&#39;', '"'));
-        console.log(contractors);
-        for (var i = 0; i < contractors.length; i++) {
-            var contractor = contractors[i];
-            console.log(contractors[i]);
-            var logisticsMarker = L.marker([contractor.latitude, contractor.longitude]).addTo(map);
-            // var logisticsMarker = L.circle([contractor.latitude, contractor.longitude]).addTo(map);
-            // logisticsMarker.setRadius(contractor.radius * 1000);
-            logisticsMarker.bindPopup(contractor.name + " " + contractor.address);
-        }
+        console.log('{{test}}');
+        // var contractors = JSON.parse('{{companies}}'.replaceAll('&#39;', '"'));
+        // console.log(contractors);
+        // for (var i = 0; i < contractors.length; i++) {
+        //     var contractor = contractors[i];
+        //     console.log(contractors[i]);
+        //     if (contractor.location.latitude && contractor.location.longitude) {
+        //         var logisticsMarker = L.marker([contractor.location.latitude, contractor.location.longitude]).addTo(map);
+        //         var logisticsMarker = L.circle([contractor.latitude, contractor.longitude]).addTo(map);
+        //         logisticsMarker.setRadius(contractor.radius * 1000);
+        //         logisticsMarker.bindPopup(contractor.name + " " + contractor.address);
+        //     }
+        // }
 
         var bbox = route_geojson["features"][0]["bbox"];
         var southWest = L.latLng(bbox[1], bbox[0]),
@@ -129,7 +131,8 @@
     <h2>Delivery companies</h2>
     <ul>
         {% for company in companies %}
-        <li>{{company.name}}: {{company.address}}, Radius = {{company.radius}} km </li>
+        <li>{{company.name}}: {{company.address}}, Radius = {{company.delivery_radius}} km,
+            ({{company.location.longitude}},{{company.location.latitude}}) </li>
         {% endfor %}
     </ul>
 </div>
