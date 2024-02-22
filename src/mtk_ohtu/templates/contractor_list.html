@@ -106,6 +106,9 @@
 
             //Define popups
             function onEachFeature(feature, layer) {
+                L.marker(feature.geometry.coordinates, {
+                    icon: redIcon // Tässä voit asettaa haluamasi ikonin
+                }).addTo(map);
                 if (feature.properties && feature.properties.name && feature.properties.address) {
                     layer.bindPopup('<b>' + feature.properties.name + '</b><br>' + feature.properties.address);
                 }
