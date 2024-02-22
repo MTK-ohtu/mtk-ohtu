@@ -106,7 +106,7 @@ def db_add_user(
     return out
 
 
-def db_add_logistics(
+def db_add_contractor(
     user_id: int,
     name: str,
     business_id: str,
@@ -134,16 +134,38 @@ def db_add_logistics(
         cursor = connection.cursor()
         try:
             cursor.execute(
-                "INSERT INTO logistics_contractors (user_id, name, business_id, address, longitude, latitude, delivery_radius) VALUES (%s,%s,%s,%s,%s,%s,%s) RETURNING id",
-                (user_id, name, business_id, address, lon, lat, radius),
+                "INSERT INTO contractors (user_id, name, business_id) VALUES (%s,%s,%s) RETURNING id",
+                (user_id, name, business_id),
             )
             out = cursor.fetchone()[0]
         except psycopg.Error as e:
             print(f"Error inserting data: {e}")
     return out
 
+def db_add_contractor_location(
+        contractor_id: int,
+        address: str,
+        telephone: str,
+        email: str,
+        longitude: float,
+        latitude: float,
+        radius: int,
+        pool: ConnectionPool
+):
+    out = False
+    with pool.connection() as connection:
+        cursor = connection.cursor()
+        try:
+            cursor.execute(
+                "INSERT INTO contractor_locations (contractor_id, address, telephone, email, longitude, latitude, delivery_radius) VALUES (%s,%s,%s,%s,%s,%s,%s) RETURNING id",
+                (contractor_id, address, telephone, email, longitude, latitude, radius),
+            )
+            out = cursor.fetchone()[0]
+        except psycopg.Error as e:
+            print(f"Error inserting data: {e}")
+    return out
 
-def db_add_cargo_category(
+def db_add_cargo_capability(
     id: int,
     type: CategoryType,
     price_per_hour: int,
@@ -165,7 +187,7 @@ def db_add_cargo_category(
     with pool.connection() as connection:
         cursor = connection.cursor()
         cursor.execute(
-            "INSERT INTO cargo_prices (logistic_id, type, price_per_km, base_rate, max_capacity, max_distance) VALUES (%s,%s,%s,%s,%s,%s)",
+            "INSERT INTO cargo_capabilities (contractor_location_id, type, price_per_km, base_rate, max_capacity, max_distance) VALUES (%s,%s,%s,%s,%s,%s)",
             (id, type, price_per_hour, base_rate, max_capacity, max_distance),
         )
         out = True
@@ -186,7 +208,7 @@ def db_get_cargo_prices(logistic_id: int, pool: ConnectionPool) -> list[CargoTyp
     with pool.connection() as connection:
         cursor = connection.cursor()
         cursor.execute(
-            "SELECT * FROM cargo_prices WHERE logistic_id=%s", (logistic_id,)
+            "SELECT * FROM cargo_capabilities WHERE contractor_location_id=%s", (logistic_id,)
         )
         out = cursor.fetchall()
     return [CargoTypeInfo(*x[1:]) for x in out]
@@ -202,7 +224,7 @@ def db_get_logistics(pool: ConnectionPool) -> list[LogisticsNode]:
     out = False
     with pool.connection() as connection:
         cursor = connection.cursor()
-        cursor.execute("SELECT * FROM logistics_contractors")
+        cursor.execute("SELECT * FROM contractors")
         out = [
             LogisticsNode(x[0], x[1], x[2], x[4], x[5], Location((x[6], x[7])), x[8])
             for x in cursor.fetchall()
@@ -225,7 +247,7 @@ def db_get_contractor(user_id: int, pool: ConnectionPool) -> LogisticsNode:
     with pool.connection() as connection:
         cursor = connection.cursor()
         cursor.execute(
-            "SELECT * FROM logistics_contractors WHERE user_id=%s", (user_id,)
+            "SELECT * FROM contractors WHERE user_id=%s", (user_id,)
         )
         out = cursor.fetchone()
     return LogisticsNode(*out[:3], out[4], out[5], Location((out[6], out[7])), out[8])

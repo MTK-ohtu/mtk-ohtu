@@ -51,9 +51,15 @@ def addlogistics(
         coordinates = l(address)
         lon = coordinates.longitude
         lat = coordinates.latitude
-        id = db.db_add_logistics(
+        id = db.db_add_contractor(
             user_id, name, business_id, address, lon, lat, radius, pool=DATABASE_POOL
         )
+        telephone = "000"
+        email = "aapo@gmail.com"
+        id2 = db.db_add_contractor_location(
+            id, address, telephone, email, lon, lat, radius, pool=DATABASE_POOL
+        )
+
         for i in range(len(categories)):
             cargo_type = categories[i]
             price = prices_per_hour[i]
@@ -61,8 +67,8 @@ def addlogistics(
             max_capacity = max_capacities[i]
             max_distance = max_distances[i]
 
-            db.db_add_cargo_category(
-                id,
+            db.db_add_cargo_capability(
+                id2,
                 cargo_type,
                 price,
                 base_rate,
