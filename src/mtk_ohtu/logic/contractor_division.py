@@ -5,7 +5,7 @@ from ..config import DATABASE_POOL
 from ..logic.logistics_node import LogisticsNode
 from ..logic.location import Location
 
-class ContractorList:
+class ContractorDivision:
 
     """
     Given a coordinate, queries all logistic contractors from DB by given fields.

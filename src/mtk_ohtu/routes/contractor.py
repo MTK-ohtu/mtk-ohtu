@@ -1,10 +1,6 @@
-<<<<<<< HEAD
 import math
 from flask import Blueprint, render_template, request, redirect, url_for, abort, session
 from geojson import Point, Feature, FeatureCollection
-=======
-from flask import Blueprint, render_template, request, redirect, url_for, abort
->>>>>>> cc890d2 (modification)
 from ..database.db_enums import CategoryType
 from ..config import DATABASE_POOL
 from ..logic import user as users
