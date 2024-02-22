@@ -110,6 +110,6 @@ def list_contractors():
         address=address,
         lat=lat,
         lon=lon,
-        in_range=contractors.get_in_range(),
-        out_range=contractors.get_out_range(),
+        in_range=contractors.get_optimal(),
+        out_range=contractors.get_suboptimal(),
     )

@@ -30,7 +30,7 @@ class ContractorDivision:
     """
 
     def split_by_range(self, source_lat: float, source_lon: float, range: float):
-        self.in_range = list(
+        self.optimal = list(
             filter(
                 lambda x: (
                     self.haversine(
@@ -44,7 +44,7 @@ class ContractorDivision:
                 self.contractors,
             )
         )
-        self.out_range = list(
+        self.suboptimal = list(
             filter(
                 lambda x: (
                     self.haversine(
@@ -64,7 +64,7 @@ class ContractorDivision:
     Returns all if not splitted.
     """
 
-    def get_in_range(self):
+    def get_optimal(self):
         if self.optimal is None:
             return self.to_featurecollection(self.contractors)
         collection = self.to_featurecollection(self.optimal)
@@ -75,7 +75,7 @@ class ContractorDivision:
     Returns all if not splitted.
     """
 
-    def get_out_range(self):
+    def get_suboptimal(self):
         if self.suboptimal is None:
             return self.to_featurecollection(self.contractors)
         collection = self.to_featurecollection(self.suboptimal)
