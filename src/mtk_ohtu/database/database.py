@@ -110,10 +110,6 @@ def db_add_contractor(
     user_id: int,
     name: str,
     business_id: str,
-    address: str,
-    lon: float,
-    lat: float,
-    radius: int,
     pool: ConnectionPool,
 ):
     """

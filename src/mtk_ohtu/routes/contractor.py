@@ -37,33 +37,20 @@ def add_logistics():
         prices_per_hour = request.form.getlist("prices_per_hour[]")
         maximum_capacities = request.form.getlist("max_capacities[]")
         maximum_distances = request.form.getlist("max_distances[]")
+        telephone = "4039"
+        email = "s"
 
-        if logistics.addlogistics(
-            user_id,
-            name,
-            business_id,
-            address,
-            radius,
-            categories,
-            base_rates,
-            prices_per_hour,
-            maximum_capacities,
-            maximum_distances,
-        ):
-            session["contractor_id"] = id
-            return redirect(
-                url_for(
-                    "contractor_bp.confirmation",
-                    message="Logistics submitted successfully",
-                )
+        contractor_id = logistics.add_contractor(user_id, name, business_id)
+        contractor_location_id = logistics.add_contractor_location(contractor_id, address, telephone, email, radius)
+        logistics.add_cargo_capability(contractor_location_id, categories, base_rates, prices_per_hour, maximum_capacities, maximum_distances)
+
+        session["contractor_id"] = contractor_id
+        return redirect(
+            url_for(
+                "contractor_bp.confirmation",
+                message="Logistics submitted successfully",
             )
-        else:
-            return redirect(
-                url_for(
-                    "contractor_bp.confirmation",
-                    message="An error occurred while submitting logistics",
-                )
-            )
+        )
 
 
 @contractor_bp.route("/confirmation")
