@@ -39,8 +39,29 @@ def test_index(client):
     
 def test_login_as_test_user(client):
     with client:
-        client.post("/login", data={
+        response = client.post("/login", data={
             "username": "testuser",
-            "password": "testpassword"})
+            "password": "testpassword"}, follow_redirects=True)
         assert session["user_id"] == 9
-    
+        assert client.request.path("/")
+
+def test_login_fails_with_wrong_password(client):
+    with client:
+        response = client.post("/login", data={
+            "username": "testuser",
+            "password": "wrong"})
+        
+        with pytest.raises(KeyError):
+            session["user_id"]
+        assert "Salasana tai käyttäjätunnus väärin".encode('utf8') in response.data
+
+def test_login_fails_when_user_not_exists(client):
+    with client:
+        response = client.post("/login", data={
+            "username": "wronguser",
+            "password": "wrong"})
+        
+        with pytest.raises(KeyError):
+            session["user_id"]
+        assert "Salasana tai käyttäjätunnus väärin".encode('utf8') in response.data
+
