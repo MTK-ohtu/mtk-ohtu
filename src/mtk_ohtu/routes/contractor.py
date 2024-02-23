@@ -31,7 +31,13 @@ def add_logistics():
         )
         user_id = users.user_id()
         address = request.form.get("address")
-        radius = request.form.get("radius")
+        radius_type = request.form.get("radiusType")
+        radius = (
+            request.form.get("radius")
+            if radius_type == "custom-limit"
+            else -1
+        )
+        print(radius)
         categories = request.form.getlist("materials[]")
         base_rates = request.form.getlist("base_rates[]")
         prices_per_hour = request.form.getlist("prices_per_hour[]")
