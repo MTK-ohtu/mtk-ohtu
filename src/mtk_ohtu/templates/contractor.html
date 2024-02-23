@@ -1,22 +1,36 @@
 {% extends "layout.html" %}
 
 {% block content %}
+
 <div>
-    <h2>{{contractor.name}}</h2>
-    <p>Address: {{contractor.address}}</p>
-    <p>Business id: {{contractor.business_id}}</p>
-    <p>Delivery radius: {{contractor.delivery_radius}}</p>
+    <h2>{{ contractor.name }}</h2>
+
+    {% if contractor.business_id %}
+    Business ID: {{ contractor.business_id }}
+    {% else %}
+    Private contractor
+    {% endif %}
+    
 </div>
 
+<h3>Locations</h3>
+{% for location in locations %}
 
-<h3>Available to deliver:</h3>
-{%for cargo in cargo_prices%}
+    <div class="card">
+        <h3>{{ location[0].address }}</h3>
+        Delivery radius (km): {% if location[0].delivery_radius == -1 %} No limit {% else %} {{ location[0].delivery_radius }} {% endif %}
 
-<div class="card">
-    <p>{{cargo.type.value}}, base rate: {{cargo.base_rate}}e and {{cargo.price_per_km}}e/km </p>
-</div>
+        <p><h4>Material types you can deliver:</h4></p>
+        {% for sidestream in location[1] %}
+    
+            <pre>{{ sidestream.type.value }}   Price (€/km): {{ sidestream.price_per_km }}    Base rate: {{ sidestream.base_rate }}€    Maximum capacity: {{ sidestream.max_capacity }}t    Maximum delivery distance: {{ sidestream.max_distance }}km</pre>
+        {% else %}
+            Nothing in here yet. Start by adding some materials.
+        {% endfor %}
+    </div>
 
-
+{% else %}
+    Nothing in here, yet! Start by adding some delivery locations.
 {% endfor %}
 
 {% endblock %}
