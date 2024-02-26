@@ -1,9 +1,7 @@
-from ..database.database import db_get_logistics
-from geojson import Point, Feature, FeatureCollection
 import math
+from geojson import Point, Feature, FeatureCollection
+from ..database.database import db_get_logistics
 from ..config import DATABASE_POOL
-from ..logic.logistics_node import LogisticsNode
-from ..logic.location import Location
 
 class ContractorDivision:
 
@@ -19,17 +17,17 @@ class ContractorDivision:
         self.contractors = db_get_logistics(DATABASE_POOL)
         self.optimal = None
         self.suboptimal = None
+        self.fields = fields
 
-    """
-    Splits all contractors into 'optimal'/'suboptimal' lists by given
-    Args:
-        latitude: float
-        longitude: float
-        limit: float, straight line distance in kilometers
-    Return: tuple (pair) of lists, first containing contractors inside range, second contains the rest 
-    """
-
-    def split_by_range(self, source_lat: float, source_lon: float, range: float):
+    def split_by_range(self, source_lat: float, source_lon: float, driver_range: float):
+        """
+        Splits all contractors into 'optimal'/'suboptimal' lists by given
+        Args:
+            latitude: float
+            longitude: float
+            limit: float, straight line distance in kilometers
+        Return: tuple (list1, list2), first containing contractors inside range, second contains the rest 
+        """
         self.optimal = list(
             filter(
                 lambda x: (
@@ -40,7 +38,7 @@ class ContractorDivision:
                         x.location.longitude,
                     )
                 )
-                < range,
+                < driver_range,
                 self.contractors,
             )
         )
@@ -54,40 +52,37 @@ class ContractorDivision:
                         x.location.longitude,
                     )
                 )
-                > range,
+                > driver_range,
                 self.contractors,
             )
         )
 
-    """
-    Creates featurecollection of contractors listed as 'in range'.
-    Returns all if not splitted.
-    """
-
     def get_optimal(self):
+        """
+        Creates featurecollection of contractors listed as 'in range'.
+        Returns all if not splitted.
+        """
         if self.optimal is None:
             return self.to_featurecollection(self.contractors)
         collection = self.to_featurecollection(self.optimal)
         return collection
 
-    """
-    Creates featurecollection of contractors listed as 'out of range'
-    Returns all if not splitted.
-    """
-
     def get_suboptimal(self):
+        """
+        Creates featurecollection of contractors listed as 'out of range'
+        Returns all if not splitted.
+        """
         if self.suboptimal is None:
             return self.to_featurecollection(self.contractors)
         collection = self.to_featurecollection(self.suboptimal)
         return collection
 
-    """
-    Create a feature collection from a list of LogisticsNodes
-    Args:
-        contractor_list: list(LogisticsNode)
-    """
-
     def to_featurecollection(self, contractor_list: list):
+        """
+        Create a feature collection from a list of LogisticsNodes
+        Args:
+            contractor_list: list(LogisticsNode)
+        """
         features = []
         for contractor in contractor_list:
             properties = {"name": contractor.name, "address": contractor.address}
@@ -102,11 +97,10 @@ class ContractorDivision:
 
         return collection
 
-    """
-    Calculate great-circle distances
-    """
-
     def haversine(self, lat1, lon1, lat2, lon2):
+        """
+        Calculate great-circle distances
+        """
         dLat = (lat2 - lat1) * math.pi / 180.0
         dLon = (lon2 - lon1) * math.pi / 180.0
         lat1 = (lat1) * math.pi / 180.0

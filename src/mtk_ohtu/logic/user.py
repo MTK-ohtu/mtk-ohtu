@@ -1,7 +1,7 @@
-from ..database import database as db
-from flask import session
 import secrets
+from flask import session
 from werkzeug.security import check_password_hash, generate_password_hash
+from ..database import database as db
 from ..config import DATABASE_POOL
 
 
@@ -34,7 +34,7 @@ def login(username, password):
 
         contractor = db.db_get_contractor(user[0], DATABASE_POOL)
         if contractor:
-           session["contractor_id"] = contractor.id
+            session["contractor_id"] = contractor.id
         return True
 
 
