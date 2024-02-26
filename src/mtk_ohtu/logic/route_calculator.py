@@ -55,7 +55,7 @@ class Route:
             route_summary = call.json()["features"][0]["properties"]["summary"]
             self.geojson = call.text
         except:
-            raise ValueError(f"Error in route call: {call}. Coordinates: {self.location1.latitude}, {self.location1.longitude} and {self.location2.latitude}, {self.location2.longitude}")
+            raise ValueError(f"Error in route call. Coordinates: {self.location1.latitude}, {self.location1.longitude} and {self.location2.latitude}, {self.location2.longitude}")
 
         # if the two locations are the same, the summary is an empty dict
         if "distance" not in route_summary:
@@ -83,6 +83,26 @@ class Route:
             f"https://api.openrouteservice.org/v2/directions/driving-hgv?api_key={self.api_key}&start={self.location1.longitude},%20{self.location1.latitude}&end={self.location2.longitude},%20{self.location2.latitude}%20",
             headers=headers,
         )
+        if call.status_code != 200:
+            return f"error: {call.status_code}"
+        else:
+            return call
+
+
+
+    def __get_route_call_post(self):
+        body = {"coordinates":[[self.location1.longitude,self.location1.latitude],[self.location2.longitude,self.location2.latitude]],"preference":"shortest"}
+
+        headers = {
+            'Accept': 'application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8',
+            'Authorization': self.api_key,
+            'Content-Type': 'application/json; charset=utf-8'
+        }
+        print("calling")
+        call = requests.post('https://api.openrouteservice.org/v2/directions/driving-hgv/geojson', json=body, headers=headers)
+        
+        print(call.status_code, call.reason)
+        print(call.text)
         if call.status_code != 200:
             return f"error: {call.status_code}"
         else:
