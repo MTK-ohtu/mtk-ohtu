@@ -39,9 +39,10 @@ def login(username, password):
 
 
 def logout():
-    del session["user_id"]
-    session.pop("contractor_id", None)
-
+    if session["user_id"]:
+        del session["user_id"]
+    if session["contractor_id"]:
+        session.pop("contractor_id", None)
 
 def user_id():
     return session.get("user_id", 0)
