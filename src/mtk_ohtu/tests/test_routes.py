@@ -42,12 +42,14 @@ def test_logout_clears_user_id_from_session(client):
         sess["user_id"] = 9
     
     with client:
-        client.get("/logout")
+        response = client.get("/logout", follow_redirects=True)
         with pytest.raises(KeyError):
             session["user_id"]
+        assert response.request.path == "/"
 
 def test_logout_without_login(client):
     with client:
-        client.get("/logout")
+        response = client.get("/logout", follow_redirects=True)
         with pytest.raises(KeyError):
             session["user_id"]
+        assert response.request.path == "/"
