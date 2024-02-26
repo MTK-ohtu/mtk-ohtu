@@ -54,6 +54,17 @@ def test_logout_without_login(client):
             session["user_id"]
         assert response.request.path == "/"
 
+def test_register(client):
+    with client:
+        response = client.post("/register", data={
+            "username": "cool_test_user",
+            "password": "Cool test password",
+            "email": "a@a.com"
+        }, follow_redirects=True)
+
+        assert "user_id" in session
+        assert response.request.path == "/"
+
 def test_contractor_redirect(client):
     with client:
         response = client.get("/contractor", follow_redirects=True)
