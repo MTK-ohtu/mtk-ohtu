@@ -2,6 +2,8 @@ from psycopg_pool import ConnectionPool
 from .db_enums import CategoryType
 from .db_datastructs import CargoTypeInfo
 
+# pylint: disable=E1129
+
 def db_add_cargo_capability(
     cargo_id: int,
     cargo_type: CategoryType,
@@ -10,7 +12,7 @@ def db_add_cargo_capability(
     max_capacity: int,
     max_distance: int,
     pool: ConnectionPool,
-):
+) -> bool:
     """
     Adds new categories of materials that the contractor are capable to transport
     Args:
