@@ -19,13 +19,6 @@ def add_contractor(
         id if adding is complete
         else False
     """
-    if not all(
-        [
-            user_id,
-            name,
-        ]
-    ):
-        return False
     try:
         id = db.db_add_contractor(
             user_id, name, business_id, pool=DATABASE_POOL
@@ -104,10 +97,9 @@ def add_cargo_capability(
                 max_distance,
                 pool=DATABASE_POOL,
             )
-            return True
-    except Exception as er:
-        logging.error(er)
+    except:
         return False
+    return True
 
 
 def get_locations_and_cargo_capability(contractor_id):
