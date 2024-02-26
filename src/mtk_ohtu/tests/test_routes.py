@@ -37,3 +37,17 @@ def test_login_fails_when_user_not_exists(client):
             session["user_id"]
         assert "Salasana tai käyttäjätunnus väärin".encode('utf8') in response.data
 
+def test_logout_clears_user_id_from_session(client):
+    with client.session_transaction() as sess:
+        sess["user_id"] = 9
+    
+    with client:
+        client.get("/logout")
+        with pytest.raises(KeyError):
+            session["user_id"]
+
+def test_logout_without_login(client):
+    with client:
+        client.get("/logout")
+        with pytest.raises(KeyError):
+            session["user_id"]
