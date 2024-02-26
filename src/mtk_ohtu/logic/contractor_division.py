@@ -3,6 +3,7 @@ from geojson import Point, Feature, FeatureCollection
 from ..database.database import db_get_logistics
 from ..config import DATABASE_POOL
 
+
 class ContractorDivision:
 
     """
@@ -26,7 +27,7 @@ class ContractorDivision:
             latitude: float
             longitude: float
             limit: float, straight line distance in kilometers
-        Return: tuple (list1, list2), first containing contractors inside range, second contains the rest 
+        Return: tuple (list1, list2), first containing contractors inside range, second contains the rest
         """
         self.optimal = list(
             filter(

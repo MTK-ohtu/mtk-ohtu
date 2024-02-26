@@ -139,15 +139,16 @@ def db_add_contractor(
             print(f"Error inserting data: {e}")
     return out
 
+
 def db_add_contractor_location(
-        contractor_id: int,
-        address: str,
-        telephone: str,
-        email: str,
-        longitude: float,
-        latitude: float,
-        radius: int,
-        pool: ConnectionPool
+    contractor_id: int,
+    address: str,
+    telephone: str,
+    email: str,
+    longitude: float,
+    latitude: float,
+    radius: int,
+    pool: ConnectionPool,
 ):
     out = False
     with pool.connection() as connection:
@@ -163,7 +164,9 @@ def db_add_contractor_location(
     return out
 
 
-def db_get_contractor_locations(contractor_id: int, pool: ConnectionPool) -> list[LogisticsNode]:
+def db_get_contractor_locations(
+    contractor_id: int, pool: ConnectionPool
+) -> list[LogisticsNode]:
     """
     Gets contractors delivery locations
 
@@ -177,7 +180,8 @@ def db_get_contractor_locations(contractor_id: int, pool: ConnectionPool) -> lis
     out = []
     with pool.connection() as connection:
         cursor = connection.execute(
-            "SELECT * FROM contractor_locations WHERE contractor_id=%s", (contractor_id,)
+            "SELECT * FROM contractor_locations WHERE contractor_id=%s",
+            (contractor_id,),
         )
         out = [
             LogisticsNode(x[0], x[1], x[2], None, Location((x[5], x[6])), x[7])
@@ -217,7 +221,9 @@ def db_add_cargo_capability(
     return out
 
 
-def db_get_location_cargo_capabilities(contractor_location_id: int, pool: ConnectionPool) -> list[CargoTypeInfo]:
+def db_get_location_cargo_capabilities(
+    contractor_location_id: int, pool: ConnectionPool
+) -> list[CargoTypeInfo]:
     """
     Gets a list of sidestreams the location is available to deliver
     Args:
@@ -231,7 +237,8 @@ def db_get_location_cargo_capabilities(contractor_location_id: int, pool: Connec
     with pool.connection() as connection:
         cursor = connection.cursor()
         cursor.execute(
-            "SELECT * FROM cargo_capabilities WHERE contractor_location_id=%s", (contractor_location_id,)
+            "SELECT * FROM cargo_capabilities WHERE contractor_location_id=%s",
+            (contractor_location_id,),
         )
         out = cursor.fetchall()
     if not out:
@@ -249,7 +256,9 @@ def db_get_logistics(pool: ConnectionPool) -> list[LogisticsNode]:
     out = None
     with pool.connection() as connection:
         cursor = connection.cursor()
-        cursor.execute("SELECT * FROM contractor_locations AS c LEFT JOIN contractors AS s ON c.contractor_id=s.id")
+        cursor.execute(
+            "SELECT * FROM contractor_locations AS c LEFT JOIN contractors AS s ON c.contractor_id=s.id"
+        )
         out = [
             LogisticsNode(x[0], x[1], x[2], x[10], Location((x[5], x[6])), x[7])
             for x in cursor.fetchall()
@@ -274,9 +283,7 @@ def db_get_contractor(user_id: int, pool: ConnectionPool) -> LogisticsContractor
     out = None
     with pool.connection() as connection:
         cursor = connection.cursor()
-        cursor.execute(
-            "SELECT * FROM contractors WHERE user_id=%s", (user_id,)
-        )
+        cursor.execute("SELECT * FROM contractors WHERE user_id=%s", (user_id,))
         out = cursor.fetchone()
     if not out:
         return None

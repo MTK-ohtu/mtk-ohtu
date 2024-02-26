@@ -32,11 +32,7 @@ def add_logistics():
         user_id = users.user_id()
         address = request.form.get("address")
         radius_type = request.form.get("radiusType")
-        radius = (
-            request.form.get("radius")
-            if radius_type == "custom-limit"
-            else -1
-        )
+        radius = request.form.get("radius") if radius_type == "custom-limit" else -1
         print(radius)
         categories = request.form.getlist("materials[]")
         base_rates = request.form.getlist("base_rates[]")
@@ -47,8 +43,17 @@ def add_logistics():
         email = request.form.get("email")
 
         contractor_id = logistics.add_contractor(user_id, name, business_id)
-        contractor_location_id = logistics.add_contractor_location(contractor_id, address, telephone, email, radius)
-        logistics.add_cargo_capability(contractor_location_id, categories, base_rates, prices_per_hour, maximum_capacities, maximum_distances)
+        contractor_location_id = logistics.add_contractor_location(
+            contractor_id, address, telephone, email, radius
+        )
+        logistics.add_cargo_capability(
+            contractor_location_id,
+            categories,
+            base_rates,
+            prices_per_hour,
+            maximum_capacities,
+            maximum_distances,
+        )
 
         session["contractor_id"] = contractor_id
         return redirect(
@@ -79,9 +84,13 @@ def contractor():
         if not contractor_info:
             return redirect("/addlogistics")
 
-        locations_and_cargo_capability = logistics.get_locations_and_cargo_capability(contractor_info.id)
+        locations_and_cargo_capability = logistics.get_locations_and_cargo_capability(
+            contractor_info.id
+        )
         return render_template(
-            "contractor.html", contractor=contractor_info, locations=locations_and_cargo_capability
+            "contractor.html",
+            contractor=contractor_info,
+            locations=locations_and_cargo_capability,
         )
 
 
@@ -95,7 +104,7 @@ def list_contractors():
     address, content = "Hirvijärvi, Juupajoki", "Hakkuujäte"
     lon, lat, r = 24.566428395979575, 61.8578385779706, 300
 
-    contractors = ContractorDivision(['name', 'address', 'latitude', 'longitude'])
+    contractors = ContractorDivision(["name", "address", "latitude", "longitude"])
     contractors.split_by_range(lat, lon, r)
     return render_template(
         "contractor_list.html",

@@ -6,6 +6,7 @@ class LogisticsContractor:
     """
     A class for storing contractor information
     """
+
     id: int
     user_id: int
     name: str

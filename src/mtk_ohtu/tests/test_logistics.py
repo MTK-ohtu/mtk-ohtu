@@ -31,11 +31,7 @@ class TestLogistics(unittest.TestCase):
 
     def test_add_contractor_location(self):
         result = l.add_contractor_location(
-            self.contractor_id,
-            self.address,
-            self.phone,
-            self.email,
-            self.radius
+            self.contractor_id, self.address, self.phone, self.email, self.radius
         )
         self.assertTrue(result)
 
@@ -46,18 +42,14 @@ class TestLogistics(unittest.TestCase):
             self.base_rates,
             self.prices_per_hour,
             self.max_capacities,
-            self.max_distances
+            self.max_distances,
         )
         self.assertTrue(result)
 
     def test_add_contractor_location_returns_false_when_address_not_found(self):
         self.address = "aaaaaaaaaaaaaaaaaaaaa"
         result = l.add_contractor_location(
-            self.contractor_id,
-            self.address,
-            self.phone,
-            self.email,
-            self.radius
+            self.contractor_id, self.address, self.phone, self.email, self.radius
         )
         self.assertFalse(result)
 

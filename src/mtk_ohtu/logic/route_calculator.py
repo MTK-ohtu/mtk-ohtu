@@ -54,7 +54,7 @@ class Route:
         except Exception as exept:
             raise ValueError(
                 f"Error in route call: {call}. Coordinates: {self.location1.latitude}, {self.location1.longitude} and {self.location2.latitude}, {self.location2.longitude}"
-                ) from exept
+            ) from exept
 
         # if the two locations are the same, the summary is an empty dict
         if "distance" not in route_summary:
@@ -80,7 +80,8 @@ class Route:
         }
         call = requests.get(
             f"https://api.openrouteservice.org/v2/directions/driving-hgv?api_key={self.api_key}&start={self.location1.longitude},%20{self.location1.latitude}&end={self.location2.longitude},%20{self.location2.latitude}%20",
-            headers=headers, timeout=600
+            headers=headers,
+            timeout=600,
         )
         if call.status_code != 200:
             return f"error: {call.status_code}"

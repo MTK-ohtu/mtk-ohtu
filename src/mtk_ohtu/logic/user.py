@@ -45,5 +45,6 @@ def logout():
     except KeyError:
         pass
 
+
 def user_id():
     return session.get("user_id", 0)

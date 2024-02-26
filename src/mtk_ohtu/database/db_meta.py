@@ -36,10 +36,10 @@ def db_drop_all(config: DatabaseConfig):
     with connection:
         cursor = connection.cursor()
         cursor.execute(
-            f"DROP SCHEMA public CASCADE; \
+            f'DROP SCHEMA public CASCADE; \
                         CREATE SCHEMA public; \
-                        GRANT ALL ON SCHEMA public TO \"{config.user}\"; \
-                        GRANT ALL ON SCHEMA public TO public;"
+                        GRANT ALL ON SCHEMA public TO "{config.user}"; \
+                        GRANT ALL ON SCHEMA public TO public;'
         )
 
     connection.close()
