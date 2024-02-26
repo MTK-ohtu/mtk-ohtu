@@ -31,6 +31,8 @@ def add_contractor(
 def add_contractor_location(
         contractor_id,
         address,
+        postcode,
+        city,
         telephone,
         email,
         radius,        
@@ -47,8 +49,9 @@ def add_contractor_location(
         id if adding is complete
         else False
     """
+    location = f"{address}, {postcode}, {city}"
     try:
-        coordinates = l(address)
+        coordinates = l(location)
         lon = coordinates.longitude
         lat = coordinates.latitude
         id = db.db_add_contractor_location(
