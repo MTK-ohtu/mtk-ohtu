@@ -25,11 +25,13 @@ def add_contractor(user_id, name, business_id):
 
 
 def add_contractor_location(
-    contractor_id,
-    address,
-    telephone,
-    email,
-    radius,
+        contractor_id,
+        address,
+        postcode,
+        city,
+        telephone,
+        email,
+        radius,        
 ):
     """
     Adds a new location for a contractor
@@ -43,8 +45,9 @@ def add_contractor_location(
         id if adding is complete
         else False
     """
+    location = f"{address}, {postcode}, {city}"
     try:
-        coordinates = l(address)
+        coordinates = l(location)
         lon = coordinates.longitude
         lat = coordinates.latitude
         id = mtk_ohtu.database.db_contractors.db_add_contractor_location(

@@ -16,6 +16,8 @@ class TestLogistics(unittest.TestCase):
         self.name = "rekka oy"
         self.business = "1234567-1"
         self.address = "Simonkatu 6"
+        self.postcode = "00100"
+        self.city = "Helsinki"
         self.email = "rekka@gmail.com"
         self.phone = "040-1234567"
         self.radius = 200
@@ -31,7 +33,13 @@ class TestLogistics(unittest.TestCase):
 
     def test_add_contractor_location(self):
         result = l.add_contractor_location(
-            self.contractor_id, self.address, self.phone, self.email, self.radius
+            self.contractor_id,
+            self.address,
+            self.postcode,
+            self.city,
+            self.phone,
+            self.email,
+            self.radius
         )
         self.assertTrue(result)
 
@@ -49,7 +57,13 @@ class TestLogistics(unittest.TestCase):
     def test_add_contractor_location_returns_false_when_address_not_found(self):
         self.address = "aaaaaaaaaaaaaaaaaaaaa"
         result = l.add_contractor_location(
-            self.contractor_id, self.address, self.phone, self.email, self.radius
+            self.contractor_id,
+            self.address,
+            self.postcode,
+            self.city,
+            self.phone,
+            self.email,
+            self.radius
         )
         self.assertFalse(result)
 

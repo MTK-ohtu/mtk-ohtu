@@ -22,40 +22,35 @@ def add_logistics():
         )
 
     if request.method == "POST":
+        user_id = users.user_id()
         service_type = request.form.get("serviceType")
         name = (
             request.form.get("fullName")
             if service_type == "private"
             else request.form.get("companyName")
         )
-        business_id = (
-            request.form.get("businessId") if service_type == "company" else None
-        )
-        user_id = users.user_id()
+        business_id = (request.form.get("businessId") if service_type == "company" else None)
+        contractor_id = logistics.add_contractor(user_id, name, business_id)
+        
         address = request.form.get("address")
+        postcode = request.form.get("postcode")
+        city = request.form.get("city")
+        telephone = request.form.get("telephone")
+        email = request.form.get("email")
         radius_type = request.form.get("radiusType")
-        radius = request.form.get("radius") if radius_type == "custom-limit" else -1
-        print(radius)
+        radius = (
+            request.form.get("radius")
+            if radius_type == "custom-limit"
+            else -1
+        )
         categories = request.form.getlist("materials[]")
         base_rates = request.form.getlist("base_rates[]")
         prices_per_hour = request.form.getlist("prices_per_hour[]")
         maximum_capacities = request.form.getlist("max_capacities[]")
         maximum_distances = request.form.getlist("max_distances[]")
-        telephone = request.form.get("telephone")
-        email = request.form.get("email")
 
-        contractor_id = logistics.add_contractor(user_id, name, business_id)
-        contractor_location_id = logistics.add_contractor_location(
-            contractor_id, address, telephone, email, radius
-        )
-        logistics.add_cargo_capability(
-            contractor_location_id,
-            categories,
-            base_rates,
-            prices_per_hour,
-            maximum_capacities,
-            maximum_distances,
-        )
+        contractor_location_id = logistics.add_contractor_location(contractor_id, address, postcode, city, telephone, email, radius)
+        logistics.add_cargo_capability(contractor_location_id, categories, base_rates, prices_per_hour, maximum_capacities, maximum_distances)
 
         session["contractor_id"] = contractor_id
         return redirect(
