@@ -1,6 +1,8 @@
 import secrets
 from flask import session
 from werkzeug.security import check_password_hash, generate_password_hash
+
+import mtk_ohtu.database.db_users
 from ..database import database as db
 from ..config import DATABASE_POOL
 
@@ -8,7 +10,7 @@ from ..config import DATABASE_POOL
 def register(username, password, email):
     hash_value = generate_password_hash(password)
 
-    db.db_add_user(username, hash_value, email, DATABASE_POOL)
+    mtk_ohtu.database.db_users.db_add_user(username, hash_value, email, DATABASE_POOL)
 
     return login(username, password)
 
@@ -25,7 +27,7 @@ def login(username, password):
         bool: True if the login is successful, False otherwise.
     """
 
-    user = db.db_get_user(username, DATABASE_POOL)
+    user = mtk_ohtu.database.db_users.db_get_user(username, DATABASE_POOL)
     if not user:
         return False
     elif user and check_password_hash(user[1], password):
