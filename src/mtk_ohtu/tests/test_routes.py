@@ -43,7 +43,7 @@ def test_login_as_test_user(client):
             "username": "testuser",
             "password": "testpassword"}, follow_redirects=True)
         assert session["user_id"] == 9
-        assert client.request.path("/")
+        assert response.request.path == "/"
 
 def test_login_fails_with_wrong_password(client):
     with client:
