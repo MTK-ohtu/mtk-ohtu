@@ -1,6 +1,6 @@
 import unittest
 from psycopg import ProgrammingError
-import mtk_ohtu.database.db_listings as db
+import mtk_ohtu.database.db_listings as db_list
 import mtk_ohtu.database.db_meta as db_m
 from mtk_ohtu.config import DATABASE_CONFIG
 
@@ -56,7 +56,7 @@ class TestSelecions(unittest.TestCase):
         self.pool = db_m.db_connection_pool(DATABASE_CONFIG)
 
     def test_get_all_listings_correct_amount(self):
-        prodlist = db.db_get_product_list(self.pool)
+        prodlist = db_list.db_get_product_list(self.pool)
         self.assertEqual(len(prodlist), 13)
 
     def tearDown(self):
