@@ -1,33 +1,5 @@
 import pytest
-import unittest
 from flask import session
-from mtk_ohtu import app as mtkapp
-from mtk_ohtu.database import db_meta as dbm
-from mtk_ohtu.config import DATABASE_CONFIG
-
-@pytest.fixture()
-def app():
-    app = mtkapp.create_app()
-    app.config.update({
-        "TESTING": True,
-    })
-    dbm.db_drop_all(DATABASE_CONFIG)
-    dbm.db_create(DATABASE_CONFIG)
-    dbm.db_excecute_file("db_mock_data.sql", DATABASE_CONFIG)
-
-    yield app
-
-    dbm.db_drop_all(DATABASE_CONFIG)
-
-
-@pytest.fixture()
-def client(app):
-    return app.test_client()
-
-
-@pytest.fixture()
-def runner(app):
-    return app.test_cli_runner()
 
 
 def test_index(client):
@@ -43,7 +15,7 @@ def test_login_as_test_user(client):
             "username": "testuser",
             "password": "testpassword"}, follow_redirects=True)
         assert session["user_id"] == 9
-        assert client.request.path("/")
+        assert response.request.path == "/"
 
 def test_login_fails_with_wrong_password(client):
     with client:
@@ -65,3 +37,19 @@ def test_login_fails_when_user_not_exists(client):
             session["user_id"]
         assert "Salasana tai käyttäjätunnus väärin".encode('utf8') in response.data
 
+def test_logout_clears_user_id_from_session(client):
+    with client.session_transaction() as sess:
+        sess["user_id"] = 9
+    
+    with client:
+        response = client.get("/logout", follow_redirects=True)
+        with pytest.raises(KeyError):
+            session["user_id"]
+        assert response.request.path == "/"
+
+def test_logout_without_login(client):
+    with client:
+        response = client.get("/logout", follow_redirects=True)
+        with pytest.raises(KeyError):
+            session["user_id"]
+        assert response.request.path == "/"

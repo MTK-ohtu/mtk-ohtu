@@ -31,7 +31,13 @@ def add_logistics():
         )
         user_id = users.user_id()
         address = request.form.get("address")
-        radius = request.form.get("radius")
+        radius_type = request.form.get("radiusType")
+        radius = (
+            request.form.get("radius")
+            if radius_type == "custom-limit"
+            else -1
+        )
+        print(radius)
         categories = request.form.getlist("materials[]")
         base_rates = request.form.getlist("base_rates[]")
         prices_per_hour = request.form.getlist("prices_per_hour[]")
@@ -69,13 +75,13 @@ def get_contractors(x, y, r):
 def contractor():
     if request.method == "GET":
         user_id = users.user_id()
-        contractor_db = db.db_get_contractor(user_id, DATABASE_POOL)
-        if not contractor_db:
+        contractor_info = db.db_get_contractor(user_id, DATABASE_POOL)
+        if not contractor_info:
             return redirect("/addlogistics")
 
-        cargo_prices = db.db_get_cargo_prices(contractor_db.id, DATABASE_POOL)
+        locations_and_cargo_capability = logistics.get_locations_and_cargo_capability(contractor_info.id)
         return render_template(
-            "contractor.html", contractor=contractor_db, cargo_prices=cargo_prices
+            "contractor.html", contractor=contractor_info, locations=locations_and_cargo_capability
         )
 
 

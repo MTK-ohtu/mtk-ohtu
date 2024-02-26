@@ -39,9 +39,11 @@ def login(username, password):
 
 
 def logout():
-    del session["user_id"]
-    session.pop("contractor_id", None)
-
+    try:
+        del session["user_id"]
+        session.pop("contractor_id", None)
+    except KeyError:
+        pass
 
 def user_id():
     return session.get("user_id", 0)

@@ -10,32 +10,23 @@ def add_contractor(
     business_id
 ):
     """
-    Adds a new logistic company and categories
+    Adds a new contractor
     Args:
-        service_type: company or private
+        user_id: user id 
         name: name of contractor
-        business_id: business id if service_type is company
-        address: address of contractor
-        radius: how far contractor can deliver
-        categories: categories of material the contractor is capable of delivering
-        base_rates: base payments for different materials
-        prices_per_hour: hourly prices for different materials
+        business_id: business id if needed
     Returns:
-        Contractor id if adding is complete
-        False if address is not correct
+        id if adding is complete
+        else False
     """
-    if not all(
-        [
-            user_id,
-            name,
-        ]
-    ):
+    try:
+        id = db.db_add_contractor(
+            user_id, name, business_id, pool=DATABASE_POOL
+        )
+        return id
+    except Exception as er:
+        logging.error(er)
         return False
-
-    id = db.db_add_contractor(
-        user_id, name, business_id, pool=DATABASE_POOL
-    )
-    return id
 
 def add_contractor_location(
         contractor_id,
@@ -44,8 +35,18 @@ def add_contractor_location(
         email,
         radius,        
 ):
-    if radius == "":
-        radius = -1
+    """
+    Adds a new location for a contractor
+    Args:
+        contractor_id: contractor id
+        address: location address
+        telephone: telephone number
+        email: email address
+        radius: delivery radius, -1 if not specified
+    Returns:
+        id if adding is complete
+        else False
+    """
     try:
         coordinates = l(address)
         lon = coordinates.longitude
@@ -66,7 +67,21 @@ def add_cargo_capability(
         max_capacities,
         max_distances
 ):
-    for i in range(len(categories)):
+    """
+    Adds all deliverable sidestreams for contractor location
+    Args:
+        contractor_location_id: contractor location id
+        categories: sidestream categories
+        base_rates: base rates for sidestreams
+        prices_per_hour: prices for sidestreams
+        max_capacities: maximum capacities for sidestreams
+        max_distances: maximum delivery distances for sidestreams
+    Returns:
+        True if adding is complete
+        else False
+    """
+    try:
+        for i in range(len(categories)):
             cargo_type = categories[i]
             price = prices_per_hour[i]
             base_rate = base_rates[i]
@@ -82,3 +97,36 @@ def add_cargo_capability(
                 max_distance,
                 pool=DATABASE_POOL,
             )
+    except:
+        return False
+    return True
+
+
+def get_locations_and_cargo_capability(contractor_id):
+    """
+    Creates an array of contractor's locations and available cargo capabilities
+    Args:
+        contractor_id: contractor's identifying number
+
+    Returns:
+        array of tuples: (LogisticsNode, [CargoTypeInfo])
+    """
+    locations = contractor_locations(contractor_id)
+
+    capability = []
+    for location in locations:
+        capability.append((location, cargo_capability(location.id)))
+
+    return capability
+
+def contractor_locations(contractor_id):
+    """
+    Returns contractor's locations on a list
+    """
+    return db.db_get_contractor_locations(contractor_id, DATABASE_POOL)
+
+def cargo_capability(contractor_location_id):
+    """
+    Returns a list of locations cargo hauling capabilities
+    """
+    return db.db_get_location_cargo_capabilities(contractor_location_id, DATABASE_POOL)
