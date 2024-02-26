@@ -101,8 +101,8 @@ def list_contractors():
     address, content = "Hirvijärvi, Juupajoki", "Hakkuujäte"
     lon, lat, r = 24.566428395979575, 61.8578385779706, 300
 
-    contractors = ContractorDivision(["name", "address", "latitude", "longitude"])
-    contractors.split_by_range(lat, lon, r)
+    contractors = ContractorDivision()
+    contractors.split_by_range(lat, lon)
     return render_template(
         "contractor_list.html",
         content=content,
