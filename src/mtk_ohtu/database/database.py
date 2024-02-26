@@ -1,11 +1,8 @@
 import psycopg
-from ..database.db_enums import CategoryType
 from psycopg_pool import ConnectionPool
-from ..logic.listing import Listing
+from ..database.db_enums import CategoryType
+from .db_datastructs import Listing, CargoTypeInfo, LogisticsContractor, LogisticsNode
 from ..logic.location import Location
-from ..logic.logistics_node import LogisticsNode
-from ..logic.logistics_contractor import LogisticsContractor
-from ..logic.cargo_type_info import CargoTypeInfo
 
 # pylint: disable=E1129
 
@@ -73,14 +70,8 @@ def db_get_user(username: str, pool: ConnectionPool) -> bool:
             out = user
     return out
 
-
 def db_check_if_user_exists():
     pass
-
-
-def db_check_if_user_exists():
-    pass
-
 
 def db_add_user(
     username: str, password: str, email: str, pool: ConnectionPool
@@ -196,8 +187,8 @@ def db_get_contractor_locations(
 
 
 def db_add_cargo_capability(
-    id: int,
-    type: CategoryType,
+    cargo_id: int,
+    cargo_type: CategoryType,
     price_per_hour: int,
     base_rate: int,
     max_capacity: int,
@@ -217,8 +208,10 @@ def db_add_cargo_capability(
     with pool.connection() as connection:
         cursor = connection.cursor()
         cursor.execute(
-            "INSERT INTO cargo_capabilities (contractor_location_id, type, price_per_km, base_rate, max_capacity, max_distance) VALUES (%s,%s,%s,%s,%s,%s)",
-            (id, type, price_per_hour, base_rate, max_capacity, max_distance),
+            "INSERT INTO cargo_capabilities \
+                (contractor_location_id, type, price_per_km, base_rate, max_capacity, max_distance) \
+                VALUES (%s,%s,%s,%s,%s,%s)",
+            (cargo_id, cargo_type, price_per_hour, base_rate, max_capacity, max_distance),
         )
         out = True
     return out

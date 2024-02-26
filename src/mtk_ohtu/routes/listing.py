@@ -6,7 +6,7 @@ from ..logic import route_stats
 from flask import Blueprint, render_template, request, redirect
 from ..config import DATABASE_POOL
 from ..logic.location import Location
-from ..logic.listing import Listing
+from ..database.db_datastructs import Listing
 
 
 listing_bp = Blueprint("listing_bp", __name__)

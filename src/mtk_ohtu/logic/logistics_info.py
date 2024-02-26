@@ -1,4 +1,4 @@
-from ..logic.listing import Listing
+from ..database.db_datastructs import Listing
 from ..logic.location import Location
 from .logistics_node import LogisticsNode
 from .route_calculator import Route

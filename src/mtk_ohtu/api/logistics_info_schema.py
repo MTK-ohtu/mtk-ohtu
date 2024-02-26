@@ -1,6 +1,6 @@
 from marshmallow import Schema, post_load, fields, ValidationError
 from ..logic.location import Location
-from ..logic.listing import Listing
+from ..database.db_datastructs import Listing
 from ..api.class_field import ClassField
 from ..database.database import db_get_product_by_id
 from ..config import DATABASE_POOL
