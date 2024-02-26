@@ -46,7 +46,6 @@ class Route:
 
     def calculate_route(self):
         """Calculate the route between the two locations. The route detailes are saved as class variables."""
-        print("getting route")
         try:
             call = self.__get_route_call()
             route_summary = call.json()["features"][0]["properties"]["summary"]

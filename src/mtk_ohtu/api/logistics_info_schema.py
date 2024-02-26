@@ -12,13 +12,13 @@ class LogisticsInfoSchema(Schema):
     listing = fields.Method(deserialize="deserialize_listing", required=True)
     location = ClassField(Location, required=True)
 
-    def deserialize_listing(value):
+    def deserialize_listing(self, id):
         if type(id) != int:
             raise ValidationError("Invalid listing id (int expected)")
 
         Listing = db_get_product_by_id(id, DATABASE_POOL)
         if Listing is None:
-            raise ValueError(f"Invalid listing id (no listing found with id {id})")
+            raise ValidationError(f"Invalid listing id (no listing found with id {id})")
 
         return Listing
 

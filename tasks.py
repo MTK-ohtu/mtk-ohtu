@@ -3,9 +3,9 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-@task
-def start(ctx):
-    ctx.run('flask --app mtk_ohtu.app run', pty = True)
+@task(optional=["debug"])
+def start(ctx, debug=False):
+    ctx.run(f'flask --app mtk_ohtu.app run {"--debug" if debug else ""}', pty = True)
 
 @task
 def reset_db(ctx):
@@ -27,11 +27,11 @@ def fill_mock(ctx):
     db_excecute_file("db_mock_data.sql", DATABASE_CONFIG)
     print("Added mock data")
 
-@task
-def mockstart(ctx):
+@task(optional=["debug"])
+def mockstart(ctx, debug=False):
     reset_db(ctx)
     fill_mock(ctx)
-    start(ctx)
+    start(ctx, debug)
 
 
 @task
