@@ -3,7 +3,7 @@ from flask import session
 from werkzeug.security import check_password_hash, generate_password_hash
 
 import mtk_ohtu.database.db_users
-from ..database import database as db
+from ..database import db_contractors as db
 from ..config import DATABASE_POOL
 
 

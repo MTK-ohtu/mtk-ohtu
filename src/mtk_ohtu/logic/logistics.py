@@ -1,4 +1,5 @@
 import logging
+import mtk_ohtu.database.db_contractors
 from ..database import database as db
 from ..config import DATABASE_POOL
 from ..logic.location import Location as l
@@ -16,7 +17,7 @@ def add_contractor(user_id, name, business_id):
         else False
     """
     try:
-        id = db.db_add_contractor(user_id, name, business_id, pool=DATABASE_POOL)
+        id = mtk_ohtu.database.db_contractors.db_add_contractor(user_id, name, business_id, pool=DATABASE_POOL)
         return id
     except Exception as er:
         logging.error(er)
@@ -46,7 +47,7 @@ def add_contractor_location(
         coordinates = l(address)
         lon = coordinates.longitude
         lat = coordinates.latitude
-        id = db.db_add_contractor_location(
+        id = mtk_ohtu.database.db_contractors.db_add_contractor_location(
             contractor_id,
             address,
             telephone,
@@ -127,7 +128,7 @@ def contractor_locations(contractor_id):
     """
     Returns contractor's locations on a list
     """
-    return db.db_get_contractor_locations(contractor_id, DATABASE_POOL)
+    return mtk_ohtu.database.db_contractors.db_get_contractor_locations(contractor_id, DATABASE_POOL)
 
 
 def cargo_capability(contractor_location_id):
