@@ -50,6 +50,22 @@ def test_logout_clears_user_id_from_session(client):
 def test_logout_without_login(client):
     with client:
         response = client.get("/logout", follow_redirects=True)
-        with pytest.raises(KeyError):
+        with pytest.raises(KeyError):            
             session["user_id"]
         assert response.request.path == "/"
+
+def test_contractor_redirect(client):
+    with client:
+        response = client.get("/contractor", follow_redirects=True)
+        assert response.request.path == "/addlogistics"
+
+def test_contractor_listing(client):
+    with client:
+        client.post("/login", data={
+            "username": "testikayttaja1",
+            "password": "testpassword"})
+
+        response = client.get("/contractor")
+        assert b"Urpunistintie 8" in response.data
+        assert b"500" in response.data
+        assert b"Saaninranta" in response.data
