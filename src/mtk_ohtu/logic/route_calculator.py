@@ -52,7 +52,7 @@ class Route:
             self.geojson = call.text
         except Exception as exept:
             raise ValueError(
-                f"Error in route call: {call}. Coordinates: {self.location1.latitude}, {self.location1.longitude} and {self.location2.latitude}, {self.location2.longitude}"
+                f"Error in route call. Coordinates: {self.location1.latitude}, {self.location1.longitude} and {self.location2.latitude}, {self.location2.longitude}"
             ) from exept
 
         # if the two locations are the same, the summary is an empty dict
@@ -82,6 +82,25 @@ class Route:
             headers=headers,
             timeout=600,
         )
+        if call.status_code != 200:
+            return f"error: {call.status_code}"
+        else:
+            return call
+
+    def __get_route_call_post(self):
+        """Return the route call from the openrouteservice API using a more complicated post request."""
+        body = {"coordinates":[[self.location1.longitude,self.location1.latitude],[self.location2.longitude,self.location2.latitude]],"instructions":"false","preference":"shortest"}
+
+        headers = {
+            'Accept': 'application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8',
+            'Authorization': self.api_key,
+            'Content-Type': 'application/json; charset=utf-8'
+        }
+        print("calling")
+        call = requests.post('https://api.openrouteservice.org/v2/directions/driving-hgv/geojson', json=body, headers=headers)
+        
+        print(call.status_code, call.reason)
+        print(call.text)
         if call.status_code != 200:
             return f"error: {call.status_code}"
         else:

@@ -2,10 +2,11 @@
 
 {% block content %}
 
-
-<div class = "card" style="  display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
-    
-    <div  style="background-color: #f1f1f1; padding: 20px; font-size: 18px; height: 65vh;">    
+<!-- This view is divided into two vertical blocks -->
+<div class = "card">
+    <!-- style="  display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;"-->
+    <!-- Block1: list view --> ->
+    <div  style="background-color: #f1f1f1; padding: 20px; font-size: 18px; height: 65vh; width: 100vh; float: left;">    
 
         <div>
             <h2 style="align-self: center;">Suositellut kuljetuspalvelut</h2>
@@ -14,53 +15,11 @@
         </div>
 
         <div id="list_div" style ="overflow: auto;border: 1px solid #ccc; overflow-y: scroll; height: 80%;">
-            
-            <script>
-                var padding = 0.02;
-                var hidden_elements = [];
-                var in_range_gjson = JSON.parse('{{ in_range | tojson | safe }}');
-                var out_range_gjson = JSON.parse('{{ out_range | tojson | safe }}');
-
-                function addElement(feature, hide){
-                    var listElement = document.createElement('button');
-                    listElement.classList.add('clickable_list_element')
-                    listElement.innerHTML = '<strong>' + feature.properties.name + '</strong><br>' + feature.properties.address;
-
-                    var info = document.createElement('div');
-                    info.style.display = 'none';
-                    info.classList.add('card');
-                    info.innerHTML = '<div><br>Palveluinfo</br></div>'
-
-                    listElement.appendChild(info)
-                    document.currentScript.parentNode.appendChild(listElement);
-
-                    if (hide) {
-                        listElement.style.display = 'none';
-                        listElement.style.backgroundColor = 'red';
-                        hidden_elements.push(listElement);
-                    }
-                    listElement.addEventListener('click', function() {
-                        var info = listElement.querySelector('div');
-                        if (info.style.display === 'none') {
-                            info.style.display = 'block';
-                            listElement.scrollIntoView({ behavior: 'smooth', block: 'end' });
-                        } else {
-                            info.style.display = 'none';
-                        }
-                    });
-                }
-
-                console.log(in_range_gjson)
-                console.log(out_range_gjson)
-                
-                in_range_gjson.features.forEach(feature => addElement(feature, false));
-                out_range_gjson.features.forEach(feature => addElement(feature, true));
-
-            </script>
         </div>
         
     </div>
 
+    <!-- Block 2: map -->
     <div name="map_div" style="background-color: #f1f1f1; padding: 20px; font-size: 18px;">
         <div>
             <!-- Include Leaflet JavaScript and CSS -->
@@ -71,18 +30,27 @@
         <!-- Add a container for the map -->
         <div id="map" style="height: 800px;"></div>
 
-        <!-- Setup leaflet  -->
+        <!-- Leaflet + code -->
         <script>
-            console.log("Setting up")
 
-            // Set coordinates to match viewers
+            var padding = 0.02;
+            var hidden_elements = [];
+            var in_range_gjson = JSON.parse('{{ in_range | tojson | safe }}');
+            var out_range_gjson = JSON.parse('{{ out_range | tojson | safe }}');
+            var address_to_marker = {};
+            var listElement_to_coord = {};
+            var marker_to_listElement = {};
+            var last_open = null;
+
+
+            // Set coordinates to match viewers'
             var map = L.map('map').setView(['{{ lat }}','{{ lon }}'], 10); 
 
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '© OpenStreetMap contributors'
             }).addTo(map);
 
-
+            // Add tiles
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '© OpenStreetMap contributors'
             }).addTo(map);
@@ -96,49 +64,110 @@
                 shadowSize: [41, 41]
             });
 
+            // Marker creation
+            function create_marker (feature, latlng) {
+                var myIcon = redIcon;
+                var marker = L.marker(latlng, { icon: myIcon });
+                console.log("Create marker for "+feature.properties.address)
+                address_to_marker[feature.properties.address] = marker;
+                return marker;
+            }
+
             var out_range_style = {
                 "color": "#ff7800",
                 "opacity": 0.5
             }
-            //Show location of source
+
+            //Show location of the source
             var source = L.marker(['{{ lat }}','{{ lon }}'], {icon: redIcon}).addTo(map);
             source.bindPopup('<b>' + '{{ content }}' + '</b><br>' + '{{ address }}').openPopup();
 
             //Define popups
             function onEachFeature(feature, layer) {
-                L.marker(feature.geometry.coordinates, {
-                    icon: redIcon // Tässä voit asettaa haluamasi ikonin
-                }).addTo(map);
                 if (feature.properties && feature.properties.name && feature.properties.address) {
                     layer.bindPopup('<b>' + feature.properties.name + '</b><br>' + feature.properties.address);
                 }
             }
             
             // Add contractor locations (database)
-            in_gjson = L.geoJSON(in_range_gjson, {onEachFeature: onEachFeature});
-            out_gjson = L.geoJSON(out_range_gjson, {onEachFeature: onEachFeature});
-
-            var combinedBounds = in_gjson.getBounds().pad(padding).extend(out_gjson.getBounds().pad(padding));
-
+            in_gjson = L.geoJSON(in_range_gjson, {onEachFeature: onEachFeature, pointToLayer: create_marker});
+            out_gjson = L.geoJSON(out_range_gjson, {onEachFeature: onEachFeature, pointToLayer: create_marker});
             in_gjson.addTo(map);
-            map.flyToBounds(in_gjson.getBounds().pad(padding));
 
+
+            // Initialize map view
+            var combinedBounds = in_gjson.getBounds().pad(padding);
             L.control.scale().addTo(map);
+            map.flyToBounds(in_gjson.getBounds().pad(0.01));
 
-            // Show / hide suboptimal contractors
+            var mapFit = function() {
+                console.log("Fly to bounds")
+            }
+
+            // Show / hide suboptimal contractors (in list and map)
             const selectAll = document.getElementById('selectAll');
-            selectAll.addEventListener("change", function(){
+            var mapFit = selectAll.addEventListener("change", function(){
                 if (this.checked) {
                     out_gjson.addTo(map)
+                    combinedBounds = in_gjson.getBounds().pad(padding).extend(out_gjson.getBounds().pad(padding));
                     map.flyToBounds(combinedBounds);
                     hidden_elements.forEach(element => {element.style.display ='block'})
                 }
                 else {
                     map.removeLayer(out_gjson);
-                    map.flyToBounds(in_gjson.getBounds().pad(padding));
+                    combinedBounds = in_gjson.getBounds().pad(padding).extend(in_gjson.getBounds().pad(padding));
+                    map.flyToBounds(combinedBounds);
                     hidden_elements.forEach(element => {element.style.display ='none'})
                 }
             });
+
+            //====================================================== Create elements on the list
+            function addElement(feature, hide){
+                console.log("Create list element "+feature.properties.address)
+
+                var listElement = document.createElement('button');
+                listElement.id = feature.properties.address
+                listElement.classList.add('clickable_list_element')
+                listElement.innerHTML = '<strong>' + feature.properties.name + '</strong><br>' + feature.properties.address;
+
+                var info = document.createElement('div');
+                info.style.display = 'none';
+                info.classList.add('card');
+                info.innerHTML = '<div><br>Palveluinfo</br></div>'
+
+                listElement.appendChild(info)
+                document.getElementById('list_div').appendChild(listElement);
+
+                listElement_to_coord[listElement.id] = [feature.geometry.coordinates[1], feature.geometry.coordinates[0]];
+
+                if (hide) {
+                    listElement.style.display = 'none';
+                    listElement.style.backgroundColor = 'red';
+                    hidden_elements.push(listElement);
+                }
+
+                listElement.addEventListener('click', function() {
+                    var info = listElement.querySelector('div');
+                    info.addEventListener('click', () => {event.stopPropagation();});
+                    var id = event.target.id
+                    map.flyTo(listElement_to_coord[id], 9);
+                    address_to_marker[id].openPopup();
+                    if (info.style.display === 'none') {
+                        info.style.display = 'block';
+                        if (last_open != null) {
+                            last_open.style.display = 'none'
+                        }
+                        last_open = info;
+                        listElement.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                    } else {
+                        info.style.display = 'none';
+                        last_open = null;
+                        map.flyToBounds(combinedBounds);
+                    }
+                });
+            }
+            in_range_gjson.features.forEach(feature => addElement(feature, false));
+            out_range_gjson.features.forEach(feature => addElement(feature, true));
         </script>
     </div>
 </div>
