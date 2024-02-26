@@ -2,7 +2,7 @@ from ..database.db_datastructs import Listing
 from ..logic.location import Location
 from ..database.db_datastructs import LogisticsNode
 from .route_calculator import Route
-from ..database.database import db_get_logistics
+from ..database.db_contractors import db_get_logistics
 from ..config import DATABASE_POOL
 
 

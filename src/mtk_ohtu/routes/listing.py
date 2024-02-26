@@ -1,5 +1,7 @@
 import datetime
-from ..database import database as db
+
+import mtk_ohtu.database.db_listings
+from ..database import db_contractors as db
 from ..logic import route_calculator
 from ..logic import session_handler
 from ..logic import route_stats
@@ -19,7 +21,7 @@ def index():
 
 @listing_bp.route("/listings", methods=["GET", "POST"])
 def listings():
-    listings = db.db_get_product_list(DATABASE_POOL)
+    listings = mtk_ohtu.database.db_listings.db_get_product_list(DATABASE_POOL)
     distances = {}
 
     if request.method == "GET":
@@ -51,7 +53,7 @@ def get_url_for_listing(listing: Listing) -> str:
 @listing_bp.route("/listing/<int:listing_id>", methods=["GET", "POST"])
 def listing(listing_id):
     if request.method == "GET":
-        db_listing = db.db_get_product_by_id(listing_id, DATABASE_POOL)
+        db_listing = mtk_ohtu.database.db_listings.db_get_product_by_id(listing_id, DATABASE_POOL)
         return render_template(
             "product.html",
             listing=db_listing,
@@ -61,7 +63,7 @@ def listing(listing_id):
         )
 
     if request.method == "POST":
-        listing = db.db_get_product_by_id(listing_id, DATABASE_POOL)
+        listing = mtk_ohtu.database.db_listings.db_get_product_by_id(listing_id, DATABASE_POOL)
         user_location = Location(request.form["address"])
         route_to_product = route_calculator.Route(listing.location, user_location)
         route_to_product.calculate_route()

@@ -7,7 +7,7 @@ from ..database.db_enums import CategoryType
 from ..config import DATABASE_POOL
 from ..logic import user as users
 from ..logic import logistics
-from ..database import database as db
+from ..database import db_cargo as db
 from ..logic.contractor_division import ContractorDivision
 
 contractor_bp = Blueprint("contractor_bp", __name__)

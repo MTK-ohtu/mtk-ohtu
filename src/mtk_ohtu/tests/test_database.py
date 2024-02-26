@@ -1,6 +1,6 @@
 import unittest
 from psycopg import ProgrammingError
-import mtk_ohtu.database.database as db
+import mtk_ohtu.database.db_listings as db
 import mtk_ohtu.database.db_meta as db_m
 from mtk_ohtu.config import DATABASE_CONFIG
 

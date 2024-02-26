@@ -1,6 +1,6 @@
 import logging
 import mtk_ohtu.database.db_contractors
-from ..database import database as db
+from ..database import db_cargo as db
 from ..config import DATABASE_POOL
 from ..logic.location import Location as l
 

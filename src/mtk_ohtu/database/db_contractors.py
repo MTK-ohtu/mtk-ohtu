@@ -110,3 +110,25 @@ def db_get_contractor(user_id: int, pool: ConnectionPool) -> LogisticsContractor
     if not out:
         return None
     return LogisticsContractor(out[0], out[1], out[2], out[4])
+
+
+def db_get_logistics(pool: ConnectionPool) -> list[LogisticsNode]:
+    """
+    Gets all logistics contractor locations from database
+    Args:
+        pool: a database connection pool
+    Returns: List of LogisticsNodes
+    """
+    out = None
+    with pool.connection() as connection:
+        cursor = connection.cursor()
+        cursor.execute(
+            "SELECT * FROM contractor_locations AS c LEFT JOIN contractors AS s ON c.contractor_id=s.id"
+        )
+        out = [
+            LogisticsNode(x[0], x[1], x[2], x[10], Location((x[5], x[6])), x[7])
+            for x in cursor.fetchall()
+        ]
+    if not out:
+        return None
+    return out

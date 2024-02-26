@@ -1,6 +1,6 @@
 import math
 from geojson import Point, Feature, FeatureCollection
-from ..database.database import db_get_logistics
+from ..database.db_contractors import db_get_logistics
 from ..config import DATABASE_POOL
 
 
