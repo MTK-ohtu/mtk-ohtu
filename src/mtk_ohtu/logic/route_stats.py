@@ -1,6 +1,5 @@
-from enum import Enum
-
 """Route satistic logic module."""
+from enum import Enum
 
 
 class FuelType(Enum):
@@ -30,24 +29,24 @@ def calculate_emissions(fuel, distance, fuel_efficiency=55.0):
     if fuel in fuels.keys():
         fuel = fuels[fuel]
 
-    if type(fuel_efficiency) != float:
-        if type(fuel_efficiency) == str:
+    if not isinstance(fuel_efficiency, float):
+        if isinstance(fuel_efficiency, str):
             if fuel_efficiency == "":
                 fuel_efficiency = 55.0
             else:
                 try:
                     fuel_efficiency = float(fuel_efficiency)
-                except:
+                except Exception as exept:
                     raise ValueError(
                         f"fuel_efficiency ({fuel_efficiency}) string conversion to float failed"
-                    )
+                    ) from exept
         else:
             try:
                 fuel_efficiency = float(fuel_efficiency)
-            except:
+            except Exception as exept:
                 raise ValueError(
                     "fuel_efficiency must be a float. Not a "
                     + str(type(fuel_efficiency))
-                )
+                ) from exept
 
     return distance / 100000 * float(fuel_efficiency) * fuel.value

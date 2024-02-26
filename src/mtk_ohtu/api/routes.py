@@ -1,5 +1,5 @@
 from marshmallow import ValidationError
-from ..logic.listing import Listing
+from ..database.db_datastructs import Listing
 from ..logic.location import Location
 from flask import Blueprint, request
 from ..api.logistics_info_schema import LogisticsInfoSchema

@@ -50,7 +50,7 @@ class TestLogistics(unittest.TestCase):
             self.base_rates,
             self.prices_per_hour,
             self.max_capacities,
-            self.max_distances
+            self.max_distances,
         )
         self.assertTrue(result)
 

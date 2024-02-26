@@ -4,15 +4,11 @@ from ..config import DATABASE_POOL
 from ..logic.location import Location as l
 
 
-def add_contractor(
-    user_id,
-    name,
-    business_id
-):
+def add_contractor(user_id, name, business_id):
     """
     Adds a new contractor
     Args:
-        user_id: user id 
+        user_id: user id
         name: name of contractor
         business_id: business id if needed
     Returns:
@@ -20,13 +16,12 @@ def add_contractor(
         else False
     """
     try:
-        id = db.db_add_contractor(
-            user_id, name, business_id, pool=DATABASE_POOL
-        )
+        id = db.db_add_contractor(user_id, name, business_id, pool=DATABASE_POOL)
         return id
     except Exception as er:
         logging.error(er)
         return False
+
 
 def add_contractor_location(
         contractor_id,
@@ -55,20 +50,28 @@ def add_contractor_location(
         lon = coordinates.longitude
         lat = coordinates.latitude
         id = db.db_add_contractor_location(
-            contractor_id, address, telephone, email, lon, lat, radius, pool=DATABASE_POOL
+            contractor_id,
+            address,
+            telephone,
+            email,
+            lon,
+            lat,
+            radius,
+            pool=DATABASE_POOL,
         )
         return id
     except Exception as er:
         logging.error(er)
         return False
-    
+
+
 def add_cargo_capability(
-        contractor_location_id,
-        categories,
-        base_rates,
-        prices_per_hour,
-        max_capacities,
-        max_distances
+    contractor_location_id,
+    categories,
+    base_rates,
+    prices_per_hour,
+    max_capacities,
+    max_distances,
 ):
     """
     Adds all deliverable sidestreams for contractor location
@@ -122,11 +125,13 @@ def get_locations_and_cargo_capability(contractor_id):
 
     return capability
 
+
 def contractor_locations(contractor_id):
     """
     Returns contractor's locations on a list
     """
     return db.db_get_contractor_locations(contractor_id, DATABASE_POOL)
+
 
 def cargo_capability(contractor_location_id):
     """

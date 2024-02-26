@@ -1,9 +1,6 @@
 import geopy.distance
 import requests
 from ..logic.location import Location
-import datetime
-from enum import Enum
-from flask import session
 
 
 class Route:
@@ -53,8 +50,10 @@ class Route:
             call = self.__get_route_call()
             route_summary = call.json()["features"][0]["properties"]["summary"]
             self.geojson = call.text
-        except:
-            raise ValueError(f"Error in route call: {call}. Coordinates: {self.location1.latitude}, {self.location1.longitude} and {self.location2.latitude}, {self.location2.longitude}")
+        except Exception as exept:
+            raise ValueError(
+                f"Error in route call. Coordinates: {self.location1.latitude}, {self.location1.longitude} and {self.location2.latitude}, {self.location2.longitude}"
+            ) from exept
 
         # if the two locations are the same, the summary is an empty dict
         if "distance" not in route_summary:
@@ -81,7 +80,27 @@ class Route:
         call = requests.get(
             f"https://api.openrouteservice.org/v2/directions/driving-hgv?api_key={self.api_key}&start={self.location1.longitude},%20{self.location1.latitude}&end={self.location2.longitude},%20{self.location2.latitude}%20",
             headers=headers,
+            timeout=600,
         )
+        if call.status_code != 200:
+            return f"error: {call.status_code}"
+        else:
+            return call
+
+    def __get_route_call_post(self):
+        """Return the route call from the openrouteservice API using a more complicated post request."""
+        body = {"coordinates":[[self.location1.longitude,self.location1.latitude],[self.location2.longitude,self.location2.latitude]],"instructions":"false","preference":"shortest"}
+
+        headers = {
+            'Accept': 'application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8',
+            'Authorization': self.api_key,
+            'Content-Type': 'application/json; charset=utf-8'
+        }
+        print("calling")
+        call = requests.post('https://api.openrouteservice.org/v2/directions/driving-hgv/geojson', json=body, headers=headers)
+        
+        print(call.status_code, call.reason)
+        print(call.text)
         if call.status_code != 200:
             return f"error: {call.status_code}"
         else:

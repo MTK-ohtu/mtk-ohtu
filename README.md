@@ -68,7 +68,11 @@ docker compose --profile nominatim up --build
 
 ## Documentation
 
+Main documentation folder: [docs](./docs/)
+
 Definition of done: https://github.com/MTK-ohtu/mtk-ohtu/blob/main/docs/Definition_of_done.md
+
+API documentation: [api.md](./docs/api.md)
 
 ## License
 

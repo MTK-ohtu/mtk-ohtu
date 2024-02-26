@@ -79,9 +79,13 @@ def contractor():
         if not contractor_info:
             return redirect("/addlogistics")
 
-        locations_and_cargo_capability = logistics.get_locations_and_cargo_capability(contractor_info.id)
+        locations_and_cargo_capability = logistics.get_locations_and_cargo_capability(
+            contractor_info.id
+        )
         return render_template(
-            "contractor.html", contractor=contractor_info, locations=locations_and_cargo_capability
+            "contractor.html",
+            contractor=contractor_info,
+            locations=locations_and_cargo_capability,
         )
 
 
@@ -95,7 +99,7 @@ def list_contractors():
     address, content = "Hirvijärvi, Juupajoki", "Hakkuujäte"
     lon, lat, r = 24.566428395979575, 61.8578385779706, 300
 
-    contractors = ContractorDivision(['name', 'address', 'latitude', 'longitude'])
+    contractors = ContractorDivision(["name", "address", "latitude", "longitude"])
     contractors.split_by_range(lat, lon, r)
     return render_template(
         "contractor_list.html",
