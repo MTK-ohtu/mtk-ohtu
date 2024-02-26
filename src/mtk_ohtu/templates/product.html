@@ -36,68 +36,6 @@
     <p>{{listing.price}} €</p>
 </div>
 
-<!-- Include Leaflet JavaScript and CSS -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
-<!-- Add a container for the map -->
-<div id="map" style="height: 400px;"></div>
-
-<style>
-    img.huechange1 {
-        filter: hue-rotate(-120deg);
-    }
-
-    img.huechange2 {
-        filter: hue-rotate(120deg);
-    }
-</style>
-<script>
-    // Create a map object with route and markers and add it to the map container.
-    var map = L.map('map').setView(['{{listing.location.latitude}}', '{{listing.location.longitude}}'], 12);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors'
-    }).addTo(map);
-    var product = L.marker(['{{listing.location.latitude}}', '{{listing.location.longitude}}']).addTo(map);
-    product._icon.classList.add('huechange1');
-    product.bindPopup("{{listing.category.value}}\n{{listing.address}}");
-    if ('{{show_route}}') {
-
-        var route_geojson = JSON.parse('{{ route_geojson }}'.replaceAll('&#34;', '"'));
-        console.log(route_geojson);
-
-        // Adds geojson route to map
-        L.geoJSON(route_geojson).addTo(map);
-        var destination = route_geojson["features"][0]["geometry"]["coordinates"].pop().reverse();
-
-        var destinationMarker = L.marker(destination).addTo(map);
-        destinationMarker._icon.classList.add('huechange2');
-        destinationMarker.bindPopup("Destination");
-
-        var contractors = JSON.parse('{{contractor_list}}'.replaceAll('&#39;', '"'));
-        console.log(contractors);
-        for (var i = 0; i < contractors.length; i++) {
-            var contractor = contractors[i];
-            console.log(contractor);
-            if (contractor.lat && contractor.lon) {
-                var logisticsMarker = L.marker([contractor.lat, contractor.lon]).addTo(map);
-                // var logisticsMarker = L.circle([contractor.latitude, contractor.longitude]).addTo(map);
-                // logisticsMarker.setRadius(contractor.radius * 1000);
-                logisticsMarker.bindPopup(contractor.name + " " + contractor.address);
-            } else {
-                console.log("No location for " + contractor.name);
-            }
-        }
-
-        var bbox = route_geojson["features"][0]["bbox"];
-        var southWest = L.latLng(bbox[1], bbox[0]),
-            northEast = L.latLng(bbox[3], bbox[2]),
-            bounds = L.latLngBounds(southWest, northEast);
-
-        map.fitBounds(bounds);
-    }
-
-</script>
 <script>
     // Change fuel efficiency unit based on fuel type
     document.getElementById('fuelType').addEventListener('change', function () {
@@ -130,12 +68,7 @@
 <!--we need to list here the delivery companies-->
 <div>
     <h2>Delivery companies</h2>
-    <ul>
-        {% for company in companies %}
-        <li>{{company.name}}: {{company.address}}, Radius = {{company.delivery_radius}} km,
-            ({{company.location.longitude}},{{company.location.latitude}}) </li>
-        {% endfor %}
-    </ul>
 </div>
+{% include "contractor_list.html" %}
 
 {% endblock %}
