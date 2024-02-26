@@ -1,3 +1,4 @@
+import psycopg
 from psycopg_pool import ConnectionPool
 
 
