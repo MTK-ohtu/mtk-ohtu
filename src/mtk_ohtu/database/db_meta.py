@@ -1,6 +1,6 @@
+from dataclasses import dataclass
 import psycopg
 from psycopg_pool import ConnectionPool
-from dataclasses import dataclass
 from psycopg.types.enum import EnumInfo, register_enum
 from ..database import db_enums
 

@@ -1,5 +1,7 @@
+import psycopg
 from psycopg_pool import ConnectionPool
 
+# pylint: disable=E1129
 
 def db_get_user(username: str, pool: ConnectionPool) -> bool:
     """Gets user from database

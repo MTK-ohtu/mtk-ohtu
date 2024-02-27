@@ -14,20 +14,17 @@ class ContractorDivision:
         source_lat, source_lon:
     """
 
-    def __init__(self, fields: list):
+    def __init__(self):
         self.contractors = db_get_logistics(DATABASE_POOL)
         self.optimal = None
         self.suboptimal = None
-        self.fields = fields
 
-    def split_by_range(self, source_lat: float, source_lon: float, driver_range: float):
+    def split_by_range(self, source_lat: float, source_lon: float):
         """
         Splits all contractors into 'optimal'/'suboptimal' lists by given
         Args:
             latitude: float
             longitude: float
-            limit: float, straight line distance in kilometers
-        Return: tuple (list1, list2), first containing contractors inside range, second contains the rest
         """
         self.optimal = list(
             filter(
@@ -39,7 +36,7 @@ class ContractorDivision:
                         x.location.longitude,
                     )
                 )
-                < driver_range,
+                < x.delivery_radius,
                 self.contractors,
             )
         )
@@ -53,7 +50,7 @@ class ContractorDivision:
                         x.location.longitude,
                     )
                 )
-                > driver_range,
+                > x.delivery_radius,
                 self.contractors,
             )
         )

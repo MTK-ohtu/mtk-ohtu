@@ -9,6 +9,7 @@ from flask import Blueprint, render_template, request, redirect
 from ..config import DATABASE_POOL
 from ..logic.location import Location
 from ..database.db_datastructs import Listing
+from ..logic.contractor_division import ContractorDivision
 
 
 listing_bp = Blueprint("listing_bp", __name__)
@@ -53,13 +54,22 @@ def get_url_for_listing(listing: Listing) -> str:
 @listing_bp.route("/listing/<int:listing_id>", methods=["GET", "POST"])
 def listing(listing_id):
     if request.method == "GET":
+        
         db_listing = mtk_ohtu.database.db_listings.db_get_product_by_id(listing_id, DATABASE_POOL)
+        contractors = ContractorDivision()
+        contractors.split_by_range(float(db_listing.location.latitude), float(db_listing.location.longitude))
         return render_template(
             "product.html",
             listing=db_listing,
             listing_id=listing_id,
             show_route=False,
             consumption=55,
+            in_range=contractors.get_optimal(),
+            out_range=contractors.get_suboptimal(),
+            lat=db_listing.location.latitude,
+            lon=db_listing.location.longitude,
+            content="KAMAA",
+            address="OSOITE"
         )
 
     if request.method == "POST":
@@ -75,6 +85,10 @@ def listing(listing_id):
         )
         logistics_nodes = db.db_get_logistics(DATABASE_POOL)
         contractor_list = []
+
+        contractors = ContractorDivision()
+        contractors.split_by_range(float(listing.location.latitude), float(listing.location.longitude))
+
         for company in logistics_nodes:
             contractor_list.append(
                 {
@@ -100,4 +114,10 @@ def listing(listing_id):
             contractor_list=contractor_list,
             consumption=fuel_consumption,
             show_route=True,
+            in_range=contractors.get_optimal(),
+            out_range=contractors.get_suboptimal(),
+            lat=listing.location.latitude,
+            lon=listing.location.longitude,
+            content="KAMAA",
+            address="OSOITE"
         )

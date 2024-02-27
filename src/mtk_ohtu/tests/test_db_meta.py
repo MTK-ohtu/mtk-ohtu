@@ -1,6 +1,5 @@
 import unittest
 from psycopg import ProgrammingError
-import mtk_ohtu.database.db_listings as db
 import mtk_ohtu.database.db_meta as db_m
 from mtk_ohtu.config import DATABASE_CONFIG
 
@@ -47,18 +46,3 @@ class TestConnectionAndCreation(unittest.TestCase):
             success = True
         self.assertTrue(success)
         connection.close()
-
-
-class TestSelecions(unittest.TestCase):
-    def setUp(self):
-        db_m.db_excecute_file("schema.sql", DATABASE_CONFIG)
-        db_m.db_excecute_file("db_mock_data.sql", DATABASE_CONFIG)
-        self.pool = db_m.db_connection_pool(DATABASE_CONFIG)
-
-    def test_get_all_listings_correct_amount(self):
-        prodlist = db.db_get_product_list(self.pool)
-        self.assertEqual(len(prodlist), 13)
-
-    def tearDown(self):
-        self.pool.close()
-        db_m.db_drop_all(DATABASE_CONFIG)

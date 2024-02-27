@@ -88,8 +88,8 @@ def add_cargo_capability(
         else False
     """
     try:
-        for i in range(len(categories)):
-            cargo_type = categories[i]
+        for i,category in enumerate(categories):
+            cargo_type = category
             price = prices_per_hour[i]
             base_rate = base_rates[i]
             max_capacity = max_capacities[i]

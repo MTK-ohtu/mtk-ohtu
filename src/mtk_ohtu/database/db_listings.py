@@ -1,12 +1,9 @@
-# pylint: disable=E1129
-
-
+from psycopg_pool import ConnectionPool
 from mtk_ohtu.database.db_datastructs import Listing
 from mtk_ohtu.logic.location import Location
 
 
-from psycopg_pool import ConnectionPool
-
+# pylint: disable=E1129
 
 def db_get_product_list(pool: ConnectionPool) -> list[Listing]:
     """Gets list of products from database

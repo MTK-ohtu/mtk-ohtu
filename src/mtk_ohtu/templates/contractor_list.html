@@ -1,6 +1,3 @@
-{% extends "layout.html" %}
-
-{% block content %}
 
 <!-- This view is divided into two vertical blocks -->
 <div class = "card">
@@ -30,6 +27,15 @@
         <!-- Add a container for the map -->
         <div id="map" style="height: 800px;"></div>
 
+        <style>
+            img.huechange1 {
+                filter: hue-rotate(-120deg);
+            }
+        
+            img.huechange2 {
+                filter: hue-rotate(120deg);
+            }
+        </style>
         <!-- Leaflet + code -->
         <script>
 
@@ -54,6 +60,31 @@
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '© OpenStreetMap contributors'
             }).addTo(map);
+
+            var product = L.marker(['{{listing.location.latitude}}', '{{listing.location.longitude}}']).addTo(map);
+            product._icon.classList.add('huechange1');
+            product.bindPopup("{{listing.category.value}}\n{{listing.address}}");
+
+            if ('{{show_route}}') {
+
+                var route_geojson = JSON.parse('{{ route_geojson }}'.replaceAll('&#34;', '"'));
+                console.log(route_geojson);
+
+                // Adds geojson route to map
+                L.geoJSON(route_geojson).addTo(map);
+                var destination = route_geojson["features"][0]["geometry"]["coordinates"].pop().reverse();
+
+                var destinationMarker = L.marker(destination).addTo(map);
+                destinationMarker._icon.classList.add('huechange2');
+                destinationMarker.bindPopup("Destination");
+
+                var bbox = route_geojson["features"][0]["bbox"];
+                var southWest = L.latLng(bbox[1], bbox[0]),
+                    northEast = L.latLng(bbox[3], bbox[2]),
+                    bounds = L.latLngBounds(southWest, northEast);
+
+                map.fitBounds(bounds);
+            }
 
             var redIcon = new L.Icon({
                 iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
@@ -171,5 +202,3 @@
         </script>
     </div>
 </div>
-
-{% endblock %}

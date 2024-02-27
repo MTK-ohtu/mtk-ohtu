@@ -1,16 +1,17 @@
 import psycopg
 from psycopg_pool import ConnectionPool
-
 from mtk_ohtu.database.db_datastructs import LogisticsContractor, LogisticsNode
 from mtk_ohtu.logic.location import Location
 
+
+# pylint: disable=E1129
 
 def db_add_contractor(
     user_id: int,
     name: str,
     business_id: str,
     pool: ConnectionPool,
-):
+) -> bool:
     """
     Adds new logistics contractor to database
     Args:
@@ -47,7 +48,7 @@ def db_add_contractor_location(
     latitude: float,
     radius: int,
     pool: ConnectionPool,
-):
+) -> bool:
     out = False
     with pool.connection() as connection:
         cursor = connection.cursor()

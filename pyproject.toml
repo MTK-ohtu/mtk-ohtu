@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "mtk_ohtu"
-version = "0.2.0"
+version = "0.3.0"
 description = "A logistics optimization tool for connecting biomass sidestream sellers, buyers and logistics providers."
 authors = ["MTK-Ohtu group"]
 readme = "README.md"
