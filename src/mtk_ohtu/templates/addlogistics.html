@@ -37,9 +37,10 @@
                                     <input type="text" id="businessId" name="businessId"> <br>
                                 </div>
                                 <br>
-                                <div class="card">
+                                <div id="Questions">
+                                <div id="allQuestions">
                                     <h4>Add location</h4>
-                                    <div id="allQuestions">
+                                    <div class="card">
                                         <label for="address">Address:</label>
                                         <input type="text" id="address" name="address"><br>
                                         <label for="postcode">Postal code:</label>
@@ -72,8 +73,10 @@
                                         </div>
                                     </div>
                                 </div>
+                                <button type="button" onclick="addLocation()">Add new location</button>
+                                </div>
                                 <br>
-                                <button type="button" onclick="">Add new location</button>
+                                
                                 <br>
                                 <input type="submit" value="Submit">
                             </form>
@@ -134,12 +137,27 @@
         materialsContainer.appendChild(materialEntry);
     }
 
-    function addLocation() {
-        const allQuestions = document.getElementById('allQuestions');
+    function deleteLocation (locationId) {
+        const location = document.getElementById(locationId);
+        const Questions = document.getElementById('Questions');
+
+        if (location) {
+            Questions.removeChild(location);
+        }
     }
 
-    function deleteLocation () {
-        
+    function addLocation() {
+        const Questions = document.getElementById('Questions');
+        const allQuestions = document.getElementById('allQuestions').cloneNode(true);
+        allQuestions.style.display = 'block';
+
+        const uniqueId = 'location-entry-' + Date.now();
+        allQuestions.setAttribute('id', uniqueId);
+
+        const deleteButton = allQuestions.querySelector('.card button');
+        deleteButton.setAttribute('onclick', 'deleteLocation("' + uniqueId + '")');
+
+        Questions.appendChild(allQuestions);
     }
 
     function toggleQuestions() {
