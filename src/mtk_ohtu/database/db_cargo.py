@@ -1,3 +1,4 @@
+import logging
 from psycopg_pool import ConnectionPool
 from .db_enums import CategoryType
 from .db_datastructs import CargoTypeInfo
@@ -51,8 +52,8 @@ def db_get_location_cargo_capabilities(
     with pool.connection() as connection:
         cursor = connection.cursor()
         cursor.execute(
-            "SELECT * FROM cargo_capabilities WHERE contractor_location_id=%s",
-            (contractor_location_id,),
+            "SELECT * FROM cargo_capabilities WHERE contractor_location_id=%s;",
+            (contractor_location_id,)
         )
         out = cursor.fetchall()
     if not out:
