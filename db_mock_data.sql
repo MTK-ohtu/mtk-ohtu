@@ -26,15 +26,15 @@ INSERT INTO listings (user_id, listing_type, category, delivery_method, supply_d
 
 INSERT INTO contractors (user_id, name, created_at, business_id) 
 VALUES 
-    (1, 'TestContractor1', NOW(), '1234567-A'), 
-    (2, 'TestContractor2', NOW(), '1234567-B'), 
-    (3, 'TestContractor3', NOW(), '1234567-C'), 
-    (4, 'TestContractor4', NOW(), '1234567-D'), 
-    (5, 'TestContractor5', NOW(), '1234567-E'), 
-    (6, 'TestContractor6', NOW(), '1234567-F'), 
-    (7, 'TestContractor7', NOW(), '1234567-G'), 
-    (8, 'TestContractor8', NOW(), '1234567-H'),
-    (9, 'TestContractor8', NOW(), '1234567-I')
+    (1, 'Kuljetus Oy Laakso', NOW(), '1234567-A'), 
+    (2, 'M & T Trans Oy', NOW(), '1234567-B'), 
+    (3, 'Wise Logistics Oy', NOW(), '1234567-C'), 
+    (4, 'MPT-Kuljetus Oy', NOW(), '1234567-D'), 
+    (5, 'Matti Jokimäki Oy', NOW(), '1234567-E'), 
+    (6, 'Alueurakointi Poutiainen Oy', NOW(), '1234567-F'), 
+    (7, 'Kuljetusliike Järveläinen Oy', NOW(), '1234567-G'), 
+    (8, 'RH-Trans Oy', NOW(), '1234567-H'),
+    (9, 'Transport Oy Ab', NOW(), '1234567-I')
 ON CONFLICT DO NOTHING;
 
 INSERT INTO contractor_locations (contractor_id, address, telephone, email, longitude, latitude, delivery_radius)
@@ -55,21 +55,31 @@ ON CONFLICT DO NOTHING;
 INSERT INTO cargo_capabilities (contractor_location_id, type, price_per_km, base_rate, max_capacity, max_distance)
 VALUES
     (1, 'Wood', 6, 100, 5, 500),
+    (1, 'Plant-based biomasses', 5, 44, 3, 400),
+    (1, 'Digestion', 3, 77, 2, 550),
     (2, 'Plant-based biomasses', 3, 45, 3, 300),
     (2, 'Animal-based biomasses', 7, 178, 1, 400),
+    (2, 'Digestion', 3, 50, 9, 100),
     (3, 'Digestion', 3, 60, 4, 400),
+    (3, 'Plant-based biomasses', 3, 45, 3, 100),
     (3, 'Soil and growing media', 9, 220, 3, 600),
     (3, 'Wood', 6, 100, 10, 300),
     (4, 'Animal-based biomasses', 6, 178, 3, 300),
     (4, 'Plant-based biomasses', 5, 119, 2, 600),
     (4, 'Soil and growing media', 5, 600, 2, 400),
     (4, 'Manure', 5, 60, 2, 300),
+    (4, 'Digestion', 3, 77, 6, 500),
     (5, 'Soil and growing media', 5, 125, 2, 400),
     (5, 'Digestion', 3, 60, 2, 600),
     (5, 'Wood', 7, 100, 8, 500),
     (5, 'Animal-based biomasses', 4, 120, 2, 300),
     (6, 'Manure', 5, 60, 3, 500),
+    (6, 'Plant-based biomasses', 3, 45, 3, 400),
+    (6, 'Digestion', 7, 200, 5, 100),
     (7, 'Soil and growing media', 5, 800, 2, 300),
     (8, 'Plant-based biomasses', 7, 90, 1, 500),
-    (9, 'Digestion', 3, 77, 2, 600)
+    (8, 'Plant-based biomasses', 3, 45, 3, 500),
+    (9, 'Digestion', 3, 77, 2, 600),
+    (9, 'Plant-based biomasses', 6, 80, 6, 400),
+    (9, 'Digestion', 3, 77, 5, 300)
 ON CONFLICT DO NOTHING;
