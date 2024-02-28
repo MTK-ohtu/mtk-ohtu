@@ -1,17 +1,19 @@
 import pytest
 from mtk_ohtu import app as mtkapp
 from mtk_ohtu.database import db_meta as dbm
-from mtk_ohtu.config import DATABASE_CONFIG
+import mtk_ohtu.config as config
 
 
 # Database testing fixtures
 
 @pytest.fixture()
 def datapool():
-    dbm.db_excecute_file("schema.sql", DATABASE_CONFIG)
-    dbm.db_excecute_file("db_mock_data.sql", DATABASE_CONFIG)
-    yield dbm.db_connection_pool(DATABASE_CONFIG)
-    dbm.db_drop_all(DATABASE_CONFIG)
+    dbm.db_excecute_file("schema.sql", config.DATABASE_CONFIG)
+    dbm.db_excecute_file("db_mock_data.sql", config.DATABASE_CONFIG)
+    pool = dbm.db_connection_pool(config.DATABASE_CONFIG)
+    yield pool
+    pool.close()
+    dbm.db_drop_all(config.DATABASE_CONFIG)
 
 # Route testing fixtures
 
@@ -23,18 +25,16 @@ def app():
             "TESTING": True,
         }
     )
-    dbm.db_drop_all(DATABASE_CONFIG)
-    dbm.db_create(DATABASE_CONFIG)
-    dbm.db_excecute_file("db_mock_data.sql", DATABASE_CONFIG)
-
+    dbm.db_drop_all(config.DATABASE_CONFIG)
+    dbm.db_create(config.DATABASE_CONFIG)
+    dbm.db_excecute_file("db_mock_data.sql", config.DATABASE_CONFIG)
     yield app
-
-    dbm.db_drop_all(DATABASE_CONFIG)
+    dbm.db_drop_all(config.DATABASE_CONFIG)
 
 
 @pytest.fixture()
 def client(app):
-    return app.test_client()
+    yield app.test_client()
 
 
 @pytest.fixture()

@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 import psycopg
-from psycopg_pool import ConnectionPool
+from psycopg_pool import ConnectionPool, NullConnectionPool
 from psycopg.types.enum import EnumInfo, register_enum
 from ..database import db_enums
 
@@ -71,6 +71,17 @@ def db_connection_pool(config: DatabaseConfig) -> ConnectionPool:
     )
     return connection_pool
 
+def db_fake_connection_pool(config: DatabaseConfig) -> NullConnectionPool:
+    conn_args = _db_connection_string(config)
+
+    connection_pool = NullConnectionPool(
+        conninfo=conn_args,
+        min_size=0,
+        max_size=5,
+        configure=db_register_enums,
+        open=True,
+    )
+    return connection_pool
 
 def db_connect(config: DatabaseConfig) -> psycopg.Connection:
     conn_args = _db_connection_string(config)
