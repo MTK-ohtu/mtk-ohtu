@@ -70,8 +70,7 @@ def listing(listing_id):
             out_range=contractors.get_suboptimal(),
             lat=db_listing.location.latitude,
             lon=db_listing.location.longitude,
-            content="KAMAA",
-            address="OSOITE"
+            logistics_info=(0, 0)
         )
 
     if request.method == "POST":
