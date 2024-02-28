@@ -3,6 +3,7 @@ from ..logic.location import Location
 from ..database.db_datastructs import LogisticsNode
 from .route_calculator import Route
 from ..database.db_contractors import db_get_logistics
+from ..database.db_cargo import db_get_location_cargo_capabilities
 from ..config import DATABASE_POOL
 
 
@@ -25,9 +26,7 @@ def get_logistics_info(listing: Listing, user_location: Location) -> tuple[float
     return (float(route.distance) / 1000.0, len(providers))
 
 
-def get_logistics_providers(
-    listing: Listing, user_location: Location
-) -> list[LogisticsNode]:
+def get_logistics_providers(listing: Listing, user_location: Location) -> list[LogisticsNode]:
     """Gets the available logistics providers / nodes for the user's location & listing
 
     Args:
@@ -37,8 +36,25 @@ def get_logistics_providers(
     Returns:
         a list of LogisticsNodes
     """
-
     nodes = db_get_logistics(DATABASE_POOL)
+    nodes = get_logistics_providers_by_range(listing, user_location, nodes)
+    nodes = get_logistics_providers_by_cargo_capability(listing, nodes)
+
+    return nodes
+
+def get_logistics_providers_by_range(
+    listing: Listing, user_location: Location, nodes: list[LogisticsNode]
+) -> list[LogisticsNode]:
+    """Gets the available logistics providers / nodes by range for the user's location & listing
+
+    Args:
+        listing (Listing): the listing in question,
+        location (Location): the buyer's location,
+        nodes (list[LogisticsNode]): the available logistics providers
+
+    Returns:
+        a list of LogisticsNodes
+    """
     accepted = []
 
     for node in nodes:
@@ -46,6 +62,30 @@ def get_logistics_providers(
         if route_to_listing.geodesic_distance() / 1000.0 <= node.delivery_radius:
             route_to_user = Route(user_location, node.location)
             if route_to_user.geodesic_distance() / 1000.0 <= node.delivery_radius:
+                accepted.append(node)
+
+    return accepted
+
+def get_logistics_providers_by_cargo_capability(
+    listing: Listing, nodes: list[LogisticsNode]
+) -> list[LogisticsNode]:
+    """Gets the available logistics providers / nodes by cargo capability for the listing
+
+    Args:
+        listing (Listing): the listing in question,
+        nodes (list[LogisticsNode]): the available logistics providers
+
+    Returns:
+        a list of LogisticsNodes
+    """
+
+    accepted = []
+    print("LISTING:",listing)
+
+    for node in nodes:
+        cargo_capabilities = db_get_location_cargo_capabilities(node.id, DATABASE_POOL)
+        for cap in cargo_capabilities:
+            if cap.type == listing.category:
                 accepted.append(node)
 
     return accepted

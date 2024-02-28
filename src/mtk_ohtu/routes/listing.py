@@ -2,6 +2,7 @@ import datetime
 
 import mtk_ohtu.database.db_listings
 from ..database import db_contractors as db
+from ..database import db_cargo as cargo_db
 from ..logic import route_calculator
 from ..logic import session_handler
 from ..logic import route_stats
@@ -10,6 +11,7 @@ from ..config import DATABASE_POOL
 from ..logic.location import Location
 from ..database.db_datastructs import Listing
 from ..logic.contractor_division import ContractorDivision
+from ..logic.logistics_info import get_logistics_providers, get_logistics_info
 
 
 listing_bp = Blueprint("listing_bp", __name__)
@@ -84,21 +86,13 @@ def listing(listing_id):
             fuel, route_to_product.distance, fuel_consumption
         )
         logistics_nodes = db.db_get_logistics(DATABASE_POOL)
-        contractor_list = []
+        
+        logistics_info = get_logistics_info(listing, user_location)
+        print("LOGISTICS INFO:",logistics_info)
 
         contractors = ContractorDivision()
         contractors.split_by_range(float(listing.location.latitude), float(listing.location.longitude))
 
-        for company in logistics_nodes:
-            contractor_list.append(
-                {
-                    "name": company.name,
-                    "address": company.address,
-                    "lat": company.location.latitude,
-                    "lon": company.location.longitude,
-                    "radius": company.delivery_radius,
-                }
-            )
         return render_template(
             "product.html",
             listing_id=listing_id,
@@ -111,13 +105,11 @@ def listing(listing_id):
             user_location=user_location.location,
             emissions=round(emissions),
             companies=logistics_nodes,
-            contractor_list=contractor_list,
             consumption=fuel_consumption,
             show_route=True,
             in_range=contractors.get_optimal(),
             out_range=contractors.get_suboptimal(),
             lat=listing.location.latitude,
             lon=listing.location.longitude,
-            content="KAMAA",
-            address="OSOITE"
+            logistics_info=logistics_info
         )

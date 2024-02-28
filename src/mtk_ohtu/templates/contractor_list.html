@@ -1,19 +1,16 @@
-
 <!-- This view is divided into two vertical blocks -->
-<div class = "card">
+<div class="card">
     <!-- style="  display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;"-->
-    <!-- Block1: list view --> ->
-    <div  style="background-color: #f1f1f1; padding: 20px; font-size: 18px; height: 65vh; width: 100vh; float: left;">    
+    <!-- Block1: list view -->
+    <div>
+        <input type="checkbox" id="selectAll">
+        <label for="selectAll">Näytä kaikki</label>
+    </div>
+    <div style="background-color: #f1f1f1; padding: 10px; font-size: 18px; height: 80vh; width: 60vh; float: left;">
 
-        <div>
-            <h2 style="align-self: center;">Suositellut kuljetuspalvelut</h2>
-            <input type="checkbox" id="selectAll">
-            <label for="selectAll">Näytä kaikki</label>
+        <div id="list_div" style="overflow: auto;border: 1px solid #ccc; overflow-y: scroll; height: 800px;">
         </div>
 
-        <div id="list_div" style ="overflow: auto;border: 1px solid #ccc; overflow-y: scroll; height: 80%;">
-        </div>
-        
     </div>
 
     <!-- Block 2: map -->
@@ -31,7 +28,7 @@
             img.huechange1 {
                 filter: hue-rotate(-120deg);
             }
-        
+
             img.huechange2 {
                 filter: hue-rotate(120deg);
             }
@@ -50,7 +47,7 @@
 
 
             // Set coordinates to match viewers'
-            var map = L.map('map').setView(['{{ lat }}','{{ lon }}'], 10); 
+            var map = L.map('map').setView(['{{ lat }}', '{{ lon }}'], 10);
 
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '© OpenStreetMap contributors'
@@ -96,10 +93,10 @@
             });
 
             // Marker creation
-            function create_marker (feature, latlng) {
+            function create_marker(feature, latlng) {
                 var myIcon = redIcon;
                 var marker = L.marker(latlng, { icon: myIcon });
-                console.log("Create marker for "+feature.properties.address)
+                console.log("Create marker for " + feature.properties.address)
                 address_to_marker[feature.properties.address] = marker;
                 return marker;
             }
@@ -109,20 +106,16 @@
                 "opacity": 0.5
             }
 
-            //Show location of the source
-            var source = L.marker(['{{ lat }}','{{ lon }}'], {icon: redIcon}).addTo(map);
-            source.bindPopup('<b>' + '{{ content }}' + '</b><br>' + '{{ address }}').openPopup();
-
             //Define popups
             function onEachFeature(feature, layer) {
                 if (feature.properties && feature.properties.name && feature.properties.address) {
                     layer.bindPopup('<b>' + feature.properties.name + '</b><br>' + feature.properties.address);
                 }
             }
-            
+
             // Add contractor locations (database)
-            in_gjson = L.geoJSON(in_range_gjson, {onEachFeature: onEachFeature, pointToLayer: create_marker});
-            out_gjson = L.geoJSON(out_range_gjson, {onEachFeature: onEachFeature, pointToLayer: create_marker});
+            in_gjson = L.geoJSON(in_range_gjson, { onEachFeature: onEachFeature, pointToLayer: create_marker });
+            out_gjson = L.geoJSON(out_range_gjson, { onEachFeature: onEachFeature, pointToLayer: create_marker });
             in_gjson.addTo(map);
 
 
@@ -131,30 +124,30 @@
             L.control.scale().addTo(map);
             map.flyToBounds(in_gjson.getBounds().pad(0.01));
 
-            var mapFit = function() {
+            var mapFit = function () {
                 console.log("Fly to bounds")
             }
 
             // Show / hide suboptimal contractors (in list and map)
             const selectAll = document.getElementById('selectAll');
-            var mapFit = selectAll.addEventListener("change", function(){
+            var mapFit = selectAll.addEventListener("change", function () {
                 if (this.checked) {
                     out_gjson.addTo(map)
                     combinedBounds = in_gjson.getBounds().pad(padding).extend(out_gjson.getBounds().pad(padding));
                     map.flyToBounds(combinedBounds);
-                    hidden_elements.forEach(element => {element.style.display ='block'})
+                    hidden_elements.forEach(element => { element.style.display = 'block' })
                 }
                 else {
                     map.removeLayer(out_gjson);
                     combinedBounds = in_gjson.getBounds().pad(padding).extend(in_gjson.getBounds().pad(padding));
                     map.flyToBounds(combinedBounds);
-                    hidden_elements.forEach(element => {element.style.display ='none'})
+                    hidden_elements.forEach(element => { element.style.display = 'none' })
                 }
             });
 
             //====================================================== Create elements on the list
-            function addElement(feature, hide){
-                console.log("Create list element "+feature.properties.address)
+            function addElement(feature, hide) {
+                console.log("Create list element " + feature.properties.address)
 
                 var listElement = document.createElement('button');
                 listElement.id = feature.properties.address
@@ -177,9 +170,9 @@
                     hidden_elements.push(listElement);
                 }
 
-                listElement.addEventListener('click', function() {
+                listElement.addEventListener('click', function () {
                     var info = listElement.querySelector('div');
-                    info.addEventListener('click', () => {event.stopPropagation();});
+                    info.addEventListener('click', () => { event.stopPropagation(); });
                     var id = event.target.id
                     map.flyTo(listElement_to_coord[id], 9);
                     address_to_marker[id].openPopup();
