@@ -1,12 +1,12 @@
 <!-- This view is divided into two vertical blocks -->
-<div class="card">
+<div class="card" style="height: 80vh;">
     <!-- style="  display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;"-->
     <!-- Block1: list view -->
     <div>
         <input type="checkbox" id="selectAll">
         <label for="selectAll">Näytä kaikki</label>
     </div>
-    <div style="background-color: #f1f1f1; padding: 10px; font-size: 18px; height: 80vh; width: 60vh; float: left;">
+    <div style="background-color: #f1f1f1; padding: 10px; font-size: 18px;  width: 60vh; float: left;">
 
         <div id="list_div" style="overflow: auto;border: 1px solid #ccc; overflow-y: scroll; height: 800px;">
         </div>
@@ -171,9 +171,15 @@
                 }
 
                 listElement.addEventListener('click', function () {
-                    var info = listElement.querySelector('div');
-                    info.addEventListener('click', () => { event.stopPropagation(); });
-                    var id = event.target.id
+
+                    if (event.target.tagName === 'BUTTON') {
+                        var button = event.target;
+                    } else {
+                        var button = event.target.closest('button');
+                    }
+                    var info = button.querySelector('div');
+                    //info.addEventListener('click', () => { event.stopPropagation(); });
+                    var id = button.id;
                     map.flyTo(listElement_to_coord[id], 9);
                     address_to_marker[id].openPopup();
                     if (info.style.display === 'none') {
@@ -182,7 +188,7 @@
                             last_open.style.display = 'none'
                         }
                         last_open = info;
-                        listElement.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                        listElement.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
                     } else {
                         info.style.display = 'none';
                         last_open = null;
