@@ -2,15 +2,13 @@
 <div class="card">
     <!-- style="  display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;"-->
     <!-- Block1: list view -->
-    <div style="background-color: #f1f1f1; padding: 20px; font-size: 18px; height: 80vh; width: 60vh; float: left;">
+    <div>
+        <input type="checkbox" id="selectAll">
+        <label for="selectAll">Näytä kaikki</label>
+    </div>
+    <div style="background-color: #f1f1f1; padding: 10px; font-size: 18px; height: 80vh; width: 60vh; float: left;">
 
-        <div>
-            <h2 style="align-self: center;">Suositellut kuljetuspalvelut</h2>
-            <input type="checkbox" id="selectAll">
-            <label for="selectAll">Näytä kaikki</label>
-        </div>
-
-        <div id="list_div" style="overflow: auto;border: 1px solid #ccc; overflow-y: scroll; height: 80%;">
+        <div id="list_div" style="overflow: auto;border: 1px solid #ccc; overflow-y: scroll; height: 800px;">
         </div>
 
     </div>
