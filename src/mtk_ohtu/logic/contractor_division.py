@@ -1,6 +1,7 @@
 import math
 from geojson import Point, Feature, FeatureCollection
 from ..database.db_contractors import db_get_logistics
+from ..database.db_cargo import db_get_location_cargo_capabilities
 from ..config import DATABASE_POOL
 
 
@@ -75,6 +76,19 @@ class ContractorDivision:
         collection = self.to_featurecollection(self.suboptimal)
         return collection
 
+    def filter_by_cargo_capasity(self, cargo_capacity: int):
+        """
+        Filters contractors by given cargo capacity.
+        Args:
+            cargo_capacity: int
+        """
+        self.optimal = list(
+            filter(lambda x: x.cargo_capacity >= cargo_capacity, self.optimal)
+        )
+        self.suboptimal = list(
+            filter(lambda x: x.cargo_capacity >= cargo_capacity, self.suboptimal)
+        )
+    
     def to_featurecollection(self, contractor_list: list):
         """
         Create a feature collection from a list of LogisticsNodes
