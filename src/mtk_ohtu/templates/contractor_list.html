@@ -83,20 +83,35 @@
                 map.fitBounds(bounds);
             }
 
-            var redIcon = new L.Icon({
-                iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
-                shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-                iconSize: [25, 41],
-                iconAnchor: [12, 41],
+            var okTruck = new L.Icon({
+                iconUrl: '/static/images/ok_truck.png',
+                shadowUrl: '/static/images/point.png',
+                iconSize: [25, 25],
+                iconAnchor: [8,25],
                 popupAnchor: [1, -34],
-                shadowSize: [41, 41]
+                shadowSize: [10, 10],
+                shadowAnchor: [0,0]
+            });
+
+            var badTruck = new L.Icon({
+                iconUrl: '/static/images/bad_truck.png',
+                shadowUrl: '/static/images/point.png',
+                iconSize: [25, 25],
+                iconAnchor: [8,25],
+                popupAnchor: [1, -34],
+                shadowSize: [10, 10],
+                shadowAnchor: [0,0]
             });
 
             // Marker creation
             function create_marker(feature, latlng) {
-                var myIcon = redIcon;
-                var marker = L.marker(latlng, { icon: myIcon });
-                console.log("Create marker for " + feature.properties.address)
+                var marker = L.marker(latlng, { icon: okTruck });
+                address_to_marker[feature.properties.address] = marker;
+                return marker;
+            }
+
+            function create_badmarker(feature, latlng) {
+                var marker = L.marker(latlng, { icon: badTruck });
                 address_to_marker[feature.properties.address] = marker;
                 return marker;
             }
@@ -115,7 +130,7 @@
 
             // Add contractor locations (database)
             in_gjson = L.geoJSON(in_range_gjson, { onEachFeature: onEachFeature, pointToLayer: create_marker });
-            out_gjson = L.geoJSON(out_range_gjson, { onEachFeature: onEachFeature, pointToLayer: create_marker });
+            out_gjson = L.geoJSON(out_range_gjson, { onEachFeature: onEachFeature, pointToLayer: create_badmarker });
             in_gjson.addTo(map);
 
 
