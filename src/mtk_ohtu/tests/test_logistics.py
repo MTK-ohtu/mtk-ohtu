@@ -67,6 +67,41 @@ class TestLogistics(unittest.TestCase):
         )
         self.assertFalse(result)
 
+    def test_contractor_locations_returns_correct_amount_of_locations(self):
+        result = l.contractor_locations(self.contractor_id)
+        self.assertEqual(len(result), 3)
+
+    def test_contractor_locations_returns_empty_list_if_none_exists(self):
+        contractor_id = 8
+        result = l.contractor_locations(contractor_id)
+        self.assertEqual(len(result), 0)
+
+    def test_cargo_capability_returns_correct_amount_of_capabilities(self):
+        result = l.cargo_capability(self.contractor_location_id)
+        self.assertEqual(len(result), 1)
+
+        contractor_location_id = 3
+        result = l.cargo_capability(contractor_location_id)
+        self.assertEqual(len(result), 3)
+
+    def test_cargo_capability_returns_empty_list_if_none_is_set(self):
+        # No cargo capabilities added to contractor_location_id 10 in test data
+        contractor_location_id = 10
+        result = l.cargo_capability(contractor_location_id)
+        self.assertEqual(len(result), 0)
+
+    def test_get_locations_and_cargo_capability_returns_correct_amount_of_locations_and_capabilities(self):
+        # 3 locations with 1, 2 and 3 capabilities
+        result = l.get_locations_and_cargo_capability(self.contractor_id)
+        self.assertEqual(len(result), 3)
+
+        loc1 = result[0][1]
+        loc2 = result[1][1]
+        loc3 = result[2][1]
+        self.assertEqual(len(loc1), 1)
+        self.assertEqual(len(loc2), 2)
+        self.assertEqual(len(loc3), 3)
+
     def tearDown(self):
         self.pool.close()
         db_m.db_drop_all(DATABASE_CONFIG)

@@ -33,7 +33,8 @@ VALUES
     (5, 'TestContractor5', NOW(), '1234567-E'), 
     (6, 'TestContractor6', NOW(), '1234567-F'), 
     (7, 'TestContractor7', NOW(), '1234567-G'), 
-    (8, 'TestContractor8', NOW(), '1234567-H')
+    (8, 'TestContractor8', NOW(), '1234567-H'),
+    (9, 'TestContractor8', NOW(), '1234567-I')
 ON CONFLICT DO NOTHING;
 
 INSERT INTO contractor_locations (contractor_id, address, telephone, email, longitude, latitude, delivery_radius)
@@ -47,7 +48,8 @@ VALUES
     (4, 'Talonpojankatu, 67100 Kokkola', '040-123456', 'testilocation@gmail.com', 23.15841, 63.83384, 550),
     (5, 'Karjakatu, 90130 Oulu', '040-123456', 'testilocation@gmail.com', 25.48896, 65.0073, 400),
     (6, 'Ranniotie, 99600 Sodankylä', '040-123456', 'testilocation@gmail.com', 26.5722, 67.4292, 600),
-    (7, 'Launeenkatu, 15610 Lahti', '040-123456', 'testilocation@gmail.com', 25.65424, 60.96962, 200)
+    (7, 'Launeenkatu, 15610 Lahti', '040-123456', 'testilocation@gmail.com', 25.65424, 60.96962, 200),
+    (9, 'Mantokoskentie, 99980 Utsjoki', '040-123456', 'testilocation@gmail.com', 27.00864, 69.87624, 300)
 ON CONFLICT DO NOTHING;
 
 INSERT INTO cargo_capabilities (contractor_location_id, type, price_per_km, base_rate, max_capacity, max_distance)

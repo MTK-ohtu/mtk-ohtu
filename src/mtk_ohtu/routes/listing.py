@@ -13,7 +13,6 @@ from ..database.db_datastructs import Listing
 from ..logic.contractor_division import ContractorDivision
 from ..logic.logistics_info import get_logistics_providers, get_logistics_info
 
-
 listing_bp = Blueprint("listing_bp", __name__)
 
 
@@ -70,8 +69,7 @@ def listing(listing_id):
             out_range=contractors.get_suboptimal(),
             lat=db_listing.location.latitude,
             lon=db_listing.location.longitude,
-            content="KAMAA",
-            address="OSOITE"
+            logistics_info=(0, 0)
         )
 
     if request.method == "POST":

@@ -9,6 +9,9 @@ from ..config import DATABASE_POOL
 
 def register(username, password, email):
     hash_value = generate_password_hash(password)
+    
+    if mtk_ohtu.database.db_users.db_get_user(username, DATABASE_POOL):
+        return False
 
     mtk_ohtu.database.db_users.db_add_user(username, hash_value, email, DATABASE_POOL)
 
