@@ -48,11 +48,11 @@ def test_api_invalid_address(client):
 def test_api_correct_response(client):
     with client:
         response = client.get("/api/logistics_info", json={
-            "listing": 9,
+            "listing": 3,
             "location": "Helsinki"
         })
 
         # These values need to be updated with the mock data
-        assert response.json["num_providers"] == 7
-        assert round(response.json["distance"], -1) == 60
-        assert response.json["link"] == "http://localhost/listing/9"
+        assert response.json["num_providers"] == 4
+        assert round(response.json["distance"], -1) == 530
+        assert response.json["link"] == "http://localhost/listing/3"

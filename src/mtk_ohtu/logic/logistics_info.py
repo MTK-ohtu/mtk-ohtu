@@ -80,7 +80,6 @@ def get_logistics_providers_by_cargo_capability(
     """
 
     accepted = []
-    print("LISTING:",listing)
 
     for node in nodes:
         cargo_capabilities = db_get_location_cargo_capabilities(node.id, DATABASE_POOL)
