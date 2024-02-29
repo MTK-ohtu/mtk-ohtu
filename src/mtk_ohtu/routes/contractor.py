@@ -2,7 +2,7 @@ import math
 from flask import Blueprint, render_template, request, redirect, url_for, abort, session
 from geojson import Point, Feature, FeatureCollection
 
-import mtk_ohtu.database.db_contractors
+from ..database import db_contractors
 from ..database.db_enums import CategoryType
 from ..config import DATABASE_POOL
 from ..logic import user as users
@@ -77,7 +77,7 @@ def get_contractors(x, y, r):
 def contractor():
     if request.method == "GET":
         user_id = users.user_id()
-        contractor_info = mtk_ohtu.database.db_contractors.db_get_contractor(user_id, DATABASE_POOL)
+        contractor_info = db_contractors.db_get_contractor(user_id, DATABASE_POOL)
         if not contractor_info:
             return redirect("/addlogistics")
 

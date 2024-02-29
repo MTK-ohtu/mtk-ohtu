@@ -79,7 +79,7 @@ def db_get_contractor_locations(
     out = []
     with pool.connection() as connection:
         cursor = connection.execute(
-            "SELECT * FROM contractor_locations WHERE contractor_id=%s",
+            "SELECT * FROM contractor_locations WHERE contractor_id=%s;",
             (contractor_id,),
         )
         out = [
@@ -124,7 +124,7 @@ def db_get_logistics(pool: ConnectionPool) -> list[LogisticsNode]:
     with pool.connection() as connection:
         cursor = connection.cursor()
         cursor.execute(
-            "SELECT * FROM contractor_locations AS c LEFT JOIN contractors AS s ON c.contractor_id=s.id"
+            "SELECT * FROM contractor_locations AS c LEFT JOIN contractors AS s ON c.contractor_id=s.id;"
         )
         out = [
             LogisticsNode(x[0], x[1], x[2], x[10], Location((x[5], x[6])), x[7])

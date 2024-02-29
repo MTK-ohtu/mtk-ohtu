@@ -13,7 +13,6 @@ from ..database.db_datastructs import Listing
 from ..logic.contractor_division import ContractorDivision
 from ..logic.logistics_info import get_logistics_providers, get_logistics_info
 
-
 listing_bp = Blueprint("listing_bp", __name__)
 
 

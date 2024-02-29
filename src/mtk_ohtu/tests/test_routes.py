@@ -75,7 +75,7 @@ def test_contractor_listing(client):
         client.post("/login", data={
             "username": "testikayttaja1",
             "password": "testpassword"})
-
+        
         response = client.get("/contractor")
         assert b"Urpunistintie 8" in response.data
         assert b"500" in response.data
