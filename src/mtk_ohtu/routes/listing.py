@@ -5,7 +5,7 @@ from ..database import db_contractors as db
 from ..database import db_cargo as cargo_db
 from ..logic import route_calculator
 from ..logic import session_handler
-from ..logic import route_stats
+from ..logic.route_stats import Emissions
 from flask import Blueprint, render_template, request, redirect
 from ..config import DATABASE_POOL
 from ..logic.location import Location
@@ -81,9 +81,9 @@ def listing(listing_id):
         session_handler.save_route_to_session(route_to_product)
         fuel = request.form["fuelType"]
         fuel_consumption = request.form["fuel_efficiency"]
-        emissions = route_stats.calculate_emissions(
-            fuel, route_to_product.distance, fuel_consumption
-        )
+        emission_info = Emissions(fuel, route_to_product.distance, fuel_consumption)
+        emissions = emission_info.calculate_emissions()
+        emission_comparison = emission_info.get_emissions_for_all_fuels()
         logistics_nodes = db.db_get_logistics(DATABASE_POOL)
         
         logistics_info = get_logistics_info(listing, user_location)
@@ -102,7 +102,8 @@ def listing(listing_id):
             ),
             route_geojson=route_to_product.geojson,
             user_location=user_location.location,
-            emissions=round(emissions),
+            emissions=emissions,
+            emission_comparison=emission_comparison,
             companies=logistics_nodes,
             consumption=fuel_consumption,
             show_route=True,

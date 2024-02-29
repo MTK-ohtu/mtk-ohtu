@@ -59,6 +59,13 @@
     <p>Distance: {{distance}} km</p>
     <p>Duration: {{duration}}</p>
     <p>CO2 emissions: {{emissions}} kg</p>
+    <table>
+        {% for emission in emission_comparison %}
+        <tr>
+            <td>{{emission}}</td>
+            <td>{{emission_comparison[emission]}} kg</td>
+            {% endfor %}
+    </table>
 </div>
 
 
