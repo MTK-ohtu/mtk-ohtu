@@ -21,7 +21,7 @@ class TestLogistics(unittest.TestCase):
         self.email = "rekka@gmail.com"
         self.phone = "040-1234567"
         self.radius = 200
-        self.categories = ["Manure"]
+        self.categories = ["Dry manure"]
         self.base_rates = ["200"]
         self.prices_per_hour = ["15"]
         self.max_capacities = ["50"]
