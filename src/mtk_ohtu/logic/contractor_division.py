@@ -1,7 +1,8 @@
 import math
 from geojson import Point, Feature, FeatureCollection
 from ..database.db_contractors import db_get_logistics
-from ..database.db_cargo import db_get_location_cargo_capabilities
+from ..database.db_cargo import db_get_locations_by_cargo_type
+from ..database.db_enums import CategoryType
 from ..config import DATABASE_POOL
 
 
@@ -15,14 +16,17 @@ class ContractorDivision:
         source_lat, source_lon:
     """
 
-    def __init__(self):
+    def __init__(self, lat:float, lon:float, cargo_capasity:int = 1e10):
+        self.lat = lat
+        self.lon = lon
+        self.cargo_capasity = cargo_capasity
         self.contractors = db_get_logistics(DATABASE_POOL)
         self.optimal = None
         self.suboptimal = None
 
-    def split_by_range(self, source_lat: float, source_lon: float):
+    def split_by_range(self):
         """
-        Splits all contractors into 'optimal'/'suboptimal' lists by given
+        Splits all contractors into 'optimal'/'suboptimal' lists by r between customer/contractor
         Args:
             latitude: float
             longitude: float
@@ -31,8 +35,8 @@ class ContractorDivision:
             filter(
                 lambda x: (
                     self.haversine(
-                        source_lat,
-                        source_lon,
+                        self.lat,
+                        self.lon,
                         x.location.latitude,
                         x.location.longitude,
                     )
@@ -45,8 +49,8 @@ class ContractorDivision:
             filter(
                 lambda x: (
                     self.haversine(
-                        source_lat,
-                        source_lon,
+                        self.lat,
+                        self.lon,
                         x.location.latitude,
                         x.location.longitude,
                     )
@@ -63,8 +67,9 @@ class ContractorDivision:
         """
         if self.optimal is None:
             return self.to_featurecollection(self.contractors)
-        collection = self.to_featurecollection(self.optimal)
-        return collection
+        return self.to_featurecollection(self.optimal)
+        
+    
 
     def get_suboptimal(self):
         """
@@ -73,8 +78,9 @@ class ContractorDivision:
         """
         if self.suboptimal is None:
             return self.to_featurecollection(self.contractors)
-        collection = self.to_featurecollection(self.suboptimal)
-        return collection
+        return self.to_featurecollection(self.suboptimal)
+        
+    
 
     def filter_by_cargo_capasity(self, cargo_capacity: int):
         """
@@ -82,13 +88,26 @@ class ContractorDivision:
         Args:
             cargo_capacity: int
         """
+        self.cargo_capasity = cargo_capacity
         self.optimal = list(
             filter(lambda x: x.cargo_capacity >= cargo_capacity, self.optimal)
         )
         self.suboptimal = list(
             filter(lambda x: x.cargo_capacity >= cargo_capacity, self.suboptimal)
         )
-    
+
+
+    def filter_by_cargo_type(self, type: CategoryType):
+        """
+        Filters contractors by given cargo type
+        Ars:
+            type: CategoryType
+        """
+        self.contractors = db_get_locations_by_cargo_type(type, DATABASE_POOL)
+        self.split_by_range
+
+
+
     def to_featurecollection(self, contractor_list: list):
         """
         Create a feature collection from a list of LogisticsNodes
@@ -109,6 +128,7 @@ class ContractorDivision:
 
         return collection
 
+
     def haversine(self, lat1, lon1, lat2, lon2):
         """
         Calculate great-circle distances
@@ -123,3 +143,7 @@ class ContractorDivision:
         rad = 6371
         c = 2 * math.asin(math.sqrt(a))
         return float(rad * c)
+    
+
+    
+
