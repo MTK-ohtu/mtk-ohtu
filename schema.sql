@@ -90,7 +90,8 @@ CREATE TABLE IF NOT EXISTS contractor_locations (
     email TEXT,
     longitude FLOAT,
     latitude FLOAT,
-    delivery_radius INTEGER NOT NULL
+    delivery_radius INTEGER NOT NULL,
+    description TEXT
 );
 
 CREATE TABLE IF NOT EXISTS cargo_capabilities (
@@ -100,5 +101,8 @@ CREATE TABLE IF NOT EXISTS cargo_capabilities (
     price_per_km INTEGER NOT NULL,
     base_rate INTEGER,
     max_capacity INTEGER,
-    max_distance INTEGER
+    max_distance INTEGER,
+    unit batch_units_type,
+    can_process BOOLEAN DEFAULT False,
+    description TEXT
 );
