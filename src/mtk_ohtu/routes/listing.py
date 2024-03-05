@@ -93,12 +93,8 @@ def listing(listing_id):
             user_location=user_location.location,
             emissions=emissions,
             emission_comparison=emission_comparison,
-            companies=logistics_nodes,
             consumption=fuel_consumption,
             show_route=True,
             in_range=contractors.get_optimal(),
             out_range=contractors.get_suboptimal(),
-            lat=listing.location.latitude,
-            lon=listing.location.longitude,
-            logistics_info=logistics_info
         )
