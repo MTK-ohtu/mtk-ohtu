@@ -47,10 +47,13 @@ def add_logistics():
         base_rates = request.form.getlist("base_rates[]")
         prices_per_hour = request.form.getlist("prices_per_hour[]")
         maximum_capacities = request.form.getlist("max_capacities[]")
-        maximum_distances = request.form.getlist("max_distances[]")
+        material_radius = request.form.getlist("radius[]")
+        print(categories)
+        print(base_rates)
+        print(material_radius)
 
         contractor_location_id = logistics.add_contractor_location(contractor_id, address, postcode, city, telephone, email, radius)
-        logistics.add_cargo_capability(contractor_location_id, categories, base_rates, prices_per_hour, maximum_capacities, maximum_distances)
+        logistics.add_cargo_capability(contractor_location_id, categories, base_rates, prices_per_hour, maximum_capacities)
 
         session["contractor_id"] = contractor_id
         return redirect(
