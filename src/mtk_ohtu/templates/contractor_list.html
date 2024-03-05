@@ -1,24 +1,13 @@
 <!-- This view is divided into two vertical blocks -->
-<div class="card" style="height: 80vh;">
-    <!-- style="  display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;"-->
-    <!-- Block1: list view -->
-    <div style="display: flex;">
-        <div style="display: flex; align-items: center;">
-            <input type="checkbox" id="selectAll">
-            <label for="selectAll">Näytä kaikki</label>
-        </div>
-        <div style="display: flex; align-items: center; margin-left: auto;">
-            <span>Shown companies:</span><p id="company_count">100</p>
-        </div>
-    </div>
-    <div style="background-color: #f1f1f1; padding: 10px; font-size: 18px;  width: 60vh; float: left;">
+<div style="height: 70vh;">
 
+    <!-- Block 1: List for contractor cards-->
+    <div style="background-color: #f1f1f1; padding: 10px; font-size: 18px;  width: 60vh; float: left;">
         <div id="list_div" style="overflow: auto;border: 1px solid #ccc; overflow-y: scroll; height: 800px;">
         </div>
-
     </div>
 
-    <!-- Block 2: map -->
+    <!-- Block 2: Map -->
     <div name="map_div" style="background-color: #f1f1f1; padding: 20px; font-size: 18px;">
         <div>
             <!-- Include Leaflet JavaScript and CSS -->

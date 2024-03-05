@@ -30,15 +30,91 @@ body {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    align-items: flex-start;
-    width: 80%;
-    margin: 0 auto;
+    align-items: left;
 }
 
 .horizontal-container > div {
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center;
+    display: flex;
+    flex-direction: column;
+    align-items: left;
     flex: 1;
-    margin: 0 10px; /* Lisää sopiva väli elementtien välille */
+    margin: 0 15px;
 }
+
+.stylish-input {
+    width: 300px;
+    padding: 3px;
+    margin-right: 5px;
+    border: 4px solid #ccc; /* Rajaviiva harmaalla */
+    border-radius: 5px; /* Pyöristetty kulmat */
+    font-size: 18px; /* Fonttikoko */
+    color: #333; /* Tekstin väri */
+    background-color: #f9f9f9; /* Taustaväri */
+    transition: border-color 0.3s ease; /* Siirtymärajaviiva */
+    float: left;
+}
+
+.stylish-input:focus {
+    outline: none; /* Poista fokuskehys */
+    border-color: dodgerblue; /* Korosta rajaviiva fokusoidessa */
+}
+
+.search_button {
+    background-image: url('/static/images/search_icon.png');
+    background-size: contain;
+    height: 35px;
+    width: 35px;
+    border-radius: 25px;
+    border-width:3px;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 45px;
+    height: 23px;
+}
+  
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 34px;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 100%;
+    width: 50%;
+    background-color: white;
+    -webkit-transition: .2s;
+    transition: .2s;
+    border-radius: 50%;
+  }
+  
+  input:checked + .slider {
+    background-color: #00530f;
+  }
+  
+  input:focus + .slider {
+    box-shadow: 0 0 1px #ffffff;
+  }
+  
+  input:checked + .slider:before {
+    -webkit-transform: translateX(100%);
+    -ms-transform: translateX(100%);
+    transform: translateX(100%);
+  }

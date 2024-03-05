@@ -1,94 +1,116 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<div>
-    <form action="/listing/{{ listing.id }}" method="POST" class="horizontal-container">
+<form action="/listing/{{ listing.id }}" method="POST">
+    <div class="horizontal-container">
         <div>
-            <h4>Delivery address</h4>
-            <p>
-                <input type="text" name="address" minlength="1" maxlength="200">
-                <input type="submit" value="Calculate distance">
-            </p>
+            <div class="horizontal-container">
+                <div>
+                    <h3>{{listing.category.value}}</h3>
+                    <h4>{{listing.address}}</h4>
+                    <!-- ({{listing.location.longitude}}, {{listing.location.latitude}}) -->
+                </div>
+                <div style="align-self: bottom;">
+                    <h1>{{listing.price}} €</h1>
+                </div>
+            </div>
         </div>
         <div>
-            <h4>Fuel economy</h4>
-            <p>
-                <label for="fuelType">Fuel:</label>
-                <select id="fuelType" name="fuelType">
-                    <option value="diesel">Diesel</option>
-                    <option value="petrol">Petrol</option>
-                    <option value="biodiesel">Biodiesel</option>
-                    <option value="natural_gas">Natural Gas</option>
-                    <option value="bio_gas">Bio Gas</option>
-                    <option value="electricity">Electricity</option>
-                </select>
-            </p>
-            <p>
-                <label for="fuel_efficiency">Fuel efficiency:</label>
-                <input type="number" name="fuel_efficiency" step="0.1" min="0" max="200" value={{consumption}}>
-                <span id="unit">l/100 km</span>
-                <input type="hidden" name="listing_id" value="{{ listing.id }}">
-            </p>
+            <h3>Description:</h3>
+            <h4>{{listing.description}}</h4>
+        </div>
+        <div>
+            <h2>Fuel economy</h2>
+            <div>
+                <p>
+                    <label for="fuelType">Fuel:</label>
+                    <select id="fuelType" name="fuelType">
+                        <option value="diesel">Diesel</option>
+                        <option value="petrol">Petrol</option>
+                        <option value="biodiesel">Biodiesel</option>
+                        <option value="natural_gas">Natural Gas</option>
+                        <option value="bio_gas">Bio Gas</option>
+                        <option value="electricity">Electricity</option>
+                    </select>
+                </p>
+                <p>
+                    <label for="fuel_efficiency">Fuel efficiency:</label>
+                    <input type="number" name="fuel_efficiency" step="0.1" min="0" max="200" value={{consumption}}>
+                    <span id="unit">l/100 km</span>
+                    <input type="hidden" name="listing_id" value="{{ listing.id }}">
+                </p>
+            </div>
         </div>
         <!-- <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}"> -->
-    </form>
-</div>
-<div class="horizontal-container">
-    <div>
-        <h2>{{listing.category.value}}</h2>
-        <p>{{listing.address}} ({{listing.location.longitude}}, {{listing.location.latitude}})</p>
     </div>
-    <div>
-        <p>{{listing.description}}</p>
+
+
+    <script>
+        // Change fuel efficiency unit based on fuel type
+        document.getElementById('fuelType').addEventListener('change', function () {
+            var fuelType = this.value;
+            var unitDisplay = document.getElementById('unit');
+
+            if (fuelType === 'petrol' || fuelType === 'diesel' || fuelType === 'biodiesel') {
+                unitDisplay.textContent = 'l/100 km';
+            } else if (fuelType === 'natural_gas' || fuelType === 'bio_gas') {
+                unitDisplay.textContent = 'kg/100 km';
+            } else if (fuelType === 'electricity') {
+                unitDisplay.textContent = 'kWh/100 km';
+            }
+        });
+    </script>
+
+
+    {% if show_route %}
+    <div class="horizontal-container">
+        <div><h3>Route to {{user_location}}</h3></div>
+        <div>
+            <p>Distance: {{distance}} km</p>
+            <p>Duration: {{duration}}</p>
+            <p>CO2 emissions: {{emissions}} kg</p>
+        </div>
+        <div>
+            <table>
+                {% for emission in emission_comparison %}
+                <tr>
+                    <td>{{emission}}</td>
+                    <td>{{emission_comparison[emission]}} kg</td>
+                    {% endfor %}
+            </table>
+        </div>
     </div>
-    <div>
-        <p>{{listing.price}} €</p>
-    </div>    
-</div>
+    {% endif %}
 
-<script>
-    // Change fuel efficiency unit based on fuel type
-    document.getElementById('fuelType').addEventListener('change', function () {
-        var fuelType = this.value;
-        var unitDisplay = document.getElementById('unit');
-
-        if (fuelType === 'petrol' || fuelType === 'diesel' || fuelType === 'biodiesel') {
-            unitDisplay.textContent = 'l/100 km';
-        } else if (fuelType === 'natural_gas' || fuelType === 'bio_gas') {
-            unitDisplay.textContent = 'kg/100 km';
-        } else if (fuelType === 'electricity') {
-            unitDisplay.textContent = 'kWh/100 km';
-        }
-    });
-</script>
-
-
-{% if show_route %}
-<div class="horizontal-container">
-    <div><h3>Route to {{user_location}}</h3></div>
-    <div>
-        <p>Distance: {{distance}} km</p>
-        <p>Duration: {{duration}}</p>
-        <p>CO2 emissions: {{emissions}} kg</p>
+    <div style="display: flex; align-items: center; justify-content: space-between;">
+        <!--Number of shown companies-->
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+            <h2 style="margin-right:15px">Companies:</h2>
+            <h2 id="company_count">100</h2>
+        </div>
+        <!--Input destination-->
+        
+            <div style="width:50%; display: flex; align-items: center;">
+                <h2 style="margin-right: 10px;">Delivery address</h2>
+                <div>
+                    <input class="stylish-input" type="text" name="address" minlength="1" maxlength="200">
+                    <button type="submit" class="search_button"></button>
+                </div>            
+            </div>
+        </form>
+        <!--Select all slider-->    
+        <div style="display: flex; align-items: center;">
+            <label class="switch">
+                <input type="checkbox" id="selectAll">
+                <span class="slider"></span>
+            </label>
+            <label for="selectAll" style="margin-left: 10px;">Näytä kaikki</label>
+        </div>
     </div>
+
+    <!--we need to list here the delivery companies-->
     <div>
-        <table>
-            {% for emission in emission_comparison %}
-            <tr>
-                <td>{{emission}}</td>
-                <td>{{emission_comparison[emission]}} kg</td>
-                {% endfor %}
-        </table>
+        {% include "contractor_list.html" %}
     </div>
-</div>
-
-
-{% endif %}
-
-
-<!--we need to list here the delivery companies-->
-<div>
-    {% include "contractor_list.html" %}
-</div>
-
+</form>
 {% endblock %}
