@@ -1,6 +1,6 @@
 import psycopg
 from psycopg_pool import ConnectionPool
-from mtk_ohtu.database.db_datastructs import LogisticsContractor, LogisticsNode
+from mtk_ohtu.database.db_datastructs import LogisticsContractor, LogisticsNode, CategoryType
 from mtk_ohtu.logic.location import Location
 
 
@@ -132,4 +132,35 @@ def db_get_logistics(pool: ConnectionPool) -> list[LogisticsNode]:
         ]
     if not out:
         return None
+    return out
+
+
+def db_get_locations_by_cargo_type(
+        type: CategoryType, pool: ConnectionPool
+) -> list[LogisticsNode]:
+    """
+    Query all contractor locations capable of shipping given cargo type
+    Args:
+        type: type of cargo (enum CategoryType)
+        pool: database connection
+    """
+    out = []
+    with pool.connection() as connection:
+        cursor = connection.cursor()
+        query = """
+                SELECT l.id, l.contractor_id, l.address, con.name, l.longitude, l.latitude, l.delivery_radius
+                FROM contractor_locations AS l 
+                LEFT JOIN cargo_capabilities AS c 
+                    ON l.id=c.contractor_location_id 
+                LEFT JOIN contractors AS con ON l.contractor_id=con.id 
+                WHERE c.type='%s';""" % (type.value,)
+        print(query)
+        cursor.execute(query)
+        lista = cursor.fetchall()
+        for k in lista:
+             print(k)
+        out = [LogisticsNode(x[0], x[1], x[2], x[3], Location((x[4], x[5])), x[6])
+            for x in lista]
+    if not out:
+        return []
     return out

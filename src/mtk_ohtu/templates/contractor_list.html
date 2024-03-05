@@ -2,9 +2,14 @@
 <div class="card" style="height: 80vh;">
     <!-- style="  display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;"-->
     <!-- Block1: list view -->
-    <div>
-        <input type="checkbox" id="selectAll">
-        <label for="selectAll">Näytä kaikki</label>
+    <div style="display: flex;">
+        <div style="display: flex; align-items: center;">
+            <input type="checkbox" id="selectAll">
+            <label for="selectAll">Näytä kaikki</label>
+        </div>
+        <div style="display: flex; align-items: center; margin-left: auto;">
+            <span>Shown companies:</span><p id="company_count">100</p>
+        </div>
     </div>
     <div style="background-color: #f1f1f1; padding: 10px; font-size: 18px;  width: 60vh; float: left;">
 
@@ -33,10 +38,11 @@
                 filter: hue-rotate(120deg);
             }
         </style>
+
         <!-- Leaflet + code -->
         <script>
 
-            var padding = 0.02;
+            var padding = 0.1;
             var hidden_elements = [];
             var in_range_gjson = JSON.parse('{{ in_range | tojson | safe }}');
             var out_range_gjson = JSON.parse('{{ out_range | tojson | safe }}');
@@ -44,46 +50,11 @@
             var listElement_to_coord = {};
             var marker_to_listElement = {};
             var last_open = null;
+            var default_bounds = [[40.712, -74.227],[40.774, -74.125]]
+            const companyCount = document.getElementById("company_count")
 
-
-            // Set coordinates to match viewers'
-            var map = L.map('map').setView(['{{ lat }}', '{{ lon }}'], 10);
-
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap contributors'
-            }).addTo(map);
-
-            // Add tiles
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap contributors'
-            }).addTo(map);
-
-            var product = L.marker(['{{listing.location.latitude}}', '{{listing.location.longitude}}']).addTo(map);
-            product._icon.classList.add('huechange1');
-            product.bindPopup("{{listing.category.value}}\n{{listing.address}}");
-
-            if ('{{show_route}}') {
-
-                var route_geojson = JSON.parse('{{ route_geojson }}'.replaceAll('&#34;', '"'));
-                console.log(route_geojson);
-
-                // Adds geojson route to map
-                L.geoJSON(route_geojson).addTo(map);
-                var destination = route_geojson["features"][0]["geometry"]["coordinates"].pop().reverse();
-
-                var destinationMarker = L.marker(destination).addTo(map);
-                destinationMarker._icon.classList.add('huechange2');
-                destinationMarker.bindPopup("Destination");
-
-                var bbox = route_geojson["features"][0]["bbox"];
-                var southWest = L.latLng(bbox[1], bbox[0]),
-                    northEast = L.latLng(bbox[3], bbox[2]),
-                    bounds = L.latLngBounds(southWest, northEast);
-
-                map.fitBounds(bounds);
-            }
-
-            var okTruck = new L.Icon({
+            // Icons
+            var greenTruck = new L.Icon({
                 iconUrl: '/static/images/ok_truck.png',
                 shadowUrl: '/static/images/point.png',
                 iconSize: [25, 25],
@@ -93,7 +64,7 @@
                 shadowAnchor: [0,0]
             });
 
-            var badTruck = new L.Icon({
+            var greyTruck = new L.Icon({
                 iconUrl: '/static/images/bad_truck.png',
                 shadowUrl: '/static/images/point.png',
                 iconSize: [25, 25],
@@ -103,116 +74,145 @@
                 shadowAnchor: [0,0]
             });
 
-            // Marker creation
+            // Create map
+            var map = L.map('map').setView(['{{ listing.location.latitude }}', '{{ listing.location.longitude }}'], 10);
+
+            // Add tiles
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+
+            // Add marker to product location
+            var product = L.marker(['{{ listing.location.latitude }}', '{{ listing.location.longitude }}']).addTo(map);
+            product._icon.classList.add('huechange1');
+            product.bindPopup("{{ listing.category.value }}\n{{ listing.address }}");
+
+            // Add scale
+            L.control.scale().addTo(map);
+
+            // Visual representation of the route
+            if ('{{show_route}}') {
+                // Add route on map
+                var route_geojson = JSON.parse('{{ route_geojson }}'.replaceAll('&#34;', '"'));
+                L.geoJSON(route_geojson).addTo(map);
+                // Add destination on map                
+                var destination = route_geojson["features"][0]["geometry"]["coordinates"].pop().reverse();
+                var destinationMarker = L.marker(destination).addTo(map);
+                destinationMarker._icon.classList.add('huechange2');
+                destinationMarker.bindPopup("Destination");
+                // Calculate route bounds on map
+                var bbox = route_geojson["features"][0]["bbox"];
+                var southWest = L.latLng(bbox[1], bbox[0]),
+                    northEast = L.latLng(bbox[3], bbox[2]),
+                    route_bounds = L.latLngBounds(southWest, northEast);
+            }
+
+            // Marker creation for optimal contractors
             function create_marker(feature, latlng) {
-                var marker = L.marker(latlng, { icon: okTruck });
+                var marker = L.marker(latlng, { icon: greenTruck });
                 address_to_marker[feature.properties.address] = marker;
                 return marker;
             }
-
+            // Marker creation for suboptimal contractors
             function create_badmarker(feature, latlng) {
-                var marker = L.marker(latlng, { icon: badTruck });
+                var marker = L.marker(latlng, { icon: greyTruck });
                 address_to_marker[feature.properties.address] = marker;
                 return marker;
             }
-
-            var out_range_style = {
-                "color": "#ff7800",
-                "opacity": 0.5
-            }
-
-            //Define popups
+            //Define popups for contractor markers
             function onEachFeature(feature, layer) {
                 if (feature.properties && feature.properties.name && feature.properties.address) {
                     layer.bindPopup('<b>' + feature.properties.name + '</b><br>' + feature.properties.address);
                 }
             }
 
-            // Add contractor locations (database)
+            // Two sets of gjson for optimal and suboptimal. Set popups and icons.
             in_gjson = L.geoJSON(in_range_gjson, { onEachFeature: onEachFeature, pointToLayer: create_marker });
             out_gjson = L.geoJSON(out_range_gjson, { onEachFeature: onEachFeature, pointToLayer: create_badmarker });
-            in_gjson.addTo(map);
+            combined_bounds = L.latLngBounds(in_gjson, out_gjson);
 
-
-            // Initialize map view
-            var combinedBounds = in_gjson.getBounds().pad(padding);
-            L.control.scale().addTo(map);
-            map.flyToBounds(in_gjson.getBounds().pad(0.01));
-
-            var mapFit = function () {
-                console.log("Fly to bounds")
-            }
-
-            // Show / hide suboptimal contractors (in list and map)
+            // Checkbox 'Show all' functionality
             const selectAll = document.getElementById('selectAll');
             var mapFit = selectAll.addEventListener("change", function () {
                 if (this.checked) {
                     out_gjson.addTo(map)
-                    combinedBounds = in_gjson.getBounds().pad(padding).extend(out_gjson.getBounds().pad(padding));
-                    map.flyToBounds(combinedBounds);
+                    map.flyToBounds(route_bounds, combined_bounds);
                     hidden_elements.forEach(element => { element.style.display = 'block' })
+                    companyCount.textContent = in_range_gjson.features.length + out_range_gjson.features.length
                 }
                 else {
                     map.removeLayer(out_gjson);
-                    combinedBounds = in_gjson.getBounds().pad(padding).extend(in_gjson.getBounds().pad(padding));
-                    map.flyToBounds(combinedBounds);
+                    map.flyToBounds(in_gjson, route_bounds);
                     hidden_elements.forEach(element => { element.style.display = 'none' })
+                    companyCount.textContent = in_range_gjson.features.length
                 }
             });
 
-            //====================================================== Create elements on the list
+            // Create elements to show on the list side ====================================================================
             function addElement(feature, hide) {
-                console.log("Create list element " + feature.properties.address)
-
+                // Create new button as list element
                 var listElement = document.createElement('button');
                 listElement.id = feature.properties.address
                 listElement.classList.add('clickable_list_element')
                 listElement.innerHTML = '<strong>' + feature.properties.name + '</strong><br>' + feature.properties.address;
-
+                // Create inner HTML for the button
                 var info = document.createElement('div');
                 info.style.display = 'none';
                 info.classList.add('card');
                 info.innerHTML = '<div><br>Palveluinfo</br></div>'
-
                 listElement.appendChild(info)
                 document.getElementById('list_div').appendChild(listElement);
-
+                // Bind list element to corresponding marker on the map
                 listElement_to_coord[listElement.id] = [feature.geometry.coordinates[1], feature.geometry.coordinates[0]];
-
+                // Define style of list element if it's set out to be 'hidden'
                 if (hide) {
                     listElement.style.display = 'none';
                     listElement.style.backgroundColor = 'red';
                     hidden_elements.push(listElement);
                 }
-
+                // Functionality for clicking this list element
                 listElement.addEventListener('click', function () {
-
+                    // Make sure that target is the list element it self (button)
                     if (event.target.tagName === 'BUTTON') {
                         var button = event.target;
                     } else {
                         var button = event.target.closest('button');
                     }
+                    // Find the info HTML inside the button
                     var info = button.querySelector('div');
-                    //info.addEventListener('click', () => { event.stopPropagation(); });
-                    var id = button.id;
-                    map.flyTo(listElement_to_coord[id], 9);
-                    address_to_marker[id].openPopup();
+                    
+                    // By clicking the list element, switch between style 'block' (show) 'none' (hidden)
                     if (info.style.display === 'none') {
                         info.style.display = 'block';
                         if (last_open != null) {
+                            // Hide previosly opened list element
                             last_open.style.display = 'none'
                         }
                         last_open = info;
                         listElement.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+                        // By clicking the list element, map focuses on the corresponding marker...
+                        map.flyTo(listElement_to_coord[button.id],9);
+                        // ...and opens the popup
+                        address_to_marker[button.id].openPopup();
                     } else {
                         info.style.display = 'none';
                         last_open = null;
-                        map.flyToBounds(combinedBounds);
+                        map.flyToBounds(route_bounds, in_gjson);
                     }
                 });
-            }
+            } // ==============================================================================================
+
+            // Add list elements on the list side
             in_range_gjson.features.forEach(feature => addElement(feature, false));
             out_range_gjson.features.forEach(feature => addElement(feature, true));
+
+            // By default, show optimal contractors on map
+            in_gjson.addTo(map);
+
+            // Default setup 
+            companyCount.textContent = in_range_gjson.features.length
+            map.flyToBounds(route_bounds.extend(in_gjson.getBounds()));
+
         </script>
     </div>
 </div>

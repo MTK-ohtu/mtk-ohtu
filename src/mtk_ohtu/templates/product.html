@@ -2,38 +2,48 @@
 
 {% block content %}
 <div>
-    <form action="/listing/{{listing_id}}" method="POST">
-        <h4>Delivery address</h4>
-        <p>
-            <input type="text" name="address" minlength="1" maxlength="200">
-            <input type="submit" value="Calculate distance">
-        </p>
-        <h4>Fuel economy</h4>
-        <p>
-            <label for="fuelType">Fuel:</label>
-            <select id="fuelType" name="fuelType">
-                <option value="diesel">Diesel</option>
-                <option value="petrol">Petrol</option>
-                <option value="biodiesel">Biodiesel</option>
-                <option value="natural_gas">Natural Gas</option>
-                <option value="bio_gas">Bio Gas</option>
-                <option value="electricity">Electricity</option>
-            </select>
-        </p>
-        <p>
-            <label for="fuel_efficiency">Fuel efficiency:</label>
-            <input type="number" name="fuel_efficiency" step="0.1" min="0" max="200" value={{consumption}}>
-            <span id="unit">l/100 km</span>
-            <input type="hidden" name="listing_id" value="{{listing_id}}">
-        </p>
+    <form action="/listing/{{ listing.id }}" method="POST" class="horizontal-container">
+        <div>
+            <h4>Delivery address</h4>
+            <p>
+                <input type="text" name="address" minlength="1" maxlength="200">
+                <input type="submit" value="Calculate distance">
+            </p>
+        </div>
+        <div>
+            <h4>Fuel economy</h4>
+            <p>
+                <label for="fuelType">Fuel:</label>
+                <select id="fuelType" name="fuelType">
+                    <option value="diesel">Diesel</option>
+                    <option value="petrol">Petrol</option>
+                    <option value="biodiesel">Biodiesel</option>
+                    <option value="natural_gas">Natural Gas</option>
+                    <option value="bio_gas">Bio Gas</option>
+                    <option value="electricity">Electricity</option>
+                </select>
+            </p>
+            <p>
+                <label for="fuel_efficiency">Fuel efficiency:</label>
+                <input type="number" name="fuel_efficiency" step="0.1" min="0" max="200" value={{consumption}}>
+                <span id="unit">l/100 km</span>
+                <input type="hidden" name="listing_id" value="{{ listing.id }}">
+            </p>
+        </div>
         <!-- <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}"> -->
     </form>
 </div>
-<div>
-    <h2>{{listing.category.value}}</h2>
-    <p>{{listing.address}} ({{listing.location.longitude}}, {{listing.location.latitude}})</p>
-    <p>{{listing.description}}</p>
-    <p>{{listing.price}} €</p>
+<div class="horizontal-container">
+    <div>
+        <h2>{{listing.category.value}}</h2>
+        <p>{{listing.address}} ({{listing.location.longitude}}, {{listing.location.latitude}})</p>
+    </div>
+    <div>
+        <p>{{listing.description}}</p>
+    </div>
+    <div>
+        <p>{{listing.price}} €</p>
+    </div>    
 </div>
 
 <script>
@@ -54,18 +64,22 @@
 
 
 {% if show_route %}
-<div>
-    <h3>Route to {{user_location}}</h3>
-    <p>Distance: {{distance}} km</p>
-    <p>Duration: {{duration}}</p>
-    <p>CO2 emissions: {{emissions}} kg</p>
-    <table>
-        {% for emission in emission_comparison %}
-        <tr>
-            <td>{{emission}}</td>
-            <td>{{emission_comparison[emission]}} kg</td>
-            {% endfor %}
-    </table>
+<div class="horizontal-container">
+    <div><h3>Route to {{user_location}}</h3></div>
+    <div>
+        <p>Distance: {{distance}} km</p>
+        <p>Duration: {{duration}}</p>
+        <p>CO2 emissions: {{emissions}} kg</p>
+    </div>
+    <div>
+        <table>
+            {% for emission in emission_comparison %}
+            <tr>
+                <td>{{emission}}</td>
+                <td>{{emission_comparison[emission]}} kg</td>
+                {% endfor %}
+        </table>
+    </div>
 </div>
 
 
@@ -74,8 +88,6 @@
 
 <!--we need to list here the delivery companies-->
 <div>
-    <h2>Delivery companies</h2>
-    <p>Available companies: {{logistics_info[1]}}</p>
     {% include "contractor_list.html" %}
 </div>
 

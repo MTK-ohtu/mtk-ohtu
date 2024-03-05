@@ -92,7 +92,11 @@ def contractor():
 
 
 @contractor_bp.route("/list_contractors", methods=["GET"])
+
 def list_contractors():
+    """
+    Rendering template marked as 'test'
+    """
     # lon = request.args.get('lon')
     # lat = request.args.get('lat')
     # r = request.args.get('r')
@@ -101,7 +105,7 @@ def list_contractors():
     address, content = "Hirvijärvi, Juupajoki", "Hakkuujäte"
     lon, lat, r = 24.566428395979575, 61.8578385779706, 300
 
-    contractors = ContractorDivision()
+    contractors = ContractorDivision(lat, lon)
     contractors.split_by_range(lat, lon)
     return render_template(
         "contractor_list.html",

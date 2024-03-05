@@ -59,24 +59,3 @@ def db_get_location_cargo_capabilities(
     if not out:
         return []
     return [CargoTypeInfo(*x[1:]) for x in out]
-
-
-def db_get_locations_by_cargo_type(
-        type: CategoryType, pool: ConnectionPool
-) -> list[CargoTypeInfo]:
-    """
-    Query all contractor locations capable of shipping given cargo type
-    Args:
-        type: type of cargo (enum CategoryType)
-        pool: database connection
-    """
-    out = []
-    with pool.connection() as connection:
-        cursor = connection.cursor()
-        cursor.execute(
-            "SELECT * FROM contractor_locations AS l LEFT JOIN cargo_capabilities AS c ON l.id=c.contractor_location_id WHERE c.type='%s';", (type)
-        )
-        out = cursor.fetchall()
-    if not out:
-        return []
-    return [CargoTypeInfo()]

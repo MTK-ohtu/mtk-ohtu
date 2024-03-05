@@ -1,7 +1,7 @@
 import math
 from geojson import Point, Feature, FeatureCollection
 from ..database.db_contractors import db_get_logistics
-from ..database.db_cargo import db_get_locations_by_cargo_type
+from ..database.db_contractors import db_get_locations_by_cargo_type
 from ..database.db_enums import CategoryType
 from ..config import DATABASE_POOL
 
@@ -13,16 +13,19 @@ class ContractorDivision:
     Divides contractors into two lists: suiteable/ rest.
     Creates leaflet compatible featurecollections from these
     Args:
-        source_lat, source_lon:
+        lat: float
+        lon: float
+        cargo_capasity: int
     """
 
-    def __init__(self, lat:float, lon:float, cargo_capasity:int = 1e10):
+    def __init__(self, lat:float, lon:float, cargo_type:CategoryType ,cargo_capasity:int = 1e10):
         self.lat = lat
         self.lon = lon
         self.cargo_capasity = cargo_capasity
-        self.contractors = db_get_logistics(DATABASE_POOL)
+        self.contractors = db_get_locations_by_cargo_type(cargo_type, DATABASE_POOL)
         self.optimal = None
         self.suboptimal = None
+        self.split_by_range()
 
     def split_by_range(self):
         """
@@ -59,6 +62,12 @@ class ContractorDivision:
                 self.contractors,
             )
         )
+        print("OPTIMALS")
+        for c in self.optimal:
+            print(c)
+        print("SUBOPTIMALS")
+        for c in self.suboptimal:
+            print(c)
 
     def get_optimal(self):
         """
@@ -77,7 +86,7 @@ class ContractorDivision:
         Returns all if not splitted.
         """
         if self.suboptimal is None:
-            return self.to_featurecollection(self.contractors)
+            return []
         return self.to_featurecollection(self.suboptimal)
         
     
@@ -104,7 +113,10 @@ class ContractorDivision:
             type: CategoryType
         """
         self.contractors = db_get_locations_by_cargo_type(type, DATABASE_POOL)
-        self.split_by_range
+        
+        # for c in self.contractors:
+        #     print(c)
+        self.split_by_range()
 
 
 

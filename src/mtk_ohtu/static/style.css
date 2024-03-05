@@ -25,3 +25,20 @@ body {
     padding: 20px;
     margin-bottom: 10px;
 }
+
+.horizontal-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 80%;
+    margin: 0 auto;
+}
+
+.horizontal-container > div {
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+    flex: 1;
+    margin: 0 10px; /* Lisää sopiva väli elementtien välille */
+}
