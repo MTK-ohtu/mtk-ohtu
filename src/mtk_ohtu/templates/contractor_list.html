@@ -35,15 +35,18 @@
             var hidden_elements = [];
             var in_range_gjson = JSON.parse('{{ in_range | tojson | safe }}');
             var out_range_gjson = JSON.parse('{{ out_range | tojson | safe }}');
+
+            // Mappings
             var address_to_marker = {};
             var listElement_to_coord = {};
-            var marker_to_listElement = {};
+            var address_to_listElement = {};
+            
             var last_open = null;
-            var default_bounds = [[40.712, -74.227],[40.774, -74.125]]
             const companyCount = document.getElementById("company_count")
+            var combined_bounds = []
 
             // Icons
-            var greenTruck = new L.Icon({
+            var okTruck = new L.Icon({
                 iconUrl: '/static/images/ok_truck.png',
                 shadowUrl: '/static/images/point.png',
                 iconSize: [25, 25],
@@ -53,7 +56,7 @@
                 shadowAnchor: [0,0]
             });
 
-            var greyTruck = new L.Icon({
+            var badTruck = new L.Icon({
                 iconUrl: '/static/images/bad_truck.png',
                 shadowUrl: '/static/images/point.png',
                 iconSize: [25, 25],
@@ -79,6 +82,11 @@
             // Add scale
             L.control.scale().addTo(map);
 
+            // Read lat long from map
+            map.on('click', function(e){
+                console.log(e.latlng.lat, e.latlng.lng)
+            })
+
             // Visual representation of the route
             if ('{{show_route}}') {
                 // Add route on map
@@ -96,15 +104,49 @@
                     route_bounds = L.latLngBounds(southWest, northEast);
             }
 
+            // Toggle function for list elements
+            var toggleListElement = function(element) {
+                // Find the info HTML inside the button
+                var info = element.querySelector('div');
+                // By clicking the list element, set info style to switch between 'block' (visible) 'none' (hidden)
+                if (info.style.display === 'none') {
+                    element.classList.add('selected')
+                    info.style.display = 'block';
+                    if (last_open != null) {
+                        // Hide previosly opened list element
+                        last_info = last_open.querySelector('div')
+                        last_open.classList.remove('selected')
+                        last_info.style.display = 'none'
+                    }
+                    last_open = element;
+                    element.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+                    // By clicking the list element, map focuses on the corresponding coordinates (marker)...
+                    map.flyTo(listElement_to_coord[element.id],9);
+                } else {
+                    element.classList.remove('selected')
+                    info.style.display = 'none';
+                    last_open = null;
+                    map.flyToBounds(route_bounds, combined_bounds);
+                }
+            }
+
             // Marker creation for optimal contractors
             function create_marker(feature, latlng) {
-                var marker = L.marker(latlng, { icon: greenTruck });
+                var marker = L.marker(latlng, { icon: okTruck });
+                marker.on('click', function(e) {
+                    listElement = address_to_listElement[feature.properties.address]
+                    toggleListElement(listElement);
+                });
                 address_to_marker[feature.properties.address] = marker;
                 return marker;
             }
             // Marker creation for suboptimal contractors
             function create_badmarker(feature, latlng) {
-                var marker = L.marker(latlng, { icon: greyTruck });
+                var marker = L.marker(latlng, { icon: badTruck });
+                marker.on('click', function(e) {
+                    listElement = address_to_listElement[feature.properties.address]
+                    toggleListElement(listElement);
+                });
                 address_to_marker[feature.properties.address] = marker;
                 return marker;
             }
@@ -118,25 +160,27 @@
             // Two sets of gjson for optimal and suboptimal. Set popups and icons.
             in_gjson = L.geoJSON(in_range_gjson, { onEachFeature: onEachFeature, pointToLayer: create_marker });
             out_gjson = L.geoJSON(out_range_gjson, { onEachFeature: onEachFeature, pointToLayer: create_badmarker });
+
+            // Default bounds of contractors consists only coordinates of suitable contractors
             combined_bounds = L.latLngBounds(in_gjson, out_gjson);
 
             // Checkbox 'Show all' functionality
             const selectAll = document.getElementById('selectAll');
-            var mapFit = selectAll.addEventListener("change", function () {
+            selectAll.addEventListener("change", function () {
                 if (this.checked) {
-                    out_gjson.addTo(map)
-                    map.flyToBounds(route_bounds, combined_bounds);
+                    out_gjson.addTo(map);
                     hidden_elements.forEach(element => { element.style.display = 'block' })
                     companyCount.textContent = in_range_gjson.features.length + out_range_gjson.features.length
+                    map.flyToBounds(route_bounds, combined_bounds);
                 }
                 else {
                     map.removeLayer(out_gjson);
-                    map.flyToBounds(in_gjson, route_bounds);
-                    hidden_elements.forEach(element => { element.style.display = 'none' })
-                    companyCount.textContent = in_range_gjson.features.length
+                    hidden_elements.forEach(element => { element.style.display = 'none' });
+                    companyCount.textContent = in_range_gjson.features.length;
+                    map.flyToBounds(route_bounds, in_gjson);
                 }
             });
-
+            
             // Create elements to show on the list side ====================================================================
             function addElement(feature, hide) {
                 // Create new button as list element
@@ -147,12 +191,13 @@
                 // Create inner HTML for the button
                 var info = document.createElement('div');
                 info.style.display = 'none';
-                info.classList.add('card');
                 info.innerHTML = '<div><br>Palveluinfo</br></div>'
                 listElement.appendChild(info)
+                // Add element to list
                 document.getElementById('list_div').appendChild(listElement);
-                // Bind list element to corresponding marker on the map
+                // Add list element to mappings
                 listElement_to_coord[listElement.id] = [feature.geometry.coordinates[1], feature.geometry.coordinates[0]];
+                address_to_listElement[feature.properties.address] = listElement;
                 // Define style of list element if it's set out to be 'hidden'
                 if (hide) {
                     listElement.style.display = 'none';
@@ -161,33 +206,21 @@
                 }
                 // Functionality for clicking this list element
                 listElement.addEventListener('click', function () {
-                    // Make sure that target is the list element it self (button)
+                    // Make sure that target (button) is the list element it self
                     if (event.target.tagName === 'BUTTON') {
                         var button = event.target;
                     } else {
                         var button = event.target.closest('button');
                     }
-                    // Find the info HTML inside the button
-                    var info = button.querySelector('div');
-                    
-                    // By clicking the list element, switch between style 'block' (show) 'none' (hidden)
-                    if (info.style.display === 'none') {
-                        info.style.display = 'block';
-                        if (last_open != null) {
-                            // Hide previosly opened list element
-                            last_open.style.display = 'none'
-                        }
-                        last_open = info;
-                        listElement.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
-                        // By clicking the list element, map focuses on the corresponding marker...
-                        map.flyTo(listElement_to_coord[button.id],9);
-                        // ...and opens the popup
-                        address_to_marker[button.id].openPopup();
+                    // Toggle popup in corresponding marker
+                    marker = address_to_marker[button.id];
+                    if (marker.isPopupOpen()) {
+                        marker.closePopup()
                     } else {
-                        info.style.display = 'none';
-                        last_open = null;
-                        map.flyToBounds(route_bounds, in_gjson);
+                        marker.openPopup()
                     }
+                    // Toggle info in the list element
+                    toggleListElement(button)
                 });
             } // ==============================================================================================
 
@@ -195,7 +228,7 @@
             in_range_gjson.features.forEach(feature => addElement(feature, false));
             out_range_gjson.features.forEach(feature => addElement(feature, true));
 
-            // By default, show optimal contractors on map
+            // By default, show only optimal contractors on the map
             in_gjson.addTo(map);
 
             // Default setup 

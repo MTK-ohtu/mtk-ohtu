@@ -62,12 +62,7 @@ class ContractorDivision:
                 self.contractors,
             )
         )
-        print("OPTIMALS")
-        for c in self.optimal:
-            print(c)
-        print("SUBOPTIMALS")
-        for c in self.suboptimal:
-            print(c)
+        
 
     def get_optimal(self):
         """
