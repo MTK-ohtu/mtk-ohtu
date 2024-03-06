@@ -1,6 +1,6 @@
 import logging
 from psycopg_pool import ConnectionPool
-from .db_enums import CategoryType
+from .db_enums import CategoryType, BatchUnitsType
 from .db_datastructs import CargoTypeInfo
 
 # pylint: disable=E1129
@@ -12,6 +12,9 @@ def db_add_cargo_capability(
     base_rate: int,
     max_capacity: int,
     max_distance: int,
+    unit: BatchUnitsType,
+    can_process: bool,
+    description: str,
     pool: ConnectionPool,
 ) -> bool:
     """
@@ -28,9 +31,9 @@ def db_add_cargo_capability(
         cursor = connection.cursor()
         cursor.execute(
             "INSERT INTO cargo_capabilities \
-                (contractor_location_id, type, price_per_km, base_rate, max_capacity, max_distance) \
-                VALUES (%s,%s,%s,%s,%s,%s)",
-            (cargo_id, cargo_type, price_per_hour, base_rate, max_capacity, max_distance),
+                (contractor_location_id, type, price_per_km, base_rate, max_capacity, max_distance, unit, can_process, description) \
+                VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+            (cargo_id, cargo_type, price_per_hour, base_rate, max_capacity, max_distance, unit, can_process, description),
         )
         out = True
     return out

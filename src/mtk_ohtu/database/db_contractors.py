@@ -47,6 +47,7 @@ def db_add_contractor_location(
     longitude: float,
     latitude: float,
     radius: int,
+    description: str,
     pool: ConnectionPool,
 ) -> bool:
     out = False
@@ -54,8 +55,8 @@ def db_add_contractor_location(
         cursor = connection.cursor()
         try:
             cursor.execute(
-                "INSERT INTO contractor_locations (contractor_id, address, telephone, email, longitude, latitude, delivery_radius) VALUES (%s,%s,%s,%s,%s,%s,%s) RETURNING id",
-                (contractor_id, address, telephone, email, longitude, latitude, radius),
+                "INSERT INTO contractor_locations (contractor_id, address, telephone, email, longitude, latitude, delivery_radius, description) VALUES (%s,%s,%s,%s,%s,%s,%s,%s) RETURNING id",
+                (contractor_id, address, telephone, email, longitude, latitude, radius, description),
             )
             out = cursor.fetchone()[0]
         except psycopg.Error as e:
