@@ -43,14 +43,52 @@ def add_logistics():
             if radius_type == "custom-limit"
             else -1
         )
-        categories = request.form.getlist("materials[]")
-        base_rates = request.form.getlist("base_rates[]")
-        prices_per_hour = request.form.getlist("prices_per_hour[]")
-        maximum_capacities = request.form.getlist("max_capacities[]")
-        maximum_distances = request.form.getlist("max_distances[]")
+        description = request.form.get("description")
+        contractor_location_id = logistics.add_contractor_location(
+            contractor_id, 
+            address, 
+            postcode, 
+            city, 
+            telephone, 
+            email, 
+            radius,
+            description
+        )
 
-        contractor_location_id = logistics.add_contractor_location(contractor_id, address, postcode, city, telephone, email, radius)
-        logistics.add_cargo_capability(contractor_location_id, categories, base_rates, prices_per_hour, maximum_capacities, maximum_distances)
+        categories = request.form.getlist("materials[]")
+        material_descriptions = []
+        can_process = []
+        base_rates = []
+        prices = []
+        max_c = []
+        radius_list = []
+        units = []
+        for c in categories:
+            material_descriptions.append(request.form.get(c + "-description"))
+            can_process.append(request.form.get(c + "-can_process"))
+            base_rates.append(request.form.get(c + "-base_rate"))
+            prices.append(request.form.get(c + "-price_per_hour"))
+            max_c.append(request.form.get(c + "-max_capacity"))
+            type = request.form.get("radiusType-" + c)
+            radius = (
+                request.form.get("radius-" + c)
+                if type == "custom-limit" + c
+                else -1
+            )
+            radius_list.append(radius)
+            units.append("tn")
+        logistics.add_cargo_capability(
+            contractor_location_id,
+            categories,
+            prices,
+            base_rates,
+            max_c,
+            radius_list,
+            units, 
+            can_process,
+            material_descriptions
+        )
+        #can_process kohta pitää korjata ja units lisätä, listojen käyttö pois
 
         session["contractor_id"] = contractor_id
         return redirect(
@@ -92,7 +130,11 @@ def contractor():
 
 
 @contractor_bp.route("/list_contractors", methods=["GET"])
+
 def list_contractors():
+    """
+    Rendering template marked as 'test'
+    """
     # lon = request.args.get('lon')
     # lat = request.args.get('lat')
     # r = request.args.get('r')
@@ -101,7 +143,7 @@ def list_contractors():
     address, content = "Hirvijärvi, Juupajoki", "Hakkuujäte"
     lon, lat, r = 24.566428395979575, 61.8578385779706, 300
 
-    contractors = ContractorDivision()
+    contractors = ContractorDivision(lat, lon)
     contractors.split_by_range(lat, lon)
     return render_template(
         "contractor_list.html",

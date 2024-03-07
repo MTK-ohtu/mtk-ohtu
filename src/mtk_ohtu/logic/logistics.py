@@ -31,7 +31,8 @@ def add_contractor_location(
         city,
         telephone,
         email,
-        radius,        
+        radius,
+        description        
 ):
     """
     Adds a new location for a contractor
@@ -50,16 +51,7 @@ def add_contractor_location(
         coordinates = l(location)
         lon = coordinates.longitude
         lat = coordinates.latitude
-        id = db_contractors.db_add_contractor_location(
-            contractor_id,
-            address,
-            telephone,
-            email,
-            lon,
-            lat,
-            radius,
-            pool=DATABASE_POOL,
-        )
+        id = db_contractors.db_add_contractor_location(contractor_id, address, telephone, email, lon, lat, radius, description, pool=DATABASE_POOL)
         return id
     except Exception as er:
         logging.error(er)
@@ -73,6 +65,9 @@ def add_cargo_capability(
     prices_per_hour,
     max_capacities,
     max_distances,
+    units,
+    can_process_list,
+    descriptions
 ):
     """
     Adds all deliverable sidestreams for contractor location
@@ -94,6 +89,9 @@ def add_cargo_capability(
             base_rate = base_rates[i]
             max_capacity = max_capacities[i]
             max_distance = max_distances[i]
+            unit = units[i]
+            can_process = can_process_list[i]
+            description = descriptions[i]
 
             db.db_add_cargo_capability(
                 contractor_location_id,
@@ -102,6 +100,9 @@ def add_cargo_capability(
                 base_rate,
                 max_capacity,
                 max_distance,
+                unit,
+                can_process,
+                description,
                 pool=DATABASE_POOL,
             )
     except:
