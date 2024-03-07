@@ -66,6 +66,8 @@
                 shadowAnchor: [0,0]
             });
 
+            
+
             // Create map
             var map = L.map('map').setView(['{{ listing.location.latitude }}', '{{ listing.location.longitude }}'], 10);
 
@@ -82,7 +84,7 @@
             // Add scale
             L.control.scale().addTo(map);
 
-            // Read lat long from map
+            // Read lat long from a click on the map
             map.on('click', function(e){
                 console.log(e.latlng.lat, e.latlng.lng)
             })
@@ -107,7 +109,7 @@
             // Toggle function for list elements
             var toggleListElement = function(element) {
                 // Find the info HTML inside the button
-                var info = element.querySelector('div');
+                var info = element.querySelector('#info');
                 // By clicking the list element, set info style to switch between 'block' (visible) 'none' (hidden)
                 if (info.style.display === 'none') {
                     element.classList.add('selected')
@@ -186,13 +188,19 @@
                 // Create new button as list element
                 var listElement = document.createElement('button');
                 listElement.id = feature.properties.address
-                listElement.classList.add('clickable_list_element')
-                listElement.innerHTML = '<strong>' + feature.properties.name + '</strong><br>' + feature.properties.address;
+                listElement.classList.add('clickable_list_element');
+                console.log("Luotiin nappi")
                 // Create inner HTML for the button
-                var info = document.createElement('div');
+                listElement.innerHTML = `
+                    <div class="horizontal-container even">
+                        <h3>${feature.properties.name}</h3>
+                        <p>${feature.properties.address}</p>
+                    </div>
+                    <p id="info">Palveluinfo</p>
+                    `;
+                // Hide info
+                var info = listElement.querySelector('#info');
                 info.style.display = 'none';
-                info.innerHTML = '<div><br>Palveluinfo</br></div>'
-                listElement.appendChild(info)
                 // Add element to list
                 document.getElementById('list_div').appendChild(listElement);
                 // Add list element to mappings
@@ -201,7 +209,7 @@
                 // Define style of list element if it's set out to be 'hidden'
                 if (hide) {
                     listElement.style.display = 'none';
-                    listElement.style.backgroundColor = 'red';
+                    listElement.classList.add('suboptimal')
                     hidden_elements.push(listElement);
                 }
                 // Functionality for clicking this list element

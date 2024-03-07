@@ -27,6 +27,7 @@ class ContractorDivision:
         self.suboptimal = None
         self.split_by_range()
 
+
     def split_by_range(self):
         """
         Splits all contractors into 'optimal'/'suboptimal' lists by r between customer/contractor

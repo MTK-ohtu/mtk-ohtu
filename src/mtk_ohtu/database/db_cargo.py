@@ -61,4 +61,4 @@ def db_get_location_cargo_capabilities(
         out = cursor.fetchall()
     if not out:
         return []
-    return [CargoTypeInfo(*x[1:]) for x in out]
+    return [CargoTypeInfo(*x[0:]) for x in out]
