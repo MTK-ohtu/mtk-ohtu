@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from mtk_ohtu.database.db_enums import CategoryType
+from mtk_ohtu.database.db_enums import CategoryType, BatchUnitsType
 from mtk_ohtu.logic.location import Location
 
 
@@ -28,14 +28,16 @@ class Listing:
 
 @dataclass
 class CargoTypeInfo:
+    id: int
     contractor_location_id: int
     type: CategoryType
     price_per_km: int
     base_rate: int
     max_capacity: int
     max_distance: int
-    max_capacity: int
-    max_distance: int
+    unit: BatchUnitsType
+    can_process: bool
+    description: str
 
 
 @dataclass

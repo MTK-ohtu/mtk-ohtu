@@ -60,14 +60,14 @@ def add_contractor_location(
 
 def add_cargo_capability(
     contractor_location_id,
-    categories,
-    base_rates,
-    prices_per_hour,
-    max_capacities,
-    max_distances,
-    units,
-    can_process_list,
-    descriptions
+    category,
+    base_rate,
+    price_per_hour,
+    max_capacity,
+    max_distance,
+    unit,
+    can_process,
+    description
 ):
     """
     Adds all deliverable sidestreams for contractor location
@@ -82,21 +82,19 @@ def add_cargo_capability(
         True if adding is complete
         else False
     """
+    if can_process == None:
+        can_process = False
+    if base_rate == "":
+        base_rate = -1
+    if price_per_hour == "":
+        price_per_hour = -1
+    if max_capacity == "":
+        max_capacity = -1
     try:
-        for i,category in enumerate(categories):
-            cargo_type = category
-            price = prices_per_hour[i]
-            base_rate = base_rates[i]
-            max_capacity = max_capacities[i]
-            max_distance = max_distances[i]
-            unit = units[i]
-            can_process = can_process_list[i]
-            description = descriptions[i]
-
             db.db_add_cargo_capability(
                 contractor_location_id,
-                cargo_type,
-                price,
+                category,
+                price_per_hour,
                 base_rate,
                 max_capacity,
                 max_distance,

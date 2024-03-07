@@ -23,7 +23,7 @@
         <p><h4>Material types you can deliver:</h4></p>
         {% for sidestream in location[1] %}
     
-            <pre>{{ sidestream.type.value }}   Price (€/km): {{ sidestream.price_per_km }}    Base rate: {{ sidestream.base_rate }}€    Maximum capacity: {{ sidestream.max_capacity }}t    Maximum delivery distance: {{ sidestream.max_distance }}km</pre>
+            <pre>{{ sidestream.type.value }}   Price (€/km): {{ sidestream.price_per_km }}    Base rate: {{ sidestream.base_rate }}€    Maximum capacity: {{ sidestream.max_capacity }}{{ sidestream.unit.value }}    Maximum delivery distance: {{ sidestream.max_distance }}km  Can process: {{ sidestream.can_process }}   Description: {{ sidestream.description }}</pre>
         {% else %}
             Nothing in here yet. Start by adding some materials.
         {% endfor %}
