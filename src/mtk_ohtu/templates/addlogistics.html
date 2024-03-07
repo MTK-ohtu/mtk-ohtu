@@ -84,7 +84,12 @@
                                         <label for="price_per_hour">Price per hour</label>
                                         <input type="text" class="price-per-hour" name="{{ material }}-price_per_hour"> €<br>
                                         <label for="max_capacity">Maximum capacity</label>
-                                        <input type="text" class="max-capacity" name="{{ material }}-max_capacity"> tons<br>
+                                        <input type="text" class="max-capacity" name="{{ material }}-max_capacity">
+                                        <select id="unitDropdown">
+                                        {% for unit in units %}
+                                            <option value="{{ unit }}" name="{{ material }}-unit">{{ unit }}</option>
+                                        {% endfor %}
+                                        </select>
                                         <h6>Delivery distance*</h6>
                                         <div class="radius-option-{{ material }}">
                                             <input type="radio" name="radiusType-{{ material }}" value="no-limit-{{ material }}" checked="checked" onclick="toggleMaterialradius('{{ material }}')">
