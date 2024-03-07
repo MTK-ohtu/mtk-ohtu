@@ -3,7 +3,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, abort,
 from geojson import Point, Feature, FeatureCollection
 
 from ..database import db_contractors
-from ..database.db_enums import CategoryType
+from ..database.db_enums import CategoryType, BatchUnitsType
 from ..config import DATABASE_POOL
 from ..logic import user as users
 from ..logic import logistics
@@ -17,8 +17,9 @@ contractor_bp = Blueprint("contractor_bp", __name__)
 def add_logistics():
     if request.method == "GET":
         material_categories = [e.value for e in CategoryType]
+        units = [e.value for e in BatchUnitsType]
         return render_template(
-            "addlogistics.html", material_categories=material_categories
+            "addlogistics.html", material_categories=material_categories, units=units
         )
 
     if request.method == "POST":
@@ -56,39 +57,31 @@ def add_logistics():
         )
 
         categories = request.form.getlist("materials[]")
-        material_descriptions = []
-        can_process = []
-        base_rates = []
-        prices = []
-        max_c = []
-        radius_list = []
-        units = []
         for c in categories:
-            material_descriptions.append(request.form.get(c + "-description"))
-            can_process.append(request.form.get(c + "-can_process"))
-            base_rates.append(request.form.get(c + "-base_rate"))
-            prices.append(request.form.get(c + "-price_per_hour"))
-            max_c.append(request.form.get(c + "-max_capacity"))
+            price = request.form.get(c + "-price_per_hour")
+            base_rate = request.form.get(c + "-base_rate")
+            max_capacity = request.form.get(c + "-max_capacity")
             type = request.form.get("radiusType-" + c)
             radius = (
                 request.form.get("radius-" + c)
                 if type == "custom-limit" + c
                 else -1
             )
-            radius_list.append(radius)
-            units.append("tn")
-        logistics.add_cargo_capability(
-            contractor_location_id,
-            categories,
-            prices,
-            base_rates,
-            max_c,
-            radius_list,
-            units, 
-            can_process,
-            material_descriptions
-        )
-        #can_process kohta pitää korjata ja units lisätä, listojen käyttö pois
+            unit = request.form.get(c + "-unit")
+            can_process = request.form.get(c + "-can_process")
+            material_description = request.form.get(c + "-description")
+            
+            logistics.add_cargo_capability(
+                contractor_location_id,
+                c,
+                price,
+                base_rate,
+                max_capacity,
+                radius,
+                unit, 
+                can_process,
+                material_description
+            )
 
         session["contractor_id"] = contractor_id
         return redirect(

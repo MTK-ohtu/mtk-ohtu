@@ -98,7 +98,7 @@ CREATE TABLE IF NOT EXISTS cargo_capabilities (
     id SERIAL PRIMARY KEY,
     contractor_location_id INTEGER REFERENCES contractor_locations(id),
     type category_type NOT NULL,
-    price_per_km INTEGER NOT NULL,
+    price_per_km INTEGER,
     base_rate INTEGER,
     max_capacity INTEGER,
     max_distance INTEGER,
