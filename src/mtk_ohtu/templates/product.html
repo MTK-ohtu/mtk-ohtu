@@ -3,47 +3,51 @@
 {% block content %}
 <form action="/listing/{{ listing.id }}" method="POST">
     <div class="horizontal-container">
-        
+
         <div class="card">
-            <div class = "horizontal-container even">
+            <div class="horizontal-container even">
                 <h1>{{listing.category.value}}:</h1>
                 <h1>{{listing.price}} €</h1>
             </div>
-                <!-- ({{listing.location.longitude}}, {{listing.location.latitude}}) -->
-                <p>{{listing.address}}</p>
+            <!-- ({{listing.location.longitude}}, {{listing.location.latitude}}) -->
+            <p>{{listing.address}}</p>
         </div>
-    
-        <div><div>
-            <h3>Description:</h3>
-            <p class="description">{{listing.description}}</p>
-        </div></div>
-        
-        <div><div>
-            <h2>Fuel economy</h2>
-            <p>
-                <label for="fuelType">Fuel:</label>
-                <select id="fuelType" name="fuelType">
-                    <option value="diesel">Diesel</option>
-                    <option value="petrol">Petrol</option>
-                    <option value="biodiesel">Biodiesel</option>
-                    <option value="natural_gas">Natural Gas</option>
-                    <option value="bio_gas">Bio Gas</option>
-                    <option value="electricity">Electricity</option>
-                </select>
-            </p>
-            <p>
-                <label for="fuel_efficiency">Fuel efficiency:</label>
-                <input type="number" name="fuel_efficiency" step="0.1" min="0" max="200" value={{consumption}}>
-                <span id="unit">l/100 km</span>
-                <input type="hidden" name="listing_id" value="{{ listing.id }}">
-            </p>
-        </div></div>
+
+        <div>
+            <div>
+                <h3>Description:</h3>
+                <p class="description">{{listing.description}}</p>
+            </div>
+        </div>
+
+        <div>
+            <div>
+                <h2>Fuel economy</h2>
+                <p>
+                    <label for="fuelType">Fuel:</label>
+                    <select id="fuelType" name="fuelType">
+                        <option value="diesel">Diesel</option>
+                        <option value="petrol">Petrol</option>
+                        <option value="biodiesel">Biodiesel</option>
+                        <option value="natural_gas">Natural Gas</option>
+                        <option value="bio_gas">Bio Gas</option>
+                        <option value="electricity">Electricity</option>
+                    </select>
+                </p>
+                <p>
+                    <label for="fuel_efficiency">Fuel efficiency:</label>
+                    <input type="number" name="fuel_efficiency" step="0.1" min="0" max="200" value={{consumption}}>
+                    <span id="unit">l/100 km</span>
+                    <input type="hidden" name="listing_id" value="{{ listing.id }}">
+                </p>
+            </div>
+        </div>
         <script>
             // Change fuel efficiency unit based on fuel type
             document.getElementById('fuelType').addEventListener('change', function () {
                 var fuelType = this.value;
                 var unitDisplay = document.getElementById('unit');
-    
+
                 if (fuelType === 'petrol' || fuelType === 'diesel' || fuelType === 'biodiesel') {
                     unitDisplay.textContent = 'l/100 km';
                 } else if (fuelType === 'natural_gas' || fuelType === 'bio_gas') {
@@ -54,32 +58,38 @@
             });
         </script>
         <div>
-        {% if show_route %}
+            {% if show_route %}
+
             <table>
-                {% for emission in emission_comparison %}
+                <tr>
+                    <th align="left">Fuel</th>
+                    <th align="left">CO2</th>
+                    {% for emission in emission_comparison %}
                 <tr>
                     <td>{{emission}}</td>
                     <td>{{emission_comparison[emission]}} kg</td>
                     {% endfor %}
             </table>
-        {% endif %}
-        </div>        
+            {% endif %}
+        </div>
         <!-- <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}"> -->
     </div>
 
     <div class="toolbar">
-        <div><div class="horizontal-container">
-            <!--Number of shown companies-->
-            <h3>Companies:</h3>
-            <h1 id="company_count"></h1>
-            <!--Select all slider-->    
-            <label class="switch">
-                <input type="checkbox" id="selectAll">
-                <span class="slider"></span>
-            </label>
-            <label for="selectAll" style="align-self: center;">Show all</label>
-        </div></div>
-        
+        <div>
+            <div class="horizontal-container">
+                <!--Number of shown companies-->
+                <h3>Companies:</h3>
+                <h1 id="company_count"></h1>
+                <!--Select all slider-->
+                <label class="switch">
+                    <input type="checkbox" id="selectAll">
+                    <span class="slider"></span>
+                </label>
+                <label for="selectAll" style="align-self: center;">Show all</label>
+            </div>
+        </div>
+
         {% if show_route %}
         <div>
             <div class="horizontal-container">
@@ -95,13 +105,15 @@
             </div>
         </div>
         {% endif %}
-        
+
         <!--Input destination-->
-        <div><div class="horizontal-container">
-            <h4 style="margin-right: 10px;">Delivery address</h4>
-            <input class="stylish-input" type="text" name="address" minlength="1" maxlength="200">
-            <button type="submit" class="search_button"></button>
-        </div></div>
+        <div>
+            <div class="horizontal-container">
+                <h4 style="margin-right: 10px;">Delivery address</h4>
+                <input class="stylish-input" type="text" name="address" minlength="1" maxlength="200">
+                <button type="submit" class="search_button"></button>
+            </div>
+        </div>
     </div>
 </form>
 
