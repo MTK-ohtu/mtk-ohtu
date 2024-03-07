@@ -36,11 +36,14 @@
             var in_range_gjson = JSON.parse('{{ in_range | tojson | safe }}');
             var out_range_gjson = JSON.parse('{{ out_range | tojson | safe }}');
 
+            console.log(in_range_gjson)
+            console.log(out_range_gjson)
+
             // Mappings
             var address_to_marker = {};
             var listElement_to_coord = {};
             var address_to_listElement = {};
-            
+
             var last_open = null;
             const companyCount = document.getElementById("company_count")
             var combined_bounds = []
@@ -50,23 +53,23 @@
                 iconUrl: '/static/images/ok_truck.png',
                 shadowUrl: '/static/images/point.png',
                 iconSize: [25, 25],
-                iconAnchor: [8,25],
+                iconAnchor: [8, 25],
                 popupAnchor: [1, -34],
                 shadowSize: [10, 10],
-                shadowAnchor: [0,0]
+                shadowAnchor: [0, 0]
             });
 
             var badTruck = new L.Icon({
                 iconUrl: '/static/images/bad_truck.png',
                 shadowUrl: '/static/images/point.png',
                 iconSize: [25, 25],
-                iconAnchor: [8,25],
+                iconAnchor: [8, 25],
                 popupAnchor: [1, -34],
                 shadowSize: [10, 10],
-                shadowAnchor: [0,0]
+                shadowAnchor: [0, 0]
             });
 
-            
+
 
             // Create map
             var map = L.map('map').setView(['{{ listing.location.latitude }}', '{{ listing.location.longitude }}'], 10);
@@ -85,12 +88,12 @@
             L.control.scale().addTo(map);
 
             // Read lat long from a click on the map
-            map.on('click', function(e){
+            map.on('click', function (e) {
                 console.log(e.latlng.lat, e.latlng.lng)
             })
 
             // Visual representation of the route
-            if ('{{show_route}}') {
+            if ('{{show_route}}' == 1) {
                 // Add route on map
                 var route_geojson = JSON.parse('{{ route_geojson }}'.replaceAll('&#34;', '"'));
                 L.geoJSON(route_geojson).addTo(map);
@@ -106,8 +109,9 @@
                     route_bounds = L.latLngBounds(southWest, northEast);
             }
 
+
             // Toggle function for list elements
-            var toggleListElement = function(element) {
+            var toggleListElement = function (element) {
                 // Find the info HTML inside the button
                 var info = element.querySelector('#info');
                 // By clicking the list element, set info style to switch between 'block' (visible) 'none' (hidden)
@@ -123,7 +127,7 @@
                     last_open = element;
                     element.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
                     // By clicking the list element, map focuses on the corresponding coordinates (marker)...
-                    map.flyTo(listElement_to_coord[element.id],9);
+                    map.flyTo(listElement_to_coord[element.id], 9);
                 } else {
                     element.classList.remove('selected')
                     info.style.display = 'none';
@@ -135,7 +139,7 @@
             // Marker creation for optimal contractors
             function create_marker(feature, latlng) {
                 var marker = L.marker(latlng, { icon: okTruck });
-                marker.on('click', function(e) {
+                marker.on('click', function (e) {
                     listElement = address_to_listElement[feature.properties.address]
                     toggleListElement(listElement);
                 });
@@ -145,7 +149,7 @@
             // Marker creation for suboptimal contractors
             function create_badmarker(feature, latlng) {
                 var marker = L.marker(latlng, { icon: badTruck });
-                marker.on('click', function(e) {
+                marker.on('click', function (e) {
                     listElement = address_to_listElement[feature.properties.address]
                     toggleListElement(listElement);
                 });
@@ -182,7 +186,7 @@
                     map.flyToBounds(route_bounds, in_gjson);
                 }
             });
-            
+
             // Create elements to show on the list side ====================================================================
             function addElement(feature, hide) {
                 // Create new button as list element
@@ -234,7 +238,9 @@
 
             // Add list elements on the list side
             in_range_gjson.features.forEach(feature => addElement(feature, false));
-            out_range_gjson.features.forEach(feature => addElement(feature, true));
+            if (out_range_gjson == []) {
+                out_range_gjson.features.forEach(feature => addElement(feature, true));
+            }
 
             // By default, show only optimal contractors on the map
             in_gjson.addTo(map);

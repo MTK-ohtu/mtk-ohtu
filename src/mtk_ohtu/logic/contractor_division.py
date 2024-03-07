@@ -1,9 +1,11 @@
 import math
 from geojson import Point, Feature, FeatureCollection
-from ..database.db_contractors import db_get_logistics
-from ..database.db_contractors import db_get_locations_by_cargo_type
+from ..database.db_contractors import db_get_locations_by_cargo_type, db_get_logistics
+from .logistics_info import get_logistics_providers_by_range
 from ..database.db_enums import CategoryType
 from ..config import DATABASE_POOL
+from .location import Location
+from ..database.db_datastructs import Listing
 
 
 class ContractorDivision:
@@ -18,9 +20,9 @@ class ContractorDivision:
         cargo_capasity: int
     """
 
-    def __init__(self, lat:float, lon:float, cargo_type:CategoryType ,cargo_capasity:int = 1e10):
-        self.lat = lat
-        self.lon = lon
+    def __init__(self, listing:Listing, cargo_type:CategoryType, delivery_location:Location = None,cargo_capasity:int = 1e10):
+        self.listing = listing
+        self.delivery_location = delivery_location        
         self.cargo_capasity = cargo_capasity
         self.contractors = db_get_locations_by_cargo_type(cargo_type, DATABASE_POOL)
         self.optimal = None
@@ -35,34 +37,48 @@ class ContractorDivision:
             latitude: float
             longitude: float
         """
-        self.optimal = list(
-            filter(
-                lambda x: (
-                    self.haversine(
-                        self.lat,
-                        self.lon,
-                        x.location.latitude,
-                        x.location.longitude,
-                    )
+        nodes = self.contractors
+        if self.delivery_location is not None:
+            self.optimal  = get_logistics_providers_by_range(self.listing, self.delivery_location, nodes)
+            self.suboptimal = list(
+                filter(
+                    lambda x: (
+                        x not in self.optimal
+                    ), self.contractors
                 )
-                < x.delivery_radius,
-                self.contractors,
             )
-        )
-        self.suboptimal = list(
-            filter(
-                lambda x: (
-                    self.haversine(
-                        self.lat,
-                        self.lon,
-                        x.location.latitude,
-                        x.location.longitude,
-                    )
-                )
-                > x.delivery_radius,
-                self.contractors,
-            )
-        )
+        else:
+            self.optimal = nodes
+            self.suboptimal = None
+
+
+        #     filter(
+        #         lambda x: (
+        #             self.haversine(
+        #                 self.lat,
+        #                 self.lon,
+        #                 x.location.latitude,
+        #                 x.location.longitude,
+        #             )
+        #         )
+        #         < x.delivery_radius,
+        #         self.contractors,
+        #     )
+        # )
+        # self.suboptimal = list(
+        #     filter(
+        #         lambda x: (
+        #             self.haversine(
+        #                 self.lat,
+        #                 self.lon,
+        #                 x.location.latitude,
+        #                 x.location.longitude,
+        #             )
+        #         )
+        #         > x.delivery_radius,
+        #         self.contractors,
+        #     )
+        # )
         
 
     def get_optimal(self):

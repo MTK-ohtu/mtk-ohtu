@@ -4,6 +4,7 @@ from ..database.db_datastructs import LogisticsNode
 from .route_calculator import Route
 from ..database.db_contractors import db_get_logistics
 from ..database.db_cargo import db_get_location_cargo_capabilities
+from ..database.db_contractors import db_get_locations_by_cargo_type
 from ..config import DATABASE_POOL
 
 
