@@ -2,7 +2,7 @@
 <div style="height: 70vh;">
 
     <!-- Block 1: List for contractor cards-->
-    <div style="background-color: #f1f1f1; padding: 10px; font-size: 18px;  width: 60vh; float: left;">
+    <div style="background-color: #f1f1f1; padding: 10px; font-size: 18px;  width: 40%; float: left;">
         <div id="list_div" style="overflow: auto;border: 1px solid #ccc; overflow-y: scroll; height: 800px;">
         </div>
     </div>
@@ -47,6 +47,12 @@
             var productCoordinates = [parseFloat('{{ listing.location.latitude }}'), parseFloat('{{ listing.location.longitude }}')]
             previousBounds = null;
 
+            // Interactive elements
+            var setGoalButton = document.getElementById('set_goal')
+            var searchButton = document.getElementById('search_button')
+            var mapDiv = document.getElementById('map')
+            var addressInput = document.getElementById('address_input')
+
             // Icons
             var okTruck = new L.Icon({
                 iconUrl: '/static/images/ok_truck.png',
@@ -72,6 +78,7 @@
             // Create map
             var map = L.map('map').setView(defaultCoordinates, 10);
 
+            
             // Add tiles
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '© OpenStreetMap contributors'
@@ -85,9 +92,18 @@
             // Add scale
             L.control.scale().addTo(map);
 
-            // Read lat long from a click on the map
+            
+            // Define function for clicking on the map
             map.on('click', function (e) {
-                console.log(e.latlng.lat, e.latlng.lng)
+                clickLat = e.latlng.lat
+                clickLng = e.latlng.lng
+                // If destination selection is on, post chosen coordinates
+                if (setGoalButton.classList.contains('pressed')) {
+                    mapDiv.classList.remove('set_goal')
+                    setGoalButton.classList.remove('pressed')
+                    addressInput.value=clickLat+","+clickLng
+                    searchButton.click()
+                }
             })
 
             // Default bounds for route (only product)
@@ -113,6 +129,17 @@
                 route_bounds = L.latLngBounds(southWest, northEast);
             }
 
+
+            // Destination selector button
+            setGoalButton.addEventListener('click', function() {
+                if (event.target.classList.contains('pressed')) {
+                    mapDiv.classList.remove('set_goal')
+                    setGoalButton.classList.remove('pressed')
+                } else {
+                    mapDiv.classList.add('set_goal')
+                    setGoalButton.classList.add('pressed')
+                }
+            })
 
             // Calculate bounds here
             var calculateBounds = function (list) {
@@ -215,11 +242,7 @@
                     map.removeLayer(out_gjson);
                     hidden_elements.forEach(element => { element.style.display = 'none' });
                     companyCount.textContent = in_range_gjson.features.length;
-                    console.log("Poistettiin epäsopivat. Vanhat rajat olivat")
-                    console.log(combined_bounds._northEast.lat)
                     combined_bounds = calculateBounds([route_bounds, in_gjson.getBounds()])
-                    console.log("Uudet rajat ovat")
-                    console.log(combined_bounds)
                 }
                 map.flyToBounds(combined_bounds.pad(padding));
             });

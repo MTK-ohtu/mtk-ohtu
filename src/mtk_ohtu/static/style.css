@@ -224,7 +224,19 @@ td {
 }
 
 .goal_button {
-    background-image: url('/static/images/goal.png');
+    background-image: url('/static/images/goal_button.png');
+    transition: translate 0.2s ease-in-out;
+}
+
+.goal_button.pressed {
+    filter: invert(100%);
+    transform: translate(3px, 3px);
+    scale: 0.95;
+    border: var(--focus-border)
+}
+
+#map.set_goal {
+    cursor: url('/static/images/set_goal.png'), auto;
 }
 
 .search_button {
