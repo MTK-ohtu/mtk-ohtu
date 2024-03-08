@@ -11,12 +11,14 @@ from ..database.db_datastructs import Listing
 class ContractorDivision:
 
     """
-    Given a coordinate, queries all logistic contractors from DB by given fields.
+    Given a listing, queries all logistic contractors from DB with correct coargo capability. Finds optimal contractors by range. 
+    If fiven a delivery location, filters out of range contractors based on both the listing and the delivery location.
     Divides contractors into two lists: suiteable/ rest.
-    Creates leaflet compatible featurecollections from these
+    Creates leaflet compatible featurecollections from these.
     Args:
-        lat: float
-        lon: float
+        listing: Listing
+        cargo_type: CargoType
+        delivery_location: Location
         cargo_capasity: int
     """
 
@@ -33,9 +35,6 @@ class ContractorDivision:
     def split_by_range(self):
         """
         Splits all contractors into 'optimal'/'suboptimal' lists by r between customer/contractor
-        Args:
-            latitude: float
-            longitude: float
         """
         nodes = self.contractors
         if self.delivery_location is not None:
@@ -52,34 +51,6 @@ class ContractorDivision:
             self.suboptimal = None
 
 
-        #     filter(
-        #         lambda x: (
-        #             self.haversine(
-        #                 self.lat,
-        #                 self.lon,
-        #                 x.location.latitude,
-        #                 x.location.longitude,
-        #             )
-        #         )
-        #         < x.delivery_radius,
-        #         self.contractors,
-        #     )
-        # )
-        # self.suboptimal = list(
-        #     filter(
-        #         lambda x: (
-        #             self.haversine(
-        #                 self.lat,
-        #                 self.lon,
-        #                 x.location.latitude,
-        #                 x.location.longitude,
-        #             )
-        #         )
-        #         > x.delivery_radius,
-        #         self.contractors,
-        #     )
-        # )
-        
 
     def get_optimal(self):
         """
@@ -155,7 +126,7 @@ class ContractorDivision:
 
     def haversine(self, lat1, lon1, lat2, lon2):
         """
-        Calculate great-circle distances
+        Calculate great-circle distances (not used in this class)
         """
         dLat = (lat2 - lat1) * math.pi / 180.0
         dLon = (lon2 - lon1) * math.pi / 180.0

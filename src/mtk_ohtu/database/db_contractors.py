@@ -155,11 +155,10 @@ def db_get_locations_by_cargo_type(
                     ON l.id=c.contractor_location_id 
                 LEFT JOIN contractors AS con ON l.contractor_id=con.id 
                 WHERE c.type='%s';""" % (type.value,)
-        print(query)
+        
         cursor.execute(query)
         lista = cursor.fetchall()
-        for k in lista:
-             print(k)
+
         out = [LogisticsNode(x[0], x[1], x[2], x[3], Location((x[4], x[5])), x[6])
             for x in lista]
     if not out:

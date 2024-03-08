@@ -65,5 +65,4 @@ class Emissions:
         emissions = {}
         for fuel in self.fuels.keys():
             emissions[fuel] = self.calculate_emissions(fuel)
-        print(emissions)
         return emissions
