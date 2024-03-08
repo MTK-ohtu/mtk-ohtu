@@ -31,20 +31,21 @@
         <!-- Leaflet + code -->
         <script>
 
-            var padding = 0.1;
+            var padding = 0.01;
             var hidden_elements = [];
             var in_range_gjson = JSON.parse('{{ in_range | tojson | safe }}');
             var out_range_gjson = JSON.parse('{{ out_range | tojson | safe }}');
 
             // Mappings
             var address_to_marker = {};
-            var listElement_to_coord = {};
+            var listElement_to_bounds = {};
             var address_to_listElement = {};
 
             var last_open = null;
             const companyCount = document.getElementById("company_count")
             var defaultCoordinates = [62.41920782078211, 26.061582656316585]
             var productCoordinates = [parseFloat('{{ listing.location.latitude }}'), parseFloat('{{ listing.location.longitude }}')]
+            previousBounds = null;
 
             // Icons
             var okTruck = new L.Icon({
@@ -89,10 +90,11 @@
                 console.log(e.latlng.lat, e.latlng.lng)
             })
 
-            // Default bounds for route
-            var southWest = L.latLng(productCoordinates.map(value => value - parseFloat(.1)));
-            var northEast = L.latLng(productCoordinates.map(value => value + parseFloat(.1)));
-            var route_bounds = L.latLngBounds(southWest, northEast);
+            // Default bounds for route (only product)
+            var route_bounds = L.latLngBounds(
+                L.latLng(productCoordinates.map(value => value - padding)),
+                L.latLng(productCoordinates.map(value => value + padding))
+            );
 
             // Visual representation of the route
             if ('{{show_route}}' == 1) {
@@ -112,6 +114,22 @@
             }
 
 
+            // Calculate bounds here
+            var calculateBounds = function (list) {
+                var lonList = []; var latList = []
+                list.forEach(bounds => {
+                    if (bounds) {
+                        latList.push(bounds._northEast.lat)
+                        latList.push(bounds._southWest.lat)
+                        lonList.push(bounds._northEast.lng)
+                        lonList.push(bounds._southWest.lng)
+                    }
+                })
+                return L.latLngBounds(
+                    L.latLng(Math.min(...latList), Math.min(...lonList)),
+                    L.latLng(Math.max(...latList), Math.max(...lonList))
+                )
+            }
             // List element animations
             var runListElementAnimation = function (element) {
                 minimum_height = element.querySelector('div').scrollHeight
@@ -131,7 +149,7 @@
                     element.classList.remove('selected')
                     last_open = null;
                     runListElementAnimation(element)
-                    map.flyToBounds(route_bounds);
+                    map.flyToBounds(combined_bounds.extend(route_bounds));
                 } else {
                     element.classList.add('selected')
                     if (last_open != null) {
@@ -142,7 +160,10 @@
                     last_open = element;
                     runListElementAnimation(element)
                     element.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
-                    map.flyToBounds(route_bounds.extend(listElement_to_coord[element.id]));
+                    elementBounds = listElement_to_bounds[element.id];
+                    if (!map.getBounds().contains(elementBounds)) {
+                        map.flyToBounds(route_bounds.extend(elementBounds).pad(padding));
+                    }
                 }
             }
                 
@@ -177,25 +198,30 @@
             in_gjson = L.geoJSON(in_range_gjson, { onEachFeature: onEachFeature, pointToLayer: create_marker });
             out_gjson = L.geoJSON(out_range_gjson, { onEachFeature: onEachFeature, pointToLayer: create_badmarker });
 
-            var combined_bounds = in_gjson.getBounds().extend(out_gjson.getBounds())
-            console.log(in_gjson.getBounds())
-            console.log(combined_bounds)
-
+            var combined_bounds = calculateBounds([route_bounds, in_gjson.getBounds()]);
+            
             // Checkbox 'Show all' functionality
             const selectAll = document.getElementById('selectAll');
             selectAll.addEventListener("change", function () {
                 if (this.checked) {
                     out_gjson.addTo(map);
                     hidden_elements.forEach(element => { element.style.display = 'block' })
-                    companyCount.textContent = in_range_gjson.features.length + out_range_gjson.features.length
-                    map.flyToBounds(combined_bounds.extend(route_bounds));
+                    if (out_range_gjson.length != 0) {
+                        companyCount.textContent = in_range_gjson.features.length + out_range_gjson.features.length
+                        combined_bounds = calculateBounds([route_bounds, in_gjson.getBounds(), out_gjson.getBounds()])
+                    }
                 }
                 else {
                     map.removeLayer(out_gjson);
                     hidden_elements.forEach(element => { element.style.display = 'none' });
                     companyCount.textContent = in_range_gjson.features.length;
-                    map.flyToBounds(in_gjson.getBounds().extend(route_bounds));
+                    console.log("Poistettiin epäsopivat. Vanhat rajat olivat")
+                    console.log(combined_bounds._northEast.lat)
+                    combined_bounds = calculateBounds([route_bounds, in_gjson.getBounds()])
+                    console.log("Uudet rajat ovat")
+                    console.log(combined_bounds)
                 }
+                map.flyToBounds(combined_bounds.pad(padding));
             });
 
             // Create elements to show on the list side ====================================================================
@@ -220,7 +246,11 @@
                 runListElementAnimation(listElement)
 
                 // Add element to mappings
-                listElement_to_coord[listElement.id] = [feature.geometry.coordinates[1], feature.geometry.coordinates[0]];
+                var bounds = L.latLngBounds(
+                    L.latLng(feature.geometry.coordinates[1]-padding, feature.geometry.coordinates[0]-padding),
+                    L.latLng(feature.geometry.coordinates[1]+padding, feature.geometry.coordinates[0]+padding),
+                    );
+                listElement_to_bounds[listElement.id] = bounds
                 address_to_listElement[feature.properties.address] = listElement;
                 // Define style of list element if it's set out to be 'hidden'
                 if (hide) {
@@ -258,7 +288,7 @@
 
             // Default setup 
             companyCount.textContent = in_range_gjson.features.length
-            map.flyToBounds(route_bounds, in_gjson.getBounds());
+            map.flyToBounds(combined_bounds.extend(route_bounds));
 
         </script>
     </div>
