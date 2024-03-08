@@ -40,3 +40,7 @@ def logistics_info():
         "num_providers": num_providers,
         "link": get_url_for_listing(listing),
     }
+
+@api_bp.route("/postings", methods=["POST"])
+def posting_edit_api():
+    request.get_json()
