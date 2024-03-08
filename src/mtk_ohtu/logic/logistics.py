@@ -1,4 +1,5 @@
 import logging
+from flask import session
 from ..database import db_contractors
 from ..database import db_cargo as db
 from ..config import DATABASE_POOL
@@ -107,6 +108,22 @@ def add_cargo_capability(
         return False
     return True
 
+def remove_cargo_capability(contractor_id, cargo_id):
+    """
+    Removes a deliverable sidestream
+    Args:
+        contractor_id: contractor's identifying number
+        cargo_id: sidestreams identifying number
+    Returns:
+        bool: True if succeeds, False otherwise
+    """
+    owner = db.db_get_cargo_owner(cargo_id, DATABASE_POOL)
+    print("owner id", owner)
+    if owner != contractor_id:
+        return False
+    print(db.db_remove_cargo_capability(cargo_id, DATABASE_POOL))
+    return db.db_remove_cargo_capability(cargo_id, DATABASE_POOL)
+   
 
 def get_locations_and_cargo_capability(contractor_id):
     """
@@ -138,3 +155,9 @@ def cargo_capability(contractor_location_id):
     Returns a list of locations cargo hauling capabilities
     """
     return db.db_get_location_cargo_capabilities(contractor_location_id, DATABASE_POOL)
+
+def contractor_id():
+    """
+    Returns contractor's id number
+    """
+    return session.get("contractor_id", 0)

@@ -13,6 +13,16 @@
     
 </div>
 
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+        {{ message }}
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
 <h3>Locations</h3>
 {% for location in locations %}
 
@@ -24,6 +34,10 @@
         {% for sidestream in location[1] %}
     
             <pre>{{ sidestream.type.value }}   Price (€/km): {{ sidestream.price_per_km }}    Base rate: {{ sidestream.base_rate }}€    Maximum capacity: {{ sidestream.max_capacity }}{{ sidestream.unit.value }}    Maximum delivery distance: {{ sidestream.max_distance }}km  Can process: {{ sidestream.can_process }}   Description: {{ sidestream.description }}</pre>
+            <form action="/contractor/cargo/remove" method="POST">
+                <input type="hidden" name="cargo_id" value="{{ sidestream.id }}">
+                <input type="submit" value="Delete">
+            </form>
         {% else %}
             Nothing in here yet. Start by adding some materials.
         {% endfor %}
