@@ -36,9 +36,6 @@
             var in_range_gjson = JSON.parse('{{ in_range | tojson | safe }}');
             var out_range_gjson = JSON.parse('{{ out_range | tojson | safe }}');
 
-            console.log(in_range_gjson)
-            console.log(out_range_gjson)
-
             // Mappings
             var address_to_marker = {};
             var listElement_to_coord = {};
@@ -46,7 +43,8 @@
 
             var last_open = null;
             const companyCount = document.getElementById("company_count")
-            var combined_bounds = []
+            var defaultCoordinates = [62.41920782078211, 26.061582656316585]
+            var productCoordinates = [parseFloat('{{ listing.location.latitude }}'), parseFloat('{{ listing.location.longitude }}')]
 
             // Icons
             var okTruck = new L.Icon({
@@ -70,9 +68,8 @@
             });
 
 
-
             // Create map
-            var map = L.map('map').setView(['{{ listing.location.latitude }}', '{{ listing.location.longitude }}'], 10);
+            var map = L.map('map').setView(defaultCoordinates, 10);
 
             // Add tiles
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -80,7 +77,7 @@
             }).addTo(map);
 
             // Add marker to product location
-            var product = L.marker(['{{ listing.location.latitude }}', '{{ listing.location.longitude }}']).addTo(map);
+            var product = L.marker(productCoordinates).addTo(map);
             product._icon.classList.add('huechange1');
             product.bindPopup("{{ listing.category.value }}\n{{ listing.address }}");
 
@@ -91,6 +88,11 @@
             map.on('click', function (e) {
                 console.log(e.latlng.lat, e.latlng.lng)
             })
+
+            // Default bounds for route
+            var southWest = L.latLng(productCoordinates.map(value => value - parseFloat(.1)));
+            var northEast = L.latLng(productCoordinates.map(value => value + parseFloat(.1)));
+            var route_bounds = L.latLngBounds(southWest, northEast);
 
             // Visual representation of the route
             if ('{{show_route}}' == 1) {
@@ -106,36 +108,44 @@
                 var bbox = route_geojson["features"][0]["bbox"];
                 var southWest = L.latLng(bbox[1], bbox[0]),
                     northEast = L.latLng(bbox[3], bbox[2]),
-                    route_bounds = L.latLngBounds(southWest, northEast);
+                route_bounds = L.latLngBounds(southWest, northEast);
             }
 
 
-            // Toggle function for list elements
-            var toggleListElement = function (element) {
-                // Find the info HTML inside the button
-                var info = element.querySelector('#info');
-                // By clicking the list element, set info style to switch between 'block' (visible) 'none' (hidden)
-                if (info.style.display === 'none') {
-                    element.classList.add('selected')
-                    info.style.display = 'block';
-                    if (last_open != null) {
-                        // Hide previosly opened list element
-                        last_info = last_open.querySelector('div')
-                        last_open.classList.remove('selected')
-                        last_info.style.display = 'none'
-                    }
-                    last_open = element;
-                    element.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
-                    // By clicking the list element, map focuses on the corresponding coordinates (marker)...
-                    map.flyTo(listElement_to_coord[element.id], 9);
+            // List element animations
+            var runListElementAnimation = function (element) {
+                minimum_height = element.querySelector('div').scrollHeight
+                element.style.setProperty('--minimum-height', minimum_height+'px')
+                element.style.setProperty('--total-height', (element.scrollHeight+3)+'px')
+                if (element.classList.contains('open')) {
+                    element.classList.remove('open')
+                    element.classList.add('closed')
                 } else {
-                    element.classList.remove('selected')
-                    info.style.display = 'none';
-                    last_open = null;
-                    map.flyToBounds(route_bounds, combined_bounds);
+                    element.classList.remove('closed')
+                    element.classList.add('open')
                 }
             }
-
+            // Toggle function for list elements
+            var toggleListElement = function (element) {
+                if (element.classList.contains('selected')) {
+                    element.classList.remove('selected')
+                    last_open = null;
+                    runListElementAnimation(element)
+                    map.flyToBounds(route_bounds);
+                } else {
+                    element.classList.add('selected')
+                    if (last_open != null) {
+                        // Hide previosly opened list element
+                        last_open.classList.remove('selected')
+                        runListElementAnimation(last_open)
+                    }
+                    last_open = element;
+                    runListElementAnimation(element)
+                    element.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+                    map.flyToBounds(route_bounds.extend(listElement_to_coord[element.id]));
+                }
+            }
+                
             // Marker creation for optimal contractors
             function create_marker(feature, latlng) {
                 var marker = L.marker(latlng, { icon: okTruck });
@@ -167,8 +177,9 @@
             in_gjson = L.geoJSON(in_range_gjson, { onEachFeature: onEachFeature, pointToLayer: create_marker });
             out_gjson = L.geoJSON(out_range_gjson, { onEachFeature: onEachFeature, pointToLayer: create_badmarker });
 
-            // Default bounds of contractors consists only coordinates of suitable contractors
-            combined_bounds = L.latLngBounds(in_gjson, out_gjson);
+            var combined_bounds = in_gjson.getBounds().extend(out_gjson.getBounds())
+            console.log(in_gjson.getBounds())
+            console.log(combined_bounds)
 
             // Checkbox 'Show all' functionality
             const selectAll = document.getElementById('selectAll');
@@ -177,13 +188,13 @@
                     out_gjson.addTo(map);
                     hidden_elements.forEach(element => { element.style.display = 'block' })
                     companyCount.textContent = in_range_gjson.features.length + out_range_gjson.features.length
-                    map.flyToBounds(route_bounds, combined_bounds);
+                    map.flyToBounds(combined_bounds.extend(route_bounds));
                 }
                 else {
                     map.removeLayer(out_gjson);
                     hidden_elements.forEach(element => { element.style.display = 'none' });
                     companyCount.textContent = in_range_gjson.features.length;
-                    map.flyToBounds(route_bounds, in_gjson);
+                    map.flyToBounds(in_gjson.getBounds().extend(route_bounds));
                 }
             });
 
@@ -192,22 +203,23 @@
                 // Create new button as list element
                 var listElement = document.createElement('button');
                 listElement.id = feature.properties.address
-                listElement.classList.add('clickable_list_element');
-                console.log("Luotiin nappi")
                 // Create inner HTML for the button
                 listElement.innerHTML = `
                     <div class="horizontal-container even">
-                        <h3>${feature.properties.name}</h3>
-                        <p>${feature.properties.address}</p>
+                        <h4 style="align-self: left;">${feature.properties.name}</h4>
+                        <p style="align-self: center;">${feature.properties.address}</p>
                     </div>
-                    <p id="info">Palveluinfo</p>
+                    <p id="info">TEKSTI</p>
                     `;
-                // Hide info
-                var info = listElement.querySelector('#info');
-                info.style.display = 'none';
                 // Add element to list
+                listElement.classList.add('clickable_list_element');
+                // This will be added 
+                listElement.classList.add('open')
+                listElement.style.borderRadius = '20px 0 0 0'
                 document.getElementById('list_div').appendChild(listElement);
-                // Add list element to mappings
+                runListElementAnimation(listElement)
+
+                // Add element to mappings
                 listElement_to_coord[listElement.id] = [feature.geometry.coordinates[1], feature.geometry.coordinates[0]];
                 address_to_listElement[feature.properties.address] = listElement;
                 // Define style of list element if it's set out to be 'hidden'
@@ -238,16 +250,15 @@
 
             // Add list elements on the list side
             in_range_gjson.features.forEach(feature => addElement(feature, false));
-            if (out_range_gjson == []) {
+            if (out_range_gjson.length != 0) {
                 out_range_gjson.features.forEach(feature => addElement(feature, true));
-            }
-
+            }   
             // By default, show only optimal contractors on the map
             in_gjson.addTo(map);
 
             // Default setup 
             companyCount.textContent = in_range_gjson.features.length
-            map.flyToBounds(route_bounds.extend(in_gjson.getBounds()));
+            map.flyToBounds(route_bounds, in_gjson.getBounds());
 
         </script>
     </div>

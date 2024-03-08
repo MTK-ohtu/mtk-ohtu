@@ -9,20 +9,23 @@
     --theme-color_3: #068200;
     --focus-background-color: #ffffff;
     --non-focus-background-color: #dedede;
+    --focus-background-color_2: #fec5c5;
+    --non-focus-background-color_2: #bb8585;
     /* Theme borders */
     --common-border: var(--theme-color_2) solid 3px;
-    --focus-border: solid 3px;
+    --focus-border: var(--theme-color_3) solid 3px;
     /* Theme fonts */
-    --header-1-font: normal normal 700 30px/30px "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
-    --header-2-font: normal normal 700 28px/28px "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
-    --header-3-font: normal normal 700 26px/18px "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
-    --header-4-font: normal normal 600 22px/18px "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
-    --common-text-font: normal normal 400 20px/20px "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
-    --description-font: normal normal 400 20px/20px "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+    --header-1-font: normal normal 700 30px/33px "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+    --header-2-font: normal normal 700 28px/30px "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+    --header-3-font: normal normal 700 26px/28px "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+    --header-4-font: normal normal 600 22px/24px "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+    --common-text-font: normal normal 400 20px/22px "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+    --description-font: normal normal 400 20px/22px "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
     --table-item-font: normal normal 400 20px/26px "Consolas", monaco, monospace;
     /* Transitions */
     --theme-color-transition: var(--theme-color_3) 0.3s ease;
-    --transition-time: 0.4s;
+    --transition-time: 0.2s; 
+    --click-button-transition: 
 }
 
 body {
@@ -86,15 +89,13 @@ td {
     font: var(--description-font);
 }
 
+/*========== CLICKABLE LIST ELEMENTS ===============================*/
 .clickable_list_element {
     background-color: var(--non-focus-background-color);
     width: 100%;
     padding-top: 3px;
     margin-bottom: 10px;
-}
-
-.clickable_list_element.suboptimal {
-    background-color: var(--theme-background-color_3);
+    overflow: hidden;
 }
 
 .clickable_list_element.selected {
@@ -102,8 +103,45 @@ td {
     border: var(--focus-border);
 }
 
-.clickable_list_element>div {
+.clickable_list_element.closed {
+    animation: scroll-closed var(--transition-time) ease-in forwards
+}
+
+.clickable_list_element.open {
+    animation: scroll-open var(--transition-time) ease-in forwards;
+}
+
+@keyframes scroll-open {
+    0%{
+        height: var(--minimum-height);
+    }
+    100%{
+        height: var(--total-height);
+    }
+}
+
+@keyframes scroll-closed {
+    0%{
+        height: var(--total-height)
+    }
+    100%{
+        height: var(--minimum-height);
+    }
+}
+
+.clickable_list_element #info {
     font: var(--description-font);
+    opacity: 0;
+    transition: opacity 1s ease-in;
+}
+
+.clickable_list_element.selected #info {
+    opacity: 1;
+    transition: opacity 1s ease-in;
+}
+
+.clickable_list_element.suboptimal {
+    background-color: var(--non-focus-background-color_2);
 }
 
 .horizontal-container {
@@ -125,7 +163,7 @@ td {
     align-items: center;
     flex: 1;
 }
-
+/*========= TOOLBAR ==========================================*/
 .toolbar {
     display: flex;
     flex-direction: row;
@@ -136,10 +174,14 @@ td {
     color: var(--non-focus-background-color);
 }
 
-.stylish-input {
-    width: 300px;
-    height: 30px;
-    padding: 3px;
+.toolbar div {
+    align-content: center;
+}
+
+.toolbar input {
+    width: 70%;
+    height: 40px;
+    padding: 1px;
     margin-right: 5px;
     align-self: center;
     border: var(--common-border);
@@ -149,21 +191,44 @@ td {
     background-color: var(--non-focus-background-color);
     transition: var(--theme-color-transition);
     float: left;
+    align-content: center;
 }
 
-.stylish-input:focus {
+.toolbar input:focus {
     outline: none;
     border-color: var(--theme-color_1);
+    background-color: var(--focus-background-color);
+}
+
+.toolbar button {
+    background-size: contain;
+    background-repeat: no-repeat;
+    align-self: center;
+    height: 46px;
+    width: 46px;
+    max-width: 46px;
+    max-height: 46px;
+    border: var(--common-border);
+    border-radius: 10px;
+    margin-right: 5px;
+    transition: translate 0.2s ease-in-out;
+}
+
+.toolbar button:hover {
+    border: var(--focus-border);
+}
+
+.toolbar button:active {
+    transform: translate(3px, 3px);
+    scale: 0.95;
+}
+
+.goal_button {
+    background-image: url('/static/images/goal.png');
 }
 
 .search_button {
     background-image: url('/static/images/search_icon.png');
-    background-size: contain;
-    align-self: center;
-    height: 35px;
-    width: 35px;
-    border-radius: 25px;
-    border-width: 3px;
 }
 
 .switch {

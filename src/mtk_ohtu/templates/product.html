@@ -59,7 +59,6 @@
         </script>
         <div>
             {% if show_route %}
-
             <table>
                 <tr>
                     <th align="left">Fuel</th>
@@ -89,7 +88,6 @@
                 <label for="selectAll" style="align-self: center;">Show all</label>
             </div>
         </div>
-
         {% if show_route %}
         <div>
             <div class="horizontal-container">
@@ -107,10 +105,10 @@
         {% endif %}
 
         <!--Input destination-->
-        <div>
-            <div class="horizontal-container">
-                <h4 style="margin-right: 10px;">Delivery address</h4>
-                <input class="stylish-input" type="text" name="address" minlength="1" maxlength="200">
+        <div style="width: 30%; max-width: 500px;">
+            <div style="display: flex; flex-direction: row;">
+                <button type="button" class="goal_button"></button>
+                <input class="stylish-input" type="text" name="address" placeholder="input address">
                 <button type="submit" class="search_button"></button>
             </div>
         </div>
