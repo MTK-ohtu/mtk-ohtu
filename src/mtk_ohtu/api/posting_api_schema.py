@@ -1,5 +1,7 @@
 from enum import Enum
 from marshmallow import Schema, post_load, fields, ValidationError
+from .class_field import ClassField
+from .address_datatype import Address
 from ..database.db_enums import BuyOrSell, DeliveryMethodType, SupplyDemandType
 
 
@@ -8,7 +10,7 @@ class EntryType(Enum):
     UPDATE = "update"
     DELETE = "delete"
 
-class posting_api_schema(Schema):
+class PostingApiSchema(Schema):
     posting_id = fields.Int(required=True)
     entry_type = fields.Enum(EntryType, required=True)
     title = fields.Str()
@@ -21,5 +23,9 @@ class posting_api_schema(Schema):
     expiry_date = fields.DateTime()
     price = fields.Float()
     delivery_details = fields.Str()
-    address = 2 # (required): address object
+    address = ClassField(Address)
     date_created = fields.DateTime()
+
+    @post_load
+    def j():
+        pass
