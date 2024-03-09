@@ -22,7 +22,7 @@
 
         <div>
             <div>
-                <h2>Fuel economy</h2>
+                <h3>Fuel economy</h3>
                 <p>
                     <label for="fuelType">Fuel:</label>
                     <select id="fuelType" name="fuelType">
@@ -62,11 +62,11 @@
             <table>
                 <tr>
                     <th align="left">Fuel</th>
-                    <th align="left">CO2</th>
+                    <th style="text-align:left;">kg CO2</th>
                     {% for emission in emission_comparison %}
-                <tr>
+                <tr style="">
                     <td>{{emission}}</td>
-                    <td>{{emission_comparison[emission]}} kg</td>
+                    <td style="text-align: right;">{{emission_comparison[emission]}}</td>
                     {% endfor %}
             </table>
             {% endif %}
@@ -93,7 +93,7 @@
             <div class="horizontal-container">
                 <div>
                     <div class="horizontal-container even">
-                        <h1>Route:</h1>
+                        <button type="button" class="route_button" id="route_button"></button>
                         <h3>{{distance}} km</h3>
                         <h3>{{duration}} h</h3>
                         <h3>{{emissions}} kg CO2</h3>

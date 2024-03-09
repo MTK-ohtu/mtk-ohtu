@@ -3,7 +3,7 @@
 
     <!-- Block 1: List for contractor cards-->
     <div style="background-color: #f1f1f1; padding: 10px; font-size: 18px;  width: 40%; float: left;">
-        <div id="list_div" style="overflow: auto;border: 1px solid #ccc; overflow-y: scroll; height: 800px;">
+        <div id="list_div" style="overflow: auto;border: 1px solid #ccc; overflow-y: scroll; scroll-behavior: smooth; height: 800px;">
         </div>
     </div>
 
@@ -31,7 +31,7 @@
         <!-- Leaflet + code -->
         <script>
 
-            var padding = 0.01;
+            var padding = 0.1;
             var hidden_elements = [];
             var in_range_gjson = JSON.parse('{{ in_range | tojson | safe }}');
             var out_range_gjson = JSON.parse('{{ out_range | tojson | safe }}');
@@ -41,19 +41,21 @@
             var listElement_to_bounds = {};
             var address_to_listElement = {};
 
-            var last_open = null;
+            var lastOpenListElement = null;
             const companyCount = document.getElementById("company_count")
             var defaultCoordinates = [62.41920782078211, 26.061582656316585]
             var productCoordinates = [parseFloat('{{ listing.location.latitude }}'), parseFloat('{{ listing.location.longitude }}')]
-            previousBounds = null;
+            var combined_bounds = null
+            var previousBounds = null;
 
             // Interactive elements
+            var routeButton = document.getElementById('route_button')
             var setGoalButton = document.getElementById('set_goal')
             var searchButton = document.getElementById('search_button')
             var mapDiv = document.getElementById('map')
             var addressInput = document.getElementById('address_input')
 
-            // Icons
+            // Leaflet marker icons
             var okTruck = new L.Icon({
                 iconUrl: '/static/images/ok_truck.png',
                 shadowUrl: '/static/images/point.png',
@@ -93,18 +95,7 @@
             L.control.scale().addTo(map);
 
             
-            // Define function for clicking on the map
-            map.on('click', function (e) {
-                clickLat = e.latlng.lat
-                clickLng = e.latlng.lng
-                // If destination selection is on, post chosen coordinates
-                if (setGoalButton.classList.contains('pressed')) {
-                    mapDiv.classList.remove('set_goal')
-                    setGoalButton.classList.remove('pressed')
-                    addressInput.value=clickLat+","+clickLng
-                    searchButton.click()
-                }
-            })
+            
 
             // Default bounds for route (only product)
             var route_bounds = L.latLngBounds(
@@ -129,6 +120,38 @@
                 route_bounds = L.latLngBounds(southWest, northEast);
             }
 
+            // Define function for clicking on the map
+            map.on('click', function (e) {
+                clickLat = e.latlng.lat
+                clickLng = e.latlng.lng
+                // If destination selection is on, post chosen coordinates
+                if (setGoalButton.classList.contains('pressed')) {
+                    mapDiv.classList.remove('set_goal')
+                    setGoalButton.classList.remove('pressed')
+                    addressInput.value=clickLat+","+clickLng
+                    searchButton.click()
+                }
+            })
+
+            // Show route button
+            if (routeButton != null) {
+                routeButton.addEventListener('click', function() {
+                    if (routeButton.classList.contains('pressed')) {
+                        routeButton.classList.remove('pressed')
+                        if (lastOpenListElement != null) {
+                            map.flyToBounds(listElement_to_bounds[lastOpenListElement.id].pad(padding*5))
+                        }
+                        else map.flyToBounds(combined_bounds.pad(padding/10))
+                    } else {
+                        previousBounds = map.getBounds()
+                        routeButton.classList.add('pressed')
+                        if (lastOpenListElement != null) {
+                            map.flyToBounds(boundsOf([route_bounds, listElement_to_bounds[lastOpenListElement.id]]))    
+                        }
+                        else map.flyToBounds(route_bounds)
+                    }
+                })
+            }
 
             // Destination selector button
             setGoalButton.addEventListener('click', function() {
@@ -142,19 +165,20 @@
             })
 
             // Calculate bounds here
-            var calculateBounds = function (list) {
-                var lonList = []; var latList = []
+            var boundsOf = function (list) {
+                var lngList = []; var latList = []
                 list.forEach(bounds => {
-                    if (bounds) {
+                    if (bounds.hasOwnProperty('_northEast')) {
                         latList.push(bounds._northEast.lat)
                         latList.push(bounds._southWest.lat)
-                        lonList.push(bounds._northEast.lng)
-                        lonList.push(bounds._southWest.lng)
+                        lngList.push(bounds._northEast.lng)
+                        lngList.push(bounds._southWest.lng)
                     }
                 })
+                if (lngList.length === 0) return null;
                 return L.latLngBounds(
-                    L.latLng(Math.min(...latList), Math.min(...lonList)),
-                    L.latLng(Math.max(...latList), Math.max(...lonList))
+                    L.latLng(Math.min(...latList), Math.min(...lngList)),
+                    L.latLng(Math.max(...latList), Math.max(...lngList))
                 )
             }
             // List element animations
@@ -166,6 +190,10 @@
                     element.classList.remove('open')
                     element.classList.add('closed')
                 } else {
+                    // Wait opening animation to end before scrolling into view
+                    element.addEventListener('animationend', function() {
+                        element.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start'});
+                    }, { once: true })
                     element.classList.remove('closed')
                     element.classList.add('open')
                 }
@@ -174,23 +202,28 @@
             var toggleListElement = function (element) {
                 if (element.classList.contains('selected')) {
                     element.classList.remove('selected')
-                    last_open = null;
+                    lastOpenListElement = null;
                     runListElementAnimation(element)
-                    map.flyToBounds(combined_bounds.extend(route_bounds));
+                    // If route button was pressed, fit route on map
+                    if (routeButton != null && routeButton.classList.contains('pressed')) {
+                        map.flyToBounds(route_bounds)
+                    }
+                    // Else fit contractors and route
+                    else map.flyToBounds(boundsOf([combined_bounds, route_bounds]));
                 } else {
                     element.classList.add('selected')
-                    if (last_open != null) {
+                    if (lastOpenListElement != null) {
                         // Hide previosly opened list element
-                        last_open.classList.remove('selected')
-                        runListElementAnimation(last_open)
+                        lastOpenListElement.classList.remove('selected')
+                        runListElementAnimation(lastOpenListElement)
                     }
-                    last_open = element;
+                    lastOpenListElement = element;
                     runListElementAnimation(element)
-                    element.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
                     elementBounds = listElement_to_bounds[element.id];
-                    if (!map.getBounds().contains(elementBounds)) {
-                        map.flyToBounds(route_bounds.extend(elementBounds).pad(padding));
-                    }
+                    if (routeButton != null && !routeButton.classList.contains('pressed')) {
+                        map.flyToBounds(elementBounds.pad(padding*5))
+                    } 
+                    else map.flyToBounds(boundsOf([route_bounds, elementBounds]).pad(padding/5));
                 }
             }
                 
@@ -225,8 +258,8 @@
             in_gjson = L.geoJSON(in_range_gjson, { onEachFeature: onEachFeature, pointToLayer: create_marker });
             out_gjson = L.geoJSON(out_range_gjson, { onEachFeature: onEachFeature, pointToLayer: create_badmarker });
 
-            var combined_bounds = calculateBounds([route_bounds, in_gjson.getBounds()]);
-            
+            combined_bounds = boundsOf([route_bounds, in_gjson.getBounds()]);
+
             // Checkbox 'Show all' functionality
             const selectAll = document.getElementById('selectAll');
             selectAll.addEventListener("change", function () {
@@ -235,16 +268,18 @@
                     hidden_elements.forEach(element => { element.style.display = 'block' })
                     if (out_range_gjson.length != 0) {
                         companyCount.textContent = in_range_gjson.features.length + out_range_gjson.features.length
-                        combined_bounds = calculateBounds([route_bounds, in_gjson.getBounds(), out_gjson.getBounds()])
-                    }
+                        combined_bounds = boundsOf([in_gjson.getBounds(), out_gjson.getBounds()])
+                    }                
                 }
                 else {
                     map.removeLayer(out_gjson);
                     hidden_elements.forEach(element => { element.style.display = 'none' });
                     companyCount.textContent = in_range_gjson.features.length;
-                    combined_bounds = calculateBounds([route_bounds, in_gjson.getBounds()])
+                    combined_bounds = boundsOf([in_gjson.getBounds()])
                 }
-                map.flyToBounds(combined_bounds.pad(padding));
+                if (combined_bounds != null && routeButton!= null && !routeButton.classList.contains('pressed')) {
+                    map.flyToBounds(boundsOf([route_bounds,  combined_bounds]).pad(padding/10));
+                }
             });
 
             // Create elements to show on the list side ====================================================================
@@ -258,7 +293,13 @@
                         <h4 style="align-self: left;">${feature.properties.name}</h4>
                         <p style="align-self: center;">${feature.properties.address}</p>
                     </div>
-                    <p id="info">TEKSTI</p>
+                    <div class="horizontal-container even">
+                        <p id="info">
+                            "As a transportation entrepreneur, I take immense pride in the operations of my company. Our commitment to excellence shines through in every aspect of our business, from the reliability of our fleet to the professionalism of our drivers. We have cultivated a reputation for efficiency and timeliness, ensuring that our clients' goods reach their destinations safely and on schedule. What sets us apart is our unwavering dedication to customer satisfaction, always going above and beyond to meet their unique needs. With a focus on innovation and continuous improvement, we strive to exceed expectations, solidifying our position as a leader in the transportation industry."
+                            - ChatGPT
+                        </p>
+                        <button type="button" class="zoom_in_button" id="inner_button"></button>
+                    </div>
                     `;
                 // Add element to list
                 listElement.classList.add('clickable_list_element');
@@ -284,10 +325,16 @@
                 // Functionality for clicking this list element
                 listElement.addEventListener('click', function () {
                     // Make sure that target (button) is the list element it self
-                    if (event.target.tagName === 'BUTTON') {
-                        var button = event.target;
+                    if (event.target.tagName === 'BUTTON') { 
+                        if (event.target.id == 'inner_button') {
+                            var button = event.target.parentElement.closest('button')
+                            map.flyToBounds(listElement_to_bounds[button.id])
+                        } else {
+                            toggleListElement(button)
+                        }
                     } else {
-                        var button = event.target.closest('button');
+                        var button = event.target.parentElement.closest('button')
+                        toggleListElement(button)
                     }
                     // Toggle popup in corresponding marker
                     marker = address_to_marker[button.id];
@@ -296,8 +343,6 @@
                     } else {
                         marker.openPopup()
                     }
-                    // Toggle info in the list element
-                    toggleListElement(button)
                 });
             } // ==============================================================================================
 
@@ -311,7 +356,7 @@
 
             // Default setup 
             companyCount.textContent = in_range_gjson.features.length
-            map.flyToBounds(combined_bounds.extend(route_bounds));
+            map.flyToBounds(boundsOf([route_bounds, combined_bounds]).pad(padding/5));
 
         </script>
     </div>

@@ -12,20 +12,22 @@
     --focus-background-color_2: #fec5c5;
     --non-focus-background-color_2: #bb8585;
     /* Theme borders */
-    --common-border: var(--theme-color_2) solid 3px;
-    --focus-border: var(--theme-color_3) solid 3px;
+    --common-border: var(--theme-color_2) solid 4px;
+    --focus-border: var(--theme-color_3) solid 4px;
     /* Theme fonts */
-    --header-1-font: normal normal 700 30px/33px "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
-    --header-2-font: normal normal 700 28px/30px "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
-    --header-3-font: normal normal 700 26px/28px "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
-    --header-4-font: normal normal 600 22px/24px "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
-    --common-text-font: normal normal 400 20px/22px "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
-    --description-font: normal normal 400 20px/22px "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
-    --table-item-font: normal normal 400 20px/26px "Consolas", monaco, monospace;
+    --theme-font-family_1: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+    --theme-font-family_2: "Consolas", monaco, monospace;
+    --header-1-font: normal normal 700 30px/33px var(--theme-font-family_1);
+    --header-2-font: normal normal 700 28px/30px var(--theme-font-family_1);
+    --header-3-font: normal normal 700 26px/28px var(--theme-font-family_1);
+    --header-4-font: normal normal 600 22px/24px var(--theme-font-family_1);
+    --common-text-font: normal normal 400 20px/22px var(--theme-font-family_1);
+    --description-font: normal normal 400 20px/22px var(--theme-font-family_1);
+    --table-item-font: normal normal 400 20px/21px var(--theme-font-family_2);
     /* Transitions */
     --theme-color-transition: var(--theme-color_3) 0.3s ease;
-    --transition-time: 0.2s; 
-    --click-button-transition: 
+    --button-transition-time: 0.2s;
+    --opening-transition-time: 0.3s; 
 }
 
 body {
@@ -104,11 +106,11 @@ td {
 }
 
 .clickable_list_element.closed {
-    animation: scroll-closed var(--transition-time) ease-in forwards
+    animation: scroll-closed var(--opening-transition-time) ease-in forwards
 }
 
 .clickable_list_element.open {
-    animation: scroll-open var(--transition-time) ease-in forwards;
+    animation: scroll-open var(--opening-transition-time) ease-in forwards;
 }
 
 @keyframes scroll-open {
@@ -203,15 +205,12 @@ td {
 .toolbar button {
     background-size: contain;
     background-repeat: no-repeat;
+    background-color: var(--non-focus-background-color);
     align-self: center;
-    height: 46px;
-    width: 46px;
-    max-width: 46px;
-    max-height: 46px;
     border: var(--common-border);
     border-radius: 10px;
     margin-right: 5px;
-    transition: translate 0.2s ease-in-out;
+    transition: translate var(--button-transition-time) ease-in-out;
 }
 
 .toolbar button:hover {
@@ -223,15 +222,25 @@ td {
     scale: 0.95;
 }
 
+.route_button {
+    min-height: 70px;
+    min-width: 90px;
+    background-image: url('/static/images/route_icon.png');
+}
+
+.route_button.pressed {
+    filter: invert(100%);
+    border: var(--focus-border)
+}
+
 .goal_button {
+    min-height: 46px;
+    min-width: 46px;
     background-image: url('/static/images/goal_button.png');
-    transition: translate 0.2s ease-in-out;
 }
 
 .goal_button.pressed {
     filter: invert(100%);
-    transform: translate(3px, 3px);
-    scale: 0.95;
     border: var(--focus-border)
 }
 
@@ -240,7 +249,32 @@ td {
 }
 
 .search_button {
+    min-height: 46px;
+    min-width: 46px;
     background-image: url('/static/images/search_icon.png');
+}
+
+.zoom_in_button {
+    min-height: 46px;
+    min-width: 46px;
+    background-image: url('/static/images/zoom_in_button.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    align-self: center;
+    border: var(--common-border);
+    border-radius: 16px;
+    margin-right: 5px;
+    margin-bottom: 3px;
+    transition: translate var(--button-transition-time) ease-in-out;
+}
+
+.zoom_in_button:active {
+    transform: translate(3px, 3px);
+    scale: 0.95;
+}
+
+.zoom_in_button:hover {
+    border: var(--focus-border);
 }
 
 .switch {
