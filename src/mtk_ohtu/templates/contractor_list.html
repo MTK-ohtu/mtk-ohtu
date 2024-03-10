@@ -138,10 +138,7 @@
                 routeButton.addEventListener('click', function() {
                     if (routeButton.classList.contains('pressed')) {
                         routeButton.classList.remove('pressed')
-                        if (lastOpenListElement != null) {
-                            map.flyToBounds(listElement_to_bounds[lastOpenListElement.id].pad(padding*5))
-                        }
-                        else map.flyToBounds(combined_bounds.pad(padding/10))
+                        map.flyToBounds(boundsOf([combined_bounds]).pad(padding/10))
                     } else {
                         previousBounds = map.getBounds()
                         routeButton.classList.add('pressed')
@@ -220,10 +217,12 @@
                     lastOpenListElement = element;
                     runListElementAnimation(element)
                     elementBounds = listElement_to_bounds[element.id];
-                    if (routeButton != null && !routeButton.classList.contains('pressed')) {
-                        map.flyToBounds(elementBounds.pad(padding*5))
-                    } 
-                    else map.flyToBounds(boundsOf([route_bounds, elementBounds]).pad(padding/5));
+                    // if (routeButton != null && !routeButton.classList.contains('pressed')) {
+                    //     map.flyToBounds(boundsOf([elementBounds.pad(padding*5))
+                    // }
+                    if (routeButton != null && routeButton.classList.contains('pressed')) {
+                        map.flyToBounds(boundsOf([route_bounds, elementBounds]).pad(padding/5));
+                    }
                 }
             }
                 
@@ -278,7 +277,7 @@
                     combined_bounds = boundsOf([in_gjson.getBounds()])
                 }
                 if (combined_bounds != null && routeButton!= null && !routeButton.classList.contains('pressed')) {
-                    map.flyToBounds(boundsOf([route_bounds,  combined_bounds]).pad(padding/10));
+                    map.flyToBounds(boundsOf([route_bounds, combined_bounds]).pad(padding/10));
                 }
             });
 
@@ -293,30 +292,30 @@
                         <h4 style="align-self: left;">${feature.properties.name}</h4>
                         <p style="align-self: center;">${feature.properties.address}</p>
                     </div>
-                    <div class="horizontal-container even">
-                        <p id="info">
+                    <div class="horizontal-container even" id="info">
+                        <p>
                             "As a transportation entrepreneur, I take immense pride in the operations of my company. Our commitment to excellence shines through in every aspect of our business, from the reliability of our fleet to the professionalism of our drivers. We have cultivated a reputation for efficiency and timeliness, ensuring that our clients' goods reach their destinations safely and on schedule. What sets us apart is our unwavering dedication to customer satisfaction, always going above and beyond to meet their unique needs. With a focus on innovation and continuous improvement, we strive to exceed expectations, solidifying our position as a leader in the transportation industry."
                             - ChatGPT
                         </p>
                         <button type="button" class="zoom_in_button" id="inner_button"></button>
                     </div>
                     `;
-                // Add element to list
+                // Element style
                 listElement.classList.add('clickable_list_element');
-                // This will be added 
+                // Add element to list, show closing animation when elements appears
                 listElement.classList.add('open')
-                listElement.style.borderRadius = '20px 0 0 0'
                 document.getElementById('list_div').appendChild(listElement);
                 runListElementAnimation(listElement)
 
-                // Add element to mappings
+                // Create squere bounds around element coordinates, add element to mappings
                 var bounds = L.latLngBounds(
                     L.latLng(feature.geometry.coordinates[1]-padding, feature.geometry.coordinates[0]-padding),
                     L.latLng(feature.geometry.coordinates[1]+padding, feature.geometry.coordinates[0]+padding),
                     );
                 listElement_to_bounds[listElement.id] = bounds
                 address_to_listElement[feature.properties.address] = listElement;
-                // Define style of list element if it's set out to be 'hidden'
+
+                // Hide suboptimal elements
                 if (hide) {
                     listElement.style.display = 'none';
                     listElement.classList.add('suboptimal')
@@ -324,24 +323,24 @@
                 }
                 // Functionality for clicking this list element
                 listElement.addEventListener('click', function () {
-                    // Make sure that target (button) is the list element it self
-                    if (event.target.tagName === 'BUTTON') { 
-                        if (event.target.id == 'inner_button') {
-                            var button = event.target.parentElement.closest('button')
-                            map.flyToBounds(listElement_to_bounds[button.id])
-                        } else {
-                            toggleListElement(button)
-                        }
-                    } else {
+                    if (event.target.id == 'inner_button') {
                         var button = event.target.parentElement.closest('button')
-                        toggleListElement(button)
-                    }
-                    // Toggle popup in corresponding marker
-                    marker = address_to_marker[button.id];
-                    if (marker.isPopupOpen()) {
-                        marker.closePopup()
+                        map.flyToBounds(listElement_to_bounds[button.id])
                     } else {
-                        marker.openPopup()
+                        // Make sure that target (button) is the list element it self
+                        if (event.target.tagName === 'BUTTON') {
+                            var button = event.target
+                        } else {
+                            var button = event.target.closest('button')
+                        }
+                        toggleListElement(button)
+                        // Toggle popup in corresponding marker
+                        marker = address_to_marker[button.id];
+                        if (marker.isPopupOpen()) {
+                            marker.closePopup()
+                        } else {
+                            marker.openPopup()
+                        }
                     }
                 });
             } // ==============================================================================================
