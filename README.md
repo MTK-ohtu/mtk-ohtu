@@ -1,4 +1,4 @@
-# mtk-ohtu ![badge](https://github.com/MTK-ohtu/mtk-ohtu/workflows/CI/badge.svg)[![codecov](https://codecov.io/gh/MTK-ohtu/mtk-ohtu/graph/badge.svg?token=U4WI4WSGPC)](https://codecov.io/gh/MTK-ohtu/mtk-ohtu)
+# mtk-ohtu [![badge](https://github.com/MTK-ohtu/mtk-ohtu/workflows/CI/badge.svg)](https://github.com/MTK-ohtu/mtk-ohtu/actions)[![codecov](https://codecov.io/gh/MTK-ohtu/mtk-ohtu/graph/badge.svg?token=U4WI4WSGPC)](https://codecov.io/gh/MTK-ohtu/mtk-ohtu)
 
 ## About
 A logistics optimization tool for connecting biomass sidestream sellers, buyers and logistics providers.
