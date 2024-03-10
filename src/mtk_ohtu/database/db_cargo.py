@@ -1,5 +1,4 @@
 import logging
-import psycopg
 from psycopg_pool import ConnectionPool
 from .db_enums import CategoryType, BatchUnitsType
 from .db_datastructs import CargoTypeInfo

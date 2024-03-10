@@ -64,6 +64,84 @@ def db_add_contractor_location(
     return out
 
 
+def db_modify_contractor_location(
+    location_id: int,
+    address: str,
+    telephone: str,
+    email: str,
+    longitude: float,
+    latitude: float,
+    radius: int,
+    description: str,
+    pool: ConnectionPool,
+) -> bool:
+    """
+    Modifies the data of existing contractor location
+    Args:
+        location_id: locations identifying number
+        address: location address
+        telephone: telephone number
+        email: email address
+        longitude: coordinate
+        latitude: coordinate
+        radius: delivery radius
+        description: location summary
+        pool: a database connection
+
+    Returns:
+        bool: True if succesful, otherwise False
+    """
+    with pool.connection() as connection:
+        cursor = connection.cursor()
+        try:
+            cursor.execute(
+                "UPDATE contractor_locations SET address=%s, SET telephone=%s, SET email=%s, SET longitude=%s, SET latitude=%s, SET radius=%s, SET description=%s WHERE id=%s",
+                (address, telephone, email, longitude, latitude, radius, description, location_id),
+            )
+            connection.commit()
+        except:
+            return False
+    return True
+
+
+def db_remove_contractor_location(location_id: int, pool: ConnectionPool) -> bool:
+    """
+    Deletes contractor location
+    Args:
+        location_id: locations identifying number
+        pool: a database connection
+    Returns:
+        bool: True if successful, otherwise False
+    """
+    with pool.connection() as connection:
+        cursor = connection.cursor()
+        try:
+            cursor.execute("DELETE FROM contractor_locations WHERE id=%s;", (location_id,))
+            connection.commit()
+        except:
+            return False
+    return True
+
+def db_get_contractor_location_owner(location_id: int, pool: ConnectionPool) -> bool:
+    """
+    Returns location owners contractor id number
+    Args:
+        location_id: locations identifying number
+        pool: a database connection
+    Returns:
+        contractor id, otherwise 0
+    """
+    with pool.connection() as connection:
+        cursor = connection.cursor()
+        cursor.execute(
+            "SELECT C.id FROM contractors C, contractor_locations CL WHERE CL.contractor_id=C.id AND CL.id=%s;", (location_id,)
+        )
+        result = cursor.fetchone()[0]
+    if not result:
+        return 0
+    return result
+
+
 def db_get_contractor_locations(
     contractor_id: int, pool: ConnectionPool
 ) -> list[LogisticsNode]:
