@@ -23,6 +23,7 @@
 						<div class="card-body p-5">
 							<h1 class="fs-4 card-title fw-bold mb-4">Kirjaudu</h1>
 							<form method="POST" class="needs-validation" novalidate="" autocomplete="off">
+								<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>		
 								<div class="mb-3">
 									<label class="mb-2 text-muted" for="email">Username</label>
 									<input id="username" type="text" class="form-control" name="username" value=""

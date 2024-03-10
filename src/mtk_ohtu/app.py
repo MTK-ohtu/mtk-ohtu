@@ -7,6 +7,7 @@ from .routes.location import location_bp
 from .routes.cargo import cargo_bp
 from .routes.user import user_bp
 from .api.routes import api_bp
+from flask_wtf.csrf import CSRFProtect
 
 
 def create_app():
@@ -23,6 +24,7 @@ def create_app():
     app.config.from_object(__name__)
     app.config["SESSION_TYPE"] = "filesystem"
     Session(app)
+    CSRFProtect(app)
 
     return app
 
