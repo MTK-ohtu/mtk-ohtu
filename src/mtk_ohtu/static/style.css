@@ -98,6 +98,7 @@ td {
     padding-top: 3px;
     margin-bottom: 10px;
     overflow: hidden;
+    border-radius: 20px 0 0 0;
 }
 
 .clickable_list_element.selected {
@@ -131,19 +132,22 @@ td {
     }
 }
 
-.clickable_list_element #info {
+.clickable_list_element #info > * {
     font: var(--description-font);
     opacity: 0;
     transition: opacity 1s ease-in;
 }
 
-.clickable_list_element.selected #info {
+.clickable_list_element.selected #info > * {
     opacity: 1;
-    transition: opacity 1s ease-in;
 }
 
 .clickable_list_element.suboptimal {
     background-color: var(--non-focus-background-color_2);
+}
+
+.clickable_list_element.suboptimal.selected {
+    background-color: var(--focus-background-color_2);
 }
 
 .horizontal-container {

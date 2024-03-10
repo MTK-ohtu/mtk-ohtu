@@ -6,6 +6,8 @@ from ..database.db_enums import CategoryType
 from ..config import DATABASE_POOL
 from .location import Location
 from ..database.db_datastructs import Listing
+#POISTA TÄMÄ
+import geopy.distance
 
 
 class ContractorDivision:
@@ -18,15 +20,23 @@ class ContractorDivision:
     Args:
         listing: Listing
         cargo_type: CargoType
+        database_access: ref. to database.db_contractors.db_get_locations_by_cargo_type
         delivery_location: Location
-        cargo_capasity: int
+        cargo_capacity: int
     """
 
-    def __init__(self, listing:Listing, cargo_type:CategoryType, delivery_location:Location = None,cargo_capasity:int = 1e10):
+    def __init__(self,
+                 listing:Listing, 
+                 cargo_type:CategoryType, 
+                 database_access,
+                 delivery_location:Location = None,
+                 cargo_capacity:int = 1e10):
+        
+        self.database_access = database_access
         self.listing = listing
         self.delivery_location = delivery_location        
-        self.cargo_capasity = cargo_capasity
-        self.contractors = db_get_locations_by_cargo_type(cargo_type, DATABASE_POOL)
+        self.cargo_capacity = cargo_capacity
+        self.contractors = database_access(cargo_type, DATABASE_POOL)
         self.optimal = None
         self.suboptimal = None
         self.split_by_range()
@@ -51,7 +61,6 @@ class ContractorDivision:
             self.suboptimal = None
 
 
-
     def get_optimal(self):
         """
         Creates featurecollection of contractors listed as 'in range'.
@@ -74,13 +83,13 @@ class ContractorDivision:
         
     
 
-    def filter_by_cargo_capasity(self, cargo_capacity: int):
+    def filter_by_cargo_capacity(self, cargo_capacity: int):
         """
         Filters contractors by given cargo capacity.
         Args:
             cargo_capacity: int
         """
-        self.cargo_capasity = cargo_capacity
+        self.cargo_capacity = cargo_capacity
         self.optimal = list(
             filter(lambda x: x.cargo_capacity >= cargo_capacity, self.optimal)
         )
@@ -95,7 +104,7 @@ class ContractorDivision:
         Ars:
             type: CategoryType
         """
-        self.contractors = db_get_locations_by_cargo_type(type, DATABASE_POOL)
+        self.contractors = self.database_access(type, DATABASE_POOL)
         
         # for c in self.contractors:
         #     print(c)
