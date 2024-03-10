@@ -2,26 +2,27 @@
 
 {% block content %}
 <form action="/listing/{{ listing.id }}" method="POST">
-    <div class="horizontal-container">
 
-        <div class="card">
-            <div class="horizontal-container even">
-                <h1>{{listing.category.value}}:</h1>
-                <h1>{{listing.price}} €</h1>
+    <div class="product_container">
+        
+        <div class="horizontal-container">
+            <div class="card">
+                <div class="horizontal-container even">
+                    <h1>{{listing.category.value}}:</h1>
+                    <h1>{{listing.price}} €</h1>
+                </div>
+                <!-- ({{listing.location.longitude}}, {{listing.location.latitude}}) -->
+                <p>{{listing.address}}</p>
             </div>
-            <!-- ({{listing.location.longitude}}, {{listing.location.latitude}}) -->
-            <p>{{listing.address}}</p>
-        </div>
-
-        <div>
             <div>
                 <h3>Description:</h3>
                 <p class="description">{{listing.description}}</p>
             </div>
         </div>
-
-        <div>
-            <div>
+        
+        
+        <div class="horizontal-container even">
+            <div >
                 <h3>Fuel economy</h3>
                 <p>
                     <label for="fuelType">Fuel:</label>
@@ -41,37 +42,38 @@
                     <input type="hidden" name="listing_id" value="{{ listing.id }}">
                 </p>
             </div>
-        </div>
-        <script>
-            // Change fuel efficiency unit based on fuel type
-            document.getElementById('fuelType').addEventListener('change', function () {
-                var fuelType = this.value;
-                var unitDisplay = document.getElementById('unit');
 
-                if (fuelType === 'petrol' || fuelType === 'diesel' || fuelType === 'biodiesel') {
-                    unitDisplay.textContent = 'l/100 km';
-                } else if (fuelType === 'natural_gas' || fuelType === 'bio_gas') {
-                    unitDisplay.textContent = 'kg/100 km';
-                } else if (fuelType === 'electricity') {
-                    unitDisplay.textContent = 'kWh/100 km';
-                }
-            });
-        </script>
-        <div>
-            {% if show_route %}
-            <table>
-                <tr>
-                    <th align="left">Fuel</th>
-                    <th style="text-align:left;">kg CO2</th>
-                    {% for emission in emission_comparison %}
-                <tr style="">
-                    <td>{{emission}}</td>
-                    <td style="text-align: right;">{{emission_comparison[emission]}}</td>
-                    {% endfor %}
-            </table>
-            {% endif %}
+            <script>
+                // Change fuel efficiency unit based on fuel type
+                document.getElementById('fuelType').addEventListener('change', function () {
+                    var fuelType = this.value;
+                    var unitDisplay = document.getElementById('unit');
+
+                    if (fuelType === 'petrol' || fuelType === 'diesel' || fuelType === 'biodiesel') {
+                        unitDisplay.textContent = 'l/100 km';
+                    } else if (fuelType === 'natural_gas' || fuelType === 'bio_gas') {
+                        unitDisplay.textContent = 'kg/100 km';
+                    } else if (fuelType === 'electricity') {
+                        unitDisplay.textContent = 'kWh/100 km';
+                    }
+                });
+            </script>
+            <div>
+                {% if show_route %}
+                <table>
+                    <tr>
+                        <th align="left">Fuel</th>
+                        <th align="left">kg CO2</th>
+                        {% for emission in emission_comparison %}
+                    <tr>
+                        <td align="left">{{emission}}</td>
+                        <td align="right">{{emission_comparison[emission]}}</td>
+                        {% endfor %}
+                </table>
+                {% endif %}
+            </div>
+            <!-- <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}"> -->
         </div>
-        <!-- <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}"> -->
     </div>
 
     <div class="toolbar">
@@ -113,13 +115,13 @@
             </div>
         </div>
     </div>
+
 </form>
 
 
 <!--we need to list here the delivery companies-->
-<div>
-    {% include "contractor_list.html" %}
-</div>
+{% include "contractor_list.html" %}
+
 
 
 {% endblock %}

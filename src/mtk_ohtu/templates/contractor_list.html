@@ -1,32 +1,21 @@
 <!-- This view is divided into two vertical blocks -->
-<div style="height: 70vh;">
+<div style="height: 70vh; display: flex;">
 
     <!-- Block 1: List for contractor cards-->
-    <div style="background-color: #f1f1f1; padding: 10px; font-size: 18px;  width: 40%; float: left;">
-        <div id="list_div" style="overflow: auto;border: 1px solid #ccc; overflow-y: scroll; scroll-behavior: smooth; height: 800px;">
-        </div>
+    <!--<div style="padding: 10px;  width: 40%; float: left;">-->
+    <div id="list_div" class="card_scrollbox" style="flex:1; max-width: 40%; float: left;">
     </div>
+    <!--</div>-->
 
     <!-- Block 2: Map -->
-    <div name="map_div" style="background-color: #f1f1f1; padding: 20px; font-size: 18px;">
-        <div>
-            <!-- Include Leaflet JavaScript and CSS -->
-            <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-            <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-        </div>
+    <div name="map_div" style="flex: 1;background-color: #f1f1f1; min-height: 100%;">
+    
+        <!-- Include Leaflet JavaScript and CSS -->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+        <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
         <!-- Add a container for the map -->
-        <div id="map" style="height: 800px;"></div>
-
-        <style>
-            img.huechange1 {
-                filter: hue-rotate(-120deg);
-            }
-
-            img.huechange2 {
-                filter: hue-rotate(120deg);
-            }
-        </style>
+        <div id="map" style="height: 100%;"></div>
 
         <!-- Leaflet + code -->
         <script>
@@ -46,7 +35,10 @@
             var defaultCoordinates = [62.41920782078211, 26.061582656316585]
             var productCoordinates = [parseFloat('{{ listing.location.latitude }}'), parseFloat('{{ listing.location.longitude }}')]
             var combined_bounds = null
-            var previousBounds = null;
+            var previousBounds = null
+            var focusedBounds = null
+            var zoomedIn = false
+
 
             // Interactive elements
             var routeButton = document.getElementById('route_button')
@@ -76,6 +68,15 @@
                 shadowAnchor: [0, 0]
             });
 
+            var goal = new L.Icon({
+                iconUrl: '/static/images/goal_button.png',
+                shadowUrl: '/static/images/point.png',
+                iconSize: [35, 35],
+                iconAnchor: [0, 35],
+                popupAnchor: [1, -34],
+                shadowSize: [10, 10],
+                shadowAnchor: [0, 5]
+            });
 
             // Create map
             var map = L.map('map').setView(defaultCoordinates, 10);
@@ -87,16 +88,12 @@
             }).addTo(map);
 
             // Add marker to product location
-            var product = L.marker(productCoordinates).addTo(map);
-            product._icon.classList.add('huechange1');
-            product.bindPopup("{{ listing.category.value }}\n{{ listing.address }}");
+            var productMarker = L.marker(productCoordinates).addTo(map);
+            productMarker.bindPopup('<h4>{{ listing.category.value }}</h4><p>{{ listing.address }}</p>');
 
             // Add scale
             L.control.scale().addTo(map);
-
             
-            
-
             // Default bounds for route (only product)
             var route_bounds = L.latLngBounds(
                 L.latLng(productCoordinates.map(value => value - padding)),
@@ -110,9 +107,9 @@
                 L.geoJSON(route_geojson).addTo(map);
                 // Add destination on map                
                 var destination = route_geojson["features"][0]["geometry"]["coordinates"].pop().reverse();
-                var destinationMarker = L.marker(destination).addTo(map);
-                destinationMarker._icon.classList.add('huechange2');
-                destinationMarker.bindPopup("Destination");
+                var destinationMarker = L.marker(destination, { icon: goal }).addTo(map);
+                // destinationMarker._icon.classList.add('huechange2');
+                destinationMarker.bindPopup('<p>{{ user_location.address }}</p>');
                 // Calculate route bounds on map
                 var bbox = route_geojson["features"][0]["bbox"];
                 var southWest = L.latLng(bbox[1], bbox[0]),
@@ -138,12 +135,18 @@
                 routeButton.addEventListener('click', function() {
                     if (routeButton.classList.contains('pressed')) {
                         routeButton.classList.remove('pressed')
+                        if (lastOpenListElement != null) {
+                            lastOpenListElement.querySelector('#zoom_button').classList.remove('zoomed_in')
+                            zoomedIn = false
+                        }
                         map.flyToBounds(boundsOf([combined_bounds]).pad(padding/10))
                     } else {
                         previousBounds = map.getBounds()
                         routeButton.classList.add('pressed')
                         if (lastOpenListElement != null) {
-                            map.flyToBounds(boundsOf([route_bounds, listElement_to_bounds[lastOpenListElement.id]]))    
+                            map.flyToBounds(boundsOf([route_bounds, listElement_to_bounds[lastOpenListElement.id]]))  
+                            lastOpenListElement.querySelector('#zoom_button').classList.remove('zoomed_in')
+                            zoomedIn = false
                         }
                         else map.flyToBounds(route_bounds)
                     }
@@ -197,34 +200,59 @@
             }
             // Toggle function for list elements
             var toggleListElement = function (element) {
+                // Closing list element
                 if (element.classList.contains('selected')) {
                     element.classList.remove('selected')
                     lastOpenListElement = null;
                     runListElementAnimation(element)
+                    element.querySelector('#zoom_button').classList.remove('zoomed_in')
                     // If route button was pressed, fit route on map
                     if (routeButton != null && routeButton.classList.contains('pressed')) {
                         map.flyToBounds(route_bounds)
                     }
                     // Else fit contractors and route
                     else map.flyToBounds(boundsOf([combined_bounds, route_bounds]));
+                
+                // Opening list element
                 } else {
                     element.classList.add('selected')
+                    elementBounds = listElement_to_bounds[element.id];
+
                     if (lastOpenListElement != null) {
                         // Hide previosly opened list element
                         lastOpenListElement.classList.remove('selected')
                         runListElementAnimation(lastOpenListElement)
+                        if (zoomedIn) {
+                            lastOpenListElement.querySelector('#zoom_button').classList.remove('zoomed_in')
+                            element.querySelector('#zoom_button').classList.add('zoomed_in')
+                            if (routeButton != null && routeButton.classList.contains('pressed')) {
+                                previousBounds = boundsOf([route_bounds, elementBounds])
+                            }
+                        }
                     }
                     lastOpenListElement = element;
                     runListElementAnimation(element)
-                    elementBounds = listElement_to_bounds[element.id];
-                    // if (routeButton != null && !routeButton.classList.contains('pressed')) {
-                    //     map.flyToBounds(boundsOf([elementBounds.pad(padding*5))
-                    // }
-                    if (routeButton != null && routeButton.classList.contains('pressed')) {
-                        map.flyToBounds(boundsOf([route_bounds, elementBounds]).pad(padding/5));
+                    if (zoomedIn){
+                        map.fitBounds(listElement_to_bounds[element.id])
+                    }
+                    else if (routeButton != null && routeButton.classList.contains('pressed')) {
+                        map.flyToBounds(boundsOf([route_bounds, elementBounds]).pad(padding));
+                    } 
+                    else if (!map.getBounds().contains(elementBounds)) {
+                        map.flyToBounds(elementBounds.pad(padding*10));
                     }
                 }
             }
+
+            // Toggle marker popup
+            var togglePopup = function(marker) {
+                if (marker.isPopupOpen()) {
+                    marker.closePopup()
+                } else {
+                    marker.openPopup()
+                }
+            }
+        
                 
             // Marker creation for optimal contractors
             function create_marker(feature, latlng) {
@@ -249,7 +277,7 @@
             //Define popups for contractor markers
             function onEachFeature(feature, layer) {
                 if (feature.properties && feature.properties.name && feature.properties.address) {
-                    layer.bindPopup('<b>' + feature.properties.name + '</b><br>' + feature.properties.address);
+                    layer.bindPopup('<h4>' + feature.properties.name + '</h4><p>' + feature.properties.address+'</p>');
                 }
             }
 
@@ -276,7 +304,7 @@
                     companyCount.textContent = in_range_gjson.features.length;
                     combined_bounds = boundsOf([in_gjson.getBounds()])
                 }
-                if (combined_bounds != null && routeButton!= null && !routeButton.classList.contains('pressed')) {
+                if (combined_bounds != null && routeButton!= null && !routeButton.classList.contains('pressed') && !zoomedIn) {
                     map.flyToBounds(boundsOf([route_bounds, combined_bounds]).pad(padding/10));
                 }
             });
@@ -297,7 +325,7 @@
                             "As a transportation entrepreneur, I take immense pride in the operations of my company. Our commitment to excellence shines through in every aspect of our business, from the reliability of our fleet to the professionalism of our drivers. We have cultivated a reputation for efficiency and timeliness, ensuring that our clients' goods reach their destinations safely and on schedule. What sets us apart is our unwavering dedication to customer satisfaction, always going above and beyond to meet their unique needs. With a focus on innovation and continuous improvement, we strive to exceed expectations, solidifying our position as a leader in the transportation industry."
                             - ChatGPT
                         </p>
-                        <button type="button" class="zoom_in_button" id="inner_button"></button>
+                        <button type="button" class="zoom_button" id="zoom_button"></button>
                     </div>
                     `;
                 // Element style
@@ -323,9 +351,19 @@
                 }
                 // Functionality for clicking this list element
                 listElement.addEventListener('click', function () {
-                    if (event.target.id == 'inner_button') {
-                        var button = event.target.parentElement.closest('button')
-                        map.flyToBounds(listElement_to_bounds[button.id])
+                    // Zoom-button functionality
+                    if (event.target.id == 'zoom_button') {
+                        if (event.target.classList.contains('zoomed_in')) {
+                            zoomedIn = false;
+                            map.fitBounds(previousBounds)
+                            event.target.classList.remove('zoomed_in')
+                        } else {
+                            event.target.classList.add('zoomed_in')
+                            var button = event.target.parentElement.closest('button')
+                            previousBounds = map.getBounds()
+                            map.fitBounds(listElement_to_bounds[button.id])
+                            zoomedIn = true
+                        }
                     } else {
                         // Make sure that target (button) is the list element it self
                         if (event.target.tagName === 'BUTTON') {
@@ -333,14 +371,17 @@
                         } else {
                             var button = event.target.closest('button')
                         }
-                        toggleListElement(button)
-                        // Toggle popup in corresponding marker
-                        marker = address_to_marker[button.id];
-                        if (marker.isPopupOpen()) {
-                            marker.closePopup()
-                        } else {
-                            marker.openPopup()
+
+                        if (lastOpenListElement != null && lastOpenListElement !== button) {
+                            togglePopup(address_to_marker[lastOpenListElement.id])
                         }
+                        togglePopup(address_to_marker[button.id])
+
+                        toggleListElement(button)
+
+                        
+                        //if (button.classList.contains('selected'))
+                        
                     }
                 });
             } // ==============================================================================================
@@ -352,10 +393,13 @@
             }   
             // By default, show only optimal contractors on the map
             in_gjson.addTo(map);
+            var empty_element = document.createElement('div')
+            empty_element.classList.add('empty_list_element')
+            document.getElementById('list_div').appendChild(empty_element)
 
             // Default setup 
             companyCount.textContent = in_range_gjson.features.length
-            map.flyToBounds(boundsOf([route_bounds, combined_bounds]).pad(padding/5));
+            map.flyToBounds(boundsOf([route_bounds, combined_bounds]));
 
         </script>
     </div>
