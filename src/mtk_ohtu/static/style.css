@@ -4,12 +4,13 @@
     --theme-background-color_1: #f1f1f1;
     --theme-background-color_2: #435841;
     --theme-background-color_3: #b87777;
+    --theme-background-color_4: #88a290;
     --theme-color_1: #4CAF50;
     --theme-color_2: #3a3a3a;
     --theme-color_3: #068200;
     --focus-background-color: #ffffff;
     --non-focus-background-color: #dedede;
-    --focus-background-color_2: #fec5c5;
+    --focus-background-color_2: #f4dddd;
     --non-focus-background-color_2: #bb8585;
     /* Theme borders */
     --common-border: var(--theme-color_2) solid 4px;
@@ -81,14 +82,58 @@ td {
     height: 5%;
 }
 
+.description {
+    font: var(--description-font);
+}
+
+/*========== CONTAINERS ============================================*/
+.product_container {
+    background-color: var(--theme-background-color_4);
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0 8px 0 8px;
+    align-content: top;
+}
+
+.list_and_map_container {
+    background-color: var(--theme-color_2);
+    padding: 8px 8px 8px 8px;
+}
+
+.horizontal-container {
+    display: flex;
+    margin-left: 15px;
+    margin-right: 15px;
+    flex-direction: row;
+    align-items: center;
+    gap: 25px;
+}
+
+.horizontal-container.even {
+    justify-content: space-between;
+}
+
+.horizontal-container > div {
+    display: flex;
+    flex-direction: column;
+    align-content: top;
+}
+
 .card {
     background-color: var(--non-focus-background-color);
     padding: 20px;
+    margin-top: 10px;
     margin-bottom: 20px;
 }
 
-.description {
-    font: var(--description-font);
+.card_scrollbox {
+    background-color: var(--theme-background-color_1);
+    border: 1px solid #ccc;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+    flex: 1;
+    padding: 5px;
 }
 
 /*========== CLICKABLE LIST ELEMENTS ===============================*/
@@ -99,6 +144,12 @@ td {
     margin-bottom: 10px;
     overflow: hidden;
     border-radius: 20px 0 0 0;
+}
+
+.empty_list_element {
+    opacity: 0;
+    width: 100%;
+    height: 500px;
 }
 
 .clickable_list_element.selected {
@@ -150,25 +201,6 @@ td {
     background-color: var(--focus-background-color_2);
 }
 
-.horizontal-container {
-    display: flex;
-    margin-left: 15px;
-    margin-right: 15px;
-    flex-direction: row;
-    align-items: top;
-    gap: 25px;
-}
-
-.horizontal-container.even {
-    justify-content: space-between;
-}
-
-.horizontal-container>div {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    flex: 1;
-}
 /*========= TOOLBAR ==========================================*/
 .toolbar {
     display: flex;
@@ -248,19 +280,16 @@ td {
     border: var(--focus-border)
 }
 
-#map.set_goal {
-    cursor: url('/static/images/set_goal.png'), auto;
-}
-
 .search_button {
     min-height: 46px;
     min-width: 46px;
     background-image: url('/static/images/search_icon.png');
 }
 
-.zoom_in_button {
+.zoom_button {
     min-height: 46px;
     min-width: 46px;
+    background-color: var(--non-focus-background-color);
     background-image: url('/static/images/zoom_in_button.png');
     background-size: contain;
     background-repeat: no-repeat;
@@ -272,13 +301,18 @@ td {
     transition: translate var(--button-transition-time) ease-in-out;
 }
 
-.zoom_in_button:active {
+.zoom_button:active {
     transform: translate(3px, 3px);
     scale: 0.95;
 }
 
-.zoom_in_button:hover {
+.zoom_button:hover {
     border: var(--focus-border);
+}
+
+.zoom_button.zoomed_in {
+    background-image: url('/static/images/zoom_out_button.png');
+    background-color: var(--focus-background-color);
 }
 
 .switch {
@@ -333,10 +367,28 @@ input:checked+.slider:before {
     transform: translateX(100%);
 }
 
+/*============ MAP ============================*/
+#map.set_goal {
+    cursor: url('/static/images/set_goal.png'), auto;
+}
+
+#map h4 {
+    margin: 0;
+    padding: 0;
+    font: normal normal 400 20px/20px var(--theme-font-family_1);
+}
+
+#map p {
+    margin: 0;
+    padding: 0;
+    font: normal normal 400 14px/16px var(--theme-font-family_1);
+}
+
+
 /* layout styles */
 #layout-navbar {
     overflow: hidden;
-    background-color: #4CAF50;
+    background-color: var(--theme-color_1);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -382,7 +434,7 @@ input:checked+.slider:before {
 }
 
 .layout-footer {
-    background-color: #333;
+    background-color: var(--theme-color_2);
     color: white;
     text-align: center;
     padding: 10px;
