@@ -3,6 +3,9 @@ from flask import Blueprint, request
 from ..api.logistics_info_schema import LogisticsInfoSchema
 from ..logic.logistics_info import get_logistics_info
 from ..routes.listing import get_url_for_listing
+from ..database.db_api import db_get_api_key
+from ..database.db_datastructs import APIKey
+from ..config import DATABASE_POOL
 
 api_bp = Blueprint("api_bp", __name__)
 
@@ -48,6 +51,10 @@ def logistics_info():
         500: other errors
     """
 
+    api_success, api_msg, api_key = validate_api_key()
+    if not api_success:
+        return {"success": False, "message": api_msg}, 401
+
     try:
         data = LogisticsInfoSchema().load(request.get_json())
     except ValidationError as err:
@@ -63,3 +70,21 @@ def logistics_info():
         "provider_count": num_providers,
         "logistics_url": get_url_for_listing(listing),
     }
+
+
+def validate_api_key() -> tuple[bool, str, APIKey]:
+    """Checks if the API key in the request headers is correct.
+    Returns:
+        tuple[success (bool), message (str), APIKey]
+    """
+
+    api_key_str = request.headers.get("API-Key", None)
+    if api_key_str is None:
+        return (False, "No API-Key header field specified.", None)
+
+    api_key = db_get_api_key(api_key_str, DATABASE_POOL)
+    if api_key is None:
+        return (False, "Provided API-Key is invalid.", None)
+
+    return (True, "", api_key)
+

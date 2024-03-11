@@ -60,3 +60,9 @@ class LogisticsNode:
     name: str
     location: Location
     delivery_radius: int
+
+@dataclass
+class APIKey:
+    id: int
+    name: str
+    key: str
