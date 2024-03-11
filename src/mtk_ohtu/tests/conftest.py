@@ -6,6 +6,7 @@ import mtk_ohtu.config as config
 
 # Database testing fixtures
 
+
 @pytest.fixture()
 def datapool():
     dbm.db_excecute_file("schema.sql", config.DATABASE_CONFIG)
@@ -15,11 +16,14 @@ def datapool():
     pool.close()
     dbm.db_drop_all(config.DATABASE_CONFIG)
 
+
 # Route testing fixtures
+
 
 @pytest.fixture()
 def app():
     app = mtkapp.create_app()
+    app.config["WTF_CSRF_ENABLED"] = False
     app.config.update(
         {
             "TESTING": True,

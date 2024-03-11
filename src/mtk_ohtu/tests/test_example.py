@@ -24,4 +24,4 @@ class TestRoute(unittest.TestCase):
         self.assertTrue(result)
 
     def test_geo_correct(self):
-       self.assertAlmostEqual(self.demo_route.geodesic_distance(), 4595.0, places=-1)
+        self.assertAlmostEqual(self.demo_route.geodesic_distance(), 4595.0, places=-1)

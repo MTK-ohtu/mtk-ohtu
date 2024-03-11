@@ -45,7 +45,7 @@ class TestLogistics(unittest.TestCase):
             self.phone,
             self.email,
             self.radius,
-            self.description
+            self.description,
         )
         self.assertTrue(result)
 
@@ -59,7 +59,7 @@ class TestLogistics(unittest.TestCase):
             self.max_distance,
             self.unit,
             self.can_process,
-            self.description
+            self.description,
         )
         self.assertTrue(result)
 
@@ -73,7 +73,7 @@ class TestLogistics(unittest.TestCase):
             self.phone,
             self.email,
             self.radius,
-            self.description
+            self.description,
         )
         self.assertFalse(result)
 
@@ -90,7 +90,7 @@ class TestLogistics(unittest.TestCase):
             self.max_distance,
             self.unit,
             self.can_process,
-            self.description
+            self.description,
         )
         self.assertTrue(result)
 
@@ -117,7 +117,9 @@ class TestLogistics(unittest.TestCase):
         result = l.cargo_capability(contractor_location_id)
         self.assertEqual(len(result), 0)
 
-    def test_get_locations_and_cargo_capability_returns_correct_amount_of_locations_and_capabilities(self):
+    def test_get_locations_and_cargo_capability_returns_correct_amount_of_locations_and_capabilities(
+        self,
+    ):
         # 3 locations with 3, 3 and 4 capabilities
         result = l.get_locations_and_cargo_capability(self.contractor_id)
         self.assertEqual(len(result), 3)

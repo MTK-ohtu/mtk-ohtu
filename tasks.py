@@ -1,11 +1,13 @@
+import secrets
 from invoke import task
 from dotenv import load_dotenv
 
 load_dotenv()
 
-@task(optional=["debug"])
-def start(ctx, debug=False):
-    ctx.run(f'flask --app mtk_ohtu.app run {"--debug" if debug else ""}', pty = True)
+@task(optional=["debug", "host"])
+def start(ctx, debug=False, host="127.0.0.1"):
+    ctx.run(f'export SECRET_KEY={secrets.token_hex()}; flask --app mtk_ohtu.app run {"--debug" if debug else ""} --host {host}',
+            pty = True)
 
 @task
 def reset_db(ctx):
@@ -36,7 +38,7 @@ def mockstart(ctx, debug=False):
 
 @task
 def test(ctx):
-    ctx.run("coverage run --branch -m pytest src", pty=True)
+    ctx.run(f"export SECRET_KEY={secrets.token_hex()}; coverage run --branch -m pytest src", pty=True)
     ctx.run("coverage html", pty=True)
 
 @task

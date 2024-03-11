@@ -16,4 +16,6 @@ RUN poetry config installer.max-workers 10
 
 RUN poetry install
 
-ENTRYPOINT ["poetry", "run", "flask", "--app", "mtk_ohtu.app", "run", "--host", "0.0.0.0"]
+RUN echo -e '\nBUILD_DATE="'`TZ="Europe/Helsinki" date`\" >> .env
+
+ENTRYPOINT ["poetry", "run", "invoke", "start", "--host", "0.0.0.0"]

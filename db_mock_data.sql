@@ -83,3 +83,6 @@ VALUES
     (9, 'Plant-based biomasses', 6, 80, 6, 400, 'tn', '0'),
     (9, 'Digestion', 3, 77, 5, 300, 'tn', '0')
 ON CONFLICT DO NOTHING;
+
+INSERT INTO api_keys (name, key) VALUES ('Test API key', 'test_api_key')
+ON CONFLICT DO NOTHING;

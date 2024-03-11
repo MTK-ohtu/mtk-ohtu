@@ -1,8 +1,11 @@
 from os import getenv
 from dotenv import load_dotenv, find_dotenv
-from .database.db_meta import DatabaseConfig, db_create, db_connection_pool, db_fake_connection_pool
-
-load_dotenv(find_dotenv(usecwd=True))
+from .database.db_meta import (
+    DatabaseConfig,
+    db_create,
+    db_connection_pool,
+    db_fake_connection_pool,
+)
 
 SECRET_KEY = getenv("SECRET_KEY")
 DATABASE_CONFIG = DatabaseConfig(
@@ -15,6 +18,7 @@ DATABASE_CONFIG = DatabaseConfig(
 IS_TESTING = getenv("IS_TESTING")
 NOMINATIM_DOMAIN = getenv("NOMINATIM_DOMAIN")
 NOMINATIM_USER_AGENT = getenv("NOMINATIM_USER_AGENT")
+BUILD_DATE = getenv("BUILD_DATE")
 
 
 def setup_db(testing=False):

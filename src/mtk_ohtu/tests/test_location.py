@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import patch
-from mtk_ohtu.logic.location import Location 
+from mtk_ohtu.logic.location import Location
 
 # Test data
 ADDRESS = "Exactum, Helsinki"
@@ -10,14 +10,16 @@ INVALID_ADDRESS = "Invalid Address, Nowhere"
 
 @pytest.fixture
 def mock_geocode_success():
-    with patch('geopy.geocoders.Nominatim.geocode') as mock:
-        mock.return_value = type('Loc', (object,), {"latitude": COORDINATES[1], "longitude": COORDINATES[0]})
+    with patch("geopy.geocoders.Nominatim.geocode") as mock:
+        mock.return_value = type(
+            "Loc", (object,), {"latitude": COORDINATES[1], "longitude": COORDINATES[0]}
+        )
         yield mock
 
 
 @pytest.fixture
 def mock_geocode_failure():
-    with patch('geopy.geocoders.Nominatim.geocode') as mock:
+    with patch("geopy.geocoders.Nominatim.geocode") as mock:
         mock.return_value = None
         yield mock
 

@@ -10,8 +10,10 @@ class FuelType(Enum):
     BIO_GAS = 1.97
     ELECTRICITY = 0.04
 
+
 class Emissions:
     """Emissions class."""
+
     def __init__(self, fuel, distance, fuel_efficiency=55.0):
         """Init."""
         self.fuel = fuel
@@ -25,7 +27,7 @@ class Emissions:
             "bio_gas": FuelType.BIO_GAS,
             "electricity": FuelType.ELECTRICITY,
         }
-        
+
     def validate_fuel_efficiency(self, fuel_efficiency):
         """Validate fuel efficiency."""
         if not isinstance(fuel_efficiency, float):
@@ -48,8 +50,8 @@ class Emissions:
                         + str(type(fuel_efficiency))
                     ) from exept
         return fuel_efficiency
-    
-    def calculate_emissions(self, fuel = None):
+
+    def calculate_emissions(self, fuel=None):
         """Return route emissions (kg CO2)."""
 
         if fuel is None:

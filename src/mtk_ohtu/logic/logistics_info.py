@@ -27,7 +27,9 @@ def get_logistics_info(listing: Listing, user_location: Location) -> tuple[float
     return (float(route.distance) / 1000.0, len(providers))
 
 
-def get_logistics_providers(listing: Listing, user_location: Location) -> list[LogisticsNode]:
+def get_logistics_providers(
+    listing: Listing, user_location: Location
+) -> list[LogisticsNode]:
     """Gets the available logistics providers / nodes for the user's location & listing
 
     Args:
@@ -37,8 +39,8 @@ def get_logistics_providers(listing: Listing, user_location: Location) -> list[L
     Returns:
         a list of LogisticsNodes
     """
-    #this would be more efficient
-    nodes = db_get_locations_by_cargo_type(listing.category, DATABASE_POOL) 
+    # this would be more efficient
+    nodes = db_get_locations_by_cargo_type(listing.category, DATABASE_POOL)
     nodes = get_logistics_providers_by_range(listing, user_location, nodes)
 
     # nodes = db_get_logistics(DATABASE_POOL)
@@ -46,6 +48,7 @@ def get_logistics_providers(listing: Listing, user_location: Location) -> list[L
     # nodes = get_logistics_providers_by_cargo_capability(listing, nodes)
 
     return nodes
+
 
 def get_logistics_providers_by_range(
     listing: Listing, user_location: Location, nodes: list[LogisticsNode]
@@ -69,12 +72,17 @@ def get_logistics_providers_by_range(
     #         if route_to_user.geodesic_distance() / 1000.0 <= node.delivery_radius:
     #             accepted.append(node)
 
-    accepted = [node for node in nodes 
-                if Route(listing.location, node.location).geodesic_distance() / 1000.0 <= node.delivery_radius 
-                and Route(user_location, node.location).geodesic_distance() / 1000.0 <= node.delivery_radius
-                ]
+    accepted = [
+        node
+        for node in nodes
+        if Route(listing.location, node.location).geodesic_distance() / 1000.0
+        <= node.delivery_radius
+        and Route(user_location, node.location).geodesic_distance() / 1000.0
+        <= node.delivery_radius
+    ]
 
     return accepted
+
 
 def get_logistics_providers_by_cargo_capability(
     listing: Listing, nodes: list[LogisticsNode]
