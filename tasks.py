@@ -38,7 +38,7 @@ def mockstart(ctx, debug=False):
 
 @task
 def test(ctx):
-    ctx.run("coverage run --branch -m pytest src", pty=True)
+    ctx.run(f"export SECRET_KEY={secrets.token_hex()}; coverage run --branch -m pytest src", pty=True)
     ctx.run("coverage html", pty=True)
 
 @task
