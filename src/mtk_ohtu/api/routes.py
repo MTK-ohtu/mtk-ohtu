@@ -3,6 +3,7 @@ from ..database.db_listings import db_get_product_by_id
 from ..logic.location import Location
 from flask import Blueprint, request
 from ..api.logistics_info_schema import LogisticsInfoSchema
+from ..api.posting_api_schema import PostingApiSchema, EntryType
 from ..logic.logistics_info import get_logistics_info
 from ..routes.listing import get_url_for_listing
 from ..config import DATABASE_POOL
@@ -63,7 +64,7 @@ def logistics_info():
     location = None
     address = data["address"]
     if "latitude" in address and "longitude" in address:
-        location = Location(address["latitude"], address["longitude"])
+        location = Location((address["longitude"], address["latitude"]))
     else:
         try:
             location = Location(address["streetAddress"])
@@ -95,7 +96,7 @@ def posting_edit_api():
             "sub_category": (string, update/delete: optional)
             "post_type": (BuyOrSell, update/delete: optional)
             "delivery_method": (DeiveryType, update/delete: optional)
-            "demand": (DemandType, update/delete: optional)
+            "demand": (SupplyDemandType, update/delete: optional)
             "expiry_date": (timestamp, update/delete: optional)
             "price": (float, update/delete: optional)
             "delivery_details": (string, optional) 
@@ -115,4 +116,23 @@ def posting_edit_api():
         404: either the user_id, posting_id or the address are not found
         500: other errors
     """
-    request.get_json()
+
+    try:
+        data = PostingApiSchema().load(request.get_json())
+    except ValidationError as err:
+        return {"success": False, "message": err.messages}, 400
+    
+    match data[0]:
+        case EntryType.CREATE:
+            print(data)
+        
+        case EntryType.UPDATE:
+            print(data)
+        
+        case EntryType.DELETE:
+            print(data)
+        
+        case _:
+            raise ValueError
+    
+    return {"success": True}, 200

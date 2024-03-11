@@ -1,8 +1,9 @@
 from enum import Enum
 from marshmallow import Schema, post_load, validates_schema, fields, ValidationError
-from .class_field import ClassField
-from .address_datatype import Address
-from ..database.db_enums import BuyOrSell, DeliveryMethodType, SupplyDemandType
+from .address_schema import AddressSchema
+from ..database.db_enums import BuyOrSell, DeliveryMethodType, SupplyDemandType, CategoryType
+from ..database.db_datastructs import FullListing
+from ..logic.location import Location
 
 
 class EntryType(Enum):
@@ -15,7 +16,7 @@ class PostingApiSchema(Schema):
     entry_type = fields.Enum(EntryType, required=True)
     title = fields.Str()
     description = fields.Str()
-    category = fields.Str()
+    category = fields.Enum(CategoryType)
     sub_category = fields.Str()
     post_type = fields.Enum(BuyOrSell)
     delivery_method = fields.Enum(DeliveryMethodType)
@@ -23,10 +24,10 @@ class PostingApiSchema(Schema):
     expiry_date = fields.DateTime()
     price = fields.Float()
     delivery_details = fields.Str()
-    address = ClassField(Address)
+    address = fields.Nested(AddressSchema)
     date_created = fields.DateTime()
 
-    create_requirements = ["title", 
+    create_requirements = ["title",
                            "category", 
                            "sub_category", 
                            "post_type", 
@@ -45,4 +46,9 @@ class PostingApiSchema(Schema):
 
     @post_load
     def make_posting(self, data):
-        pass
+        entry = data.pop("entry_type")
+        address = data.pop("address")
+        data["location"] = Location((address["longitude"], address["latitude"]))
+        data["address"] = f"{address['streetAddress']},  {address['postalCode']}, {address['city']}"
+
+        return (entry, FullListing(**data))
