@@ -84,8 +84,8 @@ def modify_contractor_location(
     location = f"{address}, {postcode}, {city}"
     try:
         coordinates = l(location)
-        lon = coordinates.longitude
-        lat = coordinates.latitude
+        longitude = coordinates.longitude
+        latitude = coordinates.latitude
     except:
         return False
 
