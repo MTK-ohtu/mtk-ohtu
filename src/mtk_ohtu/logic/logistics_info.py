@@ -69,7 +69,10 @@ def get_logistics_providers_by_range(
     #         if route_to_user.geodesic_distance() / 1000.0 <= node.delivery_radius:
     #             accepted.append(node)
 
-    accepted = [node for node in nodes if Route(listing.location, node.location).geodesic_distance() / 1000.0 <= node.delivery_radius and Route(user_location, node.location).geodesic_distance() / 1000.0 <= node.delivery_radius]
+    accepted = [node for node in nodes 
+                if Route(listing.location, node.location).geodesic_distance() / 1000.0 <= node.delivery_radius 
+                and Route(user_location, node.location).geodesic_distance() / 1000.0 <= node.delivery_radius
+                ]
 
     return accepted
 

@@ -3,6 +3,7 @@
 {% block content %}
 <div>
     <form action="/listings" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>		
         <p>
             Toimitusosoite: <br>
             <input type="text" name="address" minlength="1" maxlength="200">
