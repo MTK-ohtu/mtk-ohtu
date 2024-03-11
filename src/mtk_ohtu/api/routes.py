@@ -81,4 +81,38 @@ def logistics_info():
 
 @api_bp.route("/postings", methods=["POST"])
 def posting_edit_api():
+    """API2 implementation.
+    Expects the mimetype of the POST request to be application/json.
+    Expects the API key to be supplied in the headers as 'API-Key'.
+
+    The json body should have the form:
+        {
+            "posting_id": (int)
+            "entry_type": (create/update/delete)
+            "title": (string, update/delete: optional)
+            "description": (string, optional)
+            "category": (CategoryType, update/delete: optional)
+            "sub_category": (string, update/delete: optional)
+            "post_type": (BuyOrSell, update/delete: optional)
+            "delivery_method": (DeiveryType, update/delete: optional)
+            "demand": (DemandType, update/delete: optional)
+            "expiry_date": (timestamp, update/delete: optional)
+            "price": (float, update/delete: optional)
+            "delivery_details": (string, optional) 
+            "address": (Address, update/delete: optional)
+            "date_created": (timestamp, update/delete: optional)
+        }
+
+    Returns json in the following form:
+        {
+            "success": (bool),
+            "message": (str) error or success message
+        }
+    
+    Error codes:
+        401: API-Key is incorrect
+        400: JSON request is malformed (for example due to missing fields, extra fields, etc.)
+        404: either the user_id, posting_id or the address are not found
+        500: other errors
+    """
     request.get_json()
