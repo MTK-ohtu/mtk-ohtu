@@ -7,8 +7,6 @@ from .database.db_meta import (
     db_fake_connection_pool,
 )
 
-load_dotenv(find_dotenv(usecwd=True))
-
 SECRET_KEY = getenv("SECRET_KEY")
 DATABASE_CONFIG = DatabaseConfig(
     uri=getenv("DATABASE_URL"),
@@ -20,7 +18,7 @@ DATABASE_CONFIG = DatabaseConfig(
 IS_TESTING = getenv("IS_TESTING")
 NOMINATIM_DOMAIN = getenv("NOMINATIM_DOMAIN")
 NOMINATIM_USER_AGENT = getenv("NOMINATIM_USER_AGENT")
-
+BUILD_DATE = getenv("BUILD_DATE")
 
 def setup_db(testing=False):
     db_create(DATABASE_CONFIG)

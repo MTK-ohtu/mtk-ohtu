@@ -48,8 +48,8 @@ def logistics_info():
 
     Error codes:
         401: API-Key is incorrect
-        400: JSON request is malformed (for example due to missing fields, extra fields, etc.)
-        404: either the user_id, posting_id or the address are not found
+        400: JSON request is malformed (for example due to missing fields, extra fields, etc.) or params are otherwise incorrect
+        404: incorrect URL
         500: other errors
     """
 
@@ -134,6 +134,7 @@ def postings():
 
 def validate_api_key() -> tuple[bool, str, APIKey]:
     """Checks if the API key in the request headers is correct.
+    
     Returns:
         tuple[success (bool), message (str), APIKey]
     """
