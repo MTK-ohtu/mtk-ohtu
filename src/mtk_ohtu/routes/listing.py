@@ -7,7 +7,7 @@ from ..logic import route_calculator
 from ..logic import session_handler
 from ..logic.route_stats import Emissions
 from flask import Blueprint, render_template, request, redirect
-from ..config import DATABASE_POOL
+from ..config import DATABASE_POOL, BUILD_DATE
 from ..logic.location import Location
 from ..database.db_datastructs import Listing
 from ..database.db_contractors import db_get_locations_by_cargo_type
@@ -41,7 +41,7 @@ def listings():
 
         listings = sorted(listings, key=lambda x: distances[x.id])
 
-    return render_template("listings.html", listings=listings, distances=distances)
+    return render_template("listings.html", listings=listings, distances=distances, BUILD_DATE=BUILD_DATE)
 
 
 @listing_bp.route("/createpost")
