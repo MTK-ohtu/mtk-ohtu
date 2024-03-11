@@ -55,9 +55,8 @@ class PostingApiSchema(Schema):
     @post_load
     def make_posting(self, data, **kwargs):
         entry = data.pop("entry_type")
-        address = data.pop("address")
-        data["location"] = Location((address["longitude"], address["latitude"]))
-        data[
-            "address"
-        ] = f"{address['streetAddress']},  {address['postalCode']}, {address['city']}"
+        if "address" in data:
+            address = data.pop("address")
+            data["location"] = address[1]
+            data["address"] = address[0]
         return (entry, FullListing(**data))

@@ -11,22 +11,22 @@ from mtk_ohtu.logic.location import Location
 
 @dataclass(kw_only=True)
 class FullListing:
-    """A class for storing the full listing row"""
+    """A class for storing the full listing row for api creation, or updates"""
 
     posting_id: int
-    title: str
-    category: CategoryType
-    sub_category: str
-    post_type: BuyOrSell
-    delivery_method: DeliveryMethodType
-    demand: SupplyDemandType
-    expiry_date: int
-    price: float
-    delivery_details: str
-    address: str
-    description: str
-    location: Location
-    date_created: int
+    title: str = None
+    category: CategoryType = None
+    sub_category: str = None
+    post_type: BuyOrSell = None
+    delivery_method: DeliveryMethodType = None
+    demand: SupplyDemandType = None
+    expiry_date: int = None
+    price: float = None
+    delivery_details: str = None
+    address: str = None
+    description: str = None
+    location: Location = None
+    date_created: int = None
 
 
 @dataclass

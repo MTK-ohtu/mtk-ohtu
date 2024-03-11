@@ -18,11 +18,11 @@ class AddressSchema(Schema):
     @post_load
     def v(self, data, **kwargs):
         if "latitude" in data and "longitude" in data:
-            return Location(data["latitude"], data["longitude"])
+            return (data["streetAddress"], Location((data["longitude"], data["latitude"])))
 
         if "streetAddress" in data:
             try:
-                loc = Location(data["streetAddress"])
+                loc = (data["streetAddress"], Location(data["streetAddress"]))
                 return loc
             except ValueError as err:
                 raise ValidationError({"streetAddress": err.args})
