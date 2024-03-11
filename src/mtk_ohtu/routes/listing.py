@@ -41,7 +41,9 @@ def listings():
 
         listings = sorted(listings, key=lambda x: distances[x.id])
 
-    return render_template("listings.html", listings=listings, distances=distances, BUILD_DATE=BUILD_DATE)
+    return render_template(
+        "listings.html", listings=listings, distances=distances, BUILD_DATE=BUILD_DATE
+    )
 
 
 @listing_bp.route("/createpost")

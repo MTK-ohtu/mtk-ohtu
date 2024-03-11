@@ -6,6 +6,7 @@ from ..logic.logistics_info import get_logistics_info
 from ..routes.listing import get_url_for_listing
 from ..database.db_api import db_get_api_key
 from ..database.db_datastructs import APIKey
+from ..database.db_listings import db_create_new_listing_from_api_response
 from ..config import DATABASE_POOL
 
 api_bp = Blueprint("api_bp", __name__)
@@ -116,7 +117,7 @@ def postings():
 
     match data[0]:
         case EntryType.CREATE:
-            print(data)
+            db_create_new_listing_from_api_response(data[1], DATABASE_POOL)
 
         case EntryType.UPDATE:
             print(data)
@@ -134,7 +135,7 @@ def postings():
 
 def validate_api_key() -> tuple[bool, str, APIKey]:
     """Checks if the API key in the request headers is correct.
-    
+
     Returns:
         tuple[success (bool), message (str), APIKey]
     """

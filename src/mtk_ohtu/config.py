@@ -20,6 +20,7 @@ NOMINATIM_DOMAIN = getenv("NOMINATIM_DOMAIN")
 NOMINATIM_USER_AGENT = getenv("NOMINATIM_USER_AGENT")
 BUILD_DATE = getenv("BUILD_DATE")
 
+
 def setup_db(testing=False):
     db_create(DATABASE_CONFIG)
     if testing:
