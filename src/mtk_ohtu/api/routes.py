@@ -1,6 +1,7 @@
 from marshmallow import ValidationError
 from flask import Blueprint, request
 from ..api.logistics_info_schema import LogisticsInfoSchema
+from ..api.posting_api_schema import PostingApiSchema, EntryType
 from ..logic.logistics_info import get_logistics_info
 from ..routes.listing import get_url_for_listing
 
@@ -63,3 +64,59 @@ def logistics_info():
         "provider_count": num_providers,
         "logistics_url": get_url_for_listing(listing),
     }
+
+@api_bp.route("/postings", methods=["POST"])
+def postings():
+    """API2 implementation.
+    Expects the mimetype of the POST request to be application/json.
+    Expects the API key to be supplied in the headers as 'API-Key'.
+
+    The json body should have the form:
+        {
+            "posting_id": (int)
+            "entry_type": (create/update/delete)
+            "title": (string, update/delete: optional)
+            "description": (string, optional)
+            "category": (CategoryType, update/delete: optional)
+            "sub_category": (string, update/delete: optional)
+            "post_type": (BuyOrSell, update/delete: optional)
+            "delivery_method": (DeiveryType, update/delete: optional)
+            "demand": (SupplyDemandType, update/delete: optional)
+            "expiry_date": (timestamp, update/delete: optional)
+            "price": (float, update/delete: optional)
+            "delivery_details": (string, optional) 
+            "address": (Address, update/delete: optional)
+            "date_created": (timestamp, update/delete: optional)
+        }
+
+    Returns json in the following form:
+        {
+            "success": (bool),
+            "message": (str) error or success message
+        }
+    
+    Error codes:
+        401: API-Key is incorrect
+        400: JSON request is malformed (for example due to missing fields, extra fields, etc.)
+        404: either the user_id, posting_id or the address are not found
+        500: other errors
+    """
+    try:
+        data = PostingApiSchema().load(request.get_json())
+    except ValidationError as err:
+        return {"success": False, "message": err.messages}, 400
+    
+    match data[0]:
+        case EntryType.CREATE:
+            print(data)
+        
+        case EntryType.UPDATE:
+            print(data)
+        
+        case EntryType.DELETE:
+            print(data)
+        
+        case _:
+            raise ValueError
+    
+    return {"success": True,}, 200

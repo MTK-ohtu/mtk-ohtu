@@ -49,3 +49,4 @@ def db_get_product_by_id(product_id: int, pool: ConnectionPool) -> Listing | Non
 
     l = Listing(product_id, *out[0:5], Location((out[5], out[6])))
     return l
+
