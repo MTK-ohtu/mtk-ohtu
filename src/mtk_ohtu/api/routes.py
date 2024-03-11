@@ -38,13 +38,13 @@ def logistics_info():
             "success": (bool),
             "message": (str) error or success message,
 
-    - if successful, the following attributes are supplied - 
+    - if successful, the following attributes are supplied -
 
             "distance": (float) the distance in kilometers from the supplied location to the listing,
             "provider_count": (int) the number of available logistics providers,
             "logistics_url": (str) a full (not relative) URL leading to the logistics page providing more info
         }
-    
+
     Error codes:
         401: API-Key is incorrect
         400: JSON request is malformed (for example due to missing fields, extra fields, etc.)
@@ -72,6 +72,7 @@ def logistics_info():
         "logistics_url": get_url_for_listing(listing),
     }
 
+
 @api_bp.route("/postings", methods=["POST"])
 def postings():
     """API2 implementation.
@@ -91,7 +92,7 @@ def postings():
             "demand": (SupplyDemandType, update/delete: optional)
             "expiry_date": (timestamp, update/delete: optional)
             "price": (float, update/delete: optional)
-            "delivery_details": (string, optional) 
+            "delivery_details": (string, optional)
             "address": (Address, update/delete: optional)
             "date_created": (timestamp, update/delete: optional)
         }
@@ -101,7 +102,7 @@ def postings():
             "success": (bool),
             "message": (str) error or success message
         }
-    
+
     Error codes:
         401: API-Key is incorrect
         400: JSON request is malformed (for example due to missing fields, extra fields, etc.)
@@ -112,21 +113,24 @@ def postings():
         data = PostingApiSchema().load(request.get_json())
     except ValidationError as err:
         return {"success": False, "message": err.messages}, 400
-    
+
     match data[0]:
         case EntryType.CREATE:
             print(data)
-        
+
         case EntryType.UPDATE:
             print(data)
-        
+
         case EntryType.DELETE:
             print(data)
-        
+
         case _:
             raise ValueError
-    
-    return {"success": True,}, 200
+
+    return {
+        "success": True,
+    }, 200
+
 
 def validate_api_key() -> tuple[bool, str, APIKey]:
     """Checks if the API key in the request headers is correct.

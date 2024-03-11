@@ -1,13 +1,12 @@
 import unittest
 from unittest.mock import patch, MagicMock
-from mtk_ohtu.logic.route_calculator import Route  
+from mtk_ohtu.logic.route_calculator import Route
 from mtk_ohtu.logic.location import Location
 
+
 class TestRoute(unittest.TestCase):
-
-    @patch('mtk_ohtu.logic.location.Location')  # Mock the Location class
+    @patch("mtk_ohtu.logic.location.Location")  # Mock the Location class
     def setUp(self, mock_location_class):
-
         # Create separate mock instances for each location
         location1_mock = MagicMock()
         location1_mock.latitude = 60.205298
@@ -41,20 +40,22 @@ class TestRoute(unittest.TestCase):
         with self.assertRaises(ValueError):
             Route(self.location1, self.location1, self.api_key)
 
-    @patch('requests.get')
+    @patch("requests.get")
     def test_calculate_route(self, mock_get):
         # Mock the API response
         mock_response = MagicMock()
         mock_response.status_code = 200
         mock_response.json.return_value = {
-            "features": [{
-                "properties": {
-                    "summary": {
-                        "distance": 1000,
-                        "duration": 600,
+            "features": [
+                {
+                    "properties": {
+                        "summary": {
+                            "distance": 1000,
+                            "duration": 600,
+                        }
                     }
                 }
-            }]
+            ]
         }
         mock_get.return_value = mock_response
 
@@ -83,5 +84,6 @@ class TestRoute(unittest.TestCase):
 
     # Additional tests can be added to cover other methods and edge cases.
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

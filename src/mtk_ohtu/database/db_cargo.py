@@ -5,6 +5,7 @@ from .db_datastructs import CargoTypeInfo
 
 # pylint: disable=E1129
 
+
 def db_add_cargo_capability(
     cargo_id: int,
     cargo_type: CategoryType,
@@ -33,7 +34,17 @@ def db_add_cargo_capability(
             "INSERT INTO cargo_capabilities \
                 (contractor_location_id, type, price_per_km, base_rate, max_capacity, max_distance, unit, can_process, description) \
                 VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)",
-            (cargo_id, cargo_type, price_per_hour, base_rate, max_capacity, max_distance, unit, can_process, description),
+            (
+                cargo_id,
+                cargo_type,
+                price_per_hour,
+                base_rate,
+                max_capacity,
+                max_distance,
+                unit,
+                can_process,
+                description,
+            ),
         )
         out = True
     return out
@@ -71,7 +82,8 @@ def db_get_cargo_owner(cargo_id: int, pool: ConnectionPool) -> bool:
         cursor = connection.cursor()
         cursor.execute(
             "SELECT C.id FROM contractors C, contractor_locations CL, cargo_capabilities CC \
-                WHERE C.id=CL.contractor_id AND CL.id=CC.contractor_location_id AND CC.id=%s;", (cargo_id,)
+                WHERE C.id=CL.contractor_id AND CL.id=CC.contractor_location_id AND CC.id=%s;",
+            (cargo_id,),
         )
         result = cursor.fetchone()[0]
     if not result:
@@ -96,7 +108,7 @@ def db_get_location_cargo_capabilities(
         cursor = connection.cursor()
         cursor.execute(
             "SELECT * FROM cargo_capabilities WHERE contractor_location_id=%s;",
-            (contractor_location_id,)
+            (contractor_location_id,),
         )
         out = cursor.fetchall()
     if not out:

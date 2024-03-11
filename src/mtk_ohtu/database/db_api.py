@@ -1,6 +1,7 @@
 from .db_datastructs import APIKey
 from psycopg_pool import ConnectionPool
 
+
 def db_get_api_key(key: str, pool: ConnectionPool) -> APIKey | None:
     """Returns the API key with the provided string.
 

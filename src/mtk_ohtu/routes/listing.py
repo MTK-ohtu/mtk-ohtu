@@ -55,13 +55,16 @@ def get_url_for_listing(listing: Listing) -> str:
 
 @listing_bp.route("/listing/<int:listing_id>", methods=["GET", "POST"])
 def listing(listing_id):
-    
-    listing = mtk_ohtu.database.db_listings.db_get_product_by_id(listing_id, DATABASE_POOL)
+    listing = mtk_ohtu.database.db_listings.db_get_product_by_id(
+        listing_id, DATABASE_POOL
+    )
 
     if request.method == "GET":
-        #contractors = ContractorDivision(float(listing.location.latitude), float(listing.location.longitude), listing.category)
-        contractors = ContractorDivision(listing, listing.category, db_get_locations_by_cargo_type, listing.location)
-        #contractors.filter_by_cargo_type(listing.category)
+        # contractors = ContractorDivision(float(listing.location.latitude), float(listing.location.longitude), listing.category)
+        contractors = ContractorDivision(
+            listing, listing.category, db_get_locations_by_cargo_type, listing.location
+        )
+        # contractors.filter_by_cargo_type(listing.category)
         return render_template(
             "product.html",
             listing=listing,
@@ -83,9 +86,11 @@ def listing(listing_id):
         emission_info = Emissions(fuel, route_to_product.distance, fuel_consumption)
         emissions = emission_info.calculate_emissions()
         emission_comparison = emission_info.get_emissions_for_all_fuels()
-        #contractors = ContractorDivision(float(listing.location.latitude), float(listing.location.longitude), listing.category)
-        contractors = ContractorDivision(listing, listing.category, db_get_locations_by_cargo_type, user_location)
-        #contractors.filter_by_cargo_type(listing.category)
+        # contractors = ContractorDivision(float(listing.location.latitude), float(listing.location.longitude), listing.category)
+        contractors = ContractorDivision(
+            listing, listing.category, db_get_locations_by_cargo_type, user_location
+        )
+        # contractors.filter_by_cargo_type(listing.category)
 
         return render_template(
             "product.html",

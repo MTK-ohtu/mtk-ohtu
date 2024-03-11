@@ -18,21 +18,10 @@ def add():
     email = request.form["email"]
     radius_type = request.form["radiusType"]
     description = request.form.get("description")
-    radius = (
-        request.form["radius"]
-        if radius_type == "custom-limit"
-        else -1
-    )
+    radius = request.form["radius"] if radius_type == "custom-limit" else -1
 
     if not logistics.add_contractor_location(
-        contractor_id,
-        address,
-        postcode,
-        city,
-        telephone,
-        email,
-        radius,
-        description
+        contractor_id, address, postcode, city, telephone, email, radius, description
     ):
         flash("An error occured. Please try again.")
         return redirect("/contractor")
@@ -58,21 +47,10 @@ def modify():
     email = request.form["email"]
     radius_type = request.form["radiusType"]
     description = request.form.get("description")
-    radius = (
-        request.form["radius"]
-        if radius_type == "custom-limit"
-        else -1
-    )
+    radius = request.form["radius"] if radius_type == "custom-limit" else -1
 
     if not logistics.modify_contractor_location(
-        location_id,
-        address,
-        postcode,
-        city,
-        telephone,
-        email,
-        radius,
-        description
+        location_id, address, postcode, city, telephone, email, radius, description
     ):
         flash("An error occured. Please try again.")
         return redirect("/contractor")

@@ -1,7 +1,12 @@
 from enum import Enum
 from marshmallow import Schema, post_load, validates_schema, fields, ValidationError
 from .address_schema import AddressSchema
-from ..database.db_enums import BuyOrSell, DeliveryMethodType, SupplyDemandType, CategoryType
+from ..database.db_enums import (
+    BuyOrSell,
+    DeliveryMethodType,
+    SupplyDemandType,
+    CategoryType,
+)
 from ..database.db_datastructs import FullListing
 from ..logic.location import Location
 
@@ -10,6 +15,7 @@ class EntryType(Enum):
     CREATE = "create"
     UPDATE = "update"
     DELETE = "delete"
+
 
 class PostingApiSchema(Schema):
     posting_id = fields.Int(required=True)
@@ -27,16 +33,18 @@ class PostingApiSchema(Schema):
     address = fields.Nested(AddressSchema)
     date_created = fields.Int()
 
-    create_requirements = ["title",
-                           "category", 
-                           "sub_category", 
-                           "post_type", 
-                           "delivery_method", 
-                           "demand", 
-                           "expiry_date", 
-                           "price", 
-                           "address", 
-                           "date_created"]
+    create_requirements = [
+        "title",
+        "category",
+        "sub_category",
+        "post_type",
+        "delivery_method",
+        "demand",
+        "expiry_date",
+        "price",
+        "address",
+        "date_created",
+    ]
 
     @validates_schema
     def validate_create(self, data, **kwargs):
@@ -49,5 +57,7 @@ class PostingApiSchema(Schema):
         entry = data.pop("entry_type")
         address = data.pop("address")
         data["location"] = Location((address["longitude"], address["latitude"]))
-        data["address"] = f"{address['streetAddress']},  {address['postalCode']}, {address['city']}"
+        data[
+            "address"
+        ] = f"{address['streetAddress']},  {address['postalCode']}, {address['city']}"
         return (entry, FullListing(**data))

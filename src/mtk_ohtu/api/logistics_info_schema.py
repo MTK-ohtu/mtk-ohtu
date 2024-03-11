@@ -3,6 +3,7 @@ from mtk_ohtu.api.address_schema import AddressSchema
 from ..database.db_listings import db_get_product_by_id
 from ..config import DATABASE_POOL
 
+
 class LogisticsInfoSchema(Schema):
     """A Marshmallow schema for the API3 endpoint"""
 
@@ -17,5 +18,5 @@ class LogisticsInfoSchema(Schema):
         listing = db_get_product_by_id(id, DATABASE_POOL)
         if listing == None:
             raise ValidationError("Listing not found")
-        
+
         return listing

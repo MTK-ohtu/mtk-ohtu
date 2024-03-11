@@ -5,6 +5,7 @@ from mtk_ohtu.logic.location import Location
 
 # pylint: disable=E1129
 
+
 def db_get_product_list(pool: ConnectionPool) -> list[Listing]:
     """Gets list of products from database
     Args:
@@ -49,4 +50,3 @@ def db_get_product_by_id(product_id: int, pool: ConnectionPool) -> Listing | Non
 
     l = Listing(product_id, *out[0:5], Location((out[5], out[6])))
     return l
-

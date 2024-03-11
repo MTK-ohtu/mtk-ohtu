@@ -30,30 +30,28 @@ def add_logistics():
             if service_type == "private"
             else request.form.get("companyName")
         )
-        business_id = (request.form.get("businessId") if service_type == "company" else None)
+        business_id = (
+            request.form.get("businessId") if service_type == "company" else None
+        )
         contractor_id = logistics.add_contractor(user_id, name, business_id)
-        
+
         address = request.form.get("address")
         postcode = request.form.get("postcode")
         city = request.form.get("city")
         telephone = request.form.get("telephone")
         email = request.form.get("email")
         radius_type = request.form.get("radiusType")
-        radius = (
-            request.form.get("radius")
-            if radius_type == "custom-limit"
-            else -1
-        )
+        radius = request.form.get("radius") if radius_type == "custom-limit" else -1
         description = request.form.get("description")
         contractor_location_id = logistics.add_contractor_location(
-            contractor_id, 
-            address, 
-            postcode, 
-            city, 
-            telephone, 
-            email, 
+            contractor_id,
+            address,
+            postcode,
+            city,
+            telephone,
+            email,
             radius,
-            description
+            description,
         )
 
         categories = request.form.getlist("materials[]")
@@ -63,14 +61,12 @@ def add_logistics():
             max_capacity = request.form.get(c + "-max_capacity")
             type = request.form.get("radiusType-" + c)
             radius = (
-                request.form.get("radius-" + c)
-                if type == "custom-limit" + c
-                else -1
+                request.form.get("radius-" + c) if type == "custom-limit" + c else -1
             )
             unit = request.form.get(c + "-unit")
             can_process = request.form.get(c + "-can_process")
             material_description = request.form.get(c + "-description")
-            
+
             logistics.add_cargo_capability(
                 contractor_location_id,
                 c,
@@ -78,9 +74,9 @@ def add_logistics():
                 base_rate,
                 max_capacity,
                 radius,
-                unit, 
+                unit,
                 can_process,
-                material_description
+                material_description,
             )
 
         session["contractor_id"] = contractor_id
@@ -123,7 +119,6 @@ def contractor():
 
 
 @contractor_bp.route("/list_contractors", methods=["GET"])
-
 def list_contractors():
     """
     Rendering template marked as 'test'

@@ -89,16 +89,27 @@ class Route:
 
     def __get_route_call_post(self):
         """Return the route call from the openrouteservice API using a more complicated post request."""
-        body = {"coordinates":[[self.location1.longitude,self.location1.latitude],[self.location2.longitude,self.location2.latitude]],"instructions":"false","preference":"shortest"}
+        body = {
+            "coordinates": [
+                [self.location1.longitude, self.location1.latitude],
+                [self.location2.longitude, self.location2.latitude],
+            ],
+            "instructions": "false",
+            "preference": "shortest",
+        }
 
         headers = {
-            'Accept': 'application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8',
-            'Authorization': self.api_key,
-            'Content-Type': 'application/json; charset=utf-8'
+            "Accept": "application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8",
+            "Authorization": self.api_key,
+            "Content-Type": "application/json; charset=utf-8",
         }
         print("calling")
-        call = requests.post('https://api.openrouteservice.org/v2/directions/driving-hgv/geojson', json=body, headers=headers)
-        
+        call = requests.post(
+            "https://api.openrouteservice.org/v2/directions/driving-hgv/geojson",
+            json=body,
+            headers=headers,
+        )
+
         print(call.status_code, call.reason)
         print(call.text)
         if call.status_code != 200:

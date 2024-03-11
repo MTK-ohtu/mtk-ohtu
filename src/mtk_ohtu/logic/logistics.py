@@ -18,7 +18,9 @@ def add_contractor(user_id, name, business_id):
         else False
     """
     try:
-        id = db_contractors.db_add_contractor(user_id, name, business_id, pool=DATABASE_POOL)
+        id = db_contractors.db_add_contractor(
+            user_id, name, business_id, pool=DATABASE_POOL
+        )
         return id
     except Exception as er:
         logging.error(er)
@@ -26,14 +28,7 @@ def add_contractor(user_id, name, business_id):
 
 
 def add_contractor_location(
-        contractor_id,
-        address,
-        postcode,
-        city,
-        telephone,
-        email,
-        radius,
-        description        
+    contractor_id, address, postcode, city, telephone, email, radius, description
 ):
     """
     Adds a new location for a contractor
@@ -52,7 +47,17 @@ def add_contractor_location(
         coordinates = l(location)
         lon = coordinates.longitude
         lat = coordinates.latitude
-        id = db_contractors.db_add_contractor_location(contractor_id, address, telephone, email, lon, lat, radius, description, pool=DATABASE_POOL)
+        id = db_contractors.db_add_contractor_location(
+            contractor_id,
+            address,
+            telephone,
+            email,
+            lon,
+            lat,
+            radius,
+            description,
+            pool=DATABASE_POOL,
+        )
         return id
     except Exception as er:
         logging.error(er)
@@ -60,15 +65,8 @@ def add_contractor_location(
 
 
 def modify_contractor_location(
-    location_id,
-    address,
-    postcode,
-    city,
-    telephone,
-    email,
-    radius,
-    description
-    ):
+    location_id, address, postcode, city, telephone, email, radius, description
+):
     """
     Updates contractor location information
     Args:
@@ -91,7 +89,17 @@ def modify_contractor_location(
     except:
         return False
 
-    return db_contractors.db_modify_contractor_location(location_id, address, telephone, email, longitude, latitude, radius, description, DATABASE_POOL)
+    return db_contractors.db_modify_contractor_location(
+        location_id,
+        address,
+        telephone,
+        email,
+        longitude,
+        latitude,
+        radius,
+        description,
+        DATABASE_POOL,
+    )
 
 
 def remove_contractor_location(location_id):
@@ -116,7 +124,7 @@ def add_cargo_capability(
     max_distance,
     unit,
     can_process,
-    description
+    description,
 ):
     """
     Adds all deliverable sidestreams for contractor location
@@ -140,21 +148,22 @@ def add_cargo_capability(
     if max_capacity == "":
         max_capacity = -1
     try:
-            db.db_add_cargo_capability(
-                contractor_location_id,
-                category,
-                price_per_hour,
-                base_rate,
-                max_capacity,
-                max_distance,
-                unit,
-                can_process,
-                description,
-                pool=DATABASE_POOL,
-            )
+        db.db_add_cargo_capability(
+            contractor_location_id,
+            category,
+            price_per_hour,
+            base_rate,
+            max_capacity,
+            max_distance,
+            unit,
+            can_process,
+            description,
+            pool=DATABASE_POOL,
+        )
     except:
         return False
     return True
+
 
 def remove_cargo_capability(contractor_id, cargo_id):
     """
@@ -169,7 +178,7 @@ def remove_cargo_capability(contractor_id, cargo_id):
         return False
 
     return db.db_remove_cargo_capability(cargo_id, DATABASE_POOL)
-   
+
 
 def get_locations_and_cargo_capability(contractor_id):
     """

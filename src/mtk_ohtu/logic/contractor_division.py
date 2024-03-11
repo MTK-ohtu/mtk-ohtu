@@ -11,7 +11,7 @@ from ..database.db_datastructs import Listing
 class ContractorDivision:
 
     """
-    Given a listing, queries all logistic contractors from DB with correct coargo capability. Finds optimal contractors by range. 
+    Given a listing, queries all logistic contractors from DB with correct coargo capability. Finds optimal contractors by range.
     If fiven a delivery location, filters out of range contractors based on both the listing and the delivery location.
     Divides contractors into two lists: suiteable/ rest.
     Creates leaflet compatible featurecollections from these.
@@ -23,22 +23,22 @@ class ContractorDivision:
         cargo_capacity: int
     """
 
-    def __init__(self,
-                 listing:Listing, 
-                 cargo_type:CategoryType, 
-                 database_access,
-                 delivery_location:Location = None,
-                 cargo_capacity:int = 1e10):
-        
+    def __init__(
+        self,
+        listing: Listing,
+        cargo_type: CategoryType,
+        database_access,
+        delivery_location: Location = None,
+        cargo_capacity: int = 1e10,
+    ):
         self.database_access = database_access
         self.listing = listing
-        self.delivery_location = delivery_location        
+        self.delivery_location = delivery_location
         self.cargo_capacity = cargo_capacity
         self.contractors = database_access(cargo_type, DATABASE_POOL)
         self.optimal = None
         self.suboptimal = None
         self.split_by_range()
-
 
     def split_by_range(self):
         """
@@ -46,18 +46,15 @@ class ContractorDivision:
         """
         nodes = self.contractors
         if self.delivery_location is not None:
-            self.optimal  = get_logistics_providers_by_range(self.listing, self.delivery_location, nodes)
+            self.optimal = get_logistics_providers_by_range(
+                self.listing, self.delivery_location, nodes
+            )
             self.suboptimal = list(
-                filter(
-                    lambda x: (
-                        x not in self.optimal
-                    ), self.contractors
-                )
+                filter(lambda x: (x not in self.optimal), self.contractors)
             )
         else:
             self.optimal = nodes
             self.suboptimal = None
-
 
     def get_optimal(self):
         """
@@ -67,8 +64,6 @@ class ContractorDivision:
         if self.optimal is None:
             return self.to_featurecollection(self.contractors)
         return self.to_featurecollection(self.optimal)
-        
-    
 
     def get_suboptimal(self):
         """
@@ -78,8 +73,6 @@ class ContractorDivision:
         if self.suboptimal is None:
             return []
         return self.to_featurecollection(self.suboptimal)
-        
-    
 
     def filter_by_cargo_capacity(self, cargo_capacity: int):
         """
@@ -95,7 +88,6 @@ class ContractorDivision:
             filter(lambda x: x.cargo_capacity >= cargo_capacity, self.suboptimal)
         )
 
-
     def filter_by_cargo_type(self, type: CategoryType):
         """
         Filters contractors by given cargo type
@@ -103,12 +95,10 @@ class ContractorDivision:
             type: CategoryType
         """
         self.contractors = self.database_access(type, DATABASE_POOL)
-        
+
         # for c in self.contractors:
         #     print(c)
         self.split_by_range()
-
-
 
     def to_featurecollection(self, contractor_list: list):
         """
@@ -129,7 +119,3 @@ class ContractorDivision:
         collection = FeatureCollection(features)
 
         return collection
-    
-
-    
-

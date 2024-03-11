@@ -1,7 +1,8 @@
 from dataclasses import dataclass
 
+
 @dataclass
-class Address():
+class Address:
     latitude: float
     longitude: float
     country: str

@@ -3,6 +3,7 @@ from ..logic import logistics
 
 cargo_bp = Blueprint("cargo_bp", __name__)
 
+
 @cargo_bp.route("/contractor/cargo/add", methods=["POST"])
 def add():
     contractor_id = logistics.contractor_id()
@@ -10,7 +11,9 @@ def add():
         abort(403)
 
     contractor_location_id = request.form["location_id"]
-    if not logistics.check_asset_ownership("location", contractor_location_id, contractor_id):
+    if not logistics.check_asset_ownership(
+        "location", contractor_location_id, contractor_id
+    ):
         abort(403)
 
     category = request.form["category"]
@@ -31,7 +34,7 @@ def add():
         max_distance,
         unit,
         can_process,
-        description
+        description,
     ):
         flash("An error occured. Please try again.")
         return redirect("/contractor")

@@ -71,6 +71,7 @@ def db_connection_pool(config: DatabaseConfig) -> ConnectionPool:
     )
     return connection_pool
 
+
 def db_fake_connection_pool(config: DatabaseConfig) -> NullConnectionPool:
     conn_args = _db_connection_string(config)
 
@@ -82,6 +83,7 @@ def db_fake_connection_pool(config: DatabaseConfig) -> NullConnectionPool:
         open=True,
     )
     return connection_pool
+
 
 def db_connect(config: DatabaseConfig) -> psycopg.Connection:
     conn_args = _db_connection_string(config)

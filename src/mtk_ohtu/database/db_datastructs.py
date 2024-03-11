@@ -1,11 +1,18 @@
 from dataclasses import dataclass
-from mtk_ohtu.database.db_enums import CategoryType, BatchUnitsType, BuyOrSell, DeliveryMethodType, SupplyDemandType
+from mtk_ohtu.database.db_enums import (
+    CategoryType,
+    BatchUnitsType,
+    BuyOrSell,
+    DeliveryMethodType,
+    SupplyDemandType,
+)
 from mtk_ohtu.logic.location import Location
+
 
 @dataclass(kw_only=True)
 class FullListing:
-    """A class for storing the full listing row
-    """
+    """A class for storing the full listing row"""
+
     posting_id: int
     title: str
     category: CategoryType
@@ -79,6 +86,7 @@ class LogisticsNode:
     name: str
     location: Location
     delivery_radius: int
+
 
 @dataclass
 class APIKey:

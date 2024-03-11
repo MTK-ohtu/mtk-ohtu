@@ -3,6 +3,7 @@ from psycopg_pool import ConnectionPool
 
 # pylint: disable=E1129
 
+
 def db_get_user(username: str, pool: ConnectionPool) -> bool:
     """Gets user from database
     Args:
@@ -19,8 +20,6 @@ def db_get_user(username: str, pool: ConnectionPool) -> bool:
         if user:
             out = user
     return out
-
-
 
 
 def db_check_if_email_exists(email: str, pool: ConnectionPool) -> bool:
