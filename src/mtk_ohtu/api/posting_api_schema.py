@@ -13,19 +13,19 @@ class EntryType(Enum):
 
 class PostingApiSchema(Schema):
     posting_id = fields.Int(required=True)
-    entry_type = fields.Enum(EntryType, required=True)
+    entry_type = fields.Enum(EntryType, required=True, by_value=True)
     title = fields.Str()
     description = fields.Str()
-    category = fields.Enum(CategoryType)
+    category = fields.Enum(CategoryType, by_value=True)
     sub_category = fields.Str()
-    post_type = fields.Enum(BuyOrSell)
-    delivery_method = fields.Enum(DeliveryMethodType)
-    demand = fields.Enum(SupplyDemandType)
-    expiry_date = fields.DateTime()
+    post_type = fields.Enum(BuyOrSell, by_value=True)
+    delivery_method = fields.Enum(DeliveryMethodType, by_value=True)
+    demand = fields.Enum(SupplyDemandType, by_value=True)
+    expiry_date = fields.Int()
     price = fields.Float()
     delivery_details = fields.Str()
     address = fields.Nested(AddressSchema)
-    date_created = fields.DateTime()
+    date_created = fields.Int()
 
     create_requirements = ["title",
                            "category", 
@@ -39,16 +39,15 @@ class PostingApiSchema(Schema):
                            "date_created"]
 
     @validates_schema
-    def validate_create(self, data):
+    def validate_create(self, data, **kwargs):
         if data["entry_type"] == EntryType.CREATE:
             if not all({k: data[k] for k in data if k in self.create_requirements}):
                 raise ValidationError("Missing required fields from create")
 
     @post_load
-    def make_posting(self, data):
+    def make_posting(self, data, **kwargs):
         entry = data.pop("entry_type")
         address = data.pop("address")
         data["location"] = Location((address["longitude"], address["latitude"]))
         data["address"] = f"{address['streetAddress']},  {address['postalCode']}, {address['city']}"
-
         return (entry, FullListing(**data))

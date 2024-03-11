@@ -81,7 +81,7 @@ def logistics_info():
     }
 
 @api_bp.route("/postings", methods=["POST"])
-def posting_edit_api():
+def postings():
     """API2 implementation.
     Expects the mimetype of the POST request to be application/json.
     Expects the API key to be supplied in the headers as 'API-Key'.
@@ -116,7 +116,6 @@ def posting_edit_api():
         404: either the user_id, posting_id or the address are not found
         500: other errors
     """
-
     try:
         data = PostingApiSchema().load(request.get_json())
     except ValidationError as err:
@@ -135,4 +134,4 @@ def posting_edit_api():
         case _:
             raise ValueError
     
-    return {"success": True}, 200
+    return {"success": True,}, 200

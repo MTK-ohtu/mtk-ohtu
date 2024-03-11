@@ -9,10 +9,10 @@ class AddressSchema(Schema):
 
     country     = fields.Str()
     city        = fields.Str()
-    state       = fields.Str()
+    state       = fields.Str(allow_none=True)
     streetAddress = fields.Str()
-    postalCode  = fields.Str()
-    apartment   = fields.Str()
+    postalCode  = fields.Str(allow_none=True)
+    apartment   = fields.Str(allow_none=True)
 
     @validates_schema
     def v(self, data, **kwargs):
