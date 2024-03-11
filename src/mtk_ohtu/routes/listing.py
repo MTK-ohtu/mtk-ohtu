@@ -74,7 +74,7 @@ def listing(listing_id):
 
     if request.method == "POST":
         user_location = Location(request.form["address"])
-        print(user_location)
+        print("user_locaton",user_location)
         route_to_product = route_calculator.Route(listing.location, user_location)
         route_to_product.calculate_route()
         session_handler.save_route_to_session(route_to_product)

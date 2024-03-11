@@ -37,7 +37,6 @@ class Location:
 
     def _location_from_address(self, address):
         """Return the coordinates of the address."""
-        print(address)
         try:
             loc = geolocator.geocode(address)
             if loc is None:

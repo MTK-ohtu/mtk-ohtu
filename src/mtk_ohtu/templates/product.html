@@ -2,9 +2,10 @@
 
 {% block content %}
 <form action="/listing/{{ listing.id }}" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
     <div class="product_container">
-        
+
         <div class="horizontal-container">
             <div class="card">
                 <div class="horizontal-container even">
@@ -19,10 +20,10 @@
                 <p class="description">{{listing.description}}</p>
             </div>
         </div>
-        
-        
+
+
         <div class="horizontal-container even">
-            <div >
+            <div>
                 <h3>Fuel economy</h3>
                 <p>
                     <label for="fuelType">Fuel:</label>
@@ -72,7 +73,7 @@
                 </table>
                 {% endif %}
             </div>
-            <!-- <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}"> -->
+
         </div>
     </div>
 
