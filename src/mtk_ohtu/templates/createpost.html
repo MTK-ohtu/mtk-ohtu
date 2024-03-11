@@ -5,6 +5,7 @@
 <div>
     <h2>List Your Sidestream</h2>
     <form>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>		
         <label for="productName">Product Name:</label><br>
         <input type="text" id="productName" name="productName"><br>
         <label for="productDesc">Product Description:</label><br>

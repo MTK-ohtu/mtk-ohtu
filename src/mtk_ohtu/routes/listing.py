@@ -10,6 +10,7 @@ from flask import Blueprint, render_template, request, redirect
 from ..config import DATABASE_POOL
 from ..logic.location import Location
 from ..database.db_datastructs import Listing
+from ..database.db_contractors import db_get_locations_by_cargo_type
 from ..logic.contractor_division import ContractorDivision
 from ..logic.logistics_info import get_logistics_providers, get_logistics_info
 
@@ -59,12 +60,13 @@ def listing(listing_id):
 
     if request.method == "GET":
         #contractors = ContractorDivision(float(listing.location.latitude), float(listing.location.longitude), listing.category)
-        contractors = ContractorDivision(listing, listing.category)
+        contractors = ContractorDivision(listing, listing.category, db_get_locations_by_cargo_type, listing.location)
         #contractors.filter_by_cargo_type(listing.category)
         return render_template(
             "product.html",
             listing=listing,
             show_route=0,
+            user_location=None,
             consumption=55,
             in_range=contractors.get_optimal(),
             out_range=contractors.get_suboptimal(),
@@ -72,6 +74,7 @@ def listing(listing_id):
 
     if request.method == "POST":
         user_location = Location(request.form["address"])
+        print(user_location)
         route_to_product = route_calculator.Route(listing.location, user_location)
         route_to_product.calculate_route()
         session_handler.save_route_to_session(route_to_product)
@@ -81,7 +84,7 @@ def listing(listing_id):
         emissions = emission_info.calculate_emissions()
         emission_comparison = emission_info.get_emissions_for_all_fuels()
         #contractors = ContractorDivision(float(listing.location.latitude), float(listing.location.longitude), listing.category)
-        contractors = ContractorDivision(listing, listing.category, user_location)
+        contractors = ContractorDivision(listing, listing.category, db_get_locations_by_cargo_type, user_location)
         #contractors.filter_by_cargo_type(listing.category)
 
         return render_template(
