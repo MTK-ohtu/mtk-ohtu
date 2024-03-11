@@ -107,7 +107,7 @@ def postings():
     Error codes:
         401: API-Key is incorrect
         400: JSON request is malformed (for example due to missing fields, extra fields, etc.)
-        404: either the user_id, posting_id or the address are not found
+        404: resource not found (update, delete)
         500: other errors
     """
     try:
@@ -117,7 +117,10 @@ def postings():
 
     match data[0]:
         case EntryType.CREATE:
-            db_create_new_listing_from_api_response(data[1], DATABASE_POOL)
+            try:
+                db_create_new_listing_from_api_response(data[1], DATABASE_POOL)
+            except Exception as err:
+                return {"success": False, "message": err}, 401
 
         case EntryType.UPDATE:
             print(data)
