@@ -1,5 +1,5 @@
 from enum import Enum
-from marshmallow import Schema, post_load, fields, ValidationError
+from marshmallow import Schema, post_load, validates_schema, fields, ValidationError
 from .class_field import ClassField
 from .address_datatype import Address
 from ..database.db_enums import BuyOrSell, DeliveryMethodType, SupplyDemandType
@@ -26,6 +26,23 @@ class PostingApiSchema(Schema):
     address = ClassField(Address)
     date_created = fields.DateTime()
 
+    create_requirements = ["title", 
+                           "category", 
+                           "sub_category", 
+                           "post_type", 
+                           "delivery_method", 
+                           "demand", 
+                           "expiry_date", 
+                           "price", 
+                           "address", 
+                           "date_created"]
+
+    @validates_schema
+    def validate_create(self, data):
+        if data["entry_type"] == EntryType.CREATE:
+            if not all({k: data[k] for k in data if k in self.create_requirements}):
+                raise ValidationError("Missing required fields from create")
+
     @post_load
-    def j():
+    def make_posting(self, data):
         pass
