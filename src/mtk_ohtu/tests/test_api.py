@@ -1,8 +1,14 @@
 import pytest
 
+def post_test(client, json):
+    return client.post("/api/logistics_info",
+                       content_type="application/json; charset=utf-8",
+                       headers={"API-Key": "test_api_key"},
+                       json=json)
+
 def test_api_missing_parameters(client):
     with client:
-        response = client.post("/api/logistics_info", content_type="application/json; charset=utf-8", json={
+        response = post_test(client, json={
             "test_attribute": 123
         })
         assert response.content_type == "application/json"
@@ -14,7 +20,9 @@ def test_api_missing_parameters(client):
 
 def test_api_incorrect_url(client):
     with client:
-        response = client.post("/api/test", json={
+        response = client.post("/api/test",
+                content_type="application/json; charset=utf-8",
+                headers={"API-Key": "test_api_key"}, json={
             "address": {"streetAddress": "Helsinki"},
             "posting_id": 6
         })
@@ -22,7 +30,7 @@ def test_api_incorrect_url(client):
 
 def test_api_incorrect_parameter_types(client):
     with client:
-        response = client.post("/api/logistics_info", json={
+        response = post_test(client, json={
             "address": {"streetAddress": "Turku"},
             "posting_id": "test_str"
         })
@@ -32,7 +40,7 @@ def test_api_incorrect_parameter_types(client):
 
 def test_api_invalid_listing_id(client):
     with client:
-        response = client.post("/api/logistics_info", json={
+        response = post_test(client, json={
             "address": {"streetAddress": "Helsinki"},
             "posting_id": -512
         })
@@ -40,7 +48,7 @@ def test_api_invalid_listing_id(client):
 
 def test_api_invalid_address(client):
     with client:
-        response = client.post("/api/logistics_info", json={
+        response = post_test(client, json={
             "posting_id": 6,
             "address": {"streetAddress": "-612361236123"}
         })
@@ -50,7 +58,7 @@ def test_api_invalid_address(client):
 
 def test_api_correct_response(client):
     with client:
-        response = client.post("/api/logistics_info", json={
+        response = post_test(client, json={
             "posting_id": 3,
             "address": {"streetAddress": "Helsinki"}
         })
@@ -62,9 +70,31 @@ def test_api_correct_response(client):
 
 def test_api_incomplete_address(client):
     with client:
-        response = client.post("/api/logistics_info", json={
+        response = post_test(client, json={
             "posting_id": 3,
             "address": {"latitude": 61.7123, "city": "Helsinki"}
         })
 
         assert response.status_code == 400
+
+def test_incorrect_api_key(client):
+    with client:
+        response = client.post("/api/logistics_info",
+                content_type="application/json; charset=utf-8",
+                headers={"API-Key": "incorrect key"}, json={
+            "posting_id": 3,
+            "address": {"streetAddres": "Helsinki"}
+        })
+
+        assert response.status_code == 401
+
+def missing_api_key(client):
+    with client:
+        response = client.post("/api/logistics_info",
+                content_type="application/json; charset=utf-8",
+                json={
+            "posting_id": 3,
+            "address": {"streetAddres": "Helsinki"}
+        })
+
+        assert response.status_code == 401

@@ -106,3 +106,9 @@ CREATE TABLE IF NOT EXISTS cargo_capabilities (
     can_process BOOLEAN DEFAULT False,
     description TEXT
 );
+
+CREATE TABLE IF NOT EXISTS api_keys (
+    id SERIAL PRIMARY KEY,
+    name TEXT,
+    key VARCHAR(128)
+)
