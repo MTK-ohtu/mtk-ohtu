@@ -10,6 +10,7 @@ from flask import Blueprint, render_template, request, redirect
 from ..config import DATABASE_POOL
 from ..logic.location import Location
 from ..database.db_datastructs import Listing
+from ..database.db_contractors import db_get_locations_by_cargo_type
 from ..logic.contractor_division import ContractorDivision
 from ..logic.logistics_info import get_logistics_providers, get_logistics_info
 
@@ -54,27 +55,26 @@ def get_url_for_listing(listing: Listing) -> str:
 
 @listing_bp.route("/listing/<int:listing_id>", methods=["GET", "POST"])
 def listing(listing_id):
+    
+    listing = mtk_ohtu.database.db_listings.db_get_product_by_id(listing_id, DATABASE_POOL)
+
     if request.method == "GET":
-        
-        db_listing = mtk_ohtu.database.db_listings.db_get_product_by_id(listing_id, DATABASE_POOL)
-        contractors = ContractorDivision()
-        contractors.split_by_range(float(db_listing.location.latitude), float(db_listing.location.longitude))
+        #contractors = ContractorDivision(float(listing.location.latitude), float(listing.location.longitude), listing.category)
+        contractors = ContractorDivision(listing, listing.category, db_get_locations_by_cargo_type, listing.location)
+        #contractors.filter_by_cargo_type(listing.category)
         return render_template(
             "product.html",
-            listing=db_listing,
-            listing_id=listing_id,
-            show_route=False,
+            listing=listing,
+            show_route=0,
+            user_location=None,
             consumption=55,
             in_range=contractors.get_optimal(),
             out_range=contractors.get_suboptimal(),
-            lat=db_listing.location.latitude,
-            lon=db_listing.location.longitude,
-            logistics_info=(0, 0)
         )
 
     if request.method == "POST":
-        listing = mtk_ohtu.database.db_listings.db_get_product_by_id(listing_id, DATABASE_POOL)
         user_location = Location(request.form["address"])
+        print(user_location)
         route_to_product = route_calculator.Route(listing.location, user_location)
         route_to_product.calculate_route()
         session_handler.save_route_to_session(route_to_product)
@@ -83,17 +83,12 @@ def listing(listing_id):
         emission_info = Emissions(fuel, route_to_product.distance, fuel_consumption)
         emissions = emission_info.calculate_emissions()
         emission_comparison = emission_info.get_emissions_for_all_fuels()
-        logistics_nodes = db.db_get_logistics(DATABASE_POOL)
-        
-        logistics_info = get_logistics_info(listing, user_location)
-        print("LOGISTICS INFO:",logistics_info)
-
-        contractors = ContractorDivision()
-        contractors.split_by_range(float(listing.location.latitude), float(listing.location.longitude))
+        #contractors = ContractorDivision(float(listing.location.latitude), float(listing.location.longitude), listing.category)
+        contractors = ContractorDivision(listing, listing.category, db_get_locations_by_cargo_type, user_location)
+        #contractors.filter_by_cargo_type(listing.category)
 
         return render_template(
             "product.html",
-            listing_id=listing_id,
             listing=listing,
             distance=round(route_to_product.distance / 1000, 1),
             duration=str(
@@ -103,12 +98,8 @@ def listing(listing_id):
             user_location=user_location.location,
             emissions=emissions,
             emission_comparison=emission_comparison,
-            companies=logistics_nodes,
             consumption=fuel_consumption,
-            show_route=True,
+            show_route=1,
             in_range=contractors.get_optimal(),
             out_range=contractors.get_suboptimal(),
-            lat=listing.location.latitude,
-            lon=listing.location.longitude,
-            logistics_info=logistics_info
         )

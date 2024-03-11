@@ -1,6 +1,6 @@
 import psycopg
 from psycopg_pool import ConnectionPool
-from mtk_ohtu.database.db_datastructs import LogisticsContractor, LogisticsNode
+from mtk_ohtu.database.db_datastructs import LogisticsContractor, LogisticsNode, CategoryType
 from mtk_ohtu.logic.location import Location
 
 
@@ -47,6 +47,7 @@ def db_add_contractor_location(
     longitude: float,
     latitude: float,
     radius: int,
+    description: str,
     pool: ConnectionPool,
 ) -> bool:
     out = False
@@ -54,13 +55,91 @@ def db_add_contractor_location(
         cursor = connection.cursor()
         try:
             cursor.execute(
-                "INSERT INTO contractor_locations (contractor_id, address, telephone, email, longitude, latitude, delivery_radius) VALUES (%s,%s,%s,%s,%s,%s,%s) RETURNING id",
-                (contractor_id, address, telephone, email, longitude, latitude, radius),
+                "INSERT INTO contractor_locations (contractor_id, address, telephone, email, longitude, latitude, delivery_radius, description) VALUES (%s,%s,%s,%s,%s,%s,%s,%s) RETURNING id",
+                (contractor_id, address, telephone, email, longitude, latitude, radius, description),
             )
             out = cursor.fetchone()[0]
         except psycopg.Error as e:
             print(f"Error inserting data: {e}")
     return out
+
+
+def db_modify_contractor_location(
+    location_id: int,
+    address: str,
+    telephone: str,
+    email: str,
+    longitude: float,
+    latitude: float,
+    radius: int,
+    description: str,
+    pool: ConnectionPool,
+) -> bool:
+    """
+    Modifies the data of existing contractor location
+    Args:
+        location_id: locations identifying number
+        address: location address
+        telephone: telephone number
+        email: email address
+        longitude: coordinate
+        latitude: coordinate
+        radius: delivery radius
+        description: location summary
+        pool: a database connection
+
+    Returns:
+        bool: True if succesful, otherwise False
+    """
+    with pool.connection() as connection:
+        cursor = connection.cursor()
+        try:
+            cursor.execute(
+                "UPDATE contractor_locations SET address=%s, SET telephone=%s, SET email=%s, SET longitude=%s, SET latitude=%s, SET radius=%s, SET description=%s WHERE id=%s",
+                (address, telephone, email, longitude, latitude, radius, description, location_id),
+            )
+            connection.commit()
+        except:
+            return False
+    return True
+
+
+def db_remove_contractor_location(location_id: int, pool: ConnectionPool) -> bool:
+    """
+    Deletes contractor location
+    Args:
+        location_id: locations identifying number
+        pool: a database connection
+    Returns:
+        bool: True if successful, otherwise False
+    """
+    with pool.connection() as connection:
+        cursor = connection.cursor()
+        try:
+            cursor.execute("DELETE FROM contractor_locations WHERE id=%s;", (location_id,))
+            connection.commit()
+        except:
+            return False
+    return True
+
+def db_get_contractor_location_owner(location_id: int, pool: ConnectionPool) -> bool:
+    """
+    Returns location owners contractor id number
+    Args:
+        location_id: locations identifying number
+        pool: a database connection
+    Returns:
+        contractor id, otherwise 0
+    """
+    with pool.connection() as connection:
+        cursor = connection.cursor()
+        cursor.execute(
+            "SELECT C.id FROM contractors C, contractor_locations CL WHERE CL.contractor_id=C.id AND CL.id=%s;", (location_id,)
+        )
+        result = cursor.fetchone()[0]
+    if not result:
+        return 0
+    return result
 
 
 def db_get_contractor_locations(
@@ -132,4 +211,32 @@ def db_get_logistics(pool: ConnectionPool) -> list[LogisticsNode]:
         ]
     if not out:
         return None
+    return out
+
+
+def db_get_locations_by_cargo_type(
+        category_type: CategoryType, pool: ConnectionPool
+) -> list[LogisticsNode]:
+    """
+    Query all contractor locations capable of shipping given cargo type
+    Args:
+        type: type of cargo (enum CategoryType)
+        pool: database connection
+    """
+    out = []
+    with pool.connection() as connection:
+        cursor = connection.cursor()
+        
+        cursor.execute("SELECT l.id, l.contractor_id, l.address, con.name, l.longitude, l.latitude, l.delivery_radius \
+                FROM contractor_locations AS l \
+                LEFT JOIN cargo_capabilities AS c \
+                    ON l.id=c.contractor_location_id \
+                LEFT JOIN contractors AS con ON l.contractor_id=con.id \
+                WHERE c.type='%s';", (category_type.value,))
+        lista = cursor.fetchall()
+
+        out = [LogisticsNode(x[0], x[1], x[2], x[3], Location((x[4], x[5])), x[6])
+            for x in lista]
+    if not out:
+        return []
     return out

@@ -37,17 +37,19 @@ class VehicleRequirementType(Enum):
 
 
 class CategoryType(Enum):
-    MANURE = "Manure"
+    DRY_MANURE = "Dry manure"
+    SLUDGE_MANURE = "Sludge manure"
+    SEPARATED_MANURE = "Separated manure"
+    OTHER_MANURE = "Other manure"
     GRASS_WASTE_FODDER_AND_GREEN_GROWTHS = "Grass, waste fodder and green growths"
     BASKET_FODDER = "Basket fodder"
     PLANT_BASED_BIOMASSES = "Plant-based biomasses"
     ANIMAL_BASED_BIOMASSES = "Animal-based biomasses"
     SOIL_AND_GROWING_MEDIA = "Soil and growing media"
     DIGESTION = "Digestion"
-    WOOD = "Wood"
+    WOOD_FOREST_BIOMASS = "Wood (forest biomass)"
+    WOOD_TREATED_WOOD = "Wood (treated wood)"
     OTHER_SIDE_STREAMS_NOT_BIOMASS = "Other side streams (not biomass)"
-    LOGISTICS_AND_CONTRACTING = "Logistics and contracting"
-    OTHER = "Other"
 
 
 DEFINED_ENUMS = {

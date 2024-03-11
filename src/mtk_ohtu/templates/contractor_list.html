@@ -1,218 +1,406 @@
 <!-- This view is divided into two vertical blocks -->
-<div class="card" style="height: 80vh;">
-    <!-- style="  display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;"-->
-    <!-- Block1: list view -->
-    <div>
-        <input type="checkbox" id="selectAll">
-        <label for="selectAll">Näytä kaikki</label>
+<div style="height: 70vh; display: flex;">
+
+    <!-- Block 1: List for contractor cards-->
+    <!--<div style="padding: 10px;  width: 40%; float: left;">-->
+    <div id="list_div" class="card_scrollbox" style="flex:1; max-width: 40%; float: left;">
     </div>
-    <div style="background-color: #f1f1f1; padding: 10px; font-size: 18px;  width: 60vh; float: left;">
+    <!--</div>-->
 
-        <div id="list_div" style="overflow: auto;border: 1px solid #ccc; overflow-y: scroll; height: 800px;">
-        </div>
-
-    </div>
-
-    <!-- Block 2: map -->
-    <div name="map_div" style="background-color: #f1f1f1; padding: 20px; font-size: 18px;">
-        <div>
-            <!-- Include Leaflet JavaScript and CSS -->
-            <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-            <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-        </div>
+    <!-- Block 2: Map -->
+    <div name="map_div" style="flex: 1;background-color: #f1f1f1; min-height: 100%;">
+    
+        <!-- Include Leaflet JavaScript and CSS -->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+        <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
         <!-- Add a container for the map -->
-        <div id="map" style="height: 800px;"></div>
+        <div id="map" style="height: 100%;"></div>
 
-        <style>
-            img.huechange1 {
-                filter: hue-rotate(-120deg);
-            }
-
-            img.huechange2 {
-                filter: hue-rotate(120deg);
-            }
-        </style>
         <!-- Leaflet + code -->
         <script>
 
-            var padding = 0.02;
+            var padding = 0.1;
             var hidden_elements = [];
             var in_range_gjson = JSON.parse('{{ in_range | tojson | safe }}');
             var out_range_gjson = JSON.parse('{{ out_range | tojson | safe }}');
+
+            // Mappings
             var address_to_marker = {};
-            var listElement_to_coord = {};
-            var marker_to_listElement = {};
-            var last_open = null;
+            var listElement_to_bounds = {};
+            var address_to_listElement = {};
+
+            var lastOpenListElement = null;
+            const companyCount = document.getElementById("company_count")
+            var defaultCoordinates = [62.41920782078211, 26.061582656316585]
+            var productCoordinates = [parseFloat('{{ listing.location.latitude }}'), parseFloat('{{ listing.location.longitude }}')]
+            var combined_bounds = null
+            var previousBounds = null
+            var focusedBounds = null
+            var zoomedIn = false
 
 
-            // Set coordinates to match viewers'
-            var map = L.map('map').setView(['{{ lat }}', '{{ lon }}'], 10);
+            // Interactive elements
+            var routeButton = document.getElementById('route_button')
+            var setGoalButton = document.getElementById('set_goal')
+            var searchButton = document.getElementById('search_button')
+            var mapDiv = document.getElementById('map')
+            var addressInput = document.getElementById('address_input')
 
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap contributors'
-            }).addTo(map);
-
-            // Add tiles
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap contributors'
-            }).addTo(map);
-
-            var product = L.marker(['{{listing.location.latitude}}', '{{listing.location.longitude}}']).addTo(map);
-            product._icon.classList.add('huechange1');
-            product.bindPopup("{{listing.category.value}}\n{{listing.address}}");
-
-            if ('{{show_route}}') {
-
-                var route_geojson = JSON.parse('{{ route_geojson }}'.replaceAll('&#34;', '"'));
-                console.log(route_geojson);
-
-                // Adds geojson route to map
-                L.geoJSON(route_geojson).addTo(map);
-                var destination = route_geojson["features"][0]["geometry"]["coordinates"].pop().reverse();
-
-                var destinationMarker = L.marker(destination).addTo(map);
-                destinationMarker._icon.classList.add('huechange2');
-                destinationMarker.bindPopup("Destination");
-
-                var bbox = route_geojson["features"][0]["bbox"];
-                var southWest = L.latLng(bbox[1], bbox[0]),
-                    northEast = L.latLng(bbox[3], bbox[2]),
-                    bounds = L.latLngBounds(southWest, northEast);
-
-                map.fitBounds(bounds);
-            }
-
+            // Leaflet marker icons
             var okTruck = new L.Icon({
                 iconUrl: '/static/images/ok_truck.png',
                 shadowUrl: '/static/images/point.png',
                 iconSize: [25, 25],
-                iconAnchor: [8,25],
+                iconAnchor: [8, 25],
                 popupAnchor: [1, -34],
                 shadowSize: [10, 10],
-                shadowAnchor: [0,0]
+                shadowAnchor: [0, 0]
             });
 
             var badTruck = new L.Icon({
                 iconUrl: '/static/images/bad_truck.png',
                 shadowUrl: '/static/images/point.png',
                 iconSize: [25, 25],
-                iconAnchor: [8,25],
+                iconAnchor: [8, 25],
                 popupAnchor: [1, -34],
                 shadowSize: [10, 10],
-                shadowAnchor: [0,0]
+                shadowAnchor: [0, 0]
             });
 
-            // Marker creation
-            function create_marker(feature, latlng) {
-                var marker = L.marker(latlng, { icon: okTruck });
-                address_to_marker[feature.properties.address] = marker;
-                return marker;
+            var goal = new L.Icon({
+                iconUrl: '/static/images/goal_button.png',
+                shadowUrl: '/static/images/point.png',
+                iconSize: [35, 35],
+                iconAnchor: [0, 35],
+                popupAnchor: [1, -34],
+                shadowSize: [10, 10],
+                shadowAnchor: [0, 5]
+            });
+
+            // Create map
+            var map = L.map('map').setView(defaultCoordinates, 10);
+
+            
+            // Add tiles
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+
+            // Add marker to product location
+            var productMarker = L.marker(productCoordinates).addTo(map);
+            productMarker.bindPopup('<h4>{{ listing.category.value }}</h4><p>{{ listing.address }}</p>');
+
+            // Add scale
+            L.control.scale().addTo(map);
+            
+            // Default bounds for route (only product)
+            var route_bounds = L.latLngBounds(
+                L.latLng(productCoordinates.map(value => value - padding)),
+                L.latLng(productCoordinates.map(value => value + padding))
+            );
+
+            // Visual representation of the route
+            if ('{{show_route}}' == 1) {
+                // Add route on map
+                var route_geojson = JSON.parse('{{ route_geojson }}'.replaceAll('&#34;', '"'));
+                L.geoJSON(route_geojson).addTo(map);
+                // Add destination on map                
+                var destination = route_geojson["features"][0]["geometry"]["coordinates"].pop().reverse();
+                var destinationMarker = L.marker(destination, { icon: goal }).addTo(map);
+                // destinationMarker._icon.classList.add('huechange2');
+                destinationMarker.bindPopup('<p>{{ user_location.address }}</p>');
+                // Calculate route bounds on map
+                var bbox = route_geojson["features"][0]["bbox"];
+                var southWest = L.latLng(bbox[1], bbox[0]),
+                    northEast = L.latLng(bbox[3], bbox[2]),
+                route_bounds = L.latLngBounds(southWest, northEast);
             }
 
-            function create_badmarker(feature, latlng) {
-                var marker = L.marker(latlng, { icon: badTruck });
-                address_to_marker[feature.properties.address] = marker;
-                return marker;
+            // Define function for clicking on the map
+            map.on('click', function (e) {
+                clickLat = e.latlng.lat
+                clickLng = e.latlng.lng
+                // If destination selection is on, post chosen coordinates
+                if (setGoalButton.classList.contains('pressed')) {
+                    mapDiv.classList.remove('set_goal')
+                    setGoalButton.classList.remove('pressed')
+                    addressInput.value=clickLat+","+clickLng
+                    searchButton.click()
+                }
+            })
+
+            // Show route button
+            if (routeButton != null) {
+                routeButton.addEventListener('click', function() {
+                    if (routeButton.classList.contains('pressed')) {
+                        routeButton.classList.remove('pressed')
+                        if (lastOpenListElement != null) {
+                            lastOpenListElement.querySelector('#zoom_button').classList.remove('zoomed_in')
+                            zoomedIn = false
+                        }
+                        map.flyToBounds(boundsOf([combined_bounds]).pad(padding/10))
+                    } else {
+                        previousBounds = map.getBounds()
+                        routeButton.classList.add('pressed')
+                        if (lastOpenListElement != null) {
+                            map.flyToBounds(boundsOf([route_bounds, listElement_to_bounds[lastOpenListElement.id]]))  
+                            lastOpenListElement.querySelector('#zoom_button').classList.remove('zoomed_in')
+                            zoomedIn = false
+                        }
+                        else map.flyToBounds(route_bounds)
+                    }
+                })
             }
 
-            var out_range_style = {
-                "color": "#ff7800",
-                "opacity": 0.5
-            }
+            // Destination selector button
+            setGoalButton.addEventListener('click', function() {
+                if (event.target.classList.contains('pressed')) {
+                    mapDiv.classList.remove('set_goal')
+                    setGoalButton.classList.remove('pressed')
+                } else {
+                    mapDiv.classList.add('set_goal')
+                    setGoalButton.classList.add('pressed')
+                }
+            })
 
-            //Define popups
-            function onEachFeature(feature, layer) {
-                if (feature.properties && feature.properties.name && feature.properties.address) {
-                    layer.bindPopup('<b>' + feature.properties.name + '</b><br>' + feature.properties.address);
+            // Calculate bounds here
+            var boundsOf = function (list) {
+                var lngList = []; var latList = []
+                list.forEach(bounds => {
+                    if (bounds.hasOwnProperty('_northEast')) {
+                        latList.push(bounds._northEast.lat)
+                        latList.push(bounds._southWest.lat)
+                        lngList.push(bounds._northEast.lng)
+                        lngList.push(bounds._southWest.lng)
+                    }
+                })
+                if (lngList.length === 0) return null;
+                return L.latLngBounds(
+                    L.latLng(Math.min(...latList), Math.min(...lngList)),
+                    L.latLng(Math.max(...latList), Math.max(...lngList))
+                )
+            }
+            // List element animations
+            var runListElementAnimation = function (element) {
+                minimum_height = element.querySelector('div').scrollHeight
+                element.style.setProperty('--minimum-height', minimum_height+'px')
+                element.style.setProperty('--total-height', (element.scrollHeight+3)+'px')
+                if (element.classList.contains('open')) {
+                    element.classList.remove('open')
+                    element.classList.add('closed')
+                } else {
+                    // Wait opening animation to end before scrolling into view
+                    element.addEventListener('animationend', function() {
+                        element.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start'});
+                    }, { once: true })
+                    element.classList.remove('closed')
+                    element.classList.add('open')
+                }
+            }
+            // Toggle function for list elements
+            var toggleListElement = function (element) {
+                // Closing list element
+                if (element.classList.contains('selected')) {
+                    element.classList.remove('selected')
+                    lastOpenListElement = null;
+                    runListElementAnimation(element)
+                    element.querySelector('#zoom_button').classList.remove('zoomed_in')
+                    // If route button was pressed, fit route on map
+                    if (routeButton != null && routeButton.classList.contains('pressed')) {
+                        map.flyToBounds(route_bounds)
+                    }
+                    // Else fit contractors and route
+                    else map.flyToBounds(boundsOf([combined_bounds, route_bounds]));
+                
+                // Opening list element
+                } else {
+                    element.classList.add('selected')
+                    elementBounds = listElement_to_bounds[element.id];
+
+                    if (lastOpenListElement != null) {
+                        // Hide previosly opened list element
+                        lastOpenListElement.classList.remove('selected')
+                        runListElementAnimation(lastOpenListElement)
+                        if (zoomedIn) {
+                            lastOpenListElement.querySelector('#zoom_button').classList.remove('zoomed_in')
+                            element.querySelector('#zoom_button').classList.add('zoomed_in')
+                            if (routeButton != null && routeButton.classList.contains('pressed')) {
+                                previousBounds = boundsOf([route_bounds, elementBounds])
+                            }
+                        }
+                    }
+                    lastOpenListElement = element;
+                    runListElementAnimation(element)
+                    if (zoomedIn){
+                        map.fitBounds(listElement_to_bounds[element.id])
+                    }
+                    else if (routeButton != null && routeButton.classList.contains('pressed')) {
+                        map.flyToBounds(boundsOf([route_bounds, elementBounds]).pad(padding));
+                    } 
+                    else if (!map.getBounds().contains(elementBounds)) {
+                        map.flyToBounds(elementBounds.pad(padding*10));
+                    }
                 }
             }
 
-            // Add contractor locations (database)
-            in_gjson = L.geoJSON(in_range_gjson, { onEachFeature: onEachFeature, pointToLayer: create_marker });
-            out_gjson = L.geoJSON(out_range_gjson, { onEachFeature: onEachFeature, pointToLayer: create_badmarker });
-            in_gjson.addTo(map);
-
-
-            // Initialize map view
-            var combinedBounds = in_gjson.getBounds().pad(padding);
-            L.control.scale().addTo(map);
-            map.flyToBounds(in_gjson.getBounds().pad(0.01));
-
-            var mapFit = function () {
-                console.log("Fly to bounds")
+            // Toggle marker popup
+            var togglePopup = function(marker) {
+                if (marker.isPopupOpen()) {
+                    marker.closePopup()
+                } else {
+                    marker.openPopup()
+                }
+            }
+        
+                
+            // Marker creation for optimal contractors
+            function create_marker(feature, latlng) {
+                var marker = L.marker(latlng, { icon: okTruck });
+                marker.on('click', function (e) {
+                    listElement = address_to_listElement[feature.properties.address]
+                    toggleListElement(listElement);
+                });
+                address_to_marker[feature.properties.address] = marker;
+                return marker;
+            }
+            // Marker creation for suboptimal contractors
+            function create_badmarker(feature, latlng) {
+                var marker = L.marker(latlng, { icon: badTruck });
+                marker.on('click', function (e) {
+                    listElement = address_to_listElement[feature.properties.address]
+                    toggleListElement(listElement);
+                });
+                address_to_marker[feature.properties.address] = marker;
+                return marker;
+            }
+            //Define popups for contractor markers
+            function onEachFeature(feature, layer) {
+                if (feature.properties && feature.properties.name && feature.properties.address) {
+                    layer.bindPopup('<h4>' + feature.properties.name + '</h4><p>' + feature.properties.address+'</p>');
+                }
             }
 
-            // Show / hide suboptimal contractors (in list and map)
+            // Two sets of gjson for optimal and suboptimal. Set popups and icons.
+            in_gjson = L.geoJSON(in_range_gjson, { onEachFeature: onEachFeature, pointToLayer: create_marker });
+            out_gjson = L.geoJSON(out_range_gjson, { onEachFeature: onEachFeature, pointToLayer: create_badmarker });
+
+            combined_bounds = boundsOf([route_bounds, in_gjson.getBounds()]);
+
+            // Checkbox 'Show all' functionality
             const selectAll = document.getElementById('selectAll');
-            var mapFit = selectAll.addEventListener("change", function () {
+            selectAll.addEventListener("change", function () {
                 if (this.checked) {
-                    out_gjson.addTo(map)
-                    combinedBounds = in_gjson.getBounds().pad(padding).extend(out_gjson.getBounds().pad(padding));
-                    map.flyToBounds(combinedBounds);
+                    out_gjson.addTo(map);
                     hidden_elements.forEach(element => { element.style.display = 'block' })
+                    if (out_range_gjson.length != 0) {
+                        companyCount.textContent = in_range_gjson.features.length + out_range_gjson.features.length
+                        combined_bounds = boundsOf([in_gjson.getBounds(), out_gjson.getBounds()])
+                    }                
                 }
                 else {
                     map.removeLayer(out_gjson);
-                    combinedBounds = in_gjson.getBounds().pad(padding).extend(in_gjson.getBounds().pad(padding));
-                    map.flyToBounds(combinedBounds);
-                    hidden_elements.forEach(element => { element.style.display = 'none' })
+                    hidden_elements.forEach(element => { element.style.display = 'none' });
+                    companyCount.textContent = in_range_gjson.features.length;
+                    combined_bounds = boundsOf([in_gjson.getBounds()])
+                }
+                if (combined_bounds != null && routeButton!= null && !routeButton.classList.contains('pressed') && !zoomedIn) {
+                    map.flyToBounds(boundsOf([route_bounds, combined_bounds]).pad(padding/10));
                 }
             });
 
-            //====================================================== Create elements on the list
+            // Create elements to show on the list side ====================================================================
             function addElement(feature, hide) {
-                console.log("Create list element " + feature.properties.address)
-
+                // Create new button as list element
                 var listElement = document.createElement('button');
                 listElement.id = feature.properties.address
-                listElement.classList.add('clickable_list_element')
-                listElement.innerHTML = '<strong>' + feature.properties.name + '</strong><br>' + feature.properties.address;
-
-                var info = document.createElement('div');
-                info.style.display = 'none';
-                info.classList.add('card');
-                info.innerHTML = '<div><br>Palveluinfo</br></div>'
-
-                listElement.appendChild(info)
+                // Create inner HTML for the button
+                listElement.innerHTML = `
+                    <div class="horizontal-container even">
+                        <h4 style="align-self: left;">${feature.properties.name}</h4>
+                        <p style="align-self: center;">${feature.properties.address}</p>
+                    </div>
+                    <div class="horizontal-container even" id="info">
+                        <p>
+                            "As a transportation entrepreneur, I take immense pride in the operations of my company. Our commitment to excellence shines through in every aspect of our business, from the reliability of our fleet to the professionalism of our drivers. We have cultivated a reputation for efficiency and timeliness, ensuring that our clients' goods reach their destinations safely and on schedule. What sets us apart is our unwavering dedication to customer satisfaction, always going above and beyond to meet their unique needs. With a focus on innovation and continuous improvement, we strive to exceed expectations, solidifying our position as a leader in the transportation industry."
+                            - ChatGPT
+                        </p>
+                        <button type="button" class="zoom_button" id="zoom_button"></button>
+                    </div>
+                    `;
+                // Element style
+                listElement.classList.add('clickable_list_element');
+                // Add element to list, show closing animation when elements appears
+                listElement.classList.add('open')
                 document.getElementById('list_div').appendChild(listElement);
+                runListElementAnimation(listElement)
 
-                listElement_to_coord[listElement.id] = [feature.geometry.coordinates[1], feature.geometry.coordinates[0]];
+                // Create squere bounds around element coordinates, add element to mappings
+                var bounds = L.latLngBounds(
+                    L.latLng(feature.geometry.coordinates[1]-padding, feature.geometry.coordinates[0]-padding),
+                    L.latLng(feature.geometry.coordinates[1]+padding, feature.geometry.coordinates[0]+padding),
+                    );
+                listElement_to_bounds[listElement.id] = bounds
+                address_to_listElement[feature.properties.address] = listElement;
 
+                // Hide suboptimal elements
                 if (hide) {
                     listElement.style.display = 'none';
-                    listElement.style.backgroundColor = 'red';
+                    listElement.classList.add('suboptimal')
                     hidden_elements.push(listElement);
                 }
-
+                // Functionality for clicking this list element
                 listElement.addEventListener('click', function () {
-
-                    if (event.target.tagName === 'BUTTON') {
-                        var button = event.target;
-                    } else {
-                        var button = event.target.closest('button');
-                    }
-                    var info = button.querySelector('div');
-                    //info.addEventListener('click', () => { event.stopPropagation(); });
-                    var id = button.id;
-                    map.flyTo(listElement_to_coord[id], 9);
-                    address_to_marker[id].openPopup();
-                    if (info.style.display === 'none') {
-                        info.style.display = 'block';
-                        if (last_open != null) {
-                            last_open.style.display = 'none'
+                    // Zoom-button functionality
+                    if (event.target.id == 'zoom_button') {
+                        if (event.target.classList.contains('zoomed_in')) {
+                            zoomedIn = false;
+                            map.fitBounds(previousBounds)
+                            event.target.classList.remove('zoomed_in')
+                        } else {
+                            event.target.classList.add('zoomed_in')
+                            var button = event.target.parentElement.closest('button')
+                            previousBounds = map.getBounds()
+                            map.fitBounds(listElement_to_bounds[button.id])
+                            zoomedIn = true
                         }
-                        last_open = info;
-                        listElement.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
                     } else {
-                        info.style.display = 'none';
-                        last_open = null;
-                        map.flyToBounds(combinedBounds);
+                        // Make sure that target (button) is the list element it self
+                        if (event.target.tagName === 'BUTTON') {
+                            var button = event.target
+                        } else {
+                            var button = event.target.closest('button')
+                        }
+
+                        if (lastOpenListElement != null && lastOpenListElement !== button) {
+                            togglePopup(address_to_marker[lastOpenListElement.id])
+                        }
+                        togglePopup(address_to_marker[button.id])
+
+                        toggleListElement(button)
+
+                        
+                        //if (button.classList.contains('selected'))
+                        
                     }
                 });
-            }
+            } // ==============================================================================================
+
+            // Add list elements on the list side
             in_range_gjson.features.forEach(feature => addElement(feature, false));
-            out_range_gjson.features.forEach(feature => addElement(feature, true));
+            if (out_range_gjson.length != 0) {
+                out_range_gjson.features.forEach(feature => addElement(feature, true));
+            }   
+            // By default, show only optimal contractors on the map
+            in_gjson.addTo(map);
+            var empty_element = document.createElement('div')
+            empty_element.classList.add('empty_list_element')
+            document.getElementById('list_div').appendChild(empty_element)
+
+            // Default setup 
+            companyCount.textContent = in_range_gjson.features.length
+            map.flyToBounds(boundsOf([route_bounds, combined_bounds]));
+
         </script>
     </div>
 </div>

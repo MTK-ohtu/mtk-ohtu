@@ -4,6 +4,7 @@ from ..database.db_datastructs import LogisticsNode
 from .route_calculator import Route
 from ..database.db_contractors import db_get_logistics
 from ..database.db_cargo import db_get_location_cargo_capabilities
+from ..database.db_contractors import db_get_locations_by_cargo_type
 from ..config import DATABASE_POOL
 
 
@@ -36,9 +37,13 @@ def get_logistics_providers(listing: Listing, user_location: Location) -> list[L
     Returns:
         a list of LogisticsNodes
     """
-    nodes = db_get_logistics(DATABASE_POOL)
+    #this would be more efficient
+    nodes = db_get_locations_by_cargo_type(listing.category, DATABASE_POOL) 
     nodes = get_logistics_providers_by_range(listing, user_location, nodes)
-    nodes = get_logistics_providers_by_cargo_capability(listing, nodes)
+
+    # nodes = db_get_logistics(DATABASE_POOL)
+    # nodes = get_logistics_providers_by_range(listing, user_location, nodes)
+    # nodes = get_logistics_providers_by_cargo_capability(listing, nodes)
 
     return nodes
 
@@ -49,20 +54,25 @@ def get_logistics_providers_by_range(
 
     Args:
         listing (Listing): the listing in question,
-        location (Location): the buyer's location,
+        location (Location): the delivery location,
         nodes (list[LogisticsNode]): the available logistics providers
 
     Returns:
         a list of LogisticsNodes
     """
-    accepted = []
+    # accepted = []
 
-    for node in nodes:
-        route_to_listing = Route(listing.location, node.location)
-        if route_to_listing.geodesic_distance() / 1000.0 <= node.delivery_radius:
-            route_to_user = Route(user_location, node.location)
-            if route_to_user.geodesic_distance() / 1000.0 <= node.delivery_radius:
-                accepted.append(node)
+    # for node in nodes:
+    #     route_to_listing = Route(listing.location, node.location)
+    #     if route_to_listing.geodesic_distance() / 1000.0 <= node.delivery_radius:
+    #         route_to_user = Route(user_location, node.location)
+    #         if route_to_user.geodesic_distance() / 1000.0 <= node.delivery_radius:
+    #             accepted.append(node)
+
+    accepted = [node for node in nodes 
+                if Route(listing.location, node.location).geodesic_distance() / 1000.0 <= node.delivery_radius 
+                and Route(user_location, node.location).geodesic_distance() / 1000.0 <= node.delivery_radius
+                ]
 
     return accepted
 

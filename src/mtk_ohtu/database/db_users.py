@@ -21,8 +21,20 @@ def db_get_user(username: str, pool: ConnectionPool) -> bool:
     return out
 
 
-def db_check_if_user_exists():
-    pass
+
+
+def db_check_if_email_exists(email: str, pool: ConnectionPool) -> bool:
+    """Checks if email exists in the database.
+    Args:
+        email: Email to check
+        pool: Connection pool
+    Returns: True if email exists, False otherwise
+    """
+    with pool.connection() as connection:
+        cursor = connection.cursor()
+        cursor.execute("SELECT email FROM users WHERE email=%s;", (email,))
+        user = cursor.fetchone()
+        return bool(user)
 
 
 def db_add_user(

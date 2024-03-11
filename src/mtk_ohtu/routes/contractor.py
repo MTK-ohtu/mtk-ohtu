@@ -3,7 +3,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, abort,
 from geojson import Point, Feature, FeatureCollection
 
 from ..database import db_contractors
-from ..database.db_enums import CategoryType
+from ..database.db_enums import CategoryType, BatchUnitsType
 from ..config import DATABASE_POOL
 from ..logic import user as users
 from ..logic import logistics
@@ -17,8 +17,9 @@ contractor_bp = Blueprint("contractor_bp", __name__)
 def add_logistics():
     if request.method == "GET":
         material_categories = [e.value for e in CategoryType]
+        units = [e.value for e in BatchUnitsType]
         return render_template(
-            "addlogistics.html", material_categories=material_categories
+            "addlogistics.html", material_categories=material_categories, units=units
         )
 
     if request.method == "POST":
@@ -43,14 +44,44 @@ def add_logistics():
             if radius_type == "custom-limit"
             else -1
         )
-        categories = request.form.getlist("materials[]")
-        base_rates = request.form.getlist("base_rates[]")
-        prices_per_hour = request.form.getlist("prices_per_hour[]")
-        maximum_capacities = request.form.getlist("max_capacities[]")
-        maximum_distances = request.form.getlist("max_distances[]")
+        description = request.form.get("description")
+        contractor_location_id = logistics.add_contractor_location(
+            contractor_id, 
+            address, 
+            postcode, 
+            city, 
+            telephone, 
+            email, 
+            radius,
+            description
+        )
 
-        contractor_location_id = logistics.add_contractor_location(contractor_id, address, postcode, city, telephone, email, radius)
-        logistics.add_cargo_capability(contractor_location_id, categories, base_rates, prices_per_hour, maximum_capacities, maximum_distances)
+        categories = request.form.getlist("materials[]")
+        for c in categories:
+            price = request.form.get(c + "-price_per_hour")
+            base_rate = request.form.get(c + "-base_rate")
+            max_capacity = request.form.get(c + "-max_capacity")
+            type = request.form.get("radiusType-" + c)
+            radius = (
+                request.form.get("radius-" + c)
+                if type == "custom-limit" + c
+                else -1
+            )
+            unit = request.form.get(c + "-unit")
+            can_process = request.form.get(c + "-can_process")
+            material_description = request.form.get(c + "-description")
+            
+            logistics.add_cargo_capability(
+                contractor_location_id,
+                c,
+                price,
+                base_rate,
+                max_capacity,
+                radius,
+                unit, 
+                can_process,
+                material_description
+            )
 
         session["contractor_id"] = contractor_id
         return redirect(
@@ -92,7 +123,11 @@ def contractor():
 
 
 @contractor_bp.route("/list_contractors", methods=["GET"])
+
 def list_contractors():
+    """
+    Rendering template marked as 'test'
+    """
     # lon = request.args.get('lon')
     # lat = request.args.get('lat')
     # r = request.args.get('r')
@@ -101,7 +136,7 @@ def list_contractors():
     address, content = "Hirvijärvi, Juupajoki", "Hakkuujäte"
     lon, lat, r = 24.566428395979575, 61.8578385779706, 300
 
-    contractors = ContractorDivision()
+    contractors = ContractorDivision(lat, lon)
     contractors.split_by_range(lat, lon)
     return render_template(
         "contractor_list.html",

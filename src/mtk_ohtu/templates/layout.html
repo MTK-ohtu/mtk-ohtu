@@ -3,117 +3,58 @@
 
 <head>
     <link rel="stylesheet" type="text/css" href="../static/style.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-        #navbar {
-            overflow: hidden;
-            background-color: #4CAF50;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-        }
-
-        .navbar div,
-        .navbar-right {
-            display: flex;
-        }
-
-        #navbar a {
-            display: block;
-            color: white;
-            text-align: center;
-            padding: 14px 20px;
-            text-decoration: none;
-            float: left;
-        }
-
-        #navbar a:hover {
-            background-color: #ddd;
-            color: black;
-        }
-
-        #navbar a.active {
-            background-color: #04AA6D;
-            color: white;
-        }
-
-        .content {
-            padding: 16px;
-        }
-
-        .sticky {
-            position: fixed;
-            top: 0;
-            width: 100%;
-        }
-
-        .sticky+.content {
-            padding-top: 60px;
-        }
-
-        .footer {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 10px;
-            bottom: 0;
-            margin-top: auto;
-        }
-    </style>
+    <meta name="viewport" layout-content="width=device-width, initial-scale=1">
 </head>
 
 <body>
 
-    <div class="header">
-        <h2>MTK - OhTu project</h2>
-        <p>Circular economy and logistics</p>
+    <div class="layout-header">
+        <h2 class="layout-h2">MTK - OhTu project</h2>
+        <p class="layout-p">Circular economy and logistics</p>
     </div>
 
-    <div id="navbar">
+    <div id="layout-navbar">
         <div>
             <a href="/">Home</a>
             <a href="/listings">Listings</a>
-            <a href="/createpost">Create Post</a>
             <a href="/distance">Distance</a>
-            <a href="/list_contractors">List Contractors (test)</a>
         </div>
         {% if session.user_id %}
-        <div class="navbar-right">
-        {% if session.contractor_id%}
+        <div class="layout-navbar-right">
+            {% if session.contractor_id%}
             <a href="/contractor">MyLogistics</a>
-        {% else %}
+            {% else %}
             <a href="/addlogistics">Add Logistics Service</a>
-        {% endif %}
+            {% endif %}
             <a href="/logout">logout</a>
-        </div> 
+        </div>
 
         {% else %}
-        <div class="navbar-right">
+        <div class="layout-navbar-right">
             <a href="/login">Login</a>
-        </div>  
+        </div>
         {% endif %}
     </div>
 
-    <div class="content">
+    <div class="layout-content">
         {% block content %}{% endblock %}
     </div>
 
-    <div class="footer">
+    <div class="layout-footer">
         <p>Contact us: info@example.com</p>
     </div>
 
     <script>
         window.onscroll = function () { myFunction() };
 
-        var navbar = document.getElementById("navbar");
+        var navbar = document.getElementById("layout-navbar");
         var sticky = navbar.offsetTop;
 
         function myFunction() {
             if (window.pageYOffset >= sticky) {
-                navbar.classList.add("sticky")
+                navbar.classList.add("layout-sticky")
             } else {
-                navbar.classList.remove("sticky");
+                navbar.classList.remove("layout-sticky");
             }
         }
     </script>

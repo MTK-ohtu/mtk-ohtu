@@ -17,7 +17,7 @@ def register():
             return redirect("/")
         else:
             return render_template(
-                "register.html", message="Käyttäjätunnus on jo käytössä"
+                "register.html", message="Käyttäjätunnus tai sähköposti on jo käytössä"
             )
 
 

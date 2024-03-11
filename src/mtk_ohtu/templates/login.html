@@ -4,11 +4,14 @@
 
 <!DOCTYPE html>
 <html lang="fi">
+
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1">
 	<title>Kirjautuminen</title>
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="../static/style.css">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
 </head>
 
 <body>
@@ -20,9 +23,11 @@
 						<div class="card-body p-5">
 							<h1 class="fs-4 card-title fw-bold mb-4">Kirjaudu</h1>
 							<form method="POST" class="needs-validation" novalidate="" autocomplete="off">
+								<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>		
 								<div class="mb-3">
 									<label class="mb-2 text-muted" for="email">Username</label>
-									<input id="username" type="text" class="form-control" name="username" value="" required autofocus>
+									<input id="username" type="text" class="form-control" name="username" value=""
+										required autofocus>
 									<div class="invalid-feedback">
 										Syötä käyttäjätunnus
 									</div>
@@ -36,11 +41,11 @@
 										</a>
 									</div>
 									<input id="password" type="password" class="form-control" name="password" required>
-								    <div class="invalid-feedback">
-								    	Syötä salasana
-							    	</div>
+									<div class="invalid-feedback">
+										Syötä salasana
+									</div>
 								</div>
-								
+
 								<div class="d-flex align-items-center">
 
 									<button type="submit" class="btn btn-primary ms-auto">
@@ -50,8 +55,8 @@
 							</form>
 						</div>
 
-						<div class="text-center", style="padding-bottom: 20px;">{{message}}</div>
-						
+						<div class="text-center" , style="padding-bottom: 20px;">{{message}}</div>
+
 
 						<div class="card-footer py-3 border-0">
 							<div class="text-center">
@@ -64,34 +69,42 @@
 			</div>
 		</div>
 	</section>
-	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+		crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+		integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+		crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+		integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+		crossorigin="anonymous"></script>
 	<script>
 		// Disable form submissions if there are invalid fields
-		(function() {
-		  'use strict';
-		  window.addEventListener('load', function() {
-			// Get the forms we want to add validation styles to
-			var forms = document.getElementsByClassName('needs-validation');
-			// Loop over them and prevent submission
-			var validation = Array.prototype.filter.call(forms, function(form) {
-			  form.addEventListener('submit', function(event) {
-				if (form.checkValidity() === false) {
-				  event.preventDefault();
-				  event.stopPropagation();
-				}
-				form.classList.add('was-validated');
-			  }, false);
-			});
-		  }, false);
+		(function () {
+			'use strict';
+			window.addEventListener('load', function () {
+				// Get the forms we want to add validation styles to
+				var forms = document.getElementsByClassName('needs-validation');
+				// Loop over them and prevent submission
+				var validation = Array.prototype.filter.call(forms, function (form) {
+					form.addEventListener('submit', function (event) {
+						if (form.checkValidity() === false) {
+							event.preventDefault();
+							event.stopPropagation();
+						}
+						form.classList.add('was-validated');
+					}, false);
+				});
+			}, false);
 		})();
-		</script>
-		
-		</body>
-		</html>
+	</script>
+
+</body>
+
+</html>
 
 
 </body>
+
 </html>
 {% endblock %}

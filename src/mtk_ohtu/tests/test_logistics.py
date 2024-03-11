@@ -15,17 +15,22 @@ class TestLogistics(unittest.TestCase):
         self.contractor_location_id = 1
         self.name = "rekka oy"
         self.business = "1234567-1"
+
         self.address = "Simonkatu 6"
         self.postcode = "00100"
         self.city = "Helsinki"
         self.email = "rekka@gmail.com"
         self.phone = "040-1234567"
-        self.radius = 200
-        self.categories = ["Manure"]
-        self.base_rates = ["200"]
-        self.prices_per_hour = ["15"]
-        self.max_capacities = ["50"]
-        self.max_distances = ["300"]
+        self.radius = -1
+        self.description = "test"
+
+        self.category = "Dry manure"
+        self.base_rate = 200
+        self.price_per_hour = 15
+        self.max_capacity = 50
+        self.max_distance = 300
+        self.unit = "tn"
+        self.can_process = True
 
     def test_add_contractor(self):
         result = l.add_contractor(self.user_id, self.name, self.business)
@@ -39,18 +44,22 @@ class TestLogistics(unittest.TestCase):
             self.city,
             self.phone,
             self.email,
-            self.radius
+            self.radius,
+            self.description
         )
         self.assertTrue(result)
 
     def test_add_cargo_capability(self):
         result = l.add_cargo_capability(
             self.contractor_location_id,
-            self.categories,
-            self.base_rates,
-            self.prices_per_hour,
-            self.max_capacities,
-            self.max_distances,
+            self.category,
+            self.base_rate,
+            self.price_per_hour,
+            self.max_capacity,
+            self.max_distance,
+            self.unit,
+            self.can_process,
+            self.description
         )
         self.assertTrue(result)
 
@@ -63,9 +72,27 @@ class TestLogistics(unittest.TestCase):
             self.city,
             self.phone,
             self.email,
-            self.radius
+            self.radius,
+            self.description
         )
         self.assertFalse(result)
+
+    def test_cargo_capability_with_empty_inputs(self):
+        self.base_rate = ""
+        self.price_per_hour = ""
+        self.max_capacity = ""
+        result = l.add_cargo_capability(
+            self.contractor_location_id,
+            self.category,
+            self.base_rate,
+            self.price_per_hour,
+            self.max_capacity,
+            self.max_distance,
+            self.unit,
+            self.can_process,
+            self.description
+        )
+        self.assertTrue(result)
 
     def test_contractor_locations_returns_correct_amount_of_locations(self):
         result = l.contractor_locations(self.contractor_id)

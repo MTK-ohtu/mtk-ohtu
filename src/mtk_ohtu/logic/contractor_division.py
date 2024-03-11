@@ -1,60 +1,63 @@
 import math
 from geojson import Point, Feature, FeatureCollection
-from ..database.db_contractors import db_get_logistics
-from ..database.db_cargo import db_get_location_cargo_capabilities
+from ..database.db_contractors import db_get_locations_by_cargo_type, db_get_logistics
+from .logistics_info import get_logistics_providers_by_range
+from ..database.db_enums import CategoryType
 from ..config import DATABASE_POOL
+from .location import Location
+from ..database.db_datastructs import Listing
 
 
 class ContractorDivision:
 
     """
-    Given a coordinate, queries all logistic contractors from DB by given fields.
+    Given a listing, queries all logistic contractors from DB with correct coargo capability. Finds optimal contractors by range. 
+    If fiven a delivery location, filters out of range contractors based on both the listing and the delivery location.
     Divides contractors into two lists: suiteable/ rest.
-    Creates leaflet compatible featurecollections from these
+    Creates leaflet compatible featurecollections from these.
     Args:
-        source_lat, source_lon:
+        listing: Listing
+        cargo_type: CargoType
+        database_access: ref. to database.db_contractors.db_get_locations_by_cargo_type
+        delivery_location: Location
+        cargo_capacity: int
     """
 
-    def __init__(self):
-        self.contractors = db_get_logistics(DATABASE_POOL)
+    def __init__(self,
+                 listing:Listing, 
+                 cargo_type:CategoryType, 
+                 database_access,
+                 delivery_location:Location = None,
+                 cargo_capacity:int = 1e10):
+        
+        self.database_access = database_access
+        self.listing = listing
+        self.delivery_location = delivery_location        
+        self.cargo_capacity = cargo_capacity
+        self.contractors = database_access(cargo_type, DATABASE_POOL)
         self.optimal = None
         self.suboptimal = None
+        self.split_by_range()
 
-    def split_by_range(self, source_lat: float, source_lon: float):
+
+    def split_by_range(self):
         """
-        Splits all contractors into 'optimal'/'suboptimal' lists by given
-        Args:
-            latitude: float
-            longitude: float
+        Splits all contractors into 'optimal'/'suboptimal' lists by r between customer/contractor
         """
-        self.optimal = list(
-            filter(
-                lambda x: (
-                    self.haversine(
-                        source_lat,
-                        source_lon,
-                        x.location.latitude,
-                        x.location.longitude,
-                    )
+        nodes = self.contractors
+        if self.delivery_location is not None:
+            self.optimal  = get_logistics_providers_by_range(self.listing, self.delivery_location, nodes)
+            self.suboptimal = list(
+                filter(
+                    lambda x: (
+                        x not in self.optimal
+                    ), self.contractors
                 )
-                < x.delivery_radius,
-                self.contractors,
             )
-        )
-        self.suboptimal = list(
-            filter(
-                lambda x: (
-                    self.haversine(
-                        source_lat,
-                        source_lon,
-                        x.location.latitude,
-                        x.location.longitude,
-                    )
-                )
-                > x.delivery_radius,
-                self.contractors,
-            )
-        )
+        else:
+            self.optimal = nodes
+            self.suboptimal = None
+
 
     def get_optimal(self):
         """
@@ -63,8 +66,9 @@ class ContractorDivision:
         """
         if self.optimal is None:
             return self.to_featurecollection(self.contractors)
-        collection = self.to_featurecollection(self.optimal)
-        return collection
+        return self.to_featurecollection(self.optimal)
+        
+    
 
     def get_suboptimal(self):
         """
@@ -72,23 +76,40 @@ class ContractorDivision:
         Returns all if not splitted.
         """
         if self.suboptimal is None:
-            return self.to_featurecollection(self.contractors)
-        collection = self.to_featurecollection(self.suboptimal)
-        return collection
+            return []
+        return self.to_featurecollection(self.suboptimal)
+        
+    
 
-    def filter_by_cargo_capasity(self, cargo_capacity: int):
+    def filter_by_cargo_capacity(self, cargo_capacity: int):
         """
         Filters contractors by given cargo capacity.
         Args:
             cargo_capacity: int
         """
+        self.cargo_capacity = cargo_capacity
         self.optimal = list(
             filter(lambda x: x.cargo_capacity >= cargo_capacity, self.optimal)
         )
         self.suboptimal = list(
             filter(lambda x: x.cargo_capacity >= cargo_capacity, self.suboptimal)
         )
-    
+
+
+    def filter_by_cargo_type(self, type: CategoryType):
+        """
+        Filters contractors by given cargo type
+        Ars:
+            type: CategoryType
+        """
+        self.contractors = self.database_access(type, DATABASE_POOL)
+        
+        # for c in self.contractors:
+        #     print(c)
+        self.split_by_range()
+
+
+
     def to_featurecollection(self, contractor_list: list):
         """
         Create a feature collection from a list of LogisticsNodes
@@ -108,18 +129,7 @@ class ContractorDivision:
         collection = FeatureCollection(features)
 
         return collection
+    
 
-    def haversine(self, lat1, lon1, lat2, lon2):
-        """
-        Calculate great-circle distances
-        """
-        dLat = (lat2 - lat1) * math.pi / 180.0
-        dLon = (lon2 - lon1) * math.pi / 180.0
-        lat1 = (lat1) * math.pi / 180.0
-        lat2 = (lat2) * math.pi / 180.0
-        a = pow(math.sin(dLat / 2), 2) + pow(math.sin(dLon / 2), 2) * math.cos(
-            lat1
-        ) * math.cos(lat2)
-        rad = 6371
-        c = 2 * math.asin(math.sqrt(a))
-        return float(rad * c)
+    
+

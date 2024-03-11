@@ -23,17 +23,19 @@ DO $$ BEGIN
     CREATE TYPE batch_units_type AS ENUM ('tn', 'm3', 'kg', 'l', 'pcs', 'batch');
     CREATE TYPE vehichle_requirement_type AS ENUM ('dry', 'refrigerated', 'tanker', 'flatbed', 'container');
     CREATE TYPE category_type AS ENUM (
-    'Manure',
+    'Dry manure',
+    'Sludge manure',
+    'Separated manure',
+    'Other manure',
     'Grass, waste fodder and green growths',
     'Basket fodder',
     'Plant-based biomasses',
     'Animal-based biomasses',
     'Soil and growing media',
     'Digestion',
-    'Wood',
-    'Other side streams (not biomass)',
-    'Logistics and contracting',
-    'Other'
+    'Wood (forest biomass)',
+    'Wood (treated wood)',
+    'Other side streams (not biomass)'
 );
 EXCEPTION
     WHEN duplicate_object THEN null;
@@ -88,15 +90,19 @@ CREATE TABLE IF NOT EXISTS contractor_locations (
     email TEXT,
     longitude FLOAT,
     latitude FLOAT,
-    delivery_radius INTEGER NOT NULL
+    delivery_radius INTEGER NOT NULL,
+    description TEXT
 );
 
 CREATE TABLE IF NOT EXISTS cargo_capabilities (
     id SERIAL PRIMARY KEY,
     contractor_location_id INTEGER REFERENCES contractor_locations(id),
     type category_type NOT NULL,
-    price_per_km INTEGER NOT NULL,
+    price_per_km INTEGER,
     base_rate INTEGER,
     max_capacity INTEGER,
-    max_distance INTEGER
+    max_distance INTEGER,
+    unit batch_units_type,
+    can_process BOOLEAN DEFAULT False,
+    description TEXT
 );

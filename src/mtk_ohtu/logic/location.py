@@ -22,6 +22,7 @@ class Location:
             loc_input (str or tuple or list): The address or coordinates of the location.
                 If coordinates, then the format is (longitude, latitude)
         """
+        self.address = ""
         if type(loc_input) == str:
             self.location = self._location_from_address(loc_input)
             self.longitude = self.location.longitude
@@ -30,15 +31,18 @@ class Location:
             self.location = None
             self.longitude = loc_input[0]
             self.latitude = loc_input[1]
+            self.address = f"Coordinates:\n{self.latitude}','{self.longitude}"
         else:
             raise ValueError("Invalid location input")
 
     def _location_from_address(self, address):
         """Return the coordinates of the address."""
+        print(address)
         try:
             loc = geolocator.geocode(address)
             if loc is None:
                 raise ValueError(f"No result found for address {address}")
+            self.address = address
             return loc
         except:
             raise ValueError(f"Invalid address: {address}")
