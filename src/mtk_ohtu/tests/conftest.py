@@ -20,6 +20,7 @@ def datapool():
 @pytest.fixture()
 def app():
     app = mtkapp.create_app()
+    app.config['WTF_CSRF_ENABLED']=False
     app.config.update(
         {
             "TESTING": True,
