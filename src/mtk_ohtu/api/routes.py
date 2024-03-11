@@ -132,9 +132,10 @@ def postings():
         "success": True,
     }, 200
 
+
 def validate_api_key() -> tuple[bool, str, APIKey]:
     """Checks if the API key in the request headers is correct.
-    
+
     Returns:
         tuple[success (bool), message (str), APIKey]
     """

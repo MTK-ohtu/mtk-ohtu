@@ -53,6 +53,7 @@ def db_get_product_by_id(product_id: int, pool: ConnectionPool) -> Listing | Non
     l = Listing(product_id, *out[0:5], Location((out[5], out[6])))
     return l
 
+
 def db_create_new_listing_from_api_response(listing: FullListing, pool: ConnectionPool):
     """Creates (inserts) new listing from api object
     Args:
@@ -61,25 +62,43 @@ def db_create_new_listing_from_api_response(listing: FullListing, pool: Connecti
     Returns:
         True if successful
     """
-    user_id = 1 # no uid in api, !!TEMP!!
+    user_id = 1  # no uid in api, !!TEMP!!
 
     if listing.demand == SupplyDemandType.ONE_TIME:
         continuous = False
     else:
         continuous = True
 
-    batch_size = 1 # Missing from API2 spec
-    batch_type = BatchUnitsType.TN # Missing from API2 spec, unknown solution
-
+    batch_size = 1  # Missing from API2 spec
+    batch_type = BatchUnitsType.TN  # Missing from API2 spec, unknown solution
 
     with pool.connection() as connection:
         cursor = connection.cursor()
-        cursor.execute("INSERT INTO listings \
+        cursor.execute(
+            "INSERT INTO listings \
                        (id, user_id, listing_type, category, subcategory, \
                        delivery_method, supply_demand, is_continuous, expiration_date, batch_size, batch_units, \
                        price, delivery_details, description, address, longitude, latitude, complies_with_regulations) \
                        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);",
-                       (listing.posting_id, user_id, listing.post_type, listing.category, listing.sub_category,
-                        listing.delivery_method, listing.demand, continuous, dt.fromtimestamp(listing.expiry_date), batch_size, batch_type,
-                        listing.price, listing.delivery_details, listing.description, listing.address, listing.location.longitude, listing.location.latitude, True))
+            (
+                listing.posting_id,
+                user_id,
+                listing.post_type,
+                listing.category,
+                listing.sub_category,
+                listing.delivery_method,
+                listing.demand,
+                continuous,
+                dt.fromtimestamp(listing.expiry_date),
+                batch_size,
+                batch_type,
+                listing.price,
+                listing.delivery_details,
+                listing.description,
+                listing.address,
+                listing.location.longitude,
+                listing.location.latitude,
+                True,
+            ),
+        )
     return True
