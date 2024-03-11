@@ -28,7 +28,7 @@ def test_api_incorrect_parameter_types(client):
         })
         assert response.content_type == "application/json"
         msg = response.json["message"]
-        assert msg["posting_id"] == ["Not a valid integer."]
+        assert msg["posting_id"] == ["Invalid posting_id (int expected)"]
 
 def test_api_invalid_listing_id(client):
     with client:
@@ -36,7 +36,7 @@ def test_api_invalid_listing_id(client):
             "address": {"streetAddress": "Helsinki"},
             "posting_id": -512
         })
-        assert response.status_code == 404
+        assert response.status_code == 400
 
 def test_api_invalid_address(client):
     with client:
@@ -45,8 +45,8 @@ def test_api_invalid_address(client):
             "address": {"streetAddress": "-612361236123"}
         })
         msg = response.json["message"]
-        assert response.status_code == 404
-        assert msg == ["Invalid address: -612361236123"]
+        assert response.status_code == 400
+        assert msg["address"]["streetAddress"] == ["Invalid address: -612361236123"]
 
 def test_api_correct_response(client):
     with client:

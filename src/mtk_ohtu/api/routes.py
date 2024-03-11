@@ -1,11 +1,8 @@
 from marshmallow import ValidationError
-from ..database.db_listings import db_get_product_by_id
-from ..logic.location import Location
 from flask import Blueprint, request
 from ..api.logistics_info_schema import LogisticsInfoSchema
 from ..logic.logistics_info import get_logistics_info
 from ..routes.listing import get_url_for_listing
-from ..config import DATABASE_POOL
 
 api_bp = Blueprint("api_bp", __name__)
 
@@ -55,21 +52,9 @@ def logistics_info():
         data = LogisticsInfoSchema().load(request.get_json())
     except ValidationError as err:
         return {"success": False, "message": err.messages}, 400
-    
-    listing = db_get_product_by_id(data["posting_id"], DATABASE_POOL)
-    if listing is None:
-        return {"success": False, "message": "Listing not found"}, 404
-    
-    location = None
-    address = data["address"]
-    if "latitude" in address and "longitude" in address:
-        location = Location(address["latitude"], address["longitude"])
-    else:
-        try:
-            location = Location(address["streetAddress"])
-        except ValueError as err:
-            return {"success": False, "message": err.args}, 404
 
+    listing = data["posting_id"]
+    location = data["address"]
 
     distance, num_providers = get_logistics_info(listing, location)
 
