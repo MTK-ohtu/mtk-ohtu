@@ -2,57 +2,69 @@ import pytest
 
 def test_api_missing_parameters(client):
     with client:
-        response = client.get("/api/logistics_info", content_type="application/json; charset=utf-8", json={
+        response = client.post("/api/logistics_info", content_type="application/json; charset=utf-8", json={
             "test_attribute": 123
         })
         assert response.content_type == "application/json"
-        assert "test_attribute" in response.json
-        assert response.json["test_attribute"] == ["Unknown field."]
-        assert response.json["location"] == ["Missing data for required field."]
-        assert response.json["listing"] == ["Missing data for required field."]
+        msg = response.json["message"]
+        assert "test_attribute" in msg
+        assert msg["test_attribute"] == ["Unknown field."]
+        assert msg["address"] == ["Missing data for required field."]
+        assert msg["posting_id"] == ["Missing data for required field."]
 
 def test_api_incorrect_url(client):
     with client:
-        response = client.get("/api/test", json={
-            "location": "Helsinki",
-            "listing": 6
+        response = client.post("/api/test", json={
+            "address": {"streetAddress": "Helsinki"},
+            "posting_id": 6
         })
         assert response.status_code == 404
 
 def test_api_incorrect_parameter_types(client):
     with client:
-        response = client.get("/api/logistics_info", json={
-            "location": 12673,
-            "listing": "test_str"
+        response = client.post("/api/logistics_info", json={
+            "address": {"streetAddress": "Turku"},
+            "posting_id": "test_str"
         })
         assert response.content_type == "application/json"
-        assert response.json["location"] == ["Invalid location input"]
-        assert response.json["listing"] == ["Invalid listing id (int expected)"]
+        msg = response.json["message"]
+        assert msg["posting_id"] == ["Not a valid integer."]
 
 def test_api_invalid_listing_id(client):
     with client:
-        response = client.get("/api/logistics_info", json={
-            "location": "Helsinki",
-            "listing": -512
+        response = client.post("/api/logistics_info", json={
+            "address": {"streetAddress": "Helsinki"},
+            "posting_id": -512
         })
-        assert response.json["listing"] == ["Invalid listing id (no listing found with id -512)"]
+        assert response.status_code == 404
 
 def test_api_invalid_address(client):
     with client:
-        response = client.get("/api/logistics_info", json={
-            "listing": 6,
-            "location": "-612361236123"
+        response = client.post("/api/logistics_info", json={
+            "posting_id": 6,
+            "address": {"streetAddress": "-612361236123"}
         })
-        assert response.json["location"] == ["Invalid address: -612361236123"]
+        msg = response.json["message"]
+        assert response.status_code == 404
+        assert msg == ["Invalid address: -612361236123"]
 
 def test_api_correct_response(client):
     with client:
-        response = client.get("/api/logistics_info", json={
-            "listing": 3,
-            "location": "Helsinki"
+        response = client.post("/api/logistics_info", json={
+            "posting_id": 3,
+            "address": {"streetAddress": "Helsinki"}
         })
 
         # These values need to be updated with the mock data
-        assert response.json["num_providers"] == 4
+        assert response.json["provider_count"] == 4
         assert round(response.json["distance"], -1) == 530
-        assert response.json["link"] == "http://localhost/listing/3"
+        assert response.json["logistics_url"] == "http://localhost/listing/3"
+
+def test_api_incomplete_address(client):
+    with client:
+        response = client.post("/api/logistics_info", json={
+            "posting_id": 3,
+            "address": {"latitude": 61.7123, "city": "Helsinki"}
+        })
+
+        assert response.status_code == 400
