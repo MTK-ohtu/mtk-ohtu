@@ -10,7 +10,6 @@ from .routes.user import user_bp
 from .api.routes import api_bp
 from flask_wtf.csrf import CSRFProtect
 
-
 def create_app():
     app = Flask(__name__, static_url_path='/static')
     app.secret_key = SECRET_KEY
@@ -26,7 +25,8 @@ def create_app():
     app.config.from_object(__name__)
     app.config["SESSION_TYPE"] = "filesystem"
     Session(app)
-    CSRFProtect(app)
+    csrf = CSRFProtect(app)
+    csrf.exempt(api_bp)
 
     return app
 
