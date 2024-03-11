@@ -7,8 +7,6 @@ from .database.db_meta import (
     db_fake_connection_pool,
 )
 
-load_dotenv(find_dotenv(usecwd=True))
-
 SECRET_KEY = getenv("SECRET_KEY")
 DATABASE_CONFIG = DatabaseConfig(
     uri=getenv("DATABASE_URL"),
