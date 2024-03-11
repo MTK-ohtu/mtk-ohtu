@@ -1,6 +1,7 @@
 import unittest
 import mtk_ohtu.logic.logistics as l
 import mtk_ohtu.database.db_meta as db_m
+from mtk_ohtu.logic import user as u
 from mtk_ohtu.config import DATABASE_CONFIG
 
 
@@ -130,6 +131,52 @@ class TestLogistics(unittest.TestCase):
         self.assertEqual(len(loc1), 3)
         self.assertEqual(len(loc2), 3)
         self.assertEqual(len(loc3), 4)
+
+    def test_modify_contractor_location_returns_true_when_updating_succeeds(self):
+        result = l.modify_contractor_location(
+            self.contractor_location_id,
+            "A.I: Virtasen aukio",
+            "00550",
+            "Helsinki",
+            "0400000000",
+            "testi@gmail.com",
+            "200",
+            "-"
+        )
+        self.assertTrue(result)
+
+    def test_modify_contractor_location_returns_false_with_nonexistent_address(self):
+        result = l.modify_contractor_location(
+            self.contractor_location_id,
+            "xxxxx",
+            "0000",
+            "Helsinki",
+            "0400000000",
+            "testi@gmail.com",
+            "200",
+            "-"
+        )
+        self.assertFalse(result)
+
+    def test_remove_contractor_location_returns_true_when_successful(self):
+        result = l.remove_contractor_location(self.contractor_location_id)
+        self.assertTrue(result)
+
+    def test_check_asset_ownership_returns_true_when_contractor_is_owner(self):
+        cargo_result = l.check_asset_ownership("cargo", 8, 1)
+        location_result = l.check_asset_ownership("location", 9, 6)
+        self.assertTrue(cargo_result)
+        self.assertTrue(location_result)
+
+    def test_check_asset_ownership_returns_false_when_contractor_isnt_owner(self):
+        cargo_result = l.check_asset_ownership("cargo", 10, 2)
+        location_result = l.check_asset_ownership("location", 8, 2)
+        self.assertFalse(cargo_result)
+        self.assertFalse(location_result)
+
+    def test_check_asset_ownership_returns_false_with_unrecognized_type(self):
+        result = l.check_asset_ownership("test-type", 10, 2)
+        self.assertFalse(result)
 
     def tearDown(self):
         self.pool.close()
