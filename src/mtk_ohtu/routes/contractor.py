@@ -55,6 +55,7 @@ def add_logistics():
         )
 
         categories = request.form.getlist("materials[]")
+
         for c in categories:
             price = request.form.get(c + "-price_per_hour")
             base_rate = request.form.get(c + "-base_rate")
