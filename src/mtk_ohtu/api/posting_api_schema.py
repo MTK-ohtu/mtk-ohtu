@@ -9,6 +9,7 @@ from ..database.db_enums import (
 )
 from ..database.db_datastructs import FullListing
 from ..logic.location import Location
+import logging
 
 
 class EntryType(Enum):
@@ -49,7 +50,10 @@ class PostingApiSchema(Schema):
     @validates_schema
     def validate_create(self, data, **kwargs):
         if data["entry_type"] == EntryType.CREATE:
-            if not all({k: data[k] for k in data if k in self.create_requirements}):
+            logging.warning(str({k: data[k] for k in data if k in self.create_requirements}))
+            logging.warning(str([req in data for req in self.create_requirements]))
+            logging.warning(str(all([req in data for req in self.create_requirements])))
+            if not all({k: data[k] for k in data if k in self.create_requirements}) or not all([req in data for req in self.create_requirements]):
                 raise ValidationError("Missing required fields from create")
 
     @post_load

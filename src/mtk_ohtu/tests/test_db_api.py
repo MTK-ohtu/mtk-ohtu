@@ -1,5 +1,5 @@
 import pytest
-
+from copy import deepcopy
 
 def post_test(client, json):
     return client.post(
@@ -20,21 +20,20 @@ def test_db_api_missing_parameters(client):
         msg = response.json["message"]
         assert "test_attribute" in msg
         assert msg["test_attribute"] == ["Unknown field."]
-        assert msg["address"] == ["Missing data for required field."]
         assert msg["posting_id"] == ["Missing data for required field."]
 
 def test_db_create_missing_parameters(client):
-    json = CREATE_JSON
+    json = deepcopy(CREATE_JSON)
     json.pop('price')
     with client:
         response = post_test(client, json=json)
         assert response.content_type == "application/json"
         assert not response.json["success"]
         msg = response.json["message"]
-        assert msg["price"] == ["Missing data for required field."]
+        assert ["Missing required fields from create"] in msg.values()
 
 def test_db_create_post_already_exists(client):
-    json = CREATE_JSON
+    json = deepcopy(CREATE_JSON)
     json["posting_id"] = 1
     with client:
         response = post_test(client, json=json)
@@ -44,7 +43,7 @@ def test_db_create_post_already_exists(client):
         assert response.status_code == 401
 
 def test_db_create_post_correct_succeeds(client):
-    json = CREATE_JSON
+    json = deepcopy(CREATE_JSON)
     with client:
         response = post_test(client, json=json)
         assert response.content_type == "application/json"
@@ -52,7 +51,7 @@ def test_db_create_post_correct_succeeds(client):
         assert client.get("/listing/100").status_code == 200
 
 def test_db_update_post_id_not_exists(client):
-    json = UPDATE_JSON
+    json = deepcopy(UPDATE_JSON)
     json["posting_id"] = 100
     with client:
         response = post_test(client, json=json)
@@ -62,7 +61,7 @@ def test_db_update_post_id_not_exists(client):
         assert response.status_code == 404
 
 def test_db_update_post_correct_succeeds(client):
-    json = UPDATE_JSON
+    json = deepcopy(UPDATE_JSON)
     with client:
         assert "<h1>250 €</h1>".encode('utf8') in client.get("/listing/1").data
         response = post_test(client, json=json)
