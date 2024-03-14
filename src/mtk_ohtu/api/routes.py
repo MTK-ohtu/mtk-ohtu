@@ -7,7 +7,7 @@ from ..logic.logistics_info import get_logistics_info
 from ..routes.listing import get_url_for_listing
 from ..database.db_api import db_get_api_key
 from ..database.db_datastructs import APIKey
-from ..database.db_listings import db_create_new_listing_from_api_response, db_update_listing_from_api_response
+from ..database.db_listings import db_create_new_listing_from_api_response, db_update_listing_from_api_response, db_delete_listing_from_api_response
 from ..config import DATABASE_POOL
 
 api_bp = Blueprint("api_bp", __name__)
@@ -135,7 +135,10 @@ def postings():
                 return {"success": False, "message": f"No post with post_id {data[1].posting_id}"}, 404
 
         case EntryType.DELETE:
-            print(data)
+            try:
+                db_delete_listing_from_api_response(data[1], DATABASE_POOL)
+            except Exception:
+                return {"success": False, "message": f"No post with post_id {data[1].posting_id}"}, 404
 
         case _:
             raise ValueError

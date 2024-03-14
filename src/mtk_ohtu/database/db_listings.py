@@ -128,8 +128,6 @@ def db_update_listing_from_api_response(listing: FullListing, pool: ConnectionPo
         listings_dict["longitude"] = location.longitude
         listings_dict["latitude"] = location.latitude
 
-    #column_pairs = [[sql.Identifier(k), sql.Identifier(listings_dict[k])] for k in listings_dict]
-    #column_pairs_composed = [sql.SQL('=').join(column) for column in column_pairs]
     update_column_compose = sql.SQL(',').join([sql.SQL('=').join([sql.Identifier(k), sql.Placeholder()]) for k in listings_dict])
 
     query = sql.SQL("UPDATE listings SET {columns} WHERE id = {postid};").format(
@@ -140,4 +138,20 @@ def db_update_listing_from_api_response(listing: FullListing, pool: ConnectionPo
     with pool.connection() as connection:
         cursor = connection.cursor()
         cursor.execute(query, list(listings_dict.values()))
+    return True
+
+def db_delete_listing_from_api_response(listing: FullListing, pool: ConnectionPool):
+    """Updates listing from api object
+    Args:
+        listing: FullListing object
+        pool: db pool
+    Returns:
+        True if successful
+    """
+
+    post_id = listing.posting_id
+
+    with pool.connection() as connection:
+        cursor = connection.cursor()
+        cursor.execute("DELETE FROM listings WHERE id=%s CASCADE;", (post_id,))
     return True
