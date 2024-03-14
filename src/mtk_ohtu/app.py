@@ -13,7 +13,6 @@ from flask_wtf.csrf import CSRFProtect
 
 def create_app():
     app = Flask(__name__, static_url_path="/static")
-    app.secret_key = SECRET_KEY
 
     app.register_blueprint(user_bp)
     app.register_blueprint(contractor_bp)
@@ -23,8 +22,7 @@ def create_app():
     app.register_blueprint(cargo_bp)
     app.register_blueprint(api_bp, url_prefix="/api")
 
-    app.config.from_object(__name__)
-    app.config["SESSION_TYPE"] = "filesystem"
+    app.config.from_object("mtk_ohtu.config")
     Session(app)
     csrf = CSRFProtect(app)
     csrf.exempt(api_bp)

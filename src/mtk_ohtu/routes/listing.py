@@ -42,7 +42,7 @@ def listings():
         listings = sorted(listings, key=lambda x: distances[x.id])
 
     return render_template(
-        "listings.html", listings=listings, distances=distances, BUILD_DATE=BUILD_DATE
+        "listings.html", listings=listings, distances=distances
     )
 
 

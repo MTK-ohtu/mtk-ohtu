@@ -15,7 +15,7 @@ DATABASE_CONFIG = DatabaseConfig(
     password=getenv("DATABASE_PASSWORD"),
     port=getenv("DATABASE_PORT"),
 )
-IS_TESTING = getenv("IS_TESTING")
+IS_TESTING = bool(getenv("IS_TESTING"))
 NOMINATIM_DOMAIN = getenv("NOMINATIM_DOMAIN")
 NOMINATIM_USER_AGENT = getenv("NOMINATIM_USER_AGENT")
 BUILD_DATE = getenv("BUILD_DATE")
@@ -28,4 +28,6 @@ def setup_db(testing=False):
     return db_connection_pool(DATABASE_CONFIG)
 
 
-DATABASE_POOL = setup_db(testing=bool(IS_TESTING))
+DATABASE_POOL = setup_db(testing=IS_TESTING)
+
+SESSION_TYPE = "filesystem"
