@@ -110,6 +110,11 @@ def postings():
         404: resource not found (update, delete)
         500: other errors
     """
+
+    api_success, api_msg, api_key = validate_api_key()
+    if not api_success:
+        return {"success": False, "message": api_msg}, 401
+
     try:
         data = PostingApiSchema().load(request.get_json())
     except ValidationError as err:
