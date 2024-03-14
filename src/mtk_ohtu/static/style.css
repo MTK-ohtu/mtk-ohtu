@@ -393,6 +393,7 @@ input:checked+.slider:before {
     justify-content: space-between;
     align-items: center;
     width: 100%;
+    z-index: 1000;
 }
 
 .layout-navbar div,
