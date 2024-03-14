@@ -1,4 +1,5 @@
 from datetime import datetime as dt
+from psycopg import sql
 from psycopg_pool import ConnectionPool
 from ..database.db_datastructs import Listing, FullListing
 from ..database.db_enums import SupplyDemandType, BatchUnitsType
@@ -101,4 +102,38 @@ def db_create_new_listing_from_api_response(listing: FullListing, pool: Connecti
                 True,
             ),
         )
+    return True
+
+
+def db_update_listing_from_api_response(listing: FullListing, pool: ConnectionPool):
+    """Updates listing from api object
+    Args:
+        listing: FullListing object
+        pool: db pool
+    Returns:
+        True if successful
+    """
+
+    listings_dict = listing.update_dict()
+
+    postid = listings_dict.pop("id")
+
+    if "demand" in listings_dict:
+        if listings_dict["demand"] == SupplyDemandType.ONE_TIME:
+            listings_dict["continuous"] = False
+        else:
+            listings_dict["continuous"] = True
+
+    column_pairs = [[sql.Identifier(k), sql.Identifier(listings_dict[k])] for k in listings_dict]
+    column_pairs_composed = [sql.SQL('=').join(column) for column in column_pairs]
+    update_column_compose = sql.SQL(',').join(column_pairs_composed)
+
+    query = sql.SQL("UPDATE listings SET {columns} WHERE id = {postid};").format(
+        columns=update_column_compose,
+        postid=postid
+    )
+
+    with pool.connection() as connection:
+        cursor = connection.cursor()
+        cursor.execute(query)
     return True

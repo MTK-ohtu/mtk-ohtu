@@ -6,7 +6,7 @@ from ..logic.logistics_info import get_logistics_info
 from ..routes.listing import get_url_for_listing
 from ..database.db_api import db_get_api_key
 from ..database.db_datastructs import APIKey
-from ..database.db_listings import db_create_new_listing_from_api_response
+from ..database.db_listings import db_create_new_listing_from_api_response, db_update_listing_from_api_response
 from ..config import DATABASE_POOL
 
 api_bp = Blueprint("api_bp", __name__)
@@ -123,7 +123,10 @@ def postings():
                 return {"success": False, "message": err}, 401
 
         case EntryType.UPDATE:
-            print(data)
+            try:
+                db_update_listing_from_api_response(data[1], DATABASE_POOL)
+            except Exception as err:
+                return {"success": False, "message": err}, 404
 
         case EntryType.DELETE:
             print(data)
