@@ -1,5 +1,6 @@
 from marshmallow import ValidationError
 from flask import Blueprint, request
+from psycopg.errors import UniqueViolation
 from ..api.logistics_info_schema import LogisticsInfoSchema
 from ..api.posting_api_schema import PostingApiSchema, EntryType
 from ..logic.logistics_info import get_logistics_info
@@ -124,14 +125,14 @@ def postings():
         case EntryType.CREATE:
             try:
                 db_create_new_listing_from_api_response(data[1], DATABASE_POOL)
-            except Exception as err:
-                return {"success": False, "message": str(err)}, 401
+            except UniqueViolation:
+                return {"success": False, "message": f"Post id {data[1].posting_id} already exists. Did you mean to update?"}, 401
 
         case EntryType.UPDATE:
             try:
                 db_update_listing_from_api_response(data[1], DATABASE_POOL)
-            except Exception as err:
-                return {"success": False, "message": str(err)}, 404
+            except Exception:
+                return {"success": False, "message": f"No post with post_id {data[1].posting_id}"}, 404
 
         case EntryType.DELETE:
             print(data)
