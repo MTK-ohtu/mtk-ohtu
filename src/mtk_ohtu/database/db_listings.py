@@ -5,7 +5,6 @@ from ..database.db_datastructs import Listing, FullListing
 from ..database.db_enums import SupplyDemandType, BatchUnitsType
 from ..logic.location import Location
 
-
 # pylint: disable=E1129
 
 
@@ -118,6 +117,9 @@ def db_update_listing_from_api_response(listing: FullListing, pool: ConnectionPo
 
     postid = listings_dict.pop("id")
 
+    if not db_get_product_by_id(postid, pool):
+        raise ValueError
+
     if "demand" in listings_dict:
         if listings_dict["demand"] == SupplyDemandType.ONE_TIME:
             listings_dict["continuous"] = False
@@ -150,6 +152,9 @@ def db_delete_listing_from_api_response(listing: FullListing, pool: ConnectionPo
     """
 
     post_id = listing.posting_id
+
+    if not db_get_product_by_id(post_id, pool):
+        raise ValueError
 
     with pool.connection() as connection:
         cursor = connection.cursor()

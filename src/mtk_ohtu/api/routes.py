@@ -131,13 +131,13 @@ def postings():
         case EntryType.UPDATE:
             try:
                 db_update_listing_from_api_response(data[1], DATABASE_POOL)
-            except Exception:
+            except ValueError:
                 return {"success": False, "message": f"No post with post_id {data[1].posting_id}"}, 404
 
         case EntryType.DELETE:
             try:
                 db_delete_listing_from_api_response(data[1], DATABASE_POOL)
-            except Exception:
+            except ValueError:
                 return {"success": False, "message": f"No post with post_id {data[1].posting_id}"}, 404
 
         case _:
