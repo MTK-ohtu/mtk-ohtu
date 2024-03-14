@@ -153,5 +153,5 @@ def db_delete_listing_from_api_response(listing: FullListing, pool: ConnectionPo
 
     with pool.connection() as connection:
         cursor = connection.cursor()
-        cursor.execute("DELETE FROM listings WHERE id=%s CASCADE;", (post_id,))
+        cursor.execute("DELETE FROM listings WHERE id=%s;", (post_id,))
     return True
