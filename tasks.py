@@ -9,6 +9,11 @@ def start(ctx, debug=False, host="127.0.0.1"):
     ctx.run(f'export SECRET_KEY={secrets.token_hex()}; flask --app mtk_ohtu.app run {"--debug" if debug else ""} --host {host}',
             pty = True)
 
+@task(optional=["workers", "host"])
+def production_start(ctx, workers=2, host="127.0.0.1"):
+    ctx.run(f"export SECRET_KEY={secrets.token_hex()}; gunicorn -w {workers} 'mtk_ohtu.app:app'",
+            pty = True)
+
 @task
 def reset_db(ctx):
     from mtk_ohtu.config import DATABASE_CONFIG
