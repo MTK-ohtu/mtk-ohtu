@@ -62,8 +62,9 @@ def add_logistics():
             max_capacity = request.form.get(c + "-max_capacity")
             type = request.form.get("radiusType-" + c)
             radius = (
-                request.form.get("radius-" + c) if type == "custom-limit" + c else -1
+                request.form.get("radius-" + c) if type == "custom-limit-" + c else -1
             )
+            print(radius)
             unit = request.form.get(c + "-unit")
             can_process = request.form.get(c + "-can_process")
             material_description = request.form.get(c + "-description")

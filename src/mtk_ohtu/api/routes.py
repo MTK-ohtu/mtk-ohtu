@@ -1,12 +1,13 @@
 from marshmallow import ValidationError
 from flask import Blueprint, request
+from psycopg.errors import UniqueViolation
 from ..api.logistics_info_schema import LogisticsInfoSchema
 from ..api.posting_api_schema import PostingApiSchema, EntryType
 from ..logic.logistics_info import get_logistics_info
 from ..routes.listing import get_url_for_listing
 from ..database.db_api import db_get_api_key
 from ..database.db_datastructs import APIKey
-from ..database.db_listings import db_create_new_listing_from_api_response
+from ..database.db_listings import db_create_new_listing_from_api_response, db_update_listing_from_api_response, db_delete_listing_from_api_response
 from ..config import DATABASE_POOL
 
 api_bp = Blueprint("api_bp", __name__)
@@ -110,6 +111,11 @@ def postings():
         404: resource not found (update, delete)
         500: other errors
     """
+
+    api_success, api_msg, api_key = validate_api_key()
+    if not api_success:
+        return {"success": False, "message": api_msg}, 401
+
     try:
         data = PostingApiSchema().load(request.get_json())
     except ValidationError as err:
@@ -119,14 +125,20 @@ def postings():
         case EntryType.CREATE:
             try:
                 db_create_new_listing_from_api_response(data[1], DATABASE_POOL)
-            except Exception as err:
-                return {"success": False, "message": err}, 401
+            except UniqueViolation:
+                return {"success": False, "message": f"Post id {data[1].posting_id} already exists. Did you mean to update?"}, 401
 
         case EntryType.UPDATE:
-            print(data)
+            try:
+                db_update_listing_from_api_response(data[1], DATABASE_POOL)
+            except ValueError:
+                return {"success": False, "message": f"No post with post_id {data[1].posting_id}"}, 404
 
         case EntryType.DELETE:
-            print(data)
+            try:
+                db_delete_listing_from_api_response(data[1], DATABASE_POOL)
+            except ValueError:
+                return {"success": False, "message": f"No post with post_id {data[1].posting_id}"}, 404
 
         case _:
             raise ValueError

@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
 from mtk_ohtu.database.db_enums import (
     CategoryType,
     BatchUnitsType,
@@ -8,6 +8,29 @@ from mtk_ohtu.database.db_enums import (
 )
 from mtk_ohtu.logic.location import Location
 
+
+LISTING_NAME_TABLE = {
+    "posting_id": "id",
+    # None: "user_id"
+    "title": None,
+    "category": "category",
+    "sub_category": "subcategory",
+    "post_type": "listing_type",
+    "delivery_method": "delivery_method",
+    # None: "continuous"
+    "demand": "supply_demand",
+    "expiry_date": "expiration_date",
+    # None: "batch_size"
+    # None: "batch_type"
+    # None: "image"
+    "price": "price",
+    "delivery_details": "delivery_details",
+    "address": "address",
+    "description": "description",
+    "date_created": None,
+    "location": "location"
+    # None: "complies_with_regulations"
+}
 
 @dataclass(kw_only=True)
 class FullListing:
@@ -27,6 +50,10 @@ class FullListing:
     description: str = None
     location: Location = None
     date_created: int = None
+
+    def update_dict(self):
+        return {LISTING_NAME_TABLE[k] : v for k,v in asdict(self).items()
+                if LISTING_NAME_TABLE[k] is not None and v is not None}
 
 
 @dataclass
