@@ -6,7 +6,7 @@ from ..database import db_cargo as cargo_db
 from ..logic import route_calculator
 from ..logic import session_handler
 from ..logic.route_stats import Emissions
-from flask import Blueprint, render_template, request, redirect
+from flask import Blueprint, render_template, request, redirect, abort
 from ..config import DATABASE_POOL, BUILD_DATE
 from ..logic.location import Location
 from ..database.db_datastructs import Listing
@@ -60,6 +60,8 @@ def listing(listing_id):
     listing = mtk_ohtu.database.db_listings.db_get_product_by_id(
         listing_id, DATABASE_POOL
     )
+    if not listing:
+        abort(404) 
 
     if request.method == "GET":
         # contractors = ContractorDivision(float(listing.location.latitude), float(listing.location.longitude), listing.category)
