@@ -1,33 +1,37 @@
-from flask import Blueprint, redirect, request, abort, flash
+from flask import Blueprint, render_template, redirect, request, abort, flash
 from ..logic import logistics
 
 
 contractor_location_bp = Blueprint("contractor_location_bp", __name__)
 
 
-@contractor_location_bp.route("/contractor/location/add", methods=["POST"])
+@contractor_location_bp.route("/contractor/add_location", methods=["GET", "POST"])
 def add():
     contractor_id = logistics.contractor_id()
     if contractor_id == 0:
         abort(403)
 
-    address = request.form["address"]
-    postcode = request.form["postcode"]
-    city = request.form["city"]
-    telephone = request.form["telephone"]
-    email = request.form["email"]
-    radius_type = request.form["radiusType"]
-    description = request.form.get("description")
-    radius = request.form["radius"] if radius_type == "custom-limit" else -1
+    if request.method == "GET":
+        return render_template("addlocation.html")
+    
+    if request.method == "POST":
+        address = request.form["address"]
+        postcode = request.form["postcode"]
+        city = request.form["city"]
+        telephone = request.form["telephone"]
+        email = request.form["email"]
+        description = request.form.get("description")
+        radius_type = request.form.get("radiusType")
+        radius = request.form.get("radius") if radius_type == "custom-limit" else -1
 
-    if not logistics.add_contractor_location(
-        contractor_id, address, postcode, city, telephone, email, radius, description
-    ):
-        flash("An error occured. Please try again.")
+        if not logistics.add_contractor_location(
+            contractor_id, address, postcode, city, telephone, email, radius, description
+        ):
+            flash("An error occured. Please try again.")
+            return redirect("/contractor")
+
+        flash("New location added")
         return redirect("/contractor")
-
-    flash("New location added")
-    return redirect("/contractor")
 
 
 @contractor_location_bp.route("/contractor/location/modify", methods=["POST"])

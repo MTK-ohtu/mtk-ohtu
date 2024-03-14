@@ -1,0 +1,164 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+    <style>
+        h1 {
+            text-align: center;
+        }
+        #allQuestions {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .address-fields,
+        .contact-fields {
+            width: 30%;
+        }
+
+        .address-fields label,
+        .contact-fields label,
+        .description-field label,
+        .description-field2 label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .address-fields input,
+        .contact-fields input {
+            width: 90%;
+            margin-bottom: 10px;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+
+        .form-section {
+            border: 3px solid #ccc;
+            padding: 20px;
+            width: 70%;
+            margin: 0 auto;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .custom-submit-button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 15px 40px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 8px;
+        }
+
+        .custom-cancel-button:hover {
+            background-color: #677067;
+        }
+
+        .custom-cancel-button {
+            background-color: #677067;
+            border: none;
+            color: white;
+            padding: 15px 60px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 8px;
+        }
+
+        .custom-submit-button:hover {
+            background-color: #45a049; 
+        }
+
+        .custom-submit-button-container {
+            width: 100%;
+            text-align: center;
+            margin-top: 50px;
+            margin-bottom: 5px;
+        }
+
+        .custom-cancel-button-container {
+            width: 100%;
+            text-align: center;
+            margin-top: 0px;
+            margin-bottom: 5px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <h1>Create new location</h1>
+    <form class="" action="/contractor/add_location" method="POST">
+        <div class="form-section">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <div id="allQuestions">
+            <div class="address-fields">
+                <label for="address">Address*</label>
+                <input type="text" id="address" name="address" required>
+                <label for="postcode">Postal code*</label>
+                <input type="text" id="postcode" name="postcode" required>
+                <label for="city">City*</label>
+                <input type="text" id="city" name="city" required>
+            </div>
+            <div class="contact-fields">
+                <label for="telephone">Phone number</label>
+                <input type="text" id="telephone" name="telephone">
+                <label for="email">Email address</label>
+                <input type="text" id="email" name="email">
+            </div>
+            <div class="description-field">
+                <label for="description">Description</label><br>
+                <textarea id="description" name="description" placeholder="Describe your service"></textarea>
+            </div>
+        </div>
+
+            <h4>How far are you able to deliver*</h4>
+            <div class="radius-option">
+                <input type="radio" name="radiusType" value="no-limit" onclick="toggleRadius()">
+                <label for="no-limit" class="circle-label">No limit</label>
+                <input type="radio" name="radiusType" value="custom-limit" onclick="toggleRadius()">
+                <label for="custom-limit" class="circle-label">Custom limit</label>
+            </div>         
+            <div id="customDistance" style="display: none;" class="small-text">
+                <label for="radiusType">Maximum distance</label>
+                <input type="text" id="radius" name="radius"> kilometers
+            </div>
+        </div>
+        </div>
+        <div class="custom-submit-button-container">
+            <button type="submit" class="custom-submit-button">Create location</button>
+    </form>
+    <div class="custom-cancel-button-container">
+        <form action="/contractor">
+            <input type="submit" class="custom-cancel-button" value="  Cancel  " />
+        </form>
+    </div>
+
+    <script>
+        function toggleRadius() {
+            var radiusType = document.querySelector('input[name="radiusType"]:checked').value;
+            var customDistance = document.getElementById("customDistance");
+
+            if (radiusType === "no-limit") {
+                customDistance.style.display = "none";
+            } else {
+                customDistance.style.display = "block";
+            }
+        }
+    </script>
+</body>
+
+{% endblock %}
