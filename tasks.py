@@ -44,3 +44,8 @@ def test(ctx):
 @task
 def lint(ctx):
     ctx.run("pylint src", pty=True)
+
+@task
+def mockdata(ctx):
+    reset_db(ctx)
+    fill_mock(ctx)
