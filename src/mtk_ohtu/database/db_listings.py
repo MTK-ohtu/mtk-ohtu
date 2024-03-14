@@ -123,10 +123,14 @@ def db_update_listing_from_api_response(listing: FullListing, pool: ConnectionPo
             listings_dict["continuous"] = False
         else:
             listings_dict["continuous"] = True
+    if "location" in listings_dict:
+        location = listings_dict.pop("location")
+        listings_dict["longitude"] = location.longitude
+        listings_dict["latitude"] = location.latitude
 
-    column_pairs = [[sql.Identifier(k), sql.Identifier(listings_dict[k])] for k in listings_dict]
-    column_pairs_composed = [sql.SQL('=').join(column) for column in column_pairs]
-    update_column_compose = sql.SQL(',').join(column_pairs_composed)
+    #column_pairs = [[sql.Identifier(k), sql.Identifier(listings_dict[k])] for k in listings_dict]
+    #column_pairs_composed = [sql.SQL('=').join(column) for column in column_pairs]
+    update_column_compose = sql.SQL(',').join([sql.SQL('=').join([sql.Identifier(k), sql.Placeholder()]) for k in listings_dict])
 
     query = sql.SQL("UPDATE listings SET {columns} WHERE id = {postid};").format(
         columns=update_column_compose,
@@ -135,5 +139,5 @@ def db_update_listing_from_api_response(listing: FullListing, pool: ConnectionPo
 
     with pool.connection() as connection:
         cursor = connection.cursor()
-        cursor.execute(query)
+        cursor.execute(query, list(listings_dict.values()))
     return True

@@ -120,13 +120,13 @@ def postings():
             try:
                 db_create_new_listing_from_api_response(data[1], DATABASE_POOL)
             except Exception as err:
-                return {"success": False, "message": err}, 401
+                return {"success": False, "message": str(err)}, 401
 
         case EntryType.UPDATE:
             try:
                 db_update_listing_from_api_response(data[1], DATABASE_POOL)
             except Exception as err:
-                return {"success": False, "message": err}, 404
+                return {"success": False, "message": str(err)}, 404
 
         case EntryType.DELETE:
             print(data)

@@ -27,7 +27,8 @@ LISTING_NAME_TABLE = {
     "delivery_details": "delivery_details",
     "address": "address",
     "description": "description",
-    "date_created": None
+    "date_created": None,
+    "location": "location"
     # None: "complies_with_regulations"
 }
 
