@@ -109,7 +109,7 @@ def db_modify_contractor_location(
         cursor = connection.cursor()
         try:
             cursor.execute(
-                "UPDATE contractor_locations SET address=%s, SET telephone=%s, SET email=%s, SET longitude=%s, SET latitude=%s, SET radius=%s, SET description=%s WHERE id=%s",
+                "UPDATE contractor_locations SET address=%s, telephone=%s, email=%s, longitude=%s, latitude=%s, delivery_radius=%s, description=%s WHERE id=%s;",
                 (
                     address,
                     telephone,

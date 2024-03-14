@@ -7,12 +7,88 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1">
 	<title>Add Logistics</title>
+    <style>
+        .material-box {
+            position: relative;
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin: 10px;
+            cursor: pointer;
+            width: calc(33.3333% - 20px);
+            box-sizing: border-box;
+            float: left;
+            outline: 4px solid transparent;
+        }
+
+        .material-title {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .material-title h5 {
+            margin-right: 10px;
+            font-size: 20px;
+        }
+
+        .material-box.selected {
+            background-color: #eeeeee;
+            outline-color: #007bff;
+        }
+
+        .material-box:hover {
+            background-color: #d1d0d0;
+
+        }
+
+        .material-box input[type="checkbox"] {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .service-option,
+        .radius-option {
+            display: flex;
+        }
+
+        .service-option input[type="radio"],
+        .radius-option input[type="radio"] {
+            transform: scale(1.75);
+            margin-right: 10px;
+            margin-bottom: 15px;
+        }
+
+        .service-option label,
+        .radius-option label {
+            margin-right: 20px;
+            font-size: 18px;
+        }
+
+        .form-section {
+            border: 3px solid #ccc;
+            padding: 20px;
+            margin-bottom: 20px;
+            width: 70%;
+            margin: 0 auto;
+        }
+
+        .form-section input[type="text"],
+        .form-section textarea {
+            width: 20%;
+        }
+
+    </style>
 </head>
 
 <body>
     <h3>Add a logistics service</h3>
-    <form class="needs-validation" method="post" novalidate="" autocomplete="off">
-        <h5>Select service type*</h5>
+    <form class="" method="post" novalidate="" autocomplete="off">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <div class="form-section">
+
+        <h4>Select service type*</h4>
         <div class="service-option">
             <input type="radio" id="private" name="serviceType" value="private" onclick="toggleQuestions()">
             <label for="private" class="circle-label">Private contractor</label><br>
@@ -32,94 +108,98 @@
             <input type="text" id="businessId" name="businessId"> <br>
         </div>
         <br>
-        <div id="Questions">
-            <div id="allQuestions">
-                <h4>Add location</h4>
-                
-                    <label for="address">Address*</label>
-                    <input type="text" id="address" name="address" required><br>
-                    <label for="postcode">Postal code*</label>
-                    <input type="text" id="postcode" name="postcode" required><br>
-                    <label for="city">City*</label>
-                    <input type="text" id="city" name="city" required><br>
-                    <br>
-                    <label for="telephone">Phone number</label>
-                    <input type="text" id="telephone" name="telephone"><br>
+        <div id="allQuestions">
+            <h4>Add location</h4>
+            <label for="address">Address*</label>
+            <input type="text" id="address" name="address" required>
+            <label for="postcode">Postal code*</label>
+            <input type="text" id="postcode" name="postcode" required>
+            <label for="city">City*</label>
+            <input type="text" id="city" name="city" required>
+            <label for="telephone">Phone number</label>
+            <input type="text" id="telephone" name="telephone">
+            <label for="email">Email address</label>
+            <input type="text" id="email" name="email">
 
-                    <label for="email">Email address</label>
-                    <input type="text" id="email" name="email"><br>
-                    <br>
-                    Description (optional) <textarea class="description" name="description"></textarea><br>
-                    <br>
-                    <h5>How far are you able to deliver*</h5>
-                    <div class="radius-option">
-                        <input type="radio" name="radiusType" value="no-limit" onclick="toggleRadius()">
-                        <label for="no-limit" class="circle-label">No limit</label><br>
-                        <input type="radio" name="radiusType" value="custom-limit" onclick="toggleRadius()">
-                        <label for="custom-limit" class="circle-label">Custom limit</label>
-                    </div>         
-                    <div id="customDistance" style="display: none;">
-                        <label for="radiusType">Maximum distance</label>
-                        <input type="text" id="radius" name="radius"> kilometers<br>
-                    </div>
-                    <br>
-                    <h5>Add materials you can deliver</h5>
-                    <div id="materials-container" class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
-                        {% for material in material_categories %}
-                        <div class="col mb-4">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="form-check">
-                                        <input type="checkbox" name="materials[]" value="{{ material }}">
-                                        <label for="{{ material }}">{{ material }}</label>
-                                        <button class="show-fields" type="button" data-target="{{ material }}">Edit</button>
-                                    </div>
-                                    <div id="fields-{{ material }}" style="display: none">
-                                        Description <textarea class="description" name="{{ material }}-description"></textarea><br>
-                                        <label for="can_process">Can process</label>
-                                        <input type="checkbox" class="can-process" name="{{ material }}-can_process"><br>
-                                        <label for="base_rate">Base rate</label>
-                                        <input type="text" class="base-rate" name="{{ material }}-base_rate"> €<br> 
-                                        <label for="price_per_hour">Price per hour</label>
-                                        <input type="text" class="price-per-hour" name="{{ material }}-price_per_hour"> €<br>
-                                        <label for="max_capacity">Maximum capacity</label>
-                                        <input type="text" class="max-capacity" name="{{ material }}-max_capacity">
-                                        <select id="unitDropdown">
-                                        {% for unit in units %}
-                                            <option value="{{ unit }}" name="{{ material }}-unit">{{ unit }}</option>
-                                        {% endfor %}
-                                        </select>
-                                        <h6>Delivery distance*</h6>
-                                        <div class="radius-option-{{ material }}">
-                                            <input type="radio" name="radiusType-{{ material }}" value="no-limit-{{ material }}" checked="checked" onclick="toggleMaterialradius('{{ material }}')">
-                                            <label for="no-limit-{{ material }}" class="circle-label">Same as above</label><br>
-                                            <input type="radio" name="radiusType-{{ material }}" value="custom-limit-{{ material }}" onclick="toggleMaterialradius('{{ material }}')">
-                                            <label for="custom-limit-{{ material }}" class="circle-label">Custom limit</label>
-                                        </div>       
-                                        <div id="customDistance-{{ material }}" style="display: none;">
-                                            <label for="radius-{{ material }}">Maximum distance:</label>
-                                            <input type="text" id="radius-{{ material }}" name="{{ material }}-radius"> kilometers<br>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        {% endfor %}
-                    </div>
-                
+            Description <textarea class="description" name="description"></textarea>
+
+            <h5>How far are you able to deliver*</h5>
+            <div class="radius-option">
+                <input type="radio" name="radiusType" value="no-limit" onclick="toggleRadius()">
+                <label for="no-limit" class="circle-label">No limit</label>
+                <input type="radio" name="radiusType" value="custom-limit" onclick="toggleRadius()">
+                <label for="custom-limit" class="circle-label">Custom limit</label>
+            </div>         
+            <div id="customDistance" style="display: none;">
+                <label for="radiusType">Maximum distance</label>
+                <input type="text" id="radius" name="radius"> kilometers
             </div>
         </div>
-        <br>                        
-        <br>
+        </div>
+        <h3>Select materials you can deliver</h3>
+        <div id="materials-container">
+            {% for material in material_categories %}
+                <div class="material-box" onclick="toggleMaterial(this)">
+                    <div class="material-title">
+                        <input type="checkbox" class="hidden-checkbox" name="materials[]" value="{{ material }}">
+                        <h5>{{ material }}</h5>
+                        <button class="show-fields" type="button" data-target="{{ material }}">Edit</button>
+                    </div>
+
+                    <div id="fields-{{ material }}" style="display: none" class="card">
+                        Description <br>
+                        <textarea class="description" name="{{ material }}-description"></textarea><br>
+                        <label for="can_process" style="align-self: center;">Can Process</label>
+                        <label class="switch">
+                            <input type="checkbox" name="{{ material }}-can_process">
+                            <span class="slider"></span>
+                        </label>
+
+                        <label for="base_rate">Base rate</label>
+                        <input type="text" class="base-rate" name="{{ material }}-base_rate"> €<br> 
+                        <label for="price_per_hour">Price per hour</label>
+                        <input type="text" class="price-per-hour" name="{{ material }}-price_per_hour"> €<br>
+                        <label for="max_capacity">Maximum capacity</label>
+                        <input type="text" class="max-capacity" name="{{ material }}-max_capacity">
+                        <select id="unitDropdown">
+                            {% for unit in units %}
+                                <option value="{{ unit }}" name="{{ material }}-unit">{{ unit }}</option>
+                            {% endfor %}
+                        </select>
+                        <h6>Delivery distance*</h6>
+                        <div class="radius-option-{{ material }}">
+                            <input type="radio" name="radiusType-{{ material }}" value="no-limit-{{ material }}" checked="checked" onclick="toggleMaterialradius('{{ material }}')">            
+                            <label for="no-limit-{{ material }}" class="circle-label">Same as above</label><br>
+                            <input type="radio" name="radiusType-{{ material }}" value="custom-limit-{{ material }}" onclick="toggleMaterialradius('{{ material }}')">
+                            <label for="custom-limit-{{ material }}" class="circle-label">Custom limit</label>
+                        </div>       
+                        <div id="customDistance-{{ material }}" style="display: none;">
+                            <label for="radius-{{ material }}">Maximum distance:</label>
+                            <input type="text" id="radius-{{ material }}" name="{{ material }}-radius"> kilometers<br>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+              
+        </div>
+
         <input type="submit" value="Submit">
     </form>
 
     <script>
+        function toggleMaterial(box) {
+            var checkbox = box.querySelector('input[type="checkbox"]');
+            checkbox.checked = !checkbox.checked;
+            box.classList.toggle('selected');
+        }
+
         document.addEventListener('DOMContentLoaded', function () {
             var toggleButtons = document.querySelectorAll('.show-fields');
-            
+
             toggleButtons.forEach(function (button) {
-                button.addEventListener('click', function () {
+                button.addEventListener('click', function (event) {
+                    event.stopPropagation();
                     var material = button.getAttribute('data-target');
                     var additionalFields = document.getElementById('fields-' + material);
 
@@ -130,6 +210,12 @@
                         additionalFields.style.display = 'none';
                         button.innerText = 'Edit';
                     }
+                });
+            });
+            var cards = document.querySelectorAll('.card');
+            cards.forEach(function (card) {
+                card.addEventListener('click', function (event) {
+                    event.stopPropagation();
                 });
             });
         });
