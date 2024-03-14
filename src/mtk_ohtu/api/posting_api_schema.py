@@ -11,6 +11,7 @@ from ..database.db_datastructs import FullListing
 from ..logic.location import Location
 
 
+
 class EntryType(Enum):
     CREATE = "create"
     UPDATE = "update"
@@ -49,7 +50,7 @@ class PostingApiSchema(Schema):
     @validates_schema
     def validate_create(self, data, **kwargs):
         if data["entry_type"] == EntryType.CREATE:
-            if not all({k: data[k] for k in data if k in self.create_requirements}):
+            if not all({k: data[k] for k in data if k in self.create_requirements}) or not all([req in data for req in self.create_requirements]):
                 raise ValidationError("Missing required fields from create")
 
     @post_load

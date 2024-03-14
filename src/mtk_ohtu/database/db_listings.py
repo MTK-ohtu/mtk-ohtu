@@ -1,9 +1,9 @@
 from datetime import datetime as dt
+from psycopg import sql
 from psycopg_pool import ConnectionPool
 from ..database.db_datastructs import Listing, FullListing
 from ..database.db_enums import SupplyDemandType, BatchUnitsType
 from ..logic.location import Location
-
 
 # pylint: disable=E1129
 
@@ -101,4 +101,62 @@ def db_create_new_listing_from_api_response(listing: FullListing, pool: Connecti
                 True,
             ),
         )
+    return True
+
+
+def db_update_listing_from_api_response(listing: FullListing, pool: ConnectionPool):
+    """Updates listing from api object
+    Args:
+        listing: FullListing object
+        pool: db pool
+    Returns:
+        True if successful
+    """
+
+    listings_dict = listing.update_dict()
+
+    postid = listings_dict.pop("id")
+
+    if not db_get_product_by_id(postid, pool):
+        raise ValueError
+
+    if "demand" in listings_dict:
+        if listings_dict["demand"] == SupplyDemandType.ONE_TIME:
+            listings_dict["continuous"] = False
+        else:
+            listings_dict["continuous"] = True
+    if "location" in listings_dict:
+        location = listings_dict.pop("location")
+        listings_dict["longitude"] = location.longitude
+        listings_dict["latitude"] = location.latitude
+
+    update_column_compose = sql.SQL(',').join([sql.SQL('=').join([sql.Identifier(k), sql.Placeholder()]) for k in listings_dict])
+
+    query = sql.SQL("UPDATE listings SET {columns} WHERE id = {postid};").format(
+        columns=update_column_compose,
+        postid=postid
+    )
+
+    with pool.connection() as connection:
+        cursor = connection.cursor()
+        cursor.execute(query, list(listings_dict.values()))
+    return True
+
+def db_delete_listing_from_api_response(listing: FullListing, pool: ConnectionPool):
+    """Updates listing from api object
+    Args:
+        listing: FullListing object
+        pool: db pool
+    Returns:
+        True if successful
+    """
+
+    post_id = listing.posting_id
+
+    if not db_get_product_by_id(post_id, pool):
+        raise ValueError
+
+    with pool.connection() as connection:
+        cursor = connection.cursor()
+        cursor.execute("DELETE FROM listings WHERE id=%s;", (post_id,))
     return True
