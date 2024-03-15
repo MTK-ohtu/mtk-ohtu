@@ -9,7 +9,7 @@
 
     <!-- Block 2: Map -->
     <div name="map_div" style="flex: 1;background-color: #f1f1f1; min-height: 100%;">
-    
+
         <!-- Include Leaflet JavaScript and CSS -->
         <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
         <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
@@ -81,7 +81,7 @@
             // Create map
             var map = L.map('map').setView(defaultCoordinates, 10);
 
-            
+
             // Add tiles
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '© OpenStreetMap contributors'
@@ -93,7 +93,7 @@
 
             // Add scale
             L.control.scale().addTo(map);
-            
+
             // Default bounds for route (only product)
             var route_bounds = L.latLngBounds(
                 L.latLng(productCoordinates.map(value => value - padding)),
@@ -114,7 +114,7 @@
                 var bbox = route_geojson["features"][0]["bbox"];
                 var southWest = L.latLng(bbox[1], bbox[0]),
                     northEast = L.latLng(bbox[3], bbox[2]),
-                route_bounds = L.latLngBounds(southWest, northEast);
+                    route_bounds = L.latLngBounds(southWest, northEast);
             }
 
             // Define function for clicking on the map
@@ -125,26 +125,26 @@
                 if (setGoalButton.classList.contains('pressed')) {
                     mapDiv.classList.remove('set_goal')
                     setGoalButton.classList.remove('pressed')
-                    addressInput.value=clickLat+","+clickLng
+                    addressInput.value = clickLat + "," + clickLng
                     searchButton.click()
                 }
             })
 
             // Show route button
             if (routeButton != null) {
-                routeButton.addEventListener('click', function() {
+                routeButton.addEventListener('click', function () {
                     if (routeButton.classList.contains('pressed')) {
                         routeButton.classList.remove('pressed')
                         if (lastOpenListElement != null) {
                             lastOpenListElement.querySelector('#zoom_button').classList.remove('zoomed_in')
                             zoomedIn = false
                         }
-                        map.flyToBounds(boundsOf([combined_bounds]).pad(padding/10))
+                        map.flyToBounds(boundsOf([combined_bounds]).pad(padding / 10))
                     } else {
                         previousBounds = map.getBounds()
                         routeButton.classList.add('pressed')
                         if (lastOpenListElement != null) {
-                            map.flyToBounds(boundsOf([route_bounds, listElement_to_bounds[lastOpenListElement.id]]))  
+                            map.flyToBounds(boundsOf([route_bounds, listElement_to_bounds[lastOpenListElement.id]]))
                             lastOpenListElement.querySelector('#zoom_button').classList.remove('zoomed_in')
                             zoomedIn = false
                         }
@@ -154,7 +154,7 @@
             }
 
             // Destination selector button
-            setGoalButton.addEventListener('click', function() {
+            setGoalButton.addEventListener('click', function () {
                 if (event.target.classList.contains('pressed')) {
                     mapDiv.classList.remove('set_goal')
                     setGoalButton.classList.remove('pressed')
@@ -184,15 +184,15 @@
             // List element animations
             var runListElementAnimation = function (element) {
                 minimum_height = element.querySelector('div').scrollHeight
-                element.style.setProperty('--minimum-height', minimum_height+'px')
-                element.style.setProperty('--total-height', (element.scrollHeight+3)+'px')
+                element.style.setProperty('--minimum-height', minimum_height + 'px')
+                element.style.setProperty('--total-height', (element.scrollHeight + 3) + 'px')
                 if (element.classList.contains('open')) {
                     element.classList.remove('open')
                     element.classList.add('closed')
                 } else {
                     // Wait opening animation to end before scrolling into view
-                    element.addEventListener('animationend', function() {
-                        element.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start'});
+                    element.addEventListener('animationend', function () {
+                        element.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
                     }, { once: true })
                     element.classList.remove('closed')
                     element.classList.add('open')
@@ -212,8 +212,8 @@
                     }
                     // Else fit contractors and route
                     else map.flyToBounds(boundsOf([combined_bounds, route_bounds]));
-                
-                // Opening list element
+
+                    // Opening list element
                 } else {
                     element.classList.add('selected')
                     elementBounds = listElement_to_bounds[element.id];
@@ -232,28 +232,28 @@
                     }
                     lastOpenListElement = element;
                     runListElementAnimation(element)
-                    if (zoomedIn){
+                    if (zoomedIn) {
                         map.fitBounds(listElement_to_bounds[element.id])
                     }
                     else if (routeButton != null && routeButton.classList.contains('pressed')) {
                         map.flyToBounds(boundsOf([route_bounds, elementBounds]).pad(padding));
-                    } 
+                    }
                     else if (!map.getBounds().contains(elementBounds)) {
-                        map.flyToBounds(elementBounds.pad(padding*10));
+                        map.flyToBounds(elementBounds.pad(padding * 10));
                     }
                 }
             }
 
             // Toggle marker popup
-            var togglePopup = function(marker) {
+            var togglePopup = function (marker) {
                 if (marker.isPopupOpen()) {
                     marker.closePopup()
                 } else {
                     marker.openPopup()
                 }
             }
-        
-                
+
+
             // Marker creation for optimal contractors
             function create_marker(feature, latlng) {
                 var marker = L.marker(latlng, { icon: okTruck });
@@ -277,7 +277,7 @@
             //Define popups for contractor markers
             function onEachFeature(feature, layer) {
                 if (feature.properties && feature.properties.name && feature.properties.address) {
-                    layer.bindPopup('<h4>' + feature.properties.name + '</h4><p>' + feature.properties.address+'</p>');
+                    layer.bindPopup('<h4>' + feature.properties.name + '</h4><p>' + feature.properties.address + '</p>');
                 }
             }
 
@@ -296,7 +296,7 @@
                     if (out_range_gjson.length != 0) {
                         companyCount.textContent = in_range_gjson.features.length + out_range_gjson.features.length
                         combined_bounds = boundsOf([in_gjson.getBounds(), out_gjson.getBounds()])
-                    }                
+                    }
                 }
                 else {
                     map.removeLayer(out_gjson);
@@ -304,8 +304,8 @@
                     companyCount.textContent = in_range_gjson.features.length;
                     combined_bounds = boundsOf([in_gjson.getBounds()])
                 }
-                if (combined_bounds != null && routeButton!= null && !routeButton.classList.contains('pressed') && !zoomedIn) {
-                    map.flyToBounds(boundsOf([route_bounds, combined_bounds]).pad(padding/10));
+                if (combined_bounds != null && routeButton != null && !routeButton.classList.contains('pressed') && !zoomedIn) {
+                    map.flyToBounds(boundsOf([route_bounds, combined_bounds]).pad(padding / 10));
                 }
             });
 
@@ -319,6 +319,11 @@
                     <div class="horizontal-container even">
                         <h4 style="align-self: left;">${feature.properties.name}</h4>
                         <p style="align-self: center;">${feature.properties.address}</p>
+                        {%if show_route%}
+                        <div style="align-self: center; background-color: green; color: white; padding: 10px; margin-left: auto; text-align: center;">
+                            CO2: {{emissions}} kg
+                        </div>
+                        {%endif%}
                     </div>
                     <div class="horizontal-container even" id="info">
                         <p>
@@ -337,9 +342,9 @@
 
                 // Create squere bounds around element coordinates, add element to mappings
                 var bounds = L.latLngBounds(
-                    L.latLng(feature.geometry.coordinates[1]-padding, feature.geometry.coordinates[0]-padding),
-                    L.latLng(feature.geometry.coordinates[1]+padding, feature.geometry.coordinates[0]+padding),
-                    );
+                    L.latLng(feature.geometry.coordinates[1] - padding, feature.geometry.coordinates[0] - padding),
+                    L.latLng(feature.geometry.coordinates[1] + padding, feature.geometry.coordinates[0] + padding),
+                );
                 listElement_to_bounds[listElement.id] = bounds
                 address_to_listElement[feature.properties.address] = listElement;
 
@@ -379,9 +384,9 @@
 
                         toggleListElement(button)
 
-                        
+
                         //if (button.classList.contains('selected'))
-                        
+
                     }
                 });
             } // ==============================================================================================
@@ -390,7 +395,7 @@
             in_range_gjson.features.forEach(feature => addElement(feature, false));
             if (out_range_gjson.length != 0) {
                 out_range_gjson.features.forEach(feature => addElement(feature, true));
-            }   
+            }
             // By default, show only optimal contractors on the map
             in_gjson.addTo(map);
             var empty_element = document.createElement('div')
