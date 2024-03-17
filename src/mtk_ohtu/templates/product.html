@@ -81,8 +81,11 @@
         <div>
             <div class="horizontal-container">
                 <!--Number of shown companies-->
-                <h3>Companies:</h3>
-                <h1 id="company_count"></h1>
+                <button type="button" class="companies_button" id="companies_button">
+                    <div style="margin-left: 60px">
+                        <h1 style="font-size: 300%; color: var(--);" id="company_count">0</h1>
+                    </div>
+                </button>
                 <!--Select all slider-->
                 <label class="switch">
                     <input type="checkbox" id="selectAll">
@@ -121,7 +124,7 @@
 
 
 <!--we need to list here the delivery companies-->
-{% include "contractor_list.html" %}
+{% include "list_and_map.html" %}
 
 
 

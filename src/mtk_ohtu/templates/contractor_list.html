@@ -1,3 +1,13 @@
+<!-- Html for feature content -->
+<div id="feature_popup" style="display:none">
+
+</div>
+
+<!-- Html for list element content -->
+<div id="list_element_content" style="display:none">
+
+</div>
+
 <!-- This view is divided into two vertical blocks -->
 <div style="height: 70vh; display: flex;">
 
@@ -18,13 +28,16 @@
         <div id="map" style="height: 100%;"></div>
 
         <!-- Leaflet + code -->
+        <script src="/static/leaflet_icons.js"></script>
+        <script src="/static/vision.js"></script>
         <script>
 
             var padding = 0.1;
             var hidden_elements = [];
             var in_range_gjson = JSON.parse('{{ in_range | tojson | safe }}');
             var out_range_gjson = JSON.parse('{{ out_range | tojson | safe }}');
-
+            console.log(in_range_gjson)
+            console.log(out_range_gjson)
             // Mappings
             var address_to_marker = {};
             var listElement_to_bounds = {};
@@ -39,7 +52,6 @@
             var focusedBounds = null
             var zoomedIn = false
 
-
             // Interactive elements
             var routeButton = document.getElementById('route_button')
             var setGoalButton = document.getElementById('set_goal')
@@ -47,40 +59,9 @@
             var mapDiv = document.getElementById('map')
             var addressInput = document.getElementById('address_input')
 
-            // Leaflet marker icons
-            var okTruck = new L.Icon({
-                iconUrl: '/static/images/ok_truck.png',
-                shadowUrl: '/static/images/point.png',
-                iconSize: [25, 25],
-                iconAnchor: [8, 25],
-                popupAnchor: [1, -34],
-                shadowSize: [10, 10],
-                shadowAnchor: [0, 0]
-            });
-
-            var badTruck = new L.Icon({
-                iconUrl: '/static/images/bad_truck.png',
-                shadowUrl: '/static/images/point.png',
-                iconSize: [25, 25],
-                iconAnchor: [8, 25],
-                popupAnchor: [1, -34],
-                shadowSize: [10, 10],
-                shadowAnchor: [0, 0]
-            });
-
-            var goal = new L.Icon({
-                iconUrl: '/static/images/goal_button.png',
-                shadowUrl: '/static/images/point.png',
-                iconSize: [35, 35],
-                iconAnchor: [0, 35],
-                popupAnchor: [1, -34],
-                shadowSize: [10, 10],
-                shadowAnchor: [0, 5]
-            });
-
             // Create map
-            var map = L.map('map').setView(defaultCoordinates, 10);
-
+            const map = L.map('map').setView(defaultCoordinates, 10);
+            const V = new VisionController(L, map)
 
             // Add tiles
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -101,10 +82,11 @@
             );
 
             // Visual representation of the route
-            if ('{{show_route}}' == 1) {
+            if ('{{ route_geojson }}'.length !== 0) {
                 // Add route on map
                 var route_geojson = JSON.parse('{{ route_geojson }}'.replaceAll('&#34;', '"'));
-                L.geoJSON(route_geojson).addTo(map);
+                var route = L.geoJSON(route_geojson).addTo(map);
+                console.log(route_geojson)
                 // Add destination on map                
                 var destination = route_geojson["features"][0]["geometry"]["coordinates"].pop().reverse();
                 var destinationMarker = L.marker(destination, { icon: goal }).addTo(map);
@@ -392,6 +374,7 @@
             } // ==============================================================================================
 
             // Add list elements on the list side
+            in_range_gjson.features.forEach(feature => V.addFeature(feature))
             in_range_gjson.features.forEach(feature => addElement(feature, false));
             if (out_range_gjson.length != 0) {
                 out_range_gjson.features.forEach(feature => addElement(feature, true));
