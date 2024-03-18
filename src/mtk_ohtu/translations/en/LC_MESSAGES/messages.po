@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-03-18 14:04+0200\n"
+"POT-Creation-Date: 2024-03-18 14:47+0200\n"
 "PO-Revision-Date: 2024-03-18 14:04+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -17,6 +17,36 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.14.0\n"
+
+#: src/mtk_ohtu/templates/addlogistics.html:245
+msgid "additional_information"
+msgstr "Additional information"
+
+#: src/mtk_ohtu/templates/addlogistics.html:255
+msgid "base_rate"
+msgstr "Base rate"
+
+#: src/mtk_ohtu/templates/addlogistics.html:257
+msgid "price_per_hour"
+msgstr "Price per hour"
+
+#: src/mtk_ohtu/templates/addlogistics.html:259
+msgid "maximum_capacity"
+msgstr "Maximum capacity"
+
+#: src/mtk_ohtu/templates/addlogistics.html:266
+#, fuzzy
+msgid "delivery_distance"
+msgstr "Delivery distance"
+
+#: src/mtk_ohtu/templates/addlogistics.html:269
+msgid "same_as_above"
+msgstr "Same as above"
+
+#: src/mtk_ohtu/templates/addlogistics.html:286
+#, fuzzy
+msgid "add_logistics_submit"
+msgstr "Submit logistics"
 
 #: src/mtk_ohtu/templates/layout.html:12
 msgid "title"
@@ -61,3 +91,70 @@ msgstr "Contact us"
 #: src/mtk_ohtu/templates/layout.html:45
 msgid "footer_last_updated"
 msgstr "Last updated"
+
+msgid "add_logistics_title"
+msgstr "Add a logistics service"
+
+msgid "add_logistics_body_title"
+msgstr "Add a logistics service"
+
+msgid "add_logistics_select_service_type"
+msgstr "Select service type"
+
+msgid "private_contractor"
+msgstr "Private contractor"
+
+msgid "company"
+msgstr "Company"
+
+msgid "full_name"
+msgstr "Full name"
+
+msgid "company_name"
+msgstr "Company name"
+
+msgid "business_id"
+msgstr "Business ID"
+
+msgid "add_location"
+msgstr "Add location"
+
+msgid "address"
+msgstr "Address"
+
+msgid "postal_code"
+msgstr "Postal code"
+
+msgid "city"
+msgstr "City"
+
+msgid "phone_number"
+msgstr "Phone number"
+
+msgid "email"
+msgstr "Email"
+
+msgid "description"
+msgstr "Description"
+
+msgid "how_far_can_you_deliver"
+msgstr "How far are you able to deliver"
+
+msgid "no_limit"
+msgstr "No limit"
+
+msgid "custom_limit"
+msgstr "Custom limit"
+
+msgid "maximum_distance"
+msgstr "Maximum distance"
+
+msgid "kilometers"
+msgstr "kilometers"
+
+msgid "select_materials"
+msgstr "Select materials you can deliver"
+
+msgid "can_spread"
+msgstr "Can spread"
+

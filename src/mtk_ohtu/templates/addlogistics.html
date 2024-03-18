@@ -6,7 +6,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1">
-	<title>Add Logistics</title>
+	<title>{{ _("add_logistics_title") }}</title>
     <style>
         .material-box {
             position: relative;
@@ -171,62 +171,62 @@
 </head>
 
 <body>
-    <h3>Add Logistics</h3>
+    <h3>{{ _("add_logistics_body_title") }}</h3>
     <form class="" method="post" autocomplete="off">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <div class="form-section">
-        <h4>Select service type*</h4>
+        <h4>{{ _("add_logistics_select_service_type") }}</h4>
         <div class="service-option">
             <input type="radio" id="private" name="serviceType" value="private" onclick="toggleQuestions()">
-            <label for="private" class="circle-label">Private contractor</label><br>
+            <label for="private" class="circle-label">{{ _("private_contractor") }}</label><br>
             <input type="radio" id="company" name="serviceType" value="company" onclick="toggleQuestions()">
-            <label for="company" class="circle-label">Company</label>
+            <label for="company" class="circle-label">{{ _("company") }}</label>
         </div>
 
         <div id="privateQuestions" style="display: none;" class="small-text">
-            <label for="fullName">Your full name*</label>
+            <label for="fullName">{{ _("full_name") }}</label>
             <input type="text" id="fullName" name="fullName"><br>
         </div>
 
         <div id="companyQuestions" style="display: none;" class="small-text">
-            <label for="companyName">Company name*</label>
+            <label for="companyName">{{ _("company_name") }}</label>
             <input type="text" id="companyName" name="companyName"><br>
-            <label for="businessId">Business ID*</label>
+            <label for="businessId">{{ _("business_id") }}</label>
             <input type="text" id="businessId" name="businessId"> <br>
         </div>
         <br>
-        <h4>Add location</h4>
+        <h4>{{ _("add_location") }}</h4>
         <div id="allQuestions">
             <div class="address-fields">
-                <label for="address">Address*</label>
+                <label for="address">{{ _("address") }}</label>
                 <input type="text" id="address" name="address" required>
-                <label for="postcode">Postal code*</label>
+                <label for="postcode">{{ _("postal_code") }}</label>
                 <input type="text" id="postcode" name="postcode" required>
-                <label for="city">City*</label>
+                <label for="city">{{ _("city") }}</label>
                 <input type="text" id="city" name="city" required>
             </div>
             <div class="contact-fields">
-                <label for="telephone">Phone number</label>
+                <label for="telephone">{{ _("phone_number") }}</label>
                 <input type="text" id="telephone" name="telephone">
-                <label for="email">Email address</label>
+                <label for="email">{{ _("email") }}</label>
                 <input type="text" id="email" name="email">
             </div>
             <div class="description-field">
-                <label for="description">Description</label><br>
+                <label for="description">{{ _("description") }}</label><br>
                 <textarea id="description" name="description" placeholder="Describe your service"></textarea>
             </div>
         </div>
 
-            <h4>How far are you able to deliver*</h4>
+            <h4>{{ _("how_far_can_you_deliver") }}</h4>
             <div class="radius-option">
                 <input type="radio" name="radiusType" value="no-limit" onclick="toggleRadius()">
-                <label for="no-limit" class="circle-label">No limit</label>
+                <label for="no-limit" class="circle-label">{{ _("no_limit") }}</label>
                 <input type="radio" name="radiusType" value="custom-limit" onclick="toggleRadius()">
-                <label for="custom-limit" class="circle-label">Custom limit</label>
+                <label for="custom-limit" class="circle-label">{{ _("custom_limit") }}</label>
             </div>         
             <div id="customDistance" style="display: none;" class="small-text">
-                <label for="radiusType">Maximum distance</label>
-                <input type="text" id="radius" name="radius"> kilometers
+                <label for="radiusType">{{ _("maximum_distance") }}</label>
+                <input type="text" id="radius" name="radius"> {{ _("kilometers") }}
             </div>
             <div class="eco-capabilities">
                 {% for category in eco_categories %}
@@ -235,44 +235,44 @@
                 {% endfor %}
             </div>
         </div>
-        <h3>Select materials you can deliver</h3>
+        <h3>{{ _("select_materials") }}</h3>
         <div id="materials-container">
             {% for material in material_categories %}
                 <div class="material-box" onclick="toggleMaterial(this)">
                     <div class="material-title">
                         <input type="checkbox" class="hidden-checkbox" name="materials[]" value="{{ material }}">
                         <h5>{{ material }}</h5>
-                        <button class="show-fields" type="button" data-target="{{ material }}">Additional information</button>
+                        <button class="show-fields" type="button" data-target="{{ material }}">{{ _("additional_information") }}</button>
                     </div>
 
                     <div id="fields-{{ material }}" style="display: none" class="card">
-                        <label for="can_process" style="align-self: center;">Can spread</label>
+                        <label for="can_process" style="align-self: center;">{{ _("can_spread") }}</label>
                         <label class="switch">
                             <input type="checkbox" name="{{ material }}-can_process">
                             <span class="slider"></span>
                         </label><br>
 
-                        <label for="base_rate">Base rate</label>
+                        <label for="base_rate">{{ _("base_rate") }}</label>
                         <input type="text" class="base-rate" name="{{ material }}-base_rate"> €<br>
-                        <label for="price_per_hour">Price per hour</label>
+                        <label for="price_per_hour">{{ _("price_per_hour") }}</label>
                         <input type="text" class="price-per-hour" name="{{ material }}-price_per_hour"> €<br>
-                        <label for="max_capacity">Maximum capacity</label>
+                        <label for="max_capacity">{{ _("maximum_capacity") }}</label>
                         <input type="text" class="max-capacity" name="{{ material }}-max_capacity">
                         <select id="unitDropdown">
                             {% for unit in units %}
                                 <option value="{{ unit }}" name="{{ material }}-unit">{{ unit }}</option>
                             {% endfor %}
                         </select><br>
-                        <h4>Delivery distance*</h4>
+                        <h4>{{ _("delivery_distance") }}</h4>
                         <div class="radius-option-{{ material }}">
                             <input type="radio" name="radiusType-{{ material }}" value="no-limit-{{ material }}" checked="checked" onclick="toggleMaterialradius('{{ material }}')">            
-                            <label for="no-limit-{{ material }}" class="circle-label">Same as above</label>
+                            <label for="no-limit-{{ material }}" class="circle-label">{{ _("same_as_above") }}</label>
                             <input type="radio" name="radiusType-{{ material }}" value="custom-limit-{{ material }}" onclick="toggleMaterialradius('{{ material }}')">
-                            <label for="custom-limit-{{ material }}" class="circle-label">Custom limit</label>
+                            <label for="custom-limit-{{ material }}" class="circle-label">{{ _("custom_limit") }}</label>
                         </div>       
                         <div id="customDistance-{{ material }}" style="display: none;">
-                            <label for="radius-{{ material }}">Maximum distance:</label>
-                            <input type="text" id="radius-{{ material }}" name="radius-{{ material }}"> kilometers
+                            <label for="radius-{{ material }}">{{ _("maximum_distance") }}</label>
+                            <input type="text" id="radius-{{ material }}" name="radius-{{ material }}"> {{ _("kilometers") }}
                         </div>
                         <div class="description-field2">
                             <textarea class="description" name="{{ material }}-description" placeholder="Describe the delivery of this material" style="width: 250px; height: 150px;"></textarea>
@@ -283,7 +283,7 @@
         </div>
 
         <div class="custom-submit-button-container">
-            <button type="submit" class="custom-submit-button">Submit logistics</button>
+            <button type="submit" class="custom-submit-button">{{ _("add_logistics_submit") }}</button>
         </div>
     </form>
 
