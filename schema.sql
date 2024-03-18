@@ -24,20 +24,25 @@ DO $$ BEGIN
     CREATE TYPE vehichle_requirement_type AS ENUM ('dry', 'refrigerated', 'tanker', 'flatbed', 'container');
     CREATE TYPE eco_category_type AS ENUM ('electricity', 'biogas', 'biodiesel', 'hydrogen');
     CREATE TYPE category_type AS ENUM (
-    'Dry manure',
-    'Sludge manure',
-    'Separated manure',
-    'Other manure',
+    'Manure'
     'Grass, waste fodder and green growths',
     'Basket fodder',
     'Plant-based biomasses',
     'Animal-based biomasses',
     'Soil and growing media',
     'Digestion',
-    'Wood (forest biomass)',
-    'Wood (treated wood)',
-    'Other side streams (not biomass)'
+    'Wood',
+    'Other side streams (not biomass)',
+    'Logistics and contracting'
 );
+    CREATE TYPE subcategory_type AS ENUM (
+    'Dry manure',
+    'Sludge manure',
+    'Separated manure',
+    'Other manure',
+    'Forest biomass',
+    'Treated wood'
+    );
 EXCEPTION
     WHEN duplicate_object THEN null;
 END $$;
