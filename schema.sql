@@ -49,10 +49,11 @@ END $$;
 
 CREATE TABLE IF NOT EXISTS listings (
     id SERIAL PRIMARY KEY,
-    user_id INTEGER NOT NULL REFERENCES users(id),
+    user_id INTEGER REFERENCES users(id),
+    title VARCHAR(128),
     listing_type buying_or_selling NOT NULL,
     category category_type NOT NULL,
-    subcategory VARCHAR(16),
+    subcategory subcategory_type,
     delivery_method delivery_method_type NOT NULL,
     supply_demand supply_demand_type NOT NULL,
     is_continuous BOOLEAN DEFAULT true,
@@ -66,6 +67,7 @@ CREATE TABLE IF NOT EXISTS listings (
     address TEXT NOT NULL,
     longitude NUMERIC,
     latitude NUMERIC,
+    date_created TIMESTAMP,
     vehichle_requirement vehichle_requirement_type,
     complies_with_regulations BOOLEAN DEFAULT false
 );

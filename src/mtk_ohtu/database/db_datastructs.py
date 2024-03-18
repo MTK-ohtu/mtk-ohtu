@@ -12,7 +12,7 @@ from mtk_ohtu.logic.location import Location
 LISTING_NAME_TABLE = {
     "posting_id": "id",
     # None: "user_id"
-    "title": None,
+    "title": "title",
     "category": "category",
     "sub_category": "subcategory",
     "post_type": "listing_type",
@@ -20,14 +20,14 @@ LISTING_NAME_TABLE = {
     # None: "continuous"
     "demand": "supply_demand",
     "expiry_date": "expiration_date",
-    # None: "batch_size"
+    "batch_size": "batch_size",
     # None: "batch_type"
     # None: "image"
     "price": "price",
     "delivery_details": "delivery_details",
     "address": "address",
     "description": "description",
-    "date_created": None,
+    "date_created": "date_created",
     "location": "location"
     # None: "complies_with_regulations"
 }
