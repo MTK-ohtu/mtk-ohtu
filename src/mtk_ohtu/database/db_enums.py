@@ -37,19 +37,24 @@ class VehicleRequirementType(Enum):
 
 
 class CategoryType(Enum):
-    DRY_MANURE = "Dry manure"
-    SLUDGE_MANURE = "Sludge manure"
-    SEPARATED_MANURE = "Separated manure"
-    OTHER_MANURE = "Other manure"
+    MANURE = "Manure"
     GRASS_WASTE_FODDER_AND_GREEN_GROWTHS = "Grass, waste fodder and green growths"
     BASKET_FODDER = "Basket fodder"
     PLANT_BASED_BIOMASSES = "Plant-based biomasses"
     ANIMAL_BASED_BIOMASSES = "Animal-based biomasses"
     SOIL_AND_GROWING_MEDIA = "Soil and growing media"
     DIGESTION = "Digestion"
-    WOOD_FOREST_BIOMASS = "Wood (forest biomass)"
-    WOOD_TREATED_WOOD = "Wood (treated wood)"
+    WOOD = "Wood"
     OTHER_SIDE_STREAMS_NOT_BIOMASS = "Other side streams (not biomass)"
+    LOGISTICS_AND_CONTRACTING = 'Logistics and contracting'
+
+class SubcategoryType(Enum):
+    DRY_MANURE = "Dry manure"
+    SLUDGE_MANURE = "Sludge manure"
+    SEPARATED_MANURE = "Separated manure"
+    OTHER_MANURE = "Other manure"
+    FOREST_BIOMASS = "Forest biomass"
+    TREATED_WOOD = "Treated wood"
 
 
 class EcoCategoryType(Enum):
@@ -66,5 +71,6 @@ DEFINED_ENUMS = {
     "batch_units_type": BatchUnitsType,
     "category_type": CategoryType,
     "vehichle_requirement_type": VehicleRequirementType,
-    "eco_category_type": EcoCategoryType
+    "eco_category_type": EcoCategoryType,
+    "subcategory_type": SubcategoryType
 }

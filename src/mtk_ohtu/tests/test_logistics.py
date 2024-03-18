@@ -25,7 +25,8 @@ class TestLogistics(unittest.TestCase):
         self.radius = -1
         self.description = "test"
 
-        self.category = "Dry manure"
+        self.category = "Manure"
+        self.subcategory = "Dry manure"
         self.base_rate = 200
         self.price_per_hour = 15
         self.max_capacity = 50

@@ -160,7 +160,8 @@ def add_cargo_capability(
             description,
             pool=DATABASE_POOL,
         )
-    except:
+    except Exception as ex:
+        logging.warning(ex)
         return False
     return True
 
