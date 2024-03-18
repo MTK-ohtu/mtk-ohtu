@@ -120,3 +120,33 @@ class APIKey:
     id: int
     name: str
     key: str
+
+
+@dataclass
+class LocationService:
+    """
+    Describes one location related service.
+    For now, location can have multiple services
+    for same cargo type (CategoryType).
+    Are used in ContractorDivision to create lists 
+    for frontend.
+    """
+    contractor_id: int
+    contractor_location_id: int
+    name: str
+    address: str
+    telephone: str
+    email: str
+    location: Location
+    type: CategoryType
+    price_per_km: int
+    base_rate: int
+    max_capacity: int
+    max_distance: int
+    delivery_radius: int
+    unit: BatchUnitsType
+    can_process: bool
+    description: str
+
+
+
