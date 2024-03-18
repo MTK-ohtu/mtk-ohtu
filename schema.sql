@@ -24,7 +24,7 @@ DO $$ BEGIN
     CREATE TYPE vehichle_requirement_type AS ENUM ('dry', 'refrigerated', 'tanker', 'flatbed', 'container');
     CREATE TYPE eco_category_type AS ENUM ('electricity', 'biogas', 'biodiesel', 'hydrogen');
     CREATE TYPE category_type AS ENUM (
-    'Manure'
+    'Manure',
     'Grass, waste fodder and green growths',
     'Basket fodder',
     'Plant-based biomasses',
@@ -105,7 +105,8 @@ CREATE TABLE IF NOT EXISTS contractor_locations (
 CREATE TABLE IF NOT EXISTS cargo_capabilities (
     id SERIAL PRIMARY KEY,
     contractor_location_id INTEGER REFERENCES contractor_locations(id),
-    type category_type NOT NULL,
+    category category_type NOT NULL,
+    subcategory subcategory_type,
     price_per_km INTEGER,
     base_rate INTEGER,
     max_capacity INTEGER,
