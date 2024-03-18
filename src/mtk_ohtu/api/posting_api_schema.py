@@ -6,6 +6,8 @@ from ..database.db_enums import (
     DeliveryMethodType,
     SupplyDemandType,
     CategoryType,
+    SubcategoryType,
+    BatchUnitsType,
 )
 from ..database.db_datastructs import FullListing
 from ..logic.location import Location
@@ -24,10 +26,12 @@ class PostingApiSchema(Schema):
     title = fields.Str()
     description = fields.Str()
     category = fields.Enum(CategoryType, by_value=True)
-    sub_category = fields.Str()
+    sub_category = fields.Enum(SubcategoryType, by_value=True)
     post_type = fields.Enum(BuyOrSell, by_value=True)
     delivery_method = fields.Enum(DeliveryMethodType, by_value=True)
     demand = fields.Enum(SupplyDemandType, by_value=True)
+    batch_size = fields.Int()
+    batch_unit = fields.Enum(BatchUnitsType, by_value=True)
     expiry_date = fields.Int()
     price = fields.Float()
     delivery_details = fields.Str()
@@ -41,6 +45,8 @@ class PostingApiSchema(Schema):
         "post_type",
         "delivery_method",
         "demand",
+        "batch_size",
+        "batch_unit",
         "expiry_date",
         "price",
         "address",
