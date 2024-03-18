@@ -275,9 +275,8 @@ msgid "username_required_or_already_taken"
 msgstr ""
 
 #: src/mtk_ohtu/templates/register.html:45
-msgid "password_required"msgstr ""
-
-
+msgid "password_required"
+msgstr ""
 
 #: src/mtk_ohtu/templates/product.html:19
 msgid "description"
