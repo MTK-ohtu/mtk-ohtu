@@ -42,6 +42,8 @@
             const mapDiv = document.getElementById('map')
             const addressInput = document.getElementById('address_input')
             const selectAll = document.getElementById('selectAll');
+            const handleButton = document.getElementById('handle_button')
+
 
             //Create feature-type JSON
             const getJson = function (coordinates, name, address) {
@@ -114,15 +116,22 @@
                 }
             })
 
-            const handleButton = document.getElementById('handle_button')
             handleButton.addEventListener('click', function() {
+                var list = in_range_gjson.features.concat(out_range_gjson.features)
                 if (handleButton.classList.contains('pressed')) {
                     handleButton.classList.remove('pressed')
-                    V.moveListFeaturesToGroup(out_range_gjson.features, 'suboptimal')
-
+                    V.moveListFeaturesToGroup(
+                        list.filter(feature => 
+                            feature.properties.can_process == false), 
+                        'optimal'
+                    )
                 } else {
                     handleButton.classList.add('pressed')
-                    V.moveListFeaturesToGroup(out_range_gjson.features, 'optimal')
+                    V.moveListFeaturesToGroup(
+                        list.filter(feature => 
+                            feature.properties.can_process == false), 
+                        'suboptimal'
+                    )
                 }
             })
 

@@ -26,18 +26,18 @@
             <div>
                 <h3>{{ _("fuel_economy") }}</h3>
                 <p>
-                    <label for="fuelType">Fuel:</label>
+                    <label for="fuelType">{{ _("fuel") }}</label>
                     <select id="fuelType" name="fuelType">
-                        <option value="diesel">Diesel</option>
-                        <option value="petrol">Petrol</option>
-                        <option value="biodiesel">Biodiesel</option>
-                        <option value="natural_gas">Natural Gas</option>
-                        <option value="bio_gas">Bio Gas</option>
-                        <option value="electricity">Electricity</option>
+                        <option value="diesel">{{ _("diesel") }}</option>
+                        <option value="petrol">{{ _("petrol") }}</option>
+                        <option value="biodiesel">{{ _("bio_diesel") }}</option>
+                        <option value="natural_gas">{{ _("natural_gas") }}</option>
+                        <option value="bio_gas">{{ _("bio_gas") }}</option>
+                        <option value="electricity">{{ _("electricity") }}</option>
                     </select>
                 </p>
                 <p>
-                    <label for="fuel_efficiency">Fuel efficiency:</label>
+                    <label for="fuel_efficiency">{{ _("fuel_efficiency") }}</label>
                     <input type="number" name="fuel_efficiency" step="0.1" min="0" max="200" value={{consumption}}>
                     <span id="unit">l/100 km</span>
                     <input type="hidden" name="listing_id" value="{{ listing.id }}">

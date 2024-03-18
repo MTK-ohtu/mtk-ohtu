@@ -86,11 +86,17 @@ class VisionController {
             if (type == 'l_marker') count.textContent = parseInt(count.textContent)+ ((-1)+2*(value ? 1 : 0))
             if (value) {
                 this.data.map_object[feature].addTo(this.map)
-                if (type == 'l_marker') this.data.element[feature].style.display = 'block'
+                if (type == 'l_marker') {
+                    this.data.element[feature].style.display = 'block'
+                    //runListElementAnimation(this.data.element[feature])
+                }
             }
             else {
                 this.map.removeLayer(this.data.map_object[feature])
-                if (type == 'l_marker') this.data.element[feature].style.display = 'none'
+                if (type == 'l_marker') {
+                    //runListElementAnimation(this.data.element[feature])
+                    this.data.element[feature].style.display = 'none'
+                }
             }
         }
         //=======================================ADD/REMOVE FOCUS

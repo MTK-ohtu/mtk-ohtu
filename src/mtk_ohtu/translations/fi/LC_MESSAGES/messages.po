@@ -6,6 +6,7 @@ msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2024-03-18 14:52+0200\n"
+"POT-Creation-Date: 2024-03-18 16:56+0200\n"
 "PO-Revision-Date: 2024-03-18 11:56+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fi\n"
@@ -133,6 +134,123 @@ msgid "same_as_above"
 msgstr "Sama kuin ylempänä"
 
 #: src/mtk_ohtu/templates/addlogistics.html:282
+#: src/mtk_ohtu/templates/addlogistics.html:9
+msgid "add_logistics_title"
+msgstr "Lisää logistiikkapalvelu"
+
+#: src/mtk_ohtu/templates/addlogistics.html:174
+msgid "add_logistics_body_title"
+msgstr "Lisää logistiikkapalvelu"
+
+#: src/mtk_ohtu/templates/addlogistics.html:178
+msgid "add_logistics_select_service_type"
+msgstr "Palvelun tyyppi"
+
+#: src/mtk_ohtu/templates/addlogistics.html:181
+msgid "private_contractor"
+msgstr "Yksityinen"
+
+#: src/mtk_ohtu/templates/addlogistics.html:183
+msgid "company"
+msgstr "Yritys"
+
+#: src/mtk_ohtu/templates/addlogistics.html:187
+msgid "full_name"
+msgstr "Koko nimi"
+
+#: src/mtk_ohtu/templates/addlogistics.html:192
+msgid "company_name"
+msgstr "Yrityksen nimi"
+
+#: src/mtk_ohtu/templates/addlogistics.html:194
+msgid "business_id"
+msgstr "Y-tunnus"
+
+#: src/mtk_ohtu/templates/addlogistics.html:198
+msgid "add_location"
+msgstr "Lisää toimipiste"
+
+#: src/mtk_ohtu/templates/addlogistics.html:201
+msgid "address"
+msgstr "Katuosoite*"
+
+#: src/mtk_ohtu/templates/addlogistics.html:203
+msgid "postal_code"
+msgstr "Postinumero*"
+
+#: src/mtk_ohtu/templates/addlogistics.html:205
+msgid "city"
+msgstr "Kaupunki*"
+
+#: src/mtk_ohtu/templates/addlogistics.html:209
+msgid "phone_number"
+msgstr "Puhelinnumero"
+
+#: src/mtk_ohtu/templates/addlogistics.html:211
+msgid "email"
+msgstr "Sähköpostiosoite"
+
+#: src/mtk_ohtu/templates/addlogistics.html:215
+#: src/mtk_ohtu/templates/product.html:19
+msgid "description"
+msgstr "Kuvaus"
+
+#: src/mtk_ohtu/templates/addlogistics.html:220
+msgid "how_far_can_you_deliver"
+msgstr "Kuinka pitkälle pystyt kuljettamaan"
+
+#: src/mtk_ohtu/templates/addlogistics.html:223
+msgid "no_limit"
+msgstr "Ei rajoitusta"
+
+#: src/mtk_ohtu/templates/addlogistics.html:225
+#: src/mtk_ohtu/templates/addlogistics.html:271
+msgid "custom_limit"
+msgstr "Mukautettu"
+
+#: src/mtk_ohtu/templates/addlogistics.html:228
+#: src/mtk_ohtu/templates/addlogistics.html:274
+msgid "maximum_distance"
+msgstr "Maksimietäisyys"
+
+#: src/mtk_ohtu/templates/addlogistics.html:229
+#: src/mtk_ohtu/templates/addlogistics.html:275
+msgid "kilometers"
+msgstr "kilometriä"
+
+#: src/mtk_ohtu/templates/addlogistics.html:238
+msgid "select_materials"
+msgstr "Valitse materiaalit joita pystyt kuljettamaan"
+
+#: src/mtk_ohtu/templates/addlogistics.html:245
+msgid "additional_information"
+msgstr "Lisätietoja"
+
+#: src/mtk_ohtu/templates/addlogistics.html:249
+msgid "can_spread"
+msgstr "Voin levittää"
+
+#: src/mtk_ohtu/templates/addlogistics.html:255
+msgid "base_rate"
+msgstr "Pohjamaksu"
+
+#: src/mtk_ohtu/templates/addlogistics.html:257
+msgid "price_per_hour"
+msgstr "Hinta per tunti"
+
+#: src/mtk_ohtu/templates/addlogistics.html:259
+msgid "maximum_capacity"
+msgstr "Maksimikapasiteetti"
+
+#: src/mtk_ohtu/templates/addlogistics.html:266
+msgid "delivery_distance"
+msgstr "Etäisyyden laskenta"
+
+#: src/mtk_ohtu/templates/addlogistics.html:269
+msgid "same_as_above"
+msgstr "Sama kuin ylempänä"
+
+#: src/mtk_ohtu/templates/addlogistics.html:286
 msgid "add_logistics_submit"
 msgstr "Lisää logistiikkapalvelu"
 
@@ -206,6 +324,7 @@ msgstr "Ei lisättyjä toimipaikkoja."
 
 #: src/mtk_ohtu/templates/index.html:4 src/mtk_ohtu/templates/index.html:8
 #: src/mtk_ohtu/templates/layout.html:14
+#: src/mtk_ohtu/templates/layout.html:12
 msgid "title"
 msgstr "MTK-Ohtu"
 
@@ -244,11 +363,19 @@ msgstr "Kirjaudu sisään"
 #: src/mtk_ohtu/templates/product.html:19
 msgid "description"
 msgstr "Kuvaus"
+#: src/mtk_ohtu/templates/layout.html:44
+msgid "footer_contact"
+msgstr "Ota yhteyttä"
+
+#: src/mtk_ohtu/templates/layout.html:45
+msgid "footer_last_updated"
+msgstr "Viimeksi päivitetty"
 
 #: src/mtk_ohtu/templates/product.html:27
 msgid "fuel_economy"
 msgstr "Kulutus"
 
+#: src/mtk_ohtu/templates/product.html:29
 #: src/mtk_ohtu/templates/product.html:66
 msgid "fuel"
 msgstr "Käyttövoima"
@@ -277,3 +404,31 @@ msgstr ""
 #: src/mtk_ohtu/templates/register.html:45
 msgid "password_required"
 msgstr ""
+#: src/mtk_ohtu/templates/product.html:31
+msgid "diesel"
+msgstr "Diesel"
+
+#: src/mtk_ohtu/templates/product.html:32
+msgid "petrol"
+msgstr "Bensiini"
+
+#: src/mtk_ohtu/templates/product.html:33
+msgid "bio_diesel"
+msgstr "Biodiesel"
+
+#: src/mtk_ohtu/templates/product.html:34
+msgid "natural_gas"
+msgstr "Maakaasu"
+
+#: src/mtk_ohtu/templates/product.html:35
+msgid "bio_gas"
+msgstr "Biokaasu"
+
+#: src/mtk_ohtu/templates/product.html:36
+msgid "electricity"
+msgstr "Sähkö"
+
+#: src/mtk_ohtu/templates/product.html:40
+msgid "fuel_efficiency"
+msgstr "Kulutus"
+
