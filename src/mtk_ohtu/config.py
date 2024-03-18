@@ -31,3 +31,6 @@ def setup_db(testing=False):
 DATABASE_POOL = setup_db(testing=IS_TESTING)
 
 SESSION_TYPE = "filesystem"
+
+LANGUAGES = ["fi", "en", "sv", "zh"]
+BABEL_TRANSLATION_DIRECTORIES = "translations"

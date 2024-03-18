@@ -1,0 +1,62 @@
+# Finnish translskations for MTK-Ohtu.
+# This file is distributed under the same license as the MTK-Ohtu project.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2024-03-18 13:50+0200\n"
+"PO-Revision-Date: 2024-03-18 11:56+0200\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fi\n"
+"Language-Team: fi <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.14.0\n"
+
+#: src/mtk_ohtu/templates/layout.html:12
+msgid "title"
+msgstr "MTK-Ohtu"
+
+#: src/mtk_ohtu/templates/layout.html:13
+msgid "title_subtext"
+msgstr "Kiertotalous ja logistiikka"
+
+#: src/mtk_ohtu/templates/layout.html:18
+msgid "home"
+msgstr "Koti"
+
+#: src/mtk_ohtu/templates/layout.html:19
+msgid "listings"
+msgstr "Tuotteet"
+
+#: src/mtk_ohtu/templates/layout.html:20
+msgid "distance"
+msgstr "Etäisyyden laskenta"
+
+#: src/mtk_ohtu/templates/layout.html:25
+msgid "my_logistics"
+msgstr "Omat tiedot"
+
+#: src/mtk_ohtu/templates/layout.html:27
+msgid "add_logistics"
+msgstr "Lisää logistiikkapalvelu"
+
+#: src/mtk_ohtu/templates/layout.html:29
+msgid "logout"
+msgstr "Kirjaudu ulos"
+
+#: src/mtk_ohtu/templates/layout.html:34
+msgid "login"
+msgstr "Kirjaudu sisään"
+
+#: src/mtk_ohtu/templates/layout.html:44
+msgid "footer_contact"
+msgstr "Ota yhteyttä"
+
+#: src/mtk_ohtu/templates/layout.html:45
+msgid "footer_last_updated"
+msgstr "Viimeksi päivitetty"
+
