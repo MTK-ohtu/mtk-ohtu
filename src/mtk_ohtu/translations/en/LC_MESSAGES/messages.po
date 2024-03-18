@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-03-18 14:04+0200\n"
+"POT-Creation-Date: 2024-03-18 14:52+0200\n"
 "PO-Revision-Date: 2024-03-18 14:04+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -17,6 +17,74 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.14.0\n"
+
+#: src/mtk_ohtu/templates/contractor.html:25
+msgid "ml_business_id"
+msgstr "Business ID"
+
+#: src/mtk_ohtu/templates/contractor.html:27
+msgid "ml_private_contractor"
+msgstr "private contractor"
+
+#: src/mtk_ohtu/templates/contractor.html:32
+msgid "ml_add_location_button"
+msgstr "create new location"
+
+#: src/mtk_ohtu/templates/contractor.html:37
+msgid "ml_locations_header"
+msgstr "Locations"
+
+#: src/mtk_ohtu/templates/contractor.html:43
+msgid "ml_contractor_delivery_radius"
+msgstr "Delivery radius"
+
+#: src/mtk_ohtu/templates/contractor.html:43
+msgid "ml_delivery_radius_no_limit"
+msgstr "No limit"
+
+#: src/mtk_ohtu/templates/contractor.html:48
+msgid "ml_contractor_location_remove_location_button"
+msgstr "Remove location"
+
+#: src/mtk_ohtu/templates/contractor.html:52
+msgid "ml_contractor_location_material_types"
+msgstr "Material types you can deliver"
+
+#: src/mtk_ohtu/templates/contractor.html:55
+msgid "ml_material_price"
+msgstr "Price"
+
+#: src/mtk_ohtu/templates/contractor.html:55
+msgid "ml_material_base_rate"
+msgstr "Base rate"
+
+#: src/mtk_ohtu/templates/contractor.html:55
+msgid "ml_material_max_capacity"
+msgstr "Maximum capacity"
+
+#: src/mtk_ohtu/templates/contractor.html:55
+msgid "ml_max_delivery_distance"
+msgstr "Maximum delivery distance"
+
+#: src/mtk_ohtu/templates/contractor.html:55
+msgid "ml_can_process"
+msgstr "Can process"
+
+#: src/mtk_ohtu/templates/contractor.html:55
+msgid "ml_description"
+msgstr "Description"
+
+#: src/mtk_ohtu/templates/contractor.html:59
+msgid "ml_remove_material_type_button"
+msgstr "Delete material type"
+
+#: src/mtk_ohtu/templates/contractor.html:62
+msgid "ml_no_material_types_added_message"
+msgstr "Nothing in here yet. Start by adding some materials."
+
+#: src/mtk_ohtu/templates/contractor.html:67
+msgid "ml_no_locations_added_message"
+msgstr "Nothing in here, yet! Start by adding some delivery locations."
 
 #: src/mtk_ohtu/templates/layout.html:12
 msgid "title"

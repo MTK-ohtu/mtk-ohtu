@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-03-18 13:50+0200\n"
+"POT-Creation-Date: 2024-03-18 14:52+0200\n"
 "PO-Revision-Date: 2024-03-18 11:56+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fi\n"
@@ -15,6 +15,74 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.14.0\n"
+
+#: src/mtk_ohtu/templates/contractor.html:25
+msgid "ml_business_id"
+msgstr "Y-tunnus"
+
+#: src/mtk_ohtu/templates/contractor.html:27
+msgid "ml_private_contractor"
+msgstr "Yksityisyrittäjä"
+
+#: src/mtk_ohtu/templates/contractor.html:32
+msgid "ml_add_location_button"
+msgstr "uusi toimipaikka"
+
+#: src/mtk_ohtu/templates/contractor.html:37
+msgid "ml_locations_header"
+msgstr "Toimipaikat"
+
+#: src/mtk_ohtu/templates/contractor.html:43
+msgid "ml_contractor_delivery_radius"
+msgstr "Toimitussäde"
+
+#: src/mtk_ohtu/templates/contractor.html:43
+msgid "ml_delivery_radius_no_limit"
+msgstr "Ei rajoitusta"
+
+#: src/mtk_ohtu/templates/contractor.html:48
+msgid "ml_contractor_location_remove_location_button"
+msgstr "poista toimipaikka"
+
+#: src/mtk_ohtu/templates/contractor.html:52
+msgid "ml_contractor_location_material_types"
+msgstr "Materiaalityypit"
+
+#: src/mtk_ohtu/templates/contractor.html:55
+msgid "ml_material_price"
+msgstr "Hinta"
+
+#: src/mtk_ohtu/templates/contractor.html:55
+msgid "ml_material_base_rate"
+msgstr "Pohjahinta"
+
+#: src/mtk_ohtu/templates/contractor.html:55
+msgid "ml_material_max_capacity"
+msgstr "Kuljetuskapasiteetti"
+
+#: src/mtk_ohtu/templates/contractor.html:55
+msgid "ml_max_delivery_distance"
+msgstr "Kuljetussäde"
+
+#: src/mtk_ohtu/templates/contractor.html:55
+msgid "ml_can_process"
+msgstr "Levitysmahdollisuus"
+
+#: src/mtk_ohtu/templates/contractor.html:55
+msgid "ml_description"
+msgstr "Kuvaus"
+
+#: src/mtk_ohtu/templates/contractor.html:59
+msgid "ml_remove_material_type_button"
+msgstr "poista"
+
+#: src/mtk_ohtu/templates/contractor.html:62
+msgid "ml_no_material_types_added_message"
+msgstr "Ei lisättyjä materiaalityyppejä."
+
+#: src/mtk_ohtu/templates/contractor.html:67
+msgid "ml_no_locations_added_message"
+msgstr "Ei lisättyjä toimipaikkoja."
 
 #: src/mtk_ohtu/templates/layout.html:12
 msgid "title"
@@ -59,4 +127,3 @@ msgstr "Ota yhteyttä"
 #: src/mtk_ohtu/templates/layout.html:45
 msgid "footer_last_updated"
 msgstr "Viimeksi päivitetty"
-
