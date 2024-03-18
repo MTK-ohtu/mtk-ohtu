@@ -83,6 +83,33 @@ msgstr "Ei lisättyjä materiaalityyppejä."
 #: src/mtk_ohtu/templates/contractor.html:67
 msgid "ml_no_locations_added_message"
 msgstr "Ei lisättyjä toimipaikkoja."
+#: src/mtk_ohtu/templates/addlogistics.html:245
+msgid "additional_information"
+msgstr "Lisätietoja"
+
+#: src/mtk_ohtu/templates/addlogistics.html:255
+msgid "base_rate"
+msgstr "Pohjamaksu"
+
+#: src/mtk_ohtu/templates/addlogistics.html:257
+msgid "price_per_hour"
+msgstr "Hinta per tunti"
+
+#: src/mtk_ohtu/templates/addlogistics.html:259
+msgid "maximum_capacity"
+msgstr "Maksimikapasiteetti"
+
+#: src/mtk_ohtu/templates/addlogistics.html:266
+msgid "delivery_distance"
+msgstr "Etäisyyden laskenta"
+
+#: src/mtk_ohtu/templates/addlogistics.html:269
+msgid "same_as_above"
+msgstr "Sama kuin ylempänä"
+
+#: src/mtk_ohtu/templates/addlogistics.html:286
+msgid "add_logistics_submit"
+msgstr "Lisää logistiikkapalvelu"
 
 #: src/mtk_ohtu/templates/layout.html:12
 msgid "title"
@@ -102,7 +129,7 @@ msgstr "Tuotteet"
 
 #: src/mtk_ohtu/templates/layout.html:20
 msgid "distance"
-msgstr "Etäisyyden laskenta"
+msgstr "Kuljetussäde"
 
 #: src/mtk_ohtu/templates/layout.html:25
 msgid "my_logistics"
@@ -127,3 +154,69 @@ msgstr "Ota yhteyttä"
 #: src/mtk_ohtu/templates/layout.html:45
 msgid "footer_last_updated"
 msgstr "Viimeksi päivitetty"
+
+msgid "add_logistics_title"
+msgstr "Lisää logistiikkapalvelu"
+
+msgid "add_logistics_body_title"
+msgstr "Lisää logistiikkapalvelu"
+
+msgid "add_logistics_select_service_type"
+msgstr "Palvelun tyyppi"
+
+msgid "private_contractor"
+msgstr "Yksityinen"
+
+msgid "company"
+msgstr "Yritys"
+
+msgid "full_name"
+msgstr "Koko nimi"
+
+msgid "company_name"
+msgstr "Yrityksen nimi"
+
+msgid "business_id"
+msgstr "Y-tunnus"
+
+msgid "add_location"
+msgstr "Lisää toimipiste"
+
+msgid "address"
+msgstr "Katuosoite*"
+
+msgid "postal_code"
+msgstr "Postinumero*"
+
+msgid "city"
+msgstr "Kaupunki*"
+
+msgid "phone_number"
+msgstr "Puhelinnumero"
+
+msgid "email"
+msgstr "Sähköpostiosoite"
+
+msgid "description"
+msgstr "Kuvaus"
+
+msgid "how_far_can_you_deliver"
+msgstr "Kuinka pitkälle pystyt kuljettamaan"
+
+msgid "no_limit"
+msgstr "Ei rajoitusta"
+
+msgid "custom_limit"
+msgstr "Mukautettu"
+
+msgid "maximum_distance"
+msgstr "Maksimietäisyys"
+
+msgid "kilometers"
+msgstr "kilometriä"
+
+msgid "select_materials"
+msgstr "Valitse materiaalit joita pystyt kuljettamaan"
+
+msgid "can_spread"
+msgstr "Voin levittää"

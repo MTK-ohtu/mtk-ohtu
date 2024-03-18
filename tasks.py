@@ -76,4 +76,4 @@ def update_translations(ctx):
 
 @task
 def compile_translations(ctx):
-    ctx.run("pybabel compile -d src/mtk_ohtu/translations")
+    ctx.run("pybabel compile -f -d src/mtk_ohtu/translations")
