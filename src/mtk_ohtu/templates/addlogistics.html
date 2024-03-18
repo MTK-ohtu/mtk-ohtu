@@ -228,6 +228,12 @@
                 <label for="radiusType">Maximum distance</label>
                 <input type="text" id="radius" name="radius"> kilometers
             </div>
+            <div class="eco-capabilities">
+                {% for category in eco_categories %}
+                    <input type="checkbox" value="{{ category }}">
+                    <label for="{{ category }}">{{ category }}</label>
+                {% endfor %}
+            </div>
         </div>
         <h3>Select materials you can deliver</h3>
         <div id="materials-container">

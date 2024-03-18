@@ -1,9 +1,9 @@
 import math
-from flask import Blueprint, render_template, request, redirect, url_for, abort, session
+from flask import Blueprint, render_template, request, redirect, url_for, abort, session, flash
 from geojson import Point, Feature, FeatureCollection
 
 from ..database import db_contractors
-from ..database.db_enums import CategoryType, BatchUnitsType
+from ..database.db_enums import CategoryType, BatchUnitsType, EcoCategoryType
 from ..config import DATABASE_POOL
 from ..logic import user as users
 from ..logic import logistics
@@ -16,10 +16,11 @@ contractor_bp = Blueprint("contractor_bp", __name__)
 @contractor_bp.route("/addlogistics", methods=["GET", "POST"])
 def add_logistics():
     if request.method == "GET":
+        eco_categories = [e.value for e in EcoCategoryType]
         material_categories = [e.value for e in CategoryType]
         units = [e.value for e in BatchUnitsType]
         return render_template(
-            "addlogistics.html", material_categories=material_categories, units=units
+            "addlogistics.html", eco_categories=eco_categories, material_categories=material_categories, units=units
         )
 
     if request.method == "POST":
@@ -64,7 +65,6 @@ def add_logistics():
             radius = (
                 request.form.get("radius-" + c) if type == "custom-limit-" + c else -1
             )
-            print(radius)
             unit = request.form.get(c + "-unit")
             can_process = request.form.get(c + "-can_process")
             material_description = request.form.get(c + "-description")
@@ -82,12 +82,8 @@ def add_logistics():
             )
 
         session["contractor_id"] = contractor_id
-        return redirect(
-            url_for(
-                "contractor_bp.confirmation",
-                message="Logistics submitted successfully",
-            )
-        )
+        flash('Logistics submitted succesfully!')
+        return redirect("/contractor")
 
 
 @contractor_bp.route("/confirmation")

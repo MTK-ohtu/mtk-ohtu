@@ -52,6 +52,13 @@ class CategoryType(Enum):
     OTHER_SIDE_STREAMS_NOT_BIOMASS = "Other side streams (not biomass)"
 
 
+class EcoCategoryType(Enum):
+    ELECTRICITY = "electricity"
+    BIOGAS = "biogas"
+    BIODIESEL = "biodiesel"
+    HYDROGEN = "hydrogen"
+
+
 DEFINED_ENUMS = {
     "buying_or_selling": BuyOrSell,
     "delivery_method_type": DeliveryMethodType,
@@ -59,4 +66,5 @@ DEFINED_ENUMS = {
     "batch_units_type": BatchUnitsType,
     "category_type": CategoryType,
     "vehichle_requirement_type": VehicleRequirementType,
+    "eco_category_type": EcoCategoryType
 }

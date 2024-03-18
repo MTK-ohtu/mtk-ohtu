@@ -22,6 +22,7 @@ DO $$ BEGIN
     CREATE TYPE supply_demand_type AS ENUM ('one time', 'recurring', 'annually', 'weekly');
     CREATE TYPE batch_units_type AS ENUM ('tn', 'm3', 'kg', 'l', 'pcs', 'batch');
     CREATE TYPE vehichle_requirement_type AS ENUM ('dry', 'refrigerated', 'tanker', 'flatbed', 'container');
+    CREATE TYPE eco_category_type AS ENUM ('electricity', 'biogas', 'biodiesel', 'hydrogen');
     CREATE TYPE category_type AS ENUM (
     'Dry manure',
     'Sludge manure',
