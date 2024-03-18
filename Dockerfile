@@ -18,4 +18,6 @@ RUN poetry install
 
 RUN echo -e '\nBUILD_DATE="'`TZ="Europe/Helsinki" date`\" >> .env
 
+RUN poetry run inv compile-translations
+
 ENTRYPOINT ["poetry", "run", "invoke", "production-start", "--host", "0.0.0.0"]

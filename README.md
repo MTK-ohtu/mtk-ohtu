@@ -13,11 +13,6 @@ First, clone the project to your computer:
 ```
 git clone git@github.com:MTK-ohtu/mtk-ohtu.git
 ```
-Then install the dependencies and compile the language files:
-```
-poetry install
-poetry run invoke compile-translations
-```
 
 ### Configuration
 
@@ -66,10 +61,11 @@ docker compose up app postgres nominatim --build
 
 #### Installation
 
-(After the steps mentioned in "Setting up")
-1. Set up a PostgreSQL database.
-2. Configure enviroment variables. See: [Configuration](#configuration).
-3. Start the app with the command: `poetry run invoke start`.
+1. Install the dependencies: `poetry install`
+2. Compile the localisation files: `poetry run inv compile-translations`
+3. Set up a PostgreSQL database.
+4. Configure enviroment variables. See: [Configuration](#configuration).
+5. Start the app with the command: `poetry run invoke start`.
 
 ## Translation and localisation
 The project uses [Babel](https://python-babel.github.io/flask-babel/) for translations.
