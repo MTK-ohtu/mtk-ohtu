@@ -26,7 +26,7 @@
             {% if session.contractor_id%}
             <a href="{{ url_for('main.contractor_bp.contractor') }}">{{ _("my_logistics") }}</a>
             {% else %}
-            <a href="{{ url_for('main.contractor_bp.addlogistics') }}">{{ _("add_logistics") }}</a>
+            <a href="{{ url_for('main.contractor_bp.add_logistics') }}">{{ _("add_logistics") }}</a>
             {% endif %}
             <a href="{{ url_for('main.user_bp.logout') }}">{{ _("logout") }}</a>
         </div>
