@@ -298,7 +298,7 @@ def db_get_location_services_by_cargo_type(
                 l.telephone,\
                 l.email,\
                 l.longitude, l.latitude,\
-                c.type,\
+                c.category,\
                 c.price_per_km,\
                 c.base_rate,\
                 c.max_capacity,\
@@ -312,7 +312,7 @@ def db_get_location_services_by_cargo_type(
                     ON l.id=c.contractor_location_id \
                 LEFT JOIN contractors AS con \
                     ON l.contractor_id=con.id \
-                WHERE c.type=%s;",
+                WHERE c.category=%s;",
             (category_type.value,),
         )
         lista = cursor.fetchall()
