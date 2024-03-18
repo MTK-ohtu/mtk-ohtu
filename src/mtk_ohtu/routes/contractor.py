@@ -83,7 +83,7 @@ def add_logistics():
 
         session["contractor_id"] = contractor_id
         flash('Logistics submitted succesfully!')
-        return redirect("/contractor")
+        return redirect(url_for("main.contractor_bp.contractor"))
 
 
 @contractor_bp.route("/confirmation")
@@ -104,7 +104,7 @@ def contractor():
         user_id = users.user_id()
         contractor_info = db_contractors.db_get_contractor(user_id, DATABASE_POOL)
         if not contractor_info:
-            return redirect("/addlogistics")
+            return redirect(url_for("main.contractor_bp.add_logistics"))
 
         locations_and_cargo_capability = logistics.get_locations_and_cargo_capability(
             contractor_info.id
