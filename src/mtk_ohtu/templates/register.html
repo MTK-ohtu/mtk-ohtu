@@ -22,7 +22,7 @@
 								<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>		
 								<div class="mb-3">
 									<label class="mb-2 text-muted" for="email">Email</label>
-									<input id="email" type="text" class="form-control" name="email" required autofocus>
+									<input id="email" type="text" class="form-control" name="email" pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$" minlength="4" maxlength="30" required autofocus>
 									<div class="invalid-feedback">
 										email required or it's already taken.
 									</div>
