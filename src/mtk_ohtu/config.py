@@ -34,3 +34,4 @@ SESSION_TYPE = "filesystem"
 
 LANGUAGES = ["fi", "en", "sv", "zh"]
 BABEL_TRANSLATION_DIRECTORIES = "translations"
+DEFAULT_LANGUAGE = "en"

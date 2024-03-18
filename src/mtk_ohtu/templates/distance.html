@@ -2,7 +2,7 @@
 
 {% block content %}
 <div>
-    <form action="/distance" method="POST">
+    <form action="{{ url_for('main.location_bp.distance') }}" method="POST">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>		
         <p>Address 1: <br><input type="text" name="address1" minlength="1" maxlength="200"></p>
         <p>Address 2: <br><input type="text" name="address2" minlength="1" maxlength="200"></p>
