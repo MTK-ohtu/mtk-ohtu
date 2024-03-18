@@ -17,10 +17,11 @@ var runListElementAnimation = function (element) {
         element.classList.remove('closed')
         element.classList.add('open')
     }
-}
+}   
+
 
 // Create elements to show on the list side ====================================================================
-function createListElement(feature) {
+function createListElement(feature, extraClass) {
     var listElement = document.createElement('button');
     listElement.id = feature.properties.address
     listElement.innerHTML = `
@@ -43,6 +44,9 @@ function createListElement(feature) {
         </div>
         `;
     listElement.classList.add('clickable_list_element');
+    if (typeof extraClass !== 'undefined') {
+        listElement.classList.add(extraClass)
+    }
     var listDiv = document.getElementById('list_div')
     listDiv.appendChild(listElement)
     

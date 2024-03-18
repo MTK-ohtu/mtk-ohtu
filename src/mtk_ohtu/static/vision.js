@@ -10,19 +10,22 @@ class VisionController {
             popup_open: {},
             element_open: {},
             group: {},
+            group_icon: {},
             element: {},
             map_object: {},
             object_type: {},
             bounds: {},
             in_focus: {},
-            visible: {}
+            visible: {},
+            group_visible: {}
         }
         this.proxies = {};
         this.zoomedFeature = null
         this.openFeature = null
         this.focusedRoute = null
         this.send = false
-        this.companyFocus = false
+        this.companyFocus = true
+        this.flyTransition = 'none'
 
         //Bind data subdirectories to corresponding proxies
         for (const key in this.data) {
@@ -59,6 +62,7 @@ class VisionController {
                 runListElementAnimation(this.data.element[feature])
             } else {
                 runListElementAnimation(this.data.element[feature])
+                if (this.focusedRoute == null) this.flyTransition = 'none'
                 this.openFeature = null
                 if (this.zoomedFeature != null) {
                     this.data.element[feature].querySelector('#zoom_button')
@@ -78,6 +82,7 @@ class VisionController {
         if (attribute == 'visible') {
             var count = document.getElementById('company_count')
             var type = this.data.object_type[feature]
+            // Feature was set to be shown AND it wasn't already visible
             if (type == 'l_marker') count.textContent = parseInt(count.textContent)+ ((-1)+2*(value ? 1 : 0))
             if (value) {
                 this.data.map_object[feature].addTo(this.map)
@@ -99,6 +104,23 @@ class VisionController {
             }
             this.fly()
         }
+        //======================================MOVE FEATURE TO GROUP
+        if (attribute == 'group') {
+            var marker = this.data.map_object[feature]
+            marker.setIcon(this.data.group_icon[value])
+            var type = this.data.object_type[feature]
+            if (!this.data.visible[feature] && this.data.group_visible[value]) {
+                this.proxies.visible[feature] = true
+                this.data.in_focus[feature] = true
+            }
+            else if (this.data.visible[feature]) {
+                if (!this.data.group_visible[value]) {
+                    this.proxies.visible[feature] = false
+                    this.data.in_focus[feature] = false    
+                }
+            }
+            this.fly()
+        }
     }
     //New proxy for reporting changes in data
     getProxy(subdata, key) {
@@ -113,19 +135,32 @@ class VisionController {
     
     //=============================================================================== ADD
     addListFeaturesToGroup(features, group_name, icon) {
+        this.data.group_icon[group_name] = icon
+        this.data.group_visible[group_name] = true
         features.forEach(feature => {
             this.addListFeatureToGroup(feature, group_name, icon)
         })
     }
 
+    //Move every feature on given list to given group
+    moveListFeaturesToGroup(list, group_name) {
+        this.send = true
+        var last = list.length -1
+        list.forEach((feature, index) => {
+            if (index == last) this.send = false
+            this.proxies.group[feature.properties.address] = group_name
+        })
+        this.send = false
+    }
+
     //Add list feature with corresponding marker on the map
     addListFeatureToGroup(feature, group_name, icon) {
         const f = feature.properties.address
-        console.log("Added feature: "+f)
+        console.log("Added list-feature: "+f)
         this.data.popup_open[f] = false
         this.data.element_open[f] = false
         this.data.group[f] = group_name
-        this.data.element[f] = createListElement(feature)
+        this.data.element[f] = createListElement(feature, group_name)
         this.setEventListener(this.data.element[f])
         this.data.map_object[f] = createMarker(feature, icon, this.L)
         this.setMarkerClick(this.data.map_object[f], f)
@@ -141,7 +176,10 @@ class VisionController {
 
     addMapFeatureToGroup(feature, group_name, icon) {
         const f = feature.properties.address
-        console.log("Added feature: "+f)
+        console.log("Added map-feature: "+f)
+        if (!this.data.group_visible.hasOwnProperty(group_name)) {
+            this.data.group_visible[group_name] = true
+        }
         this.data.group[f] = group_name
         this.data.map_object[f] = createMarker(feature, icon, this.L)
         const c = feature.geometry.coordinates
@@ -177,17 +215,22 @@ class VisionController {
 
     //============================================================================== TOGGLE
     //List element is being clicked (call from listelement)
-    toggleFeature(feature) {
+    toggleListElement(feature) {
         var is_open = !Boolean(this.data.popup_open[feature])
         this.proxies.popup_open[feature] = is_open
         this.proxies.element_open[feature] = is_open
     }
 
+    toggleMarker(feature) {
+        this.flyTransition = 'none'
+        this.toggleListElement(feature)
+    }
+
     //When zoom button is being pressed (call from listelement#zoom_button)
     toggleZoom(feature) {
+        this.flyTransition = 'fast'
         if (this.zoomedFeature != null) {
             this.zoomedFeature = null
-            this.zoomOutTransition = true
             this.data.element[feature].querySelector('#zoom_button')
             .classList.remove('zoomed_in')
         } else {
@@ -205,15 +248,17 @@ class VisionController {
             .filter(([key, value]) => this.data.group[key] === group_name)
             .map(([key, value]) => key)
         const last = entries.length -1
+        var is_visible = !Boolean(this.data.group_visible[group_name])
+        this.data.group_visible[group_name] = is_visible
         entries.forEach((key, index) => {
-            var is_visible = !Boolean(this.data.visible[key])
             // If group has an open element, it will be closed
-            if (this.data.element_open[key]) this.toggleFeature(key)
+            if (this.data.element_open[key]) this.toggleListElement(key)
             if (index == last) this.send = false
             // Change both visible and in_focus value of the feature
             this.proxies.in_focus[key] = is_visible 
             this.proxies.visible[key] = is_visible
         })
+        this.send = false
     }
 
     //Add/remove focus on visible group. Triggers flying effect when all values updated.
@@ -228,28 +273,27 @@ class VisionController {
             if (index == last) this.send = false
             this.proxies.in_focus[key] = !this.data.in_focus[key]
         })
+        this.send = false
     }
 
-    //Focus on all visible markers
+    //Set focus on all visible l_markers
     addFocusOnVisibleListElements() {
         this.send = true
         const entries = Object.entries(this.data.visible)
             .filter(([key, value]) => this.data.visible[key])
-            .filter(([key, value]) => this.data.object_type[key] == 'l_marker')
+            //.filter(([key, value]) => this.data.object_type[key] == 'l_marker')
             .map(([key, value]) => key)
         const last = entries.length -1;
         entries.forEach((key, index) => {
             if (index == last) this.send = false
             this.proxies.in_focus[key] = true
         })
+        this.send = false
     }
 
+    //Toggle forced focus on companies
     toggleCompanyFocus() {
-        if (this.companyFocus) {
-            this.companyFocus = false
-        } else {
-            this.companyFocus = true
-        }
+        this.companyFocus = !this.companyFocus
         this.fly()
     }
 
@@ -279,33 +323,32 @@ class VisionController {
     //Fly here
     fly() {
         // Don't fly if updates are still coming
-        if (this.send) return
+        if (this.send) {
+            return
+        }
+        var bounds
         // Case when zoomin has been toggled on
-        if (this.zoomedFeature != null) {
-            this.map.fitBounds(this.data.bounds[this.zoomedFeature])
-        } 
-        // Case when route focus is toggled on
+        if (this.zoomedFeature != null) bounds = this.data.bounds[this.zoomedFeature]
+        
         else if (this.focusedRoute !== null && !this.companyFocus) {
             // Case when one list element is open
             if (this.openFeature != null) {
-                this.map.flyToBounds(this.boundsOf([
-                    this.data.bounds[this.focusedRoute], this.data.bounds[this.openFeature]
-                ]))
+                bounds = this.boundsOf([this.data.bounds[this.focusedRoute], this.data.bounds[this.openFeature]])
             }
             //...or no list elements are open
-            else {
-                this.map.flyToBounds(this.data.bounds[this.focusedRoute])
-            }
+            else bounds = this.data.bounds[this.focusedRoute]
         }
+        // If focus is set on visible companies OR if no list element is open
         else if (this.companyFocus || this.openFeature == null){
-            this.map.flyToBounds(this.getInFocusBounds())
+            bounds = this.getInFocusBounds()
         }
         // Case when ending the zoomin feature
         else if (this.openFeature != null) {
-            this.map.flyToBounds(this.data.bounds[this.openFeature].pad(5))
-        }
-        // Otherwise just focus on everything in_focus
-        
+            bounds = this.data.bounds[this.openFeature].pad(5)
+        } 
+        if (this.flyTransition == 'fast') this.map.fitBounds(bounds)
+        else if (this.flyTransition == 'normal') this.map.flyToBounds(bounds)
+        this.flyTransition = 'normal'        
     }
 
     //============================================================================= LISTENERS
@@ -320,14 +363,14 @@ class VisionController {
                 } else {
                     var element = e.target.closest('button')
                 }
-                this.toggleFeature(element.id)
+                this.toggleListElement(element.id)
             }
         })
     }
 
     setMarkerClick(marker, feature) {
         marker.on('click', (e) => {
-            this.toggleFeature(feature);
+            this.toggleMarker(feature);
         });
     }
 }

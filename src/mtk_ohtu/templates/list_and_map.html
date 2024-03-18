@@ -61,8 +61,8 @@
 
             //Contractors and product locations in JSON
             var in_range_gjson = JSON.parse('{{ in_range | tojson | safe }}');
-            console.log(JSON.stringify(in_range_gjson))
             var out_range_gjson = JSON.parse('{{ out_range | tojson | safe }}');
+            console.log(in_range_gjson)
             var product = getJson (
                 ['{{ listing.location.latitude }}','{{ listing.location.longitude }}'],
                 '{{ listing.category.value }}',
@@ -111,6 +111,18 @@
                     setGoalButton.classList.remove('pressed')
                     addressInput.value=clickLat+","+clickLng
                     searchButton.click()
+                }
+            })
+
+            const handleButton = document.getElementById('handle_button')
+            handleButton.addEventListener('click', function() {
+                if (handleButton.classList.contains('pressed')) {
+                    handleButton.classList.remove('pressed')
+                    V.moveListFeaturesToGroup(out_range_gjson.features, 'suboptimal')
+
+                } else {
+                    handleButton.classList.add('pressed')
+                    V.moveListFeaturesToGroup(out_range_gjson.features, 'optimal')
                 }
             })
 

@@ -298,7 +298,7 @@ def db_get_location_services_by_cargo_type(
                 l.telephone,\
                 l.email,\
                 l.longitude, l.latitude,\
-                c.category_type,\
+                c.type,\
                 c.price_per_km,\
                 c.base_rate,\
                 c.max_capacity,\
@@ -316,13 +316,14 @@ def db_get_location_services_by_cargo_type(
             (category_type.value,),
         )
         lista = cursor.fetchall()
-
+        for x in lista:
+            print(x)
         out = [
             LocationService(x[0], x[1], x[2], x[3], x[4], x[5],
                             Location((x[6], x[7])), 
-                            x[7], x[8], x[9], x[10],
+                            x[8].value, x[9], x[10],
                             x[11], x[12], x[13],
-                            x[14], x[15], x[16])
+                            x[14].value, x[15], x[16])
             for x in lista
         ]
     if not out:

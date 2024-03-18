@@ -7,6 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2024-03-18 14:36+0200\n"
 "POT-Creation-Date: 2024-03-18 14:52+0200\n"
 "PO-Revision-Date: 2024-03-18 14:04+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
@@ -224,4 +225,18 @@ msgstr "Select materials you can deliver"
 
 msgid "can_spread"
 msgstr "Can spread"
+
+
+
+#: src/mtk_ohtu/templates/product.html:19
+msgid "description"
+msgstr "Description"
+
+#: src/mtk_ohtu/templates/product.html:27
+msgid "fuel_economy"
+msgstr "Fuel economy"
+
+#: src/mtk_ohtu/templates/product.html:66
+msgid "fuel"
+msgstr "Fuel"
 

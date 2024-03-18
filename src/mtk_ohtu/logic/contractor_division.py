@@ -1,11 +1,12 @@
 import math
 from geojson import Point, Feature, FeatureCollection
-from ..database.db_contractors import db_get_locations_by_cargo_type, db_get_logistics
+from ..database.db_contractors import db_get_location_services_by_cargo_type
 from .logistics_info import get_logistics_providers_by_range
 from ..database.db_enums import CategoryType
 from ..config import DATABASE_POOL
 from .location import Location
 from ..database.db_datastructs import Listing
+from dataclasses import asdict
 
 
 class ContractorDivision:
@@ -108,7 +109,8 @@ class ContractorDivision:
         """
         features = []
         for contractor in contractor_list:
-            properties = {"name": contractor.name, "address": contractor.address}
+            properties = asdict(contractor)
+            del properties['location']
             feature = Feature(
                 geometry=Point(
                     (contractor.location.longitude, contractor.location.latitude)
