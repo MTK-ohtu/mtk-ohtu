@@ -261,7 +261,7 @@ def db_get_locations_by_cargo_type(
                 LEFT JOIN cargo_capabilities AS c \
                     ON l.id=c.contractor_location_id \
                 LEFT JOIN contractors AS con ON l.contractor_id=con.id \
-                WHERE c.type=%s;",
+                WHERE c.category=%s;",
             (category_type.value,),
         )
         lista = cursor.fetchall()

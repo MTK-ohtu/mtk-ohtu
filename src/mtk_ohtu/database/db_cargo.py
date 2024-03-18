@@ -32,7 +32,7 @@ def db_add_cargo_capability(
         cursor = connection.cursor()
         cursor.execute(
             "INSERT INTO cargo_capabilities \
-                (contractor_location_id, type, price_per_km, base_rate, max_capacity, max_distance, unit, can_process, description) \
+                (contractor_location_id, category, price_per_km, base_rate, max_capacity, max_distance, unit, can_process, description) \
                 VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)",
             (
                 cargo_id,

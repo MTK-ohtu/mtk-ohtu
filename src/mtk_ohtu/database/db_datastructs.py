@@ -5,6 +5,7 @@ from mtk_ohtu.database.db_enums import (
     BuyOrSell,
     DeliveryMethodType,
     SupplyDemandType,
+    SubcategoryType,
 )
 from mtk_ohtu.logic.location import Location
 
@@ -83,7 +84,8 @@ class Listing:
 class CargoTypeInfo:
     id: int
     contractor_location_id: int
-    type: CategoryType
+    category: CategoryType
+    subcategory: SubcategoryType
     price_per_km: int
     base_rate: int
     max_capacity: int
