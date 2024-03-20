@@ -94,50 +94,50 @@
 {% endblock %}
 
 {% block content %}
-<h1>Create new location</h1>
+<h1>{{ _("new_location") }}</h1>
 <form class="" action="{{ url_for('main.contractor_location_bp.add') }}" method="POST">
     <div class="form-section">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     <div id="allQuestions">
         <div class="address-fields">
-            <label for="address">Address*</label>
+            <label for="address">{{ _("address") }}*</label>
             <input type="text" id="address" name="address" required>
-            <label for="postcode">Postal code*</label>
+            <label for="postcode">{{ _("postal_code") }}*</label>
             <input type="text" id="postcode" name="postcode" required>
-            <label for="city">City*</label>
+            <label for="city">{{ _("city") }}*</label>
             <input type="text" id="city" name="city" required>
         </div>
         <div class="contact-fields">
-            <label for="telephone">Phone number</label>
+            <label for="telephone">{{ _("phone_number") }}</label>
             <input type="text" id="telephone" name="telephone">
-            <label for="email">Email address</label>
+            <label for="email">{{ _("email") }}</label>
             <input type="text" id="email" name="email">
         </div>
         <div class="description-field">
-            <label for="description">Description</label><br>
-            <textarea id="description" name="description" placeholder="Describe your service"></textarea>
+            <label for="description">{{ _("description") }}</label><br>
+            <textarea id="description" name="description" placeholder="{{ _('description_placeholder') }}"></textarea>
         </div>
     </div>
 
-        <h4>How far are you able to deliver*</h4>
+        <h4>{{ _("how_far_can_you_deliver") }}*</h4>
         <div class="radius-option">
             <input type="radio" name="radiusType" value="no-limit" onclick="toggleRadius()">
-            <label for="no-limit" class="circle-label">No limit</label>
+            <label for="no-limit" class="circle-label">{{ _("no_limit") }}</label>
             <input type="radio" name="radiusType" value="custom-limit" onclick="toggleRadius()">
-            <label for="custom-limit" class="circle-label">Custom limit</label>
+            <label for="custom-limit" class="circle-label">{{ _("custom_limit") }}</label>
         </div>         
         <div id="customDistance" style="display: none;" class="small-text">
-            <label for="radiusType">Maximum distance</label>
-            <input type="text" id="radius" name="radius"> kilometers
+            <label for="radiusType">{{ _("maximum_distance") }}</label>
+            <input type="text" id="radius" name="radius">{{ _("km") }}
         </div>
     </div>
     </div>
     <div class="custom-submit-button-container">
-        <button type="submit" class="custom-submit-button">Create location</button>
+        <button type="submit" class="custom-submit-button">{{ _("create_location") }}</button>
 </form>
 <div class="custom-cancel-button-container">
     <form action="{{ url_for('main.contractor_bp.contractor') }}">
-        <input type="submit" class="custom-cancel-button" value="  Cancel  " />
+        <input type="submit" class="custom-cancel-button" value="  {{ _('cancel') }}  " />
     </form>
 </div>
 
