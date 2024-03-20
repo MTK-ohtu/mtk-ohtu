@@ -1,9 +1,11 @@
 from enum import Enum
 
+def _(str):
+    return str
 
 class BuyOrSell(Enum):
-    BUY = "buy"
-    SELL = "sell"
+    BUY = _("buy")
+    SELL = _("sell")
 
 
 class DeliveryMethodType(Enum):
@@ -20,12 +22,12 @@ class SupplyDemandType(Enum):
 
 
 class BatchUnitsType(Enum):
-    TN = "tn"
-    M3 = "m3"
-    KG = "kg"
-    L = "l"
-    PCS = "pcs"
-    BATCH = "batch"
+    TN = _("tn")
+    M3 = _("m3")
+    KG = _("kg")
+    L = _("l")
+    PCS = _("pcs")
+    BATCH = _("batch")
 
 
 class VehicleRequirementType(Enum):
@@ -37,31 +39,31 @@ class VehicleRequirementType(Enum):
 
 
 class CategoryType(Enum):
-    MANURE = "Manure"
-    GRASS_WASTE_FODDER_AND_GREEN_GROWTHS = "Grass, waste fodder and green growths"
-    BASKET_FODDER = "Basket fodder"
-    PLANT_BASED_BIOMASSES = "Plant-based biomasses"
-    ANIMAL_BASED_BIOMASSES = "Animal-based biomasses"
-    SOIL_AND_GROWING_MEDIA = "Soil and growing media"
-    DIGESTION = "Digestion"
-    WOOD = "Wood"
-    OTHER_SIDE_STREAMS_NOT_BIOMASS = "Other side streams (not biomass)"
-    LOGISTICS_AND_CONTRACTING = 'Logistics and contracting'
+    MANURE = _("Manure")
+    GRASS_WASTE_FODDER_AND_GREEN_GROWTHS = _("Grass, waste fodder and green growths")
+    BASKET_FODDER = _("Basket fodder")
+    PLANT_BASED_BIOMASSES = _("Plant-based biomasses")
+    ANIMAL_BASED_BIOMASSES = _("Animal-based biomasses")
+    SOIL_AND_GROWING_MEDIA = _("Soil and growing media")
+    DIGESTION = _("Digestion")
+    WOOD = _("Wood")
+    OTHER_SIDE_STREAMS_NOT_BIOMASS = _("Other side streams (not biomass)")
+    LOGISTICS_AND_CONTRACTING = _("Logistics and contracting")
 
 class SubcategoryType(Enum):
-    DRY_MANURE = "Dry manure"
-    SLUDGE_MANURE = "Sludge manure"
-    SEPARATED_MANURE = "Separated manure"
-    OTHER_MANURE = "Other manure"
-    FOREST_BIOMASS = "Forest biomass"
-    TREATED_WOOD = "Treated wood"
+    DRY_MANURE = _("Dry manure")
+    SLUDGE_MANURE = _("Sludge manure")
+    SEPARATED_MANURE = _("Separated manure")
+    OTHER_MANURE = _("Other manure")
+    FOREST_BIOMASS = _("Forest biomass")
+    TREATED_WOOD = _("Treated wood")
 
 
 class EcoCategoryType(Enum):
-    ELECTRICITY = "electricity"
-    BIOGAS = "biogas"
-    BIODIESEL = "biodiesel"
-    HYDROGEN = "hydrogen"
+    ELECTRICITY = _("electricity")
+    BIOGAS = _("biogas")
+    BIODIESEL = _("biodiesel")
+    HYDROGEN = _("hydrogen")
 
 
 DEFINED_ENUMS = {

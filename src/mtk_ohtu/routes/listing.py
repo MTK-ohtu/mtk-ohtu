@@ -1,12 +1,12 @@
 import datetime
-
+from flask import Blueprint, render_template, request, redirect, abort
+from flask_babel import _
 import mtk_ohtu.database.db_listings
 from ..database import db_contractors as db
 from ..database import db_cargo as cargo_db
 from ..logic import route_calculator
 from ..logic import session_handler
 from ..logic.route_stats import Emissions
-from flask import Blueprint, render_template, request, redirect, abort
 from ..config import DATABASE_POOL, BUILD_DATE
 from ..logic.location import Location
 from ..database.db_datastructs import Listing
@@ -24,15 +24,15 @@ def listings():
 
     if request.method == "GET":
         for listing in listings:
-            distances[listing.id] = "Submit address to get a distance estimate"
+            distances[listing.id] = _("submit_address_first")
 
     if request.method == "POST":
         user_location = Location(request.form["address"])
         for listing in listings:
             route_to_product = route_calculator.Route(user_location, listing.location)
-            distances[listing.id] = round(
+            distances[listing.id] = str(round(
                 route_to_product.geodesic_distance() / 1000, 1
-            )
+            )) + " " + _("km")
 
         listings = sorted(listings, key=lambda x: distances[x.id])
 

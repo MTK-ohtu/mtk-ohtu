@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-03-20 16:21+0200\n"
+"POT-Creation-Date: 2024-03-20 17:03+0200\n"
 "PO-Revision-Date: 2024-03-18 14:04+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -17,6 +17,122 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.14.0\n"
+
+#: src/mtk_ohtu/database/db_enums.py:7
+msgid "buy"
+msgstr ""
+
+#: src/mtk_ohtu/database/db_enums.py:8
+#, fuzzy
+msgid "sell"
+msgstr "Diesel"
+
+#: src/mtk_ohtu/database/db_enums.py:25
+msgid "tn"
+msgstr ""
+
+#: src/mtk_ohtu/database/db_enums.py:26
+msgid "m3"
+msgstr ""
+
+#: src/mtk_ohtu/database/db_enums.py:27
+msgid "kg"
+msgstr ""
+
+#: src/mtk_ohtu/database/db_enums.py:28
+msgid "l"
+msgstr ""
+
+#: src/mtk_ohtu/database/db_enums.py:29
+msgid "pcs"
+msgstr ""
+
+#: src/mtk_ohtu/database/db_enums.py:30
+msgid "batch"
+msgstr ""
+
+#: src/mtk_ohtu/database/db_enums.py:42
+msgid "Manure"
+msgstr ""
+
+#: src/mtk_ohtu/database/db_enums.py:43
+msgid "Grass, waste fodder and green growths"
+msgstr ""
+
+#: src/mtk_ohtu/database/db_enums.py:44
+msgid "Basket fodder"
+msgstr ""
+
+#: src/mtk_ohtu/database/db_enums.py:45
+msgid "Plant-based biomasses"
+msgstr ""
+
+#: src/mtk_ohtu/database/db_enums.py:46
+msgid "Animal-based biomasses"
+msgstr ""
+
+#: src/mtk_ohtu/database/db_enums.py:47
+msgid "Soil and growing media"
+msgstr ""
+
+#: src/mtk_ohtu/database/db_enums.py:48
+#, fuzzy
+msgid "Digestion"
+msgstr "Description"
+
+#: src/mtk_ohtu/database/db_enums.py:49
+msgid "Wood"
+msgstr ""
+
+#: src/mtk_ohtu/database/db_enums.py:50
+msgid "Other side streams (not biomass)"
+msgstr ""
+
+#: src/mtk_ohtu/database/db_enums.py:51
+msgid "Logistics and contracting"
+msgstr ""
+
+#: src/mtk_ohtu/database/db_enums.py:54
+msgid "Dry manure"
+msgstr ""
+
+#: src/mtk_ohtu/database/db_enums.py:55
+msgid "Sludge manure"
+msgstr ""
+
+#: src/mtk_ohtu/database/db_enums.py:56
+msgid "Separated manure"
+msgstr ""
+
+#: src/mtk_ohtu/database/db_enums.py:57
+msgid "Other manure"
+msgstr ""
+
+#: src/mtk_ohtu/database/db_enums.py:58
+msgid "Forest biomass"
+msgstr ""
+
+#: src/mtk_ohtu/database/db_enums.py:59
+msgid "Treated wood"
+msgstr ""
+
+#: src/mtk_ohtu/database/db_enums.py:63 src/mtk_ohtu/templates/product.html:36
+msgid "electricity"
+msgstr "Electricity"
+
+#: src/mtk_ohtu/database/db_enums.py:64 src/mtk_ohtu/templates/product.html:35
+#, fuzzy
+msgid "biogas"
+msgstr "Bio gas"
+
+#: src/mtk_ohtu/database/db_enums.py:65 src/mtk_ohtu/templates/product.html:33
+#, fuzzy
+msgid "biodiesel"
+msgstr "Bio diesel"
+
+#: src/mtk_ohtu/database/db_enums.py:66
+msgid "hydrogen"
+msgstr ""
 
 #: src/mtk_ohtu/routes/cargo.py:40 src/mtk_ohtu/routes/cargo.py:58
 #: src/mtk_ohtu/routes/contractor_location.py:31
@@ -49,6 +165,14 @@ msgstr "Can spread"
 #, fuzzy
 msgid "location_removed"
 msgstr "Locations"
+
+#: src/mtk_ohtu/routes/listing.py:27
+msgid "submit_address_first"
+msgstr ""
+
+#: src/mtk_ohtu/routes/listing.py:35
+msgid "km"
+msgstr ""
 
 #: src/mtk_ohtu/templates/404.html:4 src/mtk_ohtu/templates/404.html:8
 msgid "page_not_found"
@@ -295,6 +419,10 @@ msgstr ""
 msgid "calculate_distance"
 msgstr "Maximum distance"
 
+#: src/mtk_ohtu/templates/listings.html:23
+msgid "price"
+msgstr ""
+
 #: src/mtk_ohtu/templates/listings.html:25
 msgid "distance"
 msgstr "Distance"
@@ -344,23 +472,9 @@ msgstr "Diesel"
 msgid "petrol"
 msgstr "Petrol"
 
-#: src/mtk_ohtu/templates/product.html:33
-#, fuzzy
-msgid "biodiesel"
-msgstr "Bio diesel"
-
 #: src/mtk_ohtu/templates/product.html:34
 msgid "natural_gas"
 msgstr "Natural gas"
-
-#: src/mtk_ohtu/templates/product.html:35
-#, fuzzy
-msgid "biogas"
-msgstr "Bio gas"
-
-#: src/mtk_ohtu/templates/product.html:36
-msgid "electricity"
-msgstr "Electricity"
 
 #: src/mtk_ohtu/templates/product.html:40
 #, fuzzy

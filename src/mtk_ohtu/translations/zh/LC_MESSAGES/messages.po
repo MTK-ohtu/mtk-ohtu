@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-03-20 16:21+0200\n"
-"PO-Revision-Date: 2024-03-20 16:21+0200\n"
+"POT-Creation-Date: 2024-03-20 17:03+0200\n"
+"PO-Revision-Date: 2024-03-20 17:03+0200\n"
 "Last-Translator: \n"
 "Language-Team: zh <LL@li.org>\n"
 "Language: zh\n"
@@ -18,6 +18,118 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "Generated-By: Babel 2.14.0\n"
 "X-Generator: Poedit 3.0.1\n"
+
+#: src/mtk_ohtu/database/db_enums.py:7
+msgid "buy"
+msgstr "买"
+
+#: src/mtk_ohtu/database/db_enums.py:8
+msgid "sell"
+msgstr "卖"
+
+#: src/mtk_ohtu/database/db_enums.py:25
+msgid "tn"
+msgstr "吨"
+
+#: src/mtk_ohtu/database/db_enums.py:26
+msgid "m3"
+msgstr "m³"
+
+#: src/mtk_ohtu/database/db_enums.py:27
+msgid "kg"
+msgstr "公斤"
+
+#: src/mtk_ohtu/database/db_enums.py:28
+msgid "l"
+msgstr "升"
+
+#: src/mtk_ohtu/database/db_enums.py:29
+msgid "pcs"
+msgstr "件"
+
+#: src/mtk_ohtu/database/db_enums.py:30
+msgid "batch"
+msgstr "批"
+
+#: src/mtk_ohtu/database/db_enums.py:42
+msgid "Manure"
+msgstr "粪便"
+
+#: src/mtk_ohtu/database/db_enums.py:43
+msgid "Grass, waste fodder and green growths"
+msgstr "草、废弃饲料和植物"
+
+#: src/mtk_ohtu/database/db_enums.py:44
+msgid "Basket fodder"
+msgstr "篮子饲料"
+
+#: src/mtk_ohtu/database/db_enums.py:45
+msgid "Plant-based biomasses"
+msgstr "植物生物质"
+
+#: src/mtk_ohtu/database/db_enums.py:46
+msgid "Animal-based biomasses"
+msgstr "动物生物质"
+
+#: src/mtk_ohtu/database/db_enums.py:47
+msgid "Soil and growing media"
+msgstr "土壤和生长介质"
+
+#: src/mtk_ohtu/database/db_enums.py:48
+msgid "Digestion"
+msgstr "发酵"
+
+#: src/mtk_ohtu/database/db_enums.py:49
+msgid "Wood"
+msgstr "木材"
+
+#: src/mtk_ohtu/database/db_enums.py:50
+msgid "Other side streams (not biomass)"
+msgstr "其他副流（非生物质）"
+
+#: src/mtk_ohtu/database/db_enums.py:51
+msgid "Logistics and contracting"
+msgstr "物流和承包商"
+
+#: src/mtk_ohtu/database/db_enums.py:54
+msgid "Dry manure"
+msgstr "干粪"
+
+#: src/mtk_ohtu/database/db_enums.py:55
+msgid "Sludge manure"
+msgstr "污泥粪"
+
+#: src/mtk_ohtu/database/db_enums.py:56
+msgid "Separated manure"
+msgstr "分离的粪便"
+
+#: src/mtk_ohtu/database/db_enums.py:57
+msgid "Other manure"
+msgstr "其他粪便"
+
+#: src/mtk_ohtu/database/db_enums.py:58
+msgid "Forest biomass"
+msgstr "森林生物质"
+
+#: src/mtk_ohtu/database/db_enums.py:59
+msgid "Treated wood"
+msgstr "经处理的木材"
+
+#: src/mtk_ohtu/database/db_enums.py:63 src/mtk_ohtu/templates/product.html:36
+msgid "electricity"
+msgstr "电力"
+
+#: src/mtk_ohtu/database/db_enums.py:64 src/mtk_ohtu/templates/product.html:35
+msgid "biogas"
+msgstr "沼气"
+
+#: src/mtk_ohtu/database/db_enums.py:65 src/mtk_ohtu/templates/product.html:33
+msgid "biodiesel"
+msgstr "生物柴油"
+
+#: src/mtk_ohtu/database/db_enums.py:66
+msgid "hydrogen"
+msgstr "氢"
 
 #: src/mtk_ohtu/routes/cargo.py:40 src/mtk_ohtu/routes/cargo.py:58
 #: src/mtk_ohtu/routes/contractor_location.py:31
@@ -45,6 +157,14 @@ msgstr "保存了更改"
 #: src/mtk_ohtu/routes/contractor_location.py:81
 msgid "location_removed"
 msgstr "删除了地点"
+
+#: src/mtk_ohtu/routes/listing.py:27
+msgid "submit_address_first"
+msgstr "请先输入地址"
+
+#: src/mtk_ohtu/routes/listing.py:35
+msgid "km"
+msgstr "公里"
 
 #: src/mtk_ohtu/templates/404.html:4 src/mtk_ohtu/templates/404.html:8
 msgid "page_not_found"
@@ -277,6 +397,10 @@ msgstr "目标地址"
 msgid "calculate_distance"
 msgstr "计算距离"
 
+#: src/mtk_ohtu/templates/listings.html:23
+msgid "price"
+msgstr "价格"
+
 #: src/mtk_ohtu/templates/listings.html:25
 msgid "distance"
 msgstr "距离"
@@ -326,21 +450,9 @@ msgstr "柴油"
 msgid "petrol"
 msgstr "汽油"
 
-#: src/mtk_ohtu/templates/product.html:33
-msgid "biodiesel"
-msgstr "生物柴油"
-
 #: src/mtk_ohtu/templates/product.html:34
 msgid "natural_gas"
 msgstr "天然气"
-
-#: src/mtk_ohtu/templates/product.html:35
-msgid "biogas"
-msgstr "沼气"
-
-#: src/mtk_ohtu/templates/product.html:36
-msgid "electricity"
-msgstr "电力"
 
 #: src/mtk_ohtu/templates/product.html:40
 msgid "fuel_efficiency"

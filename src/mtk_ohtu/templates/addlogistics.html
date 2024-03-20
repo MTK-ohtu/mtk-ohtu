@@ -237,7 +237,7 @@
             <div class="material-box" onclick="toggleMaterial(this)">
                 <div class="material-title">
                     <input type="checkbox" class="hidden-checkbox" name="materials[]" value="{{ material }}">
-                    <h5>{{ material }}</h5>
+                    <h5>{{ _(material) }}</h5>
                     <button class="show-fields" type="button" data-target="{{ material }}">{{ _("additional_information") }}</button>
                 </div>
 
@@ -256,7 +256,7 @@
                     <input type="text" class="max-capacity" name="{{ material }}-max_capacity">
                     <select id="unitDropdown">
                         {% for unit in units %}
-                            <option value="{{ unit }}" name="{{ material }}-unit">{{ unit }}</option>
+                            <option value="{{ unit }}" name="{{ material }}-unit">{{ _(unit) }}</option>
                         {% endfor %}
                     </select><br>
                     <h4>{{ _("delivery_distance") }}</h4>
