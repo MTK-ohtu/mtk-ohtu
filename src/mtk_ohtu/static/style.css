@@ -8,6 +8,7 @@
     --theme-color_1: #4CAF50;
     --theme-color_2: #3a3a3a;
     --theme-color_3: #068200;
+    --theme-color_4: #ff5500;
     --focus-background-color: #ffffff;
     --non-focus-background-color: #dedede;
     --focus-background-color_2: #f4dddd;
@@ -15,6 +16,7 @@
     /* Theme borders */
     --common-border: var(--theme-color_2) solid 3px;
     --focus-border: var(--theme-color_3) solid 3px;
+    --focus-border_2: var(--theme-color_4) solid 3px;
     /* Theme fonts */
     --theme-font-family_1: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
     --theme-font-family_2: "Consolas", monaco, monospace;
@@ -143,13 +145,36 @@ td {
 
 /*========== CLICKABLE LIST ELEMENTS ===============================*/
 .clickable_list_element {
-    background-color: var(--non-focus-background-color);
     width: 100%;
     height: 68px;
     padding-top: 2% 2% 2% 0;
     margin: 0 0 0.5% 0;
     overflow: hidden;
     border-radius: 20px 0 0 0;
+}
+
+.clickable_list_element.optimal {
+    background-color: var(--non-focus-background-color);
+    border: var(--common-border);
+    transition: background-color 0.5s ease;
+}
+
+.clickable_list_element.optimal.selected {
+    background-color: var(--focus-background-color);
+    border: var(--focus-border);
+    transition: background-color 0.5s ease;
+}
+
+.clickable_list_element.suboptimal {
+    background-color: var(--non-focus-background-color_2);
+    border: var(--common-border);
+    transition: background-color 0.5s ease;
+}
+
+.clickable_list_element.suboptimal.selected {
+    background-color: var(--focus-background-color_2);
+    border: var(--focus-border_2);
+    transition: background-color 0.5s ease;
 }
 
 .clickable_list_element h4 {
@@ -168,11 +193,6 @@ td {
     opacity: 0;
     width: 100%;
     height: 50%;
-}
-
-.clickable_list_element.selected {
-    background-color: var(--focus-background-color);
-    border: var(--focus-border);
 }
 
 .clickable_list_element.vanished {
@@ -232,13 +252,7 @@ td {
     line-height: 115%;
 }
 
-.clickable_list_element.suboptimal {
-    background-color: var(--non-focus-background-color_2);
-}
 
-.clickable_list_element.suboptimal.selected {
-    background-color: var(--focus-background-color_2);
-}
 
 /*========= TOOLBAR ==========================================*/
 .toolbar {

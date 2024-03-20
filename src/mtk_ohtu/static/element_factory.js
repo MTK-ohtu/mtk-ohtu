@@ -52,9 +52,8 @@ var runListElementAnimation = function (element, state) {
     
 }   
 
-
 // Create elements to show on the list side ====================================================================
-function createListElement(feature, extraClass) {
+function createListElement(feature, styleClass) {
     var listElement = document.createElement('button');
     listElement.id = feature.properties.location_id
     listElement.innerHTML = `
@@ -86,8 +85,8 @@ function createListElement(feature, extraClass) {
         </div></div>
         <h4></h4>
         `;
-    if (typeof extraClass !== 'undefined') {
-        listElement.classList.add(extraClass)
+    if (typeof styleClass !== 'undefined') {
+        listElement.classList.add(styleClass)
     }
     var listDiv = document.getElementById('list_div')
     listElement.querySelector('#services').appendChild(createServiceElement(feature))

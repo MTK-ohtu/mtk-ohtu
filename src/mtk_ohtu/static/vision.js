@@ -1,5 +1,11 @@
 import { createListElement, createMarker, runListElementAnimation, addToListElement } from './element_factory.js'
 
+// This unit deals with objects called features. To add new features to vision controller, one needs to call for 
+// 'addFeatureToGroup' (single)or 'addFeaturesToGroup (list of features)'. Features are geoJSON objects.
+// This unit also accepts geoJSON objects called 'FeatureCollection'. One collection has a field 'features'
+// having list of single features as value.
+
+
 class VisionController {
 
     constructor(leaflet, map) {
@@ -7,20 +13,54 @@ class VisionController {
         this.L = leaflet
         this.map = map
         this.data = {
-            popup_open: {},
-            element_open: {},
-            category: {},
-            group: {},
-            group_icon: {},
-            element: {},
-            map_object: {},
-            object_type: {},
-            bounds: {},
-            in_focus: {},
-            visible: {},
-            group_visible: {}
+                                        // Abbreviations:   CL = contractor location id
+                                        //                  CLF = one feature related to one contractor location
+
+            popup_open: {},             // For each CL, remember if corresponding marker's popup is open or not
+                                        // Key: feature.properties.location_id
+            
+            element_open: {},           // -**-, remember if corresponding list element is open or not
+                                        // Key: feature.properties.location_id
+
+            category: {},               // For every category (can process etc.) mark down given value for every CLF
+                                        // Key: JSON.stringify(feature)
+            
+            group: {},                  // For each CL, keep record of it's current groupname ('optimal' etc.)
+                                        // Key: feature.properties.location_id OR route.metadata.timestamp
+                                        // NOTE: group name is used as a style class, so check from style.css that they're the same
+            
+            group_icon: {},             // For each group, remember their icon
+                                        // Key: group name
+            
+            element: {},                // For each CL, remember their corresponding list element (created in element_factory.js)
+                                        // Key: feature.properties.location_id
+            
+            map_object: {},             // For each feature, remember their corresponding leaflet-object. (can be marker, geojson...)
+                                        // Key: feature.properties.location_id OR route.metadata.timestamp
+            
+            object_type: {},            // For every feature, remember their type (just marker, l_marker = marker+list element combo)
+                                        // Key: feature.properties.location_id OR route.metadata.timestamp
+            
+            bounds: {},                 // For every map object, remember their corresponding latLngBounds value on leaflet
+                                        // Key: feature.properties.location_id OR route.metadata.timestamp
+            
+            in_focus: {},               // For every feature, keep record wether their bounds will be considered in calculation of total bounds
+                                        // Key: feature.properties.location_id OR route.metadata.timestamp
+            
+            visible: {},                // For every feature, keep record of their current visibility status
+                                        // Key: feature.properties.location_id OR route.metadata.timestamp
+            
+            group_visible: {},          // For every group, keep record of their current visibility status
+                                        // Key: group name
+            
+            filtered: {},               // For every CL, keep record of how many active filters they are affected by
+                                        // Key: feature.properties.location_id
+            
+            service_home: {}            // For every CLF, remember their CL. This removes the need to use JSON.parse in every query
+                                        // Key: JSON.stringify(feature) 
         }
-        this.proxies = {};
+
+        //These are used in controller logic
         this.zoomedFeature = null
         this.openFeature = null
         this.focusedRoute = null
@@ -28,22 +68,24 @@ class VisionController {
         this.companyFocus = true
         this.flyTransition = 'normal'
 
-        //Bind data subdirectories to corresponding proxies
+        //Bind one proxy to every data subdirectory. There will be one for every subdirectory, but they may not be used.
+        this.proxies = {};
         for (const key in this.data) {
             this.proxies[key] = this.getProxy(this.data[key], key);
         }
 
-        //NOTE: when calling a proxy of 'data' (instead of just 'data') subdirectory, proxy will update value in 'data'
-        //AND notify visionController. This will trigger an effect on GUI. See featured effects below.
+        // NOTE: when calling .proxy instead of .data, proxy will update value in 'data' AND after that,
+        // it will notify visionController. This will trigger an effect on GUI. See featured effects below.
     }
 
-    //=========================================================================================== MASTER
-    //When notified about change, change visuals according to new state
+    //=========================================================================================== VISION CONTROL
+    //When notified about change, change visuals according to the new state
     visionController(note) {
-        console.log("controlMaster === '"+note.key+": '"+note.property+"' -> "+note.value)
+        console.log("visionController === '"+note.key+": '"+note.property+"' -> "+note.value)
         var attribute = note.key
         var id = note.property
         var value = note.value
+
         //=======================================ELEMENT CLOSE/OPEN
         if (attribute == 'element_open') {
             if (value) {
@@ -73,17 +115,28 @@ class VisionController {
             }
             this.fly()
         }
+
         //=======================================POPUP CLOSE/OPEN
         if (attribute == 'popup_open') { 
             var marker = this.data.map_object[id]
             if (value) marker.openPopup()
             else marker.closePopup()
         }
+
+        //=======================================CHECK FILTER VALUE
+        if (attribute == 'filtered') {
+            this.data.element[id].classList.remove(this.data.group[id])
+            if (value <= 0) {
+                this.proxies.group[id] = 'suboptimal'
+            } else {
+                this.proxies.group[id] = 'optimal'
+            }
+        }
+
         //=======================================SET VISIBLE / HIDDEN
         if (attribute == 'visible') {
             var count = document.getElementById('company_count')
             var type = this.data.object_type[id]
-            // Feature was set to be shown AND it wasn't already visible
             if (type == 'l_marker') count.textContent = parseInt(count.textContent)+ ((-1)+2*(value ? 1 : 0))
             if (value) {
                 this.data.map_object[id].addTo(this.map)
@@ -99,9 +152,7 @@ class VisionController {
                     if (this.openFeature == id) {
                         console.log("OpenFeature: "+this.openFeature)
                         this.openFeature = null
-                        //this.proxies.element_open[id] = false
                     }
-                    //this.data.element[id].style.display = 'none'
                     this.proxies.in_focus[id] = false
                     this.data.popup_open[id] = false
                     this.data.element_open[id] = false
@@ -112,6 +163,7 @@ class VisionController {
                 }
             }
         }
+
         //=======================================ADD/REMOVE FOCUS
         if (attribute == 'in_focus') {
             if (this.data.object_type[id] === 'route') {
@@ -123,10 +175,13 @@ class VisionController {
             }
             this.fly()
         }
+
         //======================================MOVE FEATURE TO GROUP
         if (attribute == 'group') {
             var marker = this.data.map_object[id]
             marker.setIcon(this.data.group_icon[value])
+            var element = this.data.element[id]
+            element.classList.add(this.data.group[id])            
             var type = this.data.object_type[id]
             if (!this.data.visible[id] && this.data.group_visible[value]) {
                 this.proxies.visible[id] = true
@@ -159,19 +214,13 @@ class VisionController {
             this.addListFeatureToGroup(feature, group_name, icon)
         })
     }
+    
+    // Features are contractor location related JSON objects. EXPECTED fields in single feature are:
+    //
+    // 'geometry': { 'coordinates': [FLOAT (longitude), FLOAT (latitude)] }}
+    // 'properties': {}, containing named fields:
+    // address, name, location_id, email, telephone, base_rate, price_per_km, max_capacity, unit, can_process
 
-    //Move every feature on given list to given group
-    moveListFeaturesToGroup(list, group_name) {
-        this.send = true
-        var last = list.length -1
-        list.forEach((feature, index) => {
-            if (index == last) this.send = false
-            this.proxies.group[feature.properties.location_id] = group_name
-        })
-        this.send = false
-    }
-
-    //Add list feature with corresponding marker on the map
     addListFeatureToGroup(feature, group_name, icon) {
         this.addListFeatureToCategories(feature)
         const f = feature.properties.location_id
@@ -181,6 +230,7 @@ class VisionController {
         this.data.group[f] = group_name
         if (this.data.element.hasOwnProperty(f)) {
             addToListElement(this.data.element[f], feature)
+            this.data.filtered[f] += 1
         } else {
             this.data.element[f] = createListElement(feature, group_name)
             this.setEventListener(this.data.element[f])
@@ -194,6 +244,7 @@ class VisionController {
             this.data.object_type[f] = 'l_marker'
             this.data.in_focus[f] = true
             this.proxies.visible[f] = true
+            this.data.filtered[f] = 1
         }
     }
 
@@ -237,30 +288,45 @@ class VisionController {
     }
 
     addListFeatureToCategories(feature) {
+        this.data.service_home[JSON.stringify(feature)] = feature.properties.location_id
         Object.entries(feature.properties).forEach(([key,value]) => {
             if (!this.data.category.hasOwnProperty(key)) {
                 this.data.category[key] = {}
             }
-            this.data.category[key][feature.properties.location_id] = value
+            this.data.category[key][JSON.stringify(feature)] = value
         })
     }
     //============================================================================== TOGGLE FILTER
     filterBy(property, value) {
         var list = Object.entries(this.data.category[property])
-        console.log("Filtering '"+property+"': "+list)
         if (typeof(value) === 'boolean') {
             list.filter(([key, val]) => val == false)
-                .filter(([key, val]) => this.data.group[key] == 'optimal')
                 .forEach(([key, val]) => {
-                    this.proxies.visible[key] = !value
+                    this.proxies.filtered[this.data.service_home[key]] -= ((-1)+2*(value ? 1 : 0))
                 })
         }
         if (typeof(value) === 'number') {
-            list.filter(([key, val]) => val == false)
-                .forEach(([key, val]) => {
-                    console.log("Id: "+key+" = "+val+" -> "+!value)
-                    this.proxies.visible[key] = !value
-                })
+            list.forEach(([key, val]) => {
+                this.data.filtered[this.data.service_home[val]] += 1;
+            })
+            // Non positive value means that value*(-1) is LOWER LIMIT (e.g max_capacity)
+            if (value <= 0) {
+                //Choose every feature, that has this property value less or equal
+                list.filter(([key, val]) => val <= -value)
+                    .forEach(([key, val]) => {
+                        // Reduce the home location's filter value for every feature on list
+                        this.data.filtered[this.data.service_home[val]] -= 1;
+                    })
+            }
+            // Positive value means that value is UPPER LIMIT (e.g. base_rate)
+            if (value > 0) {
+                //Choose every feature, that has this property value over
+                list.filter(([key, val]) => val > value)
+                    .forEach(([key, val]) => {
+                        // Reduce the home location's filter value for every feature on list
+                        this.data.filtered[this.data.service_home[val]] -= 1;
+                    })
+            }
         }
     }
     //============================================================================== TOGGLE
