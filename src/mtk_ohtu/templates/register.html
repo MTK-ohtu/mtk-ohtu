@@ -22,7 +22,7 @@
 								<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>		
 								<div class="mb-3">
 									<label class="mb-2 text-muted" for="email">{{ _("email") }}</label>
-									<input id="email" type="text" class="form-control" name="email" required autofocus>
+									<input id="email" type="email" class="form-control" name="email" pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"  required autofocus>
 									<div class="invalid-feedback">
 										{{ _("email_required_or_already_taken") }}
 									</div>
@@ -30,7 +30,7 @@
 
 								<div class="mb-3">
 									<label class="mb-2 text-muted" for="username">{{ _("username") }}</label>
-									<input id="username" type="text" class="form-control" name="username" required autofocus>
+									<input id="username" type="text" class="form-control" name="username" minlength="4" autofocus>
 									<div class="invalid-feedback">
 										{{ _("username_required_or_already_taken") }}
 									</div>
@@ -40,9 +40,9 @@
 									<div class="mb-2 w-100">
 										<label class="text-muted" for="password">Password</label>
 									</div>
-									<input id="password" type="password" class="form-control" name="password" required>
+									<input id="password" type="password" class="form-control" name="password" pattern="(?=.*\W)(?=.*\d)" required>
 								    <div class="invalid-feedback">
-										{{ _("password_required") }}
+										{{ _("password_needs_to_have_one_number_and_one_special_character") }}
 							    	</div>
 								</div>
 
