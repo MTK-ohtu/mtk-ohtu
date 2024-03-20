@@ -40,7 +40,7 @@
 									<div class="mb-2 w-100">
 										<label class="text-muted" for="password">Password</label>
 									</div>
-									<input id="password" type="password" class="form-control" name="password" pattern="(?=.*\W)(?=.*\d)" required>
+									<input id="password" type="password" class="form-control" name="password" pattern="(?=.*\W)(?=.*\d)+$" required>
 								    <div class="invalid-feedback">
 										{{ _("password_needs_to_have_one_number_and_one_special_character") }}
 							    	</div>
