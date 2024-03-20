@@ -82,7 +82,6 @@ def add_logistics():
             )
 
         session["contractor_id"] = contractor_id
-        flash('Logistics submitted succesfully!')
         return redirect(url_for("main.contractor_bp.contractor"))
 
 

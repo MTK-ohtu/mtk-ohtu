@@ -1,4 +1,5 @@
 from flask import Blueprint, redirect, request, abort, flash, url_for
+from flask_babel import _
 from ..logic import logistics
 
 cargo_bp = Blueprint("cargo_bp", __name__)
@@ -36,10 +37,10 @@ def add():
         can_process,
         description,
     ):
-        flash("An error occured. Please try again.")
+        flash(_("error_occurred"))
         return redirect(url_for("main.contractor_bp.contractor"))
 
-    flash("Material type added")
+    flash(_("material_type_added"))
     return redirect(url_for("main.contractor_bp.contractor"))
 
 
@@ -54,8 +55,8 @@ def remove():
         abort(403)
 
     if not logistics.remove_cargo_capability(contractor_id, cargo_id):
-        flash("An error occured. Please try again.")
+        flash(_("error_occurred"))
         return redirect(url_for("main.contractor_bp.contractor"))
 
-    flash("Material type removed")
+    flash(_("material_type_removed"))
     return redirect(url_for("main.contractor_bp.contractor"))

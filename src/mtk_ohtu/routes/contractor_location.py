@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, redirect, request, abort, flash, url_for
+from flask_babel import _
 from ..logic import logistics
 
 
@@ -27,10 +28,10 @@ def add():
         if not logistics.add_contractor_location(
             contractor_id, address, postcode, city, telephone, email, radius, description
         ):
-            flash("An error occured. Please try again.")
+            flash(_("error_occurred"))
             return redirect(url_for("main.contractor_bp.contractor"))
 
-        flash("New location added")
+        flash(_("new_location_added"))
         return redirect(url_for("main.contractor_bp.contractor"))
 
 
@@ -56,10 +57,10 @@ def modify():
     if not logistics.modify_contractor_location(
         location_id, address, postcode, city, telephone, email, radius, description
     ):
-        flash("An error occured. Please try again.")
+        flash(_("error_occurred"))
         return redirect(url_for("main.contractor_bp.contractor"))
 
-    flash("Changes saved")
+    flash(_("changes_saved"))
     return redirect(url_for("main.contractor_bp.contractor"))
 
 
@@ -74,8 +75,8 @@ def remove():
         abort(403)
 
     if not logistics.remove_contractor_location(location_id):
-        flash("An error occured. Please try again.")
+        flash(_("error_occurred"))
         return redirect(url_for("main.contractor_bp.contractor"))
 
-    flash("Location removed")
+    flash(_("location_removed"))
     return redirect(url_for("main.contractor_bp.contractor"))
