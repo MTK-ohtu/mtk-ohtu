@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-03-20 17:03+0200\n"
+"POT-Creation-Date: 2024-03-20 17:09+0200\n"
 "PO-Revision-Date: 2024-03-18 11:56+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fi\n"
@@ -16,119 +16,119 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.14.0\n"
 
-#: src/mtk_ohtu/database/db_enums.py:7
+#: src/mtk_ohtu/database/db_enums.py:8
 msgid "buy"
 msgstr ""
 
-#: src/mtk_ohtu/database/db_enums.py:8
+#: src/mtk_ohtu/database/db_enums.py:9
 #, fuzzy
 msgid "sell"
 msgstr "Diesel"
 
-#: src/mtk_ohtu/database/db_enums.py:25
+#: src/mtk_ohtu/database/db_enums.py:26
 msgid "tn"
 msgstr ""
 
-#: src/mtk_ohtu/database/db_enums.py:26
+#: src/mtk_ohtu/database/db_enums.py:27
 msgid "m3"
 msgstr ""
 
-#: src/mtk_ohtu/database/db_enums.py:27
+#: src/mtk_ohtu/database/db_enums.py:28
 msgid "kg"
 msgstr ""
 
-#: src/mtk_ohtu/database/db_enums.py:28
+#: src/mtk_ohtu/database/db_enums.py:29
 msgid "l"
 msgstr ""
 
-#: src/mtk_ohtu/database/db_enums.py:29
+#: src/mtk_ohtu/database/db_enums.py:30
 msgid "pcs"
 msgstr ""
 
-#: src/mtk_ohtu/database/db_enums.py:30
+#: src/mtk_ohtu/database/db_enums.py:31
 msgid "batch"
 msgstr ""
 
-#: src/mtk_ohtu/database/db_enums.py:42
+#: src/mtk_ohtu/database/db_enums.py:43
 msgid "Manure"
 msgstr ""
 
-#: src/mtk_ohtu/database/db_enums.py:43
+#: src/mtk_ohtu/database/db_enums.py:44
 msgid "Grass, waste fodder and green growths"
 msgstr ""
 
-#: src/mtk_ohtu/database/db_enums.py:44
+#: src/mtk_ohtu/database/db_enums.py:45
 msgid "Basket fodder"
 msgstr ""
 
-#: src/mtk_ohtu/database/db_enums.py:45
+#: src/mtk_ohtu/database/db_enums.py:46
 msgid "Plant-based biomasses"
 msgstr ""
 
-#: src/mtk_ohtu/database/db_enums.py:46
+#: src/mtk_ohtu/database/db_enums.py:47
 msgid "Animal-based biomasses"
 msgstr ""
 
-#: src/mtk_ohtu/database/db_enums.py:47
+#: src/mtk_ohtu/database/db_enums.py:48
 msgid "Soil and growing media"
 msgstr ""
 
-#: src/mtk_ohtu/database/db_enums.py:48
+#: src/mtk_ohtu/database/db_enums.py:49
 #, fuzzy
 msgid "Digestion"
 msgstr "Kuvaus"
 
-#: src/mtk_ohtu/database/db_enums.py:49
+#: src/mtk_ohtu/database/db_enums.py:50
 msgid "Wood"
 msgstr ""
 
-#: src/mtk_ohtu/database/db_enums.py:50
+#: src/mtk_ohtu/database/db_enums.py:51
 msgid "Other side streams (not biomass)"
 msgstr ""
 
-#: src/mtk_ohtu/database/db_enums.py:51
+#: src/mtk_ohtu/database/db_enums.py:52
 msgid "Logistics and contracting"
 msgstr ""
 
-#: src/mtk_ohtu/database/db_enums.py:54
+#: src/mtk_ohtu/database/db_enums.py:55
 msgid "Dry manure"
 msgstr ""
 
-#: src/mtk_ohtu/database/db_enums.py:55
+#: src/mtk_ohtu/database/db_enums.py:56
 msgid "Sludge manure"
 msgstr ""
 
-#: src/mtk_ohtu/database/db_enums.py:56
+#: src/mtk_ohtu/database/db_enums.py:57
 msgid "Separated manure"
 msgstr ""
 
-#: src/mtk_ohtu/database/db_enums.py:57
+#: src/mtk_ohtu/database/db_enums.py:58
 msgid "Other manure"
 msgstr ""
 
-#: src/mtk_ohtu/database/db_enums.py:58
+#: src/mtk_ohtu/database/db_enums.py:59
 msgid "Forest biomass"
 msgstr ""
 
-#: src/mtk_ohtu/database/db_enums.py:59
+#: src/mtk_ohtu/database/db_enums.py:60
 msgid "Treated wood"
 msgstr ""
 
-#: src/mtk_ohtu/database/db_enums.py:63 src/mtk_ohtu/templates/product.html:36
+#: src/mtk_ohtu/database/db_enums.py:64 src/mtk_ohtu/templates/product.html:36
 msgid "electricity"
 msgstr "Sähkö"
 
-#: src/mtk_ohtu/database/db_enums.py:64 src/mtk_ohtu/templates/product.html:35
+#: src/mtk_ohtu/database/db_enums.py:65 src/mtk_ohtu/templates/product.html:35
 #, fuzzy
 msgid "biogas"
 msgstr "Biokaasu"
 
-#: src/mtk_ohtu/database/db_enums.py:65 src/mtk_ohtu/templates/product.html:33
+#: src/mtk_ohtu/database/db_enums.py:66 src/mtk_ohtu/templates/product.html:33
 #, fuzzy
 msgid "biodiesel"
 msgstr "Biodiesel"
 
-#: src/mtk_ohtu/database/db_enums.py:66
+#: src/mtk_ohtu/database/db_enums.py:67
 msgid "hydrogen"
 msgstr ""
 
@@ -275,6 +275,7 @@ msgid "select_materials"
 msgstr "Valitse materiaalit joita pystyt kuljettamaan"
 
 #: src/mtk_ohtu/templates/addlogistics.html:241
+#: src/mtk_ohtu/templates/addlogistics.html:307
 msgid "additional_information"
 msgstr "Lisätietoja"
 
@@ -310,6 +311,10 @@ msgstr ""
 #: src/mtk_ohtu/templates/addlogistics.html:282
 msgid "add_logistics_submit"
 msgstr "Lisää logistiikkapalvelu"
+
+#: src/mtk_ohtu/templates/addlogistics.html:304
+msgid "close"
+msgstr ""
 
 #: src/mtk_ohtu/templates/contractor.html:32
 #, fuzzy

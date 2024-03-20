@@ -301,10 +301,10 @@
 
                 if (additionalFields.style.display === 'none' || additionalFields.style.display === '') {
                     additionalFields.style.display = 'block';
-                    button.innerText = 'Close';
+                    button.innerText = "{{ _('close') }}";
                 } else {
                     additionalFields.style.display = 'none';
-                    button.innerText = 'Additional information';
+                    button.innerText = "{{ _('additional_information') }}";
                 }
             });
         });

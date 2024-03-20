@@ -1,5 +1,6 @@
 from enum import Enum
 
+# Necesarily for gettext & flask-babel to find the strings to translate
 def _(str):
     return str
 

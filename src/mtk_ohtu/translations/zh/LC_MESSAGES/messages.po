@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-03-20 17:03+0200\n"
-"PO-Revision-Date: 2024-03-20 17:03+0200\n"
+"POT-Creation-Date: 2024-03-20 17:09+0200\n"
+"PO-Revision-Date: 2024-03-20 17:10+0200\n"
 "Last-Translator: \n"
 "Language-Team: zh <LL@li.org>\n"
 "Language: zh\n"
@@ -19,115 +19,115 @@ msgstr ""
 "Generated-By: Babel 2.14.0\n"
 "X-Generator: Poedit 3.0.1\n"
 
-#: src/mtk_ohtu/database/db_enums.py:7
+#: src/mtk_ohtu/database/db_enums.py:8
 msgid "buy"
 msgstr "买"
 
-#: src/mtk_ohtu/database/db_enums.py:8
+#: src/mtk_ohtu/database/db_enums.py:9
 msgid "sell"
 msgstr "卖"
 
-#: src/mtk_ohtu/database/db_enums.py:25
+#: src/mtk_ohtu/database/db_enums.py:26
 msgid "tn"
 msgstr "吨"
 
-#: src/mtk_ohtu/database/db_enums.py:26
+#: src/mtk_ohtu/database/db_enums.py:27
 msgid "m3"
 msgstr "m³"
 
-#: src/mtk_ohtu/database/db_enums.py:27
+#: src/mtk_ohtu/database/db_enums.py:28
 msgid "kg"
 msgstr "公斤"
 
-#: src/mtk_ohtu/database/db_enums.py:28
+#: src/mtk_ohtu/database/db_enums.py:29
 msgid "l"
 msgstr "升"
 
-#: src/mtk_ohtu/database/db_enums.py:29
+#: src/mtk_ohtu/database/db_enums.py:30
 msgid "pcs"
 msgstr "件"
 
-#: src/mtk_ohtu/database/db_enums.py:30
+#: src/mtk_ohtu/database/db_enums.py:31
 msgid "batch"
 msgstr "批"
 
-#: src/mtk_ohtu/database/db_enums.py:42
+#: src/mtk_ohtu/database/db_enums.py:43
 msgid "Manure"
 msgstr "粪便"
 
-#: src/mtk_ohtu/database/db_enums.py:43
+#: src/mtk_ohtu/database/db_enums.py:44
 msgid "Grass, waste fodder and green growths"
 msgstr "草、废弃饲料和植物"
 
-#: src/mtk_ohtu/database/db_enums.py:44
+#: src/mtk_ohtu/database/db_enums.py:45
 msgid "Basket fodder"
 msgstr "篮子饲料"
 
-#: src/mtk_ohtu/database/db_enums.py:45
+#: src/mtk_ohtu/database/db_enums.py:46
 msgid "Plant-based biomasses"
 msgstr "植物生物质"
 
-#: src/mtk_ohtu/database/db_enums.py:46
+#: src/mtk_ohtu/database/db_enums.py:47
 msgid "Animal-based biomasses"
 msgstr "动物生物质"
 
-#: src/mtk_ohtu/database/db_enums.py:47
+#: src/mtk_ohtu/database/db_enums.py:48
 msgid "Soil and growing media"
 msgstr "土壤和生长介质"
 
-#: src/mtk_ohtu/database/db_enums.py:48
+#: src/mtk_ohtu/database/db_enums.py:49
 msgid "Digestion"
 msgstr "发酵"
 
-#: src/mtk_ohtu/database/db_enums.py:49
+#: src/mtk_ohtu/database/db_enums.py:50
 msgid "Wood"
 msgstr "木材"
 
-#: src/mtk_ohtu/database/db_enums.py:50
+#: src/mtk_ohtu/database/db_enums.py:51
 msgid "Other side streams (not biomass)"
 msgstr "其他副流（非生物质）"
 
-#: src/mtk_ohtu/database/db_enums.py:51
+#: src/mtk_ohtu/database/db_enums.py:52
 msgid "Logistics and contracting"
 msgstr "物流和承包商"
 
-#: src/mtk_ohtu/database/db_enums.py:54
+#: src/mtk_ohtu/database/db_enums.py:55
 msgid "Dry manure"
 msgstr "干粪"
 
-#: src/mtk_ohtu/database/db_enums.py:55
+#: src/mtk_ohtu/database/db_enums.py:56
 msgid "Sludge manure"
 msgstr "污泥粪"
 
-#: src/mtk_ohtu/database/db_enums.py:56
+#: src/mtk_ohtu/database/db_enums.py:57
 msgid "Separated manure"
 msgstr "分离的粪便"
 
-#: src/mtk_ohtu/database/db_enums.py:57
+#: src/mtk_ohtu/database/db_enums.py:58
 msgid "Other manure"
 msgstr "其他粪便"
 
-#: src/mtk_ohtu/database/db_enums.py:58
+#: src/mtk_ohtu/database/db_enums.py:59
 msgid "Forest biomass"
 msgstr "森林生物质"
 
-#: src/mtk_ohtu/database/db_enums.py:59
+#: src/mtk_ohtu/database/db_enums.py:60
 msgid "Treated wood"
 msgstr "经处理的木材"
 
-#: src/mtk_ohtu/database/db_enums.py:63 src/mtk_ohtu/templates/product.html:36
+#: src/mtk_ohtu/database/db_enums.py:64 src/mtk_ohtu/templates/product.html:36
 msgid "electricity"
 msgstr "电力"
 
-#: src/mtk_ohtu/database/db_enums.py:64 src/mtk_ohtu/templates/product.html:35
+#: src/mtk_ohtu/database/db_enums.py:65 src/mtk_ohtu/templates/product.html:35
 msgid "biogas"
 msgstr "沼气"
 
-#: src/mtk_ohtu/database/db_enums.py:65 src/mtk_ohtu/templates/product.html:33
+#: src/mtk_ohtu/database/db_enums.py:66 src/mtk_ohtu/templates/product.html:33
 msgid "biodiesel"
 msgstr "生物柴油"
 
-#: src/mtk_ohtu/database/db_enums.py:66
+#: src/mtk_ohtu/database/db_enums.py:67
 msgid "hydrogen"
 msgstr "氢"
 
@@ -267,6 +267,7 @@ msgid "select_materials"
 msgstr "选择材料"
 
 #: src/mtk_ohtu/templates/addlogistics.html:241
+#: src/mtk_ohtu/templates/addlogistics.html:307
 msgid "additional_information"
 msgstr "补充资料"
 
@@ -302,6 +303,10 @@ msgstr "添加补充资料"
 #: src/mtk_ohtu/templates/addlogistics.html:282
 msgid "add_logistics_submit"
 msgstr "提交"
+
+#: src/mtk_ohtu/templates/addlogistics.html:304
+msgid "close"
+msgstr "关闭"
 
 #: src/mtk_ohtu/templates/contractor.html:32
 msgid "add_location_button"
