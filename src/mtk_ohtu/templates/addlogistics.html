@@ -209,7 +209,7 @@
         </div>
         <div class="description-field">
             <label for="description">{{ _("description") }}</label><br>
-            <textarea id="description" name="description" placeholder="Describe your service"></textarea>
+            <textarea id="description" name="description" placeholder="{{ _('description_placeholder') }}"></textarea>
         </div>
     </div>
 
@@ -271,7 +271,7 @@
                         <input type="text" id="radius-{{ material }}" name="radius-{{ material }}"> {{ _("kilometers") }}
                     </div>
                     <div class="description-field2">
-                        <textarea class="description" name="{{ material }}-description" placeholder="Describe the delivery of this material" style="width: 250px; height: 150px;"></textarea>
+                        <textarea class="description" name="{{ material }}-description" placeholder="{{ _('material_delivery_description_placeholder') }}" style="width: 250px; height: 150px;"></textarea>
                     </div>
                 </div>
             </div>

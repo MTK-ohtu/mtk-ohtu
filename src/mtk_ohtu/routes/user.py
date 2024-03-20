@@ -14,7 +14,7 @@ def register():
         password = request.form["password"]
         email = request.form["email"]
         if users.register(username, password, email):
-            return redirect(url_for('main.listing_bp.index'))
+            return redirect(url_for('main.misc_bp.index'))
         else:
             return render_template(
                 "register.html", message="Käyttäjätunnus tai sähköposti on jo käytössä"
@@ -29,7 +29,7 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
         if users.login(username, password):
-            return redirect(url_for('main.listing_bp.index'))
+            return redirect(url_for('main.misc_bp.index'))
         else:
             return render_template(
                 "login.html", message="Salasana tai käyttäjätunnus väärin"
@@ -39,4 +39,4 @@ def login():
 @user_bp.route("/logout")
 def logout():
     users.logout()
-    return redirect(url_for('main.listing_bp.index'))
+    return redirect(url_for('main.misc_bp.index'))

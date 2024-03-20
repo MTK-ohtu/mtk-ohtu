@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block head %}
-<title>Kirjautuminen</title>
+<title>{{ _("login") }}</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
 	integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
 {% endblock %}
@@ -14,35 +14,35 @@
 			<div class="col-xxl-4 col-xl-5 col-lg-5 col-md-7 col-sm-9">
 				<div class="card shadow-lg">
 					<div class="card-body p-5">
-						<h1 class="fs-4 card-title fw-bold mb-4">Kirjaudu</h1>
+						<h1 class="fs-4 card-title fw-bold mb-4">{{ _("login") }}</h1>
 						<form method="POST" class="needs-validation" novalidate="" autocomplete="off">
 							<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>		
 							<div class="mb-3">
-								<label class="mb-2 text-muted" for="email">Username</label>
+								<label class="mb-2 text-muted" for="email">{{ _("username") }}</label>
 								<input id="username" type="text" class="form-control" name="username" value=""
 									required autofocus>
 								<div class="invalid-feedback">
-									Syötä käyttäjätunnus
+									{{ _("input_username_error") }}
 								</div>
 							</div>
 
 							<div class="mb-3">
 								<div class="mb-2 w-100">
-									<label class="text-muted" for="password">Password</label>
+									<label class="text-muted" for="password">{{ _("password") }}</label>
 									<a href="forgot.html" class="float-end">
-										Forgot your password?
+										{{ _("forgot_password_question") }}
 									</a>
 								</div>
 								<input id="password" type="password" class="form-control" name="password" required>
 								<div class="invalid-feedback">
-									Syötä salasana
+									{{ _("input_password_error") }}
 								</div>
 							</div>
 
 							<div class="d-flex align-items-center">
 
 								<button type="submit" class="btn btn-primary ms-auto">
-									Login
+									{{ _("login") }}
 								</button>
 							</div>
 						</form>
@@ -53,7 +53,7 @@
 
 					<div class="card-footer py-3 border-0">
 						<div class="text-center">
-							Don't have an account? <a href="{{ url_for('main.user_bp.register') }}" class="text-dark">Register here</a>
+							{{ _("dont_have_account_question") }} <a href="{{ url_for('main.user_bp.register') }}" class="text-dark">{{ _("register_here_button") }}</a>
 						</div>
 					</div>
 				</div>

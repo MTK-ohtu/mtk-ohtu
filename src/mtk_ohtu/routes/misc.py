@@ -20,4 +20,4 @@ def change_language(new_language: str):
 # because there is no route that accepts it and therefore the language parameter is not caught. There needs to be a route to catch it.
 @misc_bp.route("/<path:p>")
 def fallback_errorhandler(p: str):
-    return render_template("404.html")
+    return render_template("404.html"), 404
