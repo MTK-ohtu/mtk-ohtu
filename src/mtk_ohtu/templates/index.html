@@ -1,96 +1,10 @@
 {% extends "layout.html" %}
 
-{% block content %}
-<h1>Welcome to the MTK - OhTU project page</h1>
-<h2>Discover and list sidestreams</h2>
+{% block head %}
+<title>{{ _("title") }}</title>
+{% endblock %}
 
-<p>{{result}}</p>
-<p>
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eleifend arcu urna, ac eleifend massa consequat quis.
-    Sed eget condimentum nisl, sed aliquam elit. Quisque placerat mattis est, eget condimentum risus vestibulum in.
-    Pellentesque nec eros sagittis sem fermentum posuere. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-    Praesent ut ultrices augue. Donec sed velit ac orci hendrerit semper tempus sed ligula. Pellentesque lacus lorem,
-    congue sed nisl eu, feugiat convallis tortor. Fusce faucibus consectetur est non vulputate. In vitae ex vel mi
-    viverra imperdiet. Donec pretium aliquam lacus eu feugiat. Praesent nec est volutpat, lacinia dolor eget, varius
-    tortor.
-</p>
-<p>
-    Integer et est urna. Sed sagittis, orci quis semper auctor, tortor elit ultrices ex, quis gravida est diam sed
-    magna. Nullam id quam nec neque rhoncus pulvinar ut et felis. Integer tempus ultricies urna. Quisque odio risus,
-    condimentum ultricies tristique eu, finibus sed sem. Etiam libero mi, ullamcorper eu lacus eu, tincidunt posuere
-    justo. Fusce sit amet ullamcorper risus, luctus sodales massa. Vestibulum felis dolor, gravida a molestie a, iaculis
-    at lacus. Donec posuere placerat luctus. Phasellus et mi neque. Ut lectus metus, faucibus id nisl ut, ultricies
-    rhoncus odio. Duis eget augue ultricies, venenatis nibh facilisis, sodales quam. Vivamus sodales laoreet venenatis.
-</p>
-<p>
-    Interdum et malesuada fames ac ante ipsum primis in faucibus. Aliquam convallis tortor id ante dignissim commodo.
-    Etiam vitae semper purus. Aliquam congue eros at justo facilisis, quis volutpat mi laoreet. Nam sed fermentum ipsum,
-    sed pellentesque tortor. Praesent vel lacus vel nisi rhoncus consequat id ut lacus. Donec dignissim lorem sed eros
-    feugiat, nec pulvinar est hendrerit. Vestibulum non venenatis magna. Ut eget libero mollis, vestibulum enim sit
-    amet, placerat neque. Cras turpis eros, laoreet nec turpis id, euismod maximus sapien. Morbi malesuada bibendum
-    tortor sit amet venenatis. Donec eget ante tincidunt, ultricies nisl in, bibendum nulla. Pellentesque urna orci,
-    fermentum sit amet condimentum at, lacinia ac turpis. Vestibulum ante ipsum primis in faucibus orci luctus et
-    ultrices posuere cubilia curae; Maecenas eu ligula finibus, egestas est eget, convallis risus.
-</p>
-<p>
-    Aliquam feugiat dui purus, ac eleifend diam finibus vitae. Praesent molestie eget nibh quis tempus. Mauris et mollis
-    mi. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Ut porttitor mauris
-    sapien, eu facilisis justo cursus at. Nulla faucibus ullamcorper est, elementum suscipit ligula pharetra vel. Donec
-    euismod ex aliquam lectus ultricies iaculis. Pellentesque varius pulvinar posuere.
-</p>
-<p>
-    Vestibulum eleifend tempus mi, nec consequat arcu eleifend eu. Fusce faucibus, elit quis iaculis malesuada, massa
-    neque egestas enim, eu ultricies magna augue ac nisl. Praesent bibendum eleifend magna vel interdum. Phasellus lacus
-    orci, consectetur ac lacinia non, aliquet id massa. Quisque ultrices malesuada nisi, vulputate eleifend massa
-    sodales bibendum. Praesent lobortis ullamcorper justo sed rhoncus. Vestibulum pellentesque eu lacus sit amet
-    porttitor. Aliquam ultricies urna a nisl tristique, quis convallis nisi viverra. Vestibulum quis dui eget elit
-    sodales ullamcorper. Donec quis ultricies neque, eu hendrerit mi. Aliquam at velit sit amet magna lobortis
-    fermentum. Nulla iaculis nulla aliquam fermentum ornare. Ut ac justo fermentum, laoreet erat a, finibus ante. Proin
-    aliquam pretium egestas. Phasellus vel mattis ex.
-</p>
-<p>
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eleifend arcu urna, ac eleifend massa consequat quis.
-    Sed eget condimentum nisl, sed aliquam elit. Quisque placerat mattis est, eget condimentum risus vestibulum in.
-    Pellentesque nec eros sagittis sem fermentum posuere. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-    Praesent ut ultrices augue. Donec sed velit ac orci hendrerit semper tempus sed ligula. Pellentesque lacus lorem,
-    congue sed nisl eu, feugiat convallis tortor. Fusce faucibus consectetur est non vulputate. In vitae ex vel mi
-    viverra imperdiet. Donec pretium aliquam lacus eu feugiat. Praesent nec est volutpat, lacinia dolor eget, varius
-    tortor.
-</p>
-<h2>Heading 2</h2>
-<p>
-    Integer et est urna. Sed sagittis, orci quis semper auctor, tortor elit ultrices ex, quis gravida est diam sed
-    magna. Nullam id quam nec neque rhoncus pulvinar ut et felis. Integer tempus ultricies urna. Quisque odio risus,
-    condimentum ultricies tristique eu, finibus sed sem. Etiam libero mi, ullamcorper eu lacus eu, tincidunt posuere
-    justo. Fusce sit amet ullamcorper risus, luctus sodales massa. Vestibulum felis dolor, gravida a molestie a, iaculis
-    at lacus. Donec posuere placerat luctus. Phasellus et mi neque. Ut lectus metus, faucibus id nisl ut, ultricies
-    rhoncus odio. Duis eget augue ultricies, venenatis nibh facilisis, sodales quam. Vivamus sodales laoreet venenatis.
-</p>
-<p>
-    Interdum et malesuada fames ac ante ipsum primis in faucibus. Aliquam convallis tortor id ante dignissim commodo.
-    Etiam vitae semper purus. Aliquam congue eros at justo facilisis, quis volutpat mi laoreet. Nam sed fermentum ipsum,
-    sed pellentesque tortor. Praesent vel lacus vel nisi rhoncus consequat id ut lacus. Donec dignissim lorem sed eros
-    feugiat, nec pulvinar est hendrerit. Vestibulum non venenatis magna. Ut eget libero mollis, vestibulum enim sit
-    amet, placerat neque. Cras turpis eros, laoreet nec turpis id, euismod maximus sapien. Morbi malesuada bibendum
-    tortor sit amet venenatis. Donec eget ante tincidunt, ultricies nisl in, bibendum nulla. Pellentesque urna orci,
-    fermentum sit amet condimentum at, lacinia ac turpis. Vestibulum ante ipsum primis in faucibus orci luctus et
-    ultrices posuere cubilia curae; Maecenas eu ligula finibus, egestas est eget, convallis risus.
-</p>
-<p>
-    Aliquam feugiat dui purus, ac eleifend diam finibus vitae. Praesent molestie eget nibh quis tempus. Mauris et mollis
-    mi. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Ut porttitor mauris
-    sapien, eu facilisis justo cursus at. Nulla faucibus ullamcorper est, elementum suscipit ligula pharetra vel. Donec
-    euismod ex aliquam lectus ultricies iaculis. Pellentesque varius pulvinar posuere.
-</p>
-<p>
-    Vestibulum eleifend tempus mi, nec consequat arcu eleifend eu. Fusce faucibus, elit quis iaculis malesuada, massa
-    neque egestas enim, eu ultricies magna augue ac nisl. Praesent bibendum eleifend magna vel interdum. Phasellus lacus
-    orci, consectetur ac lacinia non, aliquet id massa. Quisque ultrices malesuada nisi, vulputate eleifend massa
-    sodales bibendum. Praesent lobortis ullamcorper justo sed rhoncus. Vestibulum pellentesque eu lacus sit amet
-    porttitor. Aliquam ultricies urna a nisl tristique, quis convallis nisi viverra. Vestibulum quis dui eget elit
-    sodales ullamcorper. Donec quis ultricies neque, eu hendrerit mi. Aliquam at velit sit amet magna lobortis
-    fermentum. Nulla iaculis nulla aliquam fermentum ornare. Ut ac justo fermentum, laoreet erat a, finibus ante. Proin
-    aliquam pretium egestas. Phasellus vel mattis ex.
-</p>
+{% block content %}
+<h1>{{ _("title") }}</h1>
 
 {% endblock %}

@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, request, abort, flash
+from flask import Blueprint, redirect, request, abort, flash, url_for
 from ..logic import logistics
 
 cargo_bp = Blueprint("cargo_bp", __name__)
@@ -37,10 +37,10 @@ def add():
         description,
     ):
         flash("An error occured. Please try again.")
-        return redirect("/contractor")
+        return redirect(url_for("main.contractor_bp.contractor"))
 
     flash("Material type added")
-    return redirect("/contractor")
+    return redirect(url_for("main.contractor_bp.contractor"))
 
 
 @cargo_bp.route("/contractor/cargo/remove", methods=["POST"])
@@ -55,7 +55,7 @@ def remove():
 
     if not logistics.remove_cargo_capability(contractor_id, cargo_id):
         flash("An error occured. Please try again.")
-        return redirect("/contractor")
+        return redirect(url_for("main.contractor_bp.contractor"))
 
     flash("Material type removed")
-    return redirect("/contractor")
+    return redirect(url_for("main.contractor_bp.contractor"))

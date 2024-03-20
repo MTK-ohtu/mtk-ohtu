@@ -1,6 +1,7 @@
 import secrets
 from invoke import task
 from dotenv import load_dotenv
+import os
 
 load_dotenv()
 
@@ -54,3 +55,25 @@ def lint(ctx):
 def mockdata(ctx):
     reset_db(ctx)
     fill_mock(ctx)
+
+def extract_translations(ctx):
+    ctx.run("pybabel extract -F babel.cfg -o messages.pot .")
+
+def remove_temp_translations():
+    os.remove("messages.pot")
+
+@task
+def init_language(ctx, language):
+    extract_translations(ctx)
+    ctx.run(f"pybabel init -i messages.pot -d src/mtk_ohtu/translations -l {language}")
+    remove_temp_translations()
+
+@task
+def update_translations(ctx):
+    extract_translations(ctx)
+    ctx.run("pybabel update -i messages.pot -d src/mtk_ohtu/translations")
+    remove_temp_translations()
+
+@task
+def compile_translations(ctx):
+    ctx.run("pybabel compile -f -d src/mtk_ohtu/translations")

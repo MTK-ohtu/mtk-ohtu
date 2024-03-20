@@ -5,6 +5,7 @@ from mtk_ohtu.database.db_enums import (
     BuyOrSell,
     DeliveryMethodType,
     SupplyDemandType,
+    SubcategoryType,
 )
 from mtk_ohtu.logic.location import Location
 
@@ -12,7 +13,7 @@ from mtk_ohtu.logic.location import Location
 LISTING_NAME_TABLE = {
     "posting_id": "id",
     # None: "user_id"
-    "title": None,
+    "title": "title",
     "category": "category",
     "sub_category": "subcategory",
     "post_type": "listing_type",
@@ -20,14 +21,14 @@ LISTING_NAME_TABLE = {
     # None: "continuous"
     "demand": "supply_demand",
     "expiry_date": "expiration_date",
-    # None: "batch_size"
-    # None: "batch_type"
+    "batch_size": "batch_size",
+    "batch_type": "batch_type",
     # None: "image"
     "price": "price",
     "delivery_details": "delivery_details",
     "address": "address",
     "description": "description",
-    "date_created": None,
+    "date_created": "date_created",
     "location": "location"
     # None: "complies_with_regulations"
 }
@@ -39,11 +40,13 @@ class FullListing:
     posting_id: int
     title: str = None
     category: CategoryType = None
-    sub_category: str = None
+    sub_category: SubcategoryType = None
     post_type: BuyOrSell = None
     delivery_method: DeliveryMethodType = None
     demand: SupplyDemandType = None
     expiry_date: int = None
+    batch_size: int = None
+    batch_type: BatchUnitsType = None
     price: float = None
     delivery_details: str = None
     address: str = None
@@ -83,7 +86,8 @@ class Listing:
 class CargoTypeInfo:
     id: int
     contractor_location_id: int
-    type: CategoryType
+    category: CategoryType
+    subcategory: SubcategoryType
     price_per_km: int
     base_rate: int
     max_capacity: int
@@ -120,3 +124,33 @@ class APIKey:
     id: int
     name: str
     key: str
+
+
+@dataclass
+class LocationService:
+    """
+    Describes one location related service.
+    For now, location can have multiple services
+    for same cargo type (CategoryType).
+    Are used in ContractorDivision to create lists 
+    for frontend.
+    """
+    contractor_id: int
+    contractor_location_id: int
+    name: str
+    address: str
+    telephone: str
+    email: str
+    location: Location
+    type: CategoryType
+    price_per_km: int
+    base_rate: int
+    max_capacity: int
+    max_distance: int
+    delivery_radius: int
+    unit: BatchUnitsType
+    can_process: bool
+    description: str
+
+
+

@@ -9,7 +9,7 @@ def post_test(client, json):
         json=json,
     )
 
-CREATE_JSON={'posting_id': 100, 'entry_type': 'create', 'title': 'esm', 'description': 'kuv', 'category': 'Digestion', 'sub_category': 'idk', 'post_type': 'sell', 'delivery_method': 'pickup', 'demand': 'one time', 'expiry_date': 1712825393, 'price': 200, 'delivery_details': 'tx', 'address': { 'latitude' : 62.02740179999999, 'longitude' : 24.6354997, 'country' : 'Suomi', 'city' : 'Mänttä', 'state' : None, 'streetAddress' : 'Tehtaankatu 20, Mänttä, Suomi', 'postalCode' : None, 'apartment' : None }, 'date_created': 1712825393 }
+CREATE_JSON={'posting_id': 100, 'entry_type': 'create', 'title': 'esm', 'description': 'kuv', 'category': 'Wood', 'sub_category': 'Treated wood', 'post_type': 'sell', 'delivery_method': 'pickup', 'demand': 'one time', 'batch_size': 200, 'batch_type': 'tn', 'expiry_date': 1712825393, 'price': 200, 'delivery_details': 'tx', 'address': { 'latitude' : 62.02740179999999, 'longitude' : 24.6354997, 'country' : 'Suomi', 'city' : 'Mänttä', 'state' : None, 'streetAddress' : 'Tehtaankatu 20, Mänttä, Suomi', 'postalCode' : None, 'apartment' : None }, 'date_created': 1712825393 }
 
 UPDATE_JSON={'posting_id': 1, 'entry_type': 'update', 'price': 1234}
 

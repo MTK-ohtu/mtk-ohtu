@@ -5,6 +5,8 @@ A logistics optimization tool for connecting biomass sidestream sellers, buyers 
 
 To be used in: https://www.kiertoasuomesta.fi/
 
+Staging environment: https://mtk-ohtu-docker-ohtuprojekti-staging.apps.ocp-test-0.k8s.it.helsinki.fi/
+
 ## Setting up
 
 First, clone the project to your computer:
@@ -15,8 +17,6 @@ git clone git@github.com:MTK-ohtu/mtk-ohtu.git
 ### Configuration
 
 To run this app, some enviroment variables need to be set. To do this, find `.env.template` in the project's root folder and rename it to `.env`. The environment variables are default-configured for running with Docker Compose. For running manually, configure the variables inside the file separately.
-
-Regardless of the method of execution, you need to generate a secret key. You can do this with the command: `python3 -c 'import secrets; print(secrets.token_hex())'`. Replace PUT_THE_KEY_HERE in the .env file with the generated secret key.
 
 ### Running with Docker Compose
 
@@ -52,19 +52,36 @@ Running the Nominatim server for the first time may take over half an hour. It i
 docker compose up nominatim
 ```
 
-Later, when running the **whole** application with Docker Compose, specify `--profile nominatim` so that the whole command is:
+Later, when running the **whole** application with Docker Compose, specify the components separately so that the whole command is:
 ```
-docker compose --profile nominatim up --build
+docker compose up app postgres nominatim --build
 ```
 
 ### Running manually
 
 #### Installation
 
-1. Install dependencies with the command: `poetry install`.
-2. Set up a PostgreSQL database.
-3. Configure enviroment variables. See: [Configuration](#configuration).
-4. Start the app with the command: `poetry run invoke start`.
+1. Install the dependencies: `poetry install`
+2. Compile the localisation files: `poetry run inv compile-translations`
+3. Set up a PostgreSQL database.
+4. Configure enviroment variables. See: [Configuration](#configuration).
+5. Start the app with the command: `poetry run invoke start`.
+
+## Translation and localisation
+The project uses [Babel](https://python-babel.github.io/flask-babel/) for translations.
+
+The following commands are to be executed in `poetry shell`.
+
+To translate a new piece of text:
+1. Replace the text (`X`) with `{{ _("X") }}` (in a Jinja2 template) or `_("X")` (in a Python file; use `from flask_babel import _`)
+2. Run `inv update-translations`
+3. Change the `.po` files in [src/mtk_ohtu/translations](./src/mtk_ohtu/translations)
+4. Run `inv compile-translations`
+
+To initialize a new language:
+1. Run `inv init-language --language XXXXX`
+2. Change the `.po` files in [src/mtk_ohtu/translations](./src/mtk_ohtu/translations)
+3. Run `inv compile-translations`
 
 ## Documentation
 
@@ -79,9 +96,6 @@ API documentation: [api.md](./docs/api.md)
 ## Project progress
 
 Product backlog: https://github.com/orgs/MTK-ohtu/projects/7
-
-App: _link here_
-
 
 ## Frameworks & libraries used
 

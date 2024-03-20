@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<form action="/listing/{{ listing.id }}" method="POST">
+<form action="{{ url_for('main.listing_bp.listing', listing_id=listing.id) }}" method="POST">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
     <div class="product_container">
@@ -16,7 +16,7 @@
                 <p>{{listing.address}}</p>
             </div>
             <div>
-                <h3>Description:</h3>
+                <h3>{{_("description") }}</h3>
                 <p class="description">{{listing.description}}</p>
             </div>
         </div>
@@ -24,20 +24,20 @@
 
         <div class="horizontal-container even">
             <div>
-                <h3>Fuel economy</h3>
+                <h3>{{ _("fuel_economy") }}</h3>
                 <p>
-                    <label for="fuelType">Fuel:</label>
+                    <label for="fuelType">{{ _("fuel") }}</label>
                     <select id="fuelType" name="fuelType">
-                        <option value="diesel">Diesel</option>
-                        <option value="petrol">Petrol</option>
-                        <option value="biodiesel">Biodiesel</option>
-                        <option value="natural_gas">Natural Gas</option>
-                        <option value="bio_gas">Bio Gas</option>
-                        <option value="electricity">Electricity</option>
+                        <option value="diesel">{{ _("diesel") }}</option>
+                        <option value="petrol">{{ _("petrol") }}</option>
+                        <option value="biodiesel">{{ _("bio_diesel") }}</option>
+                        <option value="natural_gas">{{ _("natural_gas") }}</option>
+                        <option value="bio_gas">{{ _("bio_gas") }}</option>
+                        <option value="electricity">{{ _("electricity") }}</option>
                     </select>
                 </p>
                 <p>
-                    <label for="fuel_efficiency">Fuel efficiency:</label>
+                    <label for="fuel_efficiency">{{ _("fuel_efficiency") }}</label>
                     <input type="number" name="fuel_efficiency" step="0.1" min="0" max="200" value={{consumption}}>
                     <span id="unit">l/100 km</span>
                     <input type="hidden" name="listing_id" value="{{ listing.id }}">
@@ -63,7 +63,7 @@
                 {% if show_route %}
                 <table>
                     <tr>
-                        <th align="left">Fuel</th>
+                        <th align="left">{{ _("fuel") }}</th>
                         <th align="left">kg CO2</th>
                         {% for emission in emission_comparison %}
                     <tr>
@@ -80,8 +80,9 @@
     <div class="toolbar">
         <div>
             <div class="horizontal-container">
+                <button type="button" id="handle_button" class="handle_button"></button>
                 <!--Number of shown companies-->
-                <button type="button" class="companies_button" id="companies_button">
+                <button type="button" class="companies_button pressed" id="companies_button">
                     <div style="margin-left: 60px">
                         <h1 style="font-size: 300%; color: var(--);" id="company_count">0</h1>
                     </div>
@@ -99,7 +100,11 @@
             <div class="horizontal-container">
                 <div>
                     <div class="horizontal-container even">
-                        <button type="button" class="route_button" id="route_button"></button>
+                        <button type="button" class="route_button" id="route_button">
+                            <div style="margin-left: 60px">
+                                <h1 style="font-size: 300%; color: var(--);" id="route_count"> </h1>
+                            </div>
+                        </button>
                         <h3>{{distance}} km</h3>
                         <h3>{{duration}} h</h3>
                         <h3>{{emissions}} kg CO2</h3>

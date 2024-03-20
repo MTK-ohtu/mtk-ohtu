@@ -4,6 +4,7 @@ from mtk_ohtu.database.db_datastructs import (
     LogisticsContractor,
     LogisticsNode,
     CategoryType,
+    LocationService
 )
 from mtk_ohtu.logic.location import Location
 
@@ -260,13 +261,69 @@ def db_get_locations_by_cargo_type(
                 LEFT JOIN cargo_capabilities AS c \
                     ON l.id=c.contractor_location_id \
                 LEFT JOIN contractors AS con ON l.contractor_id=con.id \
-                WHERE c.type=%s;",
+                WHERE c.category=%s;",
             (category_type.value,),
         )
         lista = cursor.fetchall()
 
         out = [
             LogisticsNode(x[0], x[1], x[2], x[3], Location((x[4], x[5])), x[6])
+            for x in lista
+        ]
+    if not out:
+        return []
+    return out
+
+
+def db_get_location_services_by_cargo_type(
+        category_type: CategoryType, pool: ConnectionPool
+) -> list[LocationService]:
+    """
+    Queries for location related information by given CategoryType.
+    Returns collection (list) containing all information needed in front end.
+    Args:
+        category_type: type of cargo (enum CategoryType)
+        pool: database connection
+    Return: list[LocationService]    
+    """
+    out = []
+    with pool.connection() as connection:
+        cursor = connection.cursor()
+
+        cursor.execute(
+            "SELECT l.contractor_id,\
+                l.id,\
+                con.name,\
+                l.address,\
+                l.telephone,\
+                l.email,\
+                l.longitude, l.latitude,\
+                c.category,\
+                c.price_per_km,\
+                c.base_rate,\
+                c.max_capacity,\
+                c.max_distance,\
+                l.delivery_radius,\
+                c.unit,\
+                c.can_process,\
+                l.description \
+                FROM contractor_locations AS l \
+                LEFT JOIN cargo_capabilities AS c \
+                    ON l.id=c.contractor_location_id \
+                LEFT JOIN contractors AS con \
+                    ON l.contractor_id=con.id \
+                WHERE c.category=%s;",
+            (category_type.value,),
+        )
+        lista = cursor.fetchall()
+        for x in lista:
+            print(x)
+        out = [
+            LocationService(x[0], x[1], x[2], x[3], x[4], x[5],
+                            Location((x[6], x[7])), 
+                            x[8].value, x[9], x[10],
+                            x[11], x[12], x[13],
+                            x[14].value, x[15], x[16])
             for x in lista
         ]
     if not out:

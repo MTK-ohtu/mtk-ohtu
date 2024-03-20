@@ -2,10 +2,10 @@
 
 {% block content %}
 <div>
-    <form action="/listings" method="POST">
+    <form action="{{ url_for('main.listing_bp.listings') }}" method="POST">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>		
         <p>
-            Toimitusosoite: <br>
+            {{ _("destination_address") }}: <br>
             <input type="text" name="address" minlength="1" maxlength="200">
             <input type="submit" value="Calculate distance">
         </p>
@@ -19,7 +19,7 @@
 {% for listing in listings %}
 
 <div class="card">
-    <h2><a href="listing/{{listing.id}}">{{ listing.category.value }}</a></h2>
+    <h2><a href="{{ url_for('main.listing_bp.listing', listing_id=listing.id) }}">{{ listing.category.value }}</a></h2>
     <p>Price: {{ listing.price }} €</p>
     <p>{{ listing.address }}</p>
     <p>Distance: {{ distances[listing.id]}} km</p>

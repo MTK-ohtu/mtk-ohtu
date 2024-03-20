@@ -17,22 +17,22 @@
 				<div class="col-xxl-4 col-xl-5 col-lg-5 col-md-7 col-sm-9">
 					<div class="card shadow-lg">
 						<div class="card-body p-5">
-							<h1 class="fs-4 card-title fw-bold mb-4">Register</h1>
+							<h1 class="fs-4 card-title fw-bold mb-4">{{ _("register") }}</h1>
 							<form method="POST" class="needs-validation" novalidate autocomplete="off">
 								<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>		
 								<div class="mb-3">
-									<label class="mb-2 text-muted" for="email">Email</label>
-									<input id="email" type="text" class="form-control" name="email" pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$" minlength="4" maxlength="30" required autofocus>
+									<label class="mb-2 text-muted" for="email">{{ _("email") }}</label>
+									<input id="email" type="text" class="form-control" name="email" required autofocus>
 									<div class="invalid-feedback">
-										email required or it's already taken.
+										{{ _("email_required_or_already_taken") }}
 									</div>
 								</div>
 
 								<div class="mb-3">
-									<label class="mb-2 text-muted" for="username">Username</label>
+									<label class="mb-2 text-muted" for="username">{{ _("username") }}</label>
 									<input id="username" type="text" class="form-control" name="username" required autofocus>
 									<div class="invalid-feedback">
-										Username required or it's already taken.
+										{{ _("username_required_or_already_taken") }}
 									</div>
 								</div>
 
@@ -42,14 +42,14 @@
 									</div>
 									<input id="password" type="password" class="form-control" name="password" required>
 								    <div class="invalid-feedback">
-								    	Password required
+										{{ _("password_required") }}
 							    	</div>
 								</div>
 
 								<div class="d-flex align-items-center">
 									{{message}}
 									<button type="submit" class="btn btn-primary ms-auto">
-										Register
+										{{ _("register") }}
 								</div>
 							</form>
 						</div>

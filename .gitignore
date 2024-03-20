@@ -9,3 +9,5 @@ flask_session/
 nominatim
 .pytest_cache
 oma_testikoodi.py
+*.pot
+*.mo

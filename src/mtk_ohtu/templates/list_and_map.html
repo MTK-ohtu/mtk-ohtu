@@ -42,6 +42,8 @@
             const mapDiv = document.getElementById('map')
             const addressInput = document.getElementById('address_input')
             const selectAll = document.getElementById('selectAll');
+            const handleButton = document.getElementById('handle_button')
+
 
             //Create feature-type JSON
             const getJson = function (coordinates, name, address) {
@@ -61,8 +63,8 @@
 
             //Contractors and product locations in JSON
             var in_range_gjson = JSON.parse('{{ in_range | tojson | safe }}');
-            console.log(JSON.stringify(in_range_gjson))
             var out_range_gjson = JSON.parse('{{ out_range | tojson | safe }}');
+            console.log(in_range_gjson)
             var product = getJson (
                 ['{{ listing.location.latitude }}','{{ listing.location.longitude }}'],
                 '{{ listing.category.value }}',
@@ -111,6 +113,25 @@
                     setGoalButton.classList.remove('pressed')
                     addressInput.value=clickLat+","+clickLng
                     searchButton.click()
+                }
+            })
+
+            handleButton.addEventListener('click', function() {
+                var list = in_range_gjson.features.concat(out_range_gjson.features)
+                if (handleButton.classList.contains('pressed')) {
+                    handleButton.classList.remove('pressed')
+                    V.moveListFeaturesToGroup(
+                        list.filter(feature => 
+                            feature.properties.can_process == false), 
+                        'optimal'
+                    )
+                } else {
+                    handleButton.classList.add('pressed')
+                    V.moveListFeaturesToGroup(
+                        list.filter(feature => 
+                            feature.properties.can_process == false), 
+                        'suboptimal'
+                    )
                 }
             })
 

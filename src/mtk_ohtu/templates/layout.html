@@ -2,36 +2,39 @@
 <html>
 
 <head>
-    <link rel="stylesheet" type="text/css" href="../static/style.css">
+	<meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
     <meta name="viewport" layout-content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/x-icon" href="{{url_for('static', filename='images/favicon/favicon.ico') }}">
+    {% block head %}{% endblock %}
 </head>
 
 <body>
 
     <div class="layout-header">
-        <h2 class="layout-h2">MTK - OhTu project</h2>
-        <p class="layout-p">Circular economy and logistics</p>
+        <h2 class="layout-h2">{{ _("title") }}</h2>
+        <p class="layout-p">{{ _("title_subtext") }}</p>
     </div>
 
     <div id="layout-navbar">
         <div>
-            <a href="/">Home</a>
-            <a href="/listings">Listings</a>
-            <a href="/distance">Distance</a>
+            <a href="{{ url_for('main.listing_bp.index') }}">{{ _("home") }}</a>
+            <a href="{{ url_for('main.listing_bp.listings') }}">{{ _("listings") }}</a>
+            <a href="{{ url_for('main.location_bp.distance') }}">{{ _("distance") }}</a>
         </div>
         {% if session.user_id %}
         <div class="layout-navbar-right">
             {% if session.contractor_id%}
-            <a href="/contractor">MyLogistics</a>
+            <a href="{{ url_for('main.contractor_bp.contractor') }}">{{ _("my_logistics") }}</a>
             {% else %}
-            <a href="/addlogistics">Add Logistics Service</a>
+            <a href="{{ url_for('main.contractor_bp.add_logistics') }}">{{ _("add_logistics") }}</a>
             {% endif %}
-            <a href="/logout">logout</a>
+            <a href="{{ url_for('main.user_bp.logout') }}">{{ _("logout") }}</a>
         </div>
 
         {% else %}
         <div class="layout-navbar-right">
-            <a href="/login">Login</a>
+            <a href="{{ url_for('main.user_bp.login') }}">{{ _("login") }}</a>
         </div>
         {% endif %}
     </div>
@@ -41,8 +44,8 @@
     </div>
 
     <div class="layout-footer">
-        <p>Contact us: info@example.com</p>
-        <p>Last updated: {{ config.BUILD_DATE }}</p>
+        <p>{{ _("footer_contact") }}: info@example.com</p>
+        <p>{{ _("footer_last_updated") }}: {{ config.BUILD_DATE }}</p>
     </div>
 
     <script>

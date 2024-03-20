@@ -1,357 +1,356 @@
 {% extends "layout.html" %}
 
+{% block head %}
+<title>{{ _("add_logistics_title") }}</title>
+<style>
+    .material-box {
+        position: relative;
+        border: 2px solid #ccc;
+        padding: 20px;
+        margin: 10px;
+        cursor: pointer;
+        width: calc(30%);
+        box-sizing: border-box;
+        float: left;
+        outline: 4px solid transparent;
+    }
+
+    .material-title {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .material-title h5 {
+        margin-right: 10px;
+        font-size: 20px;
+    }
+
+    .material-box.selected {
+        background-color: #eeeeee;
+        outline-color: #4CAF50;
+    }
+
+    .material-box:hover {
+        background-color: #d1d0d0;
+
+    }
+
+    .material-box input[type="checkbox"] {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    #materials-container {
+        border: 3px solid #ccc;
+        padding: 20px;
+        margin-top: 20px;
+        width: 70%;
+        margin: 0 auto;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .service-option,
+    .radius-option {
+        display: flex;
+    }
+
+    .service-option input[type="radio"],
+    .radius-option input[type="radio"],
+    .material-box input[type="radio"] {
+        transform: scale(1.75);
+        margin-right: 10px;
+        margin-bottom: 15px;
+    }
+
+    .service-option label,
+    .radius-option label {
+        margin-right: 20px;
+        font-size: 18px;
+    }
+
+    .form-section {
+        border: 3px solid #ccc;
+        padding: 20px;
+        width: 70%;
+        margin: 0 auto;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .small-text input[type="text"] {
+        width: 20%;
+        padding: 2px;
+        box-sizing: border-box;
+    }
+
+    #allQuestions {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+
+    .address-fields,
+    .contact-fields {
+        width: 30%;
+    }
+
+    .description-field textarea {
+        width: 90%;
+        height: 150px;
+    }
+
+    .description-field {
+        width: 40%;
+    }
+
+    .description-field2 {
+        margin-top: 20px;
+    }
+
+    .address-fields label,
+    .contact-fields label,
+    .description-field label,
+    .description-field2 label {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+
+    .address-fields input,
+    .contact-fields input {
+        width: 90%;
+        margin-bottom: 10px;
+        padding: 8px;
+        box-sizing: border-box;
+    }
+
+    h3 {
+        text-align: center; 
+        margin-bottom: 50px;
+    }
+
+    .custom-submit-button {
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        padding: 15px 40px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 8px;
+    }
+
+    .custom-submit-button:hover {
+        background-color: #45a049; 
+    }
+
+    .custom-submit-button-container {
+        width: 100%;
+        text-align: center;
+        margin-top: 50px;
+        margin-bottom: 50px;
+    }
+
+    .card {
+        font-size: 17px;
+    }
+</style>
+{% endblock %}
+
+
 {% block content %}
+<h3>{{ _("add_logistics_body_title") }}</h3>
+<form class="" method="post" autocomplete="off">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div class="form-section">
+    <h4>{{ _("add_logistics_select_service_type") }}</h4>
+    <div class="service-option">
+        <input type="radio" id="private" name="serviceType" value="private" onclick="toggleQuestions()">
+        <label for="private" class="circle-label">{{ _("private_contractor") }}</label><br>
+        <input type="radio" id="company" name="serviceType" value="company" onclick="toggleQuestions()">
+        <label for="company" class="circle-label">{{ _("company") }}</label>
+    </div>
 
-<!DOCTYPE html>
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width,initial-scale=1">
-	<title>Add Logistics</title>
-    <style>
-        .material-box {
-            position: relative;
-            border: 2px solid #ccc;
-            padding: 20px;
-            margin: 10px;
-            cursor: pointer;
-            width: calc(30%);
-            box-sizing: border-box;
-            float: left;
-            outline: 4px solid transparent;
-        }
+    <div id="privateQuestions" style="display: none;" class="small-text">
+        <label for="fullName">{{ _("full_name") }}</label>
+        <input type="text" id="fullName" name="fullName"><br>
+    </div>
 
-        .material-title {
-            display: flex;
-            align-items: center;
-            flex-direction: column;
-        }
-
-        .material-title h5 {
-            margin-right: 10px;
-            font-size: 20px;
-        }
-
-        .material-box.selected {
-            background-color: #eeeeee;
-            outline-color: #4CAF50;
-        }
-
-        .material-box:hover {
-            background-color: #d1d0d0;
-
-        }
-
-        .material-box input[type="checkbox"] {
-            position: absolute;
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        #materials-container {
-            border: 3px solid #ccc;
-            padding: 20px;
-            margin-top: 20px;
-            width: 70%;
-            margin: 0 auto;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-        }
-
-        .service-option,
-        .radius-option {
-            display: flex;
-        }
-
-        .service-option input[type="radio"],
-        .radius-option input[type="radio"],
-        .material-box input[type="radio"] {
-            transform: scale(1.75);
-            margin-right: 10px;
-            margin-bottom: 15px;
-        }
-
-        .service-option label,
-        .radius-option label {
-            margin-right: 20px;
-            font-size: 18px;
-        }
-
-        .form-section {
-            border: 3px solid #ccc;
-            padding: 20px;
-            width: 70%;
-            margin: 0 auto;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-        }
-
-        .small-text input[type="text"] {
-            width: 20%;
-            padding: 2px;
-            box-sizing: border-box;
-        }
-
-        #allQuestions {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            align-items: flex-start;
-        }
-
-        .address-fields,
-        .contact-fields {
-            width: 30%;
-        }
-
-        .description-field textarea {
-            width: 90%;
-            height: 150px;
-        }
-
-        .description-field {
-            width: 40%;
-        }
-
-        .description-field2 {
-            margin-top: 20px;
-        }
-
-        .address-fields label,
-        .contact-fields label,
-        .description-field label,
-        .description-field2 label {
-            display: block;
-            margin-bottom: 5px;
-        }
-
-
-        .address-fields input,
-        .contact-fields input {
-            width: 90%;
-            margin-bottom: 10px;
-            padding: 8px;
-            box-sizing: border-box;
-        }
-
-        h3 {
-            text-align: center; 
-            margin-bottom: 50px;
-        }
-
-        .custom-submit-button {
-            background-color: #4CAF50;
-            border: none;
-            color: white;
-            padding: 15px 40px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 4px 2px;
-            cursor: pointer;
-            border-radius: 8px;
-        }
-
-        .custom-submit-button:hover {
-            background-color: #45a049; 
-        }
-
-        .custom-submit-button-container {
-            width: 100%;
-            text-align: center;
-            margin-top: 50px;
-            margin-bottom: 50px;
-        }
-
-        .card {
-            font-size: 17px;
-        }
-    </style>
-</head>
-
-<body>
-    <h3>Add Logistics</h3>
-    <form class="" method="post" autocomplete="off">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-        <div class="form-section">
-        <h4>Select service type*</h4>
-        <div class="service-option">
-            <input type="radio" id="private" name="serviceType" value="private" onclick="toggleQuestions()">
-            <label for="private" class="circle-label">Private contractor</label><br>
-            <input type="radio" id="company" name="serviceType" value="company" onclick="toggleQuestions()">
-            <label for="company" class="circle-label">Company</label>
+    <div id="companyQuestions" style="display: none;" class="small-text">
+        <label for="companyName">{{ _("company_name") }}</label>
+        <input type="text" id="companyName" name="companyName"><br>
+        <label for="businessId">{{ _("business_id") }}</label>
+        <input type="text" id="businessId" name="businessId"> <br>
+    </div>
+    <br>
+    <h4>{{ _("add_location") }}</h4>
+    <div id="allQuestions">
+        <div class="address-fields">
+            <label for="address">{{ _("address") }}</label>
+            <input type="text" id="address" name="address" required>
+            <label for="postcode">{{ _("postal_code") }}</label>
+            <input type="text" id="postcode" name="postcode" required>
+            <label for="city">{{ _("city") }}</label>
+            <input type="text" id="city" name="city" required>
         </div>
-
-        <div id="privateQuestions" style="display: none;" class="small-text">
-            <label for="fullName">Your full name*</label>
-            <input type="text" id="fullName" name="fullName"><br>
+        <div class="contact-fields">
+            <label for="telephone">{{ _("phone_number") }}</label>
+            <input type="text" id="telephone" name="telephone">
+            <label for="email">{{ _("email") }}</label>
+            <input type="text" id="email" name="email">
         </div>
-
-        <div id="companyQuestions" style="display: none;" class="small-text">
-            <label for="companyName">Company name*</label>
-            <input type="text" id="companyName" name="companyName"><br>
-            <label for="businessId">Business ID*</label>
-            <input type="text" id="businessId" name="businessId"> <br>
+        <div class="description-field">
+            <label for="description">{{ _("description") }}</label><br>
+            <textarea id="description" name="description" placeholder="Describe your service"></textarea>
         </div>
-        <br>
-        <h4>Add location</h4>
-        <div id="allQuestions">
-            <div class="address-fields">
-                <label for="address">Address*</label>
-                <input type="text" id="address" name="address" required>
-                <label for="postcode">Postal code*</label>
-                <input type="text" id="postcode" name="postcode" required>
-                <label for="city">City*</label>
-                <input type="text" id="city" name="city" required>
-            </div>
-            <div class="contact-fields">
-                <label for="telephone">Phone number</label>
-                <input type="text" id="telephone" name="telephone">
-                <label for="email">Email address</label>
-                <input type="text" id="email" name="email">
-            </div>
-            <div class="description-field">
-                <label for="description">Description</label><br>
-                <textarea id="description" name="description" placeholder="Describe your service"></textarea>
-            </div>
+    </div>
+
+        <h4>{{ _("how_far_can_you_deliver") }}</h4>
+        <div class="radius-option">
+            <input type="radio" name="radiusType" value="no-limit" onclick="toggleRadius()">
+            <label for="no-limit" class="circle-label">{{ _("no_limit") }}</label>
+            <input type="radio" name="radiusType" value="custom-limit" onclick="toggleRadius()">
+            <label for="custom-limit" class="circle-label">{{ _("custom_limit") }}</label>
+        </div>         
+        <div id="customDistance" style="display: none;" class="small-text">
+            <label for="radiusType">{{ _("maximum_distance") }}</label>
+            <input type="text" id="radius" name="radius"> {{ _("kilometers") }}
         </div>
-
-            <h4>How far are you able to deliver*</h4>
-            <div class="radius-option">
-                <input type="radio" name="radiusType" value="no-limit" onclick="toggleRadius()">
-                <label for="no-limit" class="circle-label">No limit</label>
-                <input type="radio" name="radiusType" value="custom-limit" onclick="toggleRadius()">
-                <label for="custom-limit" class="circle-label">Custom limit</label>
-            </div>         
-            <div id="customDistance" style="display: none;" class="small-text">
-                <label for="radiusType">Maximum distance</label>
-                <input type="text" id="radius" name="radius"> kilometers
-            </div>
-        </div>
-        <h3>Select materials you can deliver</h3>
-        <div id="materials-container">
-            {% for material in material_categories %}
-                <div class="material-box" onclick="toggleMaterial(this)">
-                    <div class="material-title">
-                        <input type="checkbox" class="hidden-checkbox" name="materials[]" value="{{ material }}">
-                        <h5>{{ material }}</h5>
-                        <button class="show-fields" type="button" data-target="{{ material }}">Additional information</button>
-                    </div>
-
-                    <div id="fields-{{ material }}" style="display: none" class="card">
-                        <label for="can_process" style="align-self: center;">Can spread</label>
-                        <label class="switch">
-                            <input type="checkbox" name="{{ material }}-can_process">
-                            <span class="slider"></span>
-                        </label><br>
-
-                        <label for="base_rate">Base rate</label>
-                        <input type="text" class="base-rate" name="{{ material }}-base_rate"> €<br>
-                        <label for="price_per_hour">Price per hour</label>
-                        <input type="text" class="price-per-hour" name="{{ material }}-price_per_hour"> €<br>
-                        <label for="max_capacity">Maximum capacity</label>
-                        <input type="text" class="max-capacity" name="{{ material }}-max_capacity">
-                        <select id="unitDropdown">
-                            {% for unit in units %}
-                                <option value="{{ unit }}" name="{{ material }}-unit">{{ unit }}</option>
-                            {% endfor %}
-                        </select><br>
-                        <h4>Delivery distance*</h4>
-                        <div class="radius-option-{{ material }}">
-                            <input type="radio" name="radiusType-{{ material }}" value="no-limit-{{ material }}" checked="checked" onclick="toggleMaterialradius('{{ material }}')">            
-                            <label for="no-limit-{{ material }}" class="circle-label">Same as above</label>
-                            <input type="radio" name="radiusType-{{ material }}" value="custom-limit-{{ material }}" onclick="toggleMaterialradius('{{ material }}')">
-                            <label for="custom-limit-{{ material }}" class="circle-label">Custom limit</label>
-                        </div>       
-                        <div id="customDistance-{{ material }}" style="display: none;">
-                            <label for="radius-{{ material }}">Maximum distance:</label>
-                            <input type="text" id="radius-{{ material }}" name="radius-{{ material }}"> kilometers
-                        </div>
-                        <div class="description-field2">
-                            <textarea class="description" name="{{ material }}-description" placeholder="Describe the delivery of this material" style="width: 250px; height: 150px;"></textarea>
-                        </div>
-                    </div>
-                </div>
+        <div class="eco-capabilities">
+            {% for category in eco_categories %}
+                <input type="checkbox" value="{{ category }}">
+                <label for="{{ category }}">{{ category }}</label>
             {% endfor %}
         </div>
+    </div>
+    <h3>{{ _("select_materials") }}</h3>
+    <div id="materials-container">
+        {% for material in material_categories %}
+            <div class="material-box" onclick="toggleMaterial(this)">
+                <div class="material-title">
+                    <input type="checkbox" class="hidden-checkbox" name="materials[]" value="{{ material }}">
+                    <h5>{{ material }}</h5>
+                    <button class="show-fields" type="button" data-target="{{ material }}">{{ _("additional_information") }}</button>
+                </div>
 
-        <div class="custom-submit-button-container">
-            <button type="submit" class="custom-submit-button">Submit logistics</button>
-        </div>
-    </form>
+                <div id="fields-{{ material }}" style="display: none" class="card">
+                    <label for="can_process" style="align-self: center;">{{ _("can_spread") }}</label>
+                    <label class="switch">
+                        <input type="checkbox" name="{{ material }}-can_process">
+                        <span class="slider"></span>
+                    </label><br>
 
-    <script>
-        function toggleMaterial(box) {
-            var checkbox = box.querySelector('input[type="checkbox"]');
-            checkbox.checked = !checkbox.checked;
-            box.classList.toggle('selected');
-        }
+                    <label for="base_rate">{{ _("base_rate") }}</label>
+                    <input type="text" class="base-rate" name="{{ material }}-base_rate"> €<br>
+                    <label for="price_per_hour">{{ _("price_per_hour") }}</label>
+                    <input type="text" class="price-per-hour" name="{{ material }}-price_per_hour"> €<br>
+                    <label for="max_capacity">{{ _("maximum_capacity") }}</label>
+                    <input type="text" class="max-capacity" name="{{ material }}-max_capacity">
+                    <select id="unitDropdown">
+                        {% for unit in units %}
+                            <option value="{{ unit }}" name="{{ material }}-unit">{{ unit }}</option>
+                        {% endfor %}
+                    </select><br>
+                    <h4>{{ _("delivery_distance") }}</h4>
+                    <div class="radius-option-{{ material }}">
+                        <input type="radio" name="radiusType-{{ material }}" value="no-limit-{{ material }}" checked="checked" onclick="toggleMaterialradius('{{ material }}')">            
+                        <label for="no-limit-{{ material }}" class="circle-label">{{ _("same_as_above") }}</label>
+                        <input type="radio" name="radiusType-{{ material }}" value="custom-limit-{{ material }}" onclick="toggleMaterialradius('{{ material }}')">
+                        <label for="custom-limit-{{ material }}" class="circle-label">{{ _("custom_limit") }}</label>
+                    </div>       
+                    <div id="customDistance-{{ material }}" style="display: none;">
+                        <label for="radius-{{ material }}">{{ _("maximum_distance") }}</label>
+                        <input type="text" id="radius-{{ material }}" name="radius-{{ material }}"> {{ _("kilometers") }}
+                    </div>
+                    <div class="description-field2">
+                        <textarea class="description" name="{{ material }}-description" placeholder="Describe the delivery of this material" style="width: 250px; height: 150px;"></textarea>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 
-        document.addEventListener('DOMContentLoaded', function () {
-            var toggleButtons = document.querySelectorAll('.show-fields');
+    <div class="custom-submit-button-container">
+        <button type="submit" class="custom-submit-button">{{ _("add_logistics_submit") }}</button>
+    </div>
+</form>
 
-            toggleButtons.forEach(function (button) {
-                button.addEventListener('click', function (event) {
-                    event.stopPropagation();
-                    var material = button.getAttribute('data-target');
-                    var additionalFields = document.getElementById('fields-' + material);
+<script>
+    function toggleMaterial(box) {
+        var checkbox = box.querySelector('input[type="checkbox"]');
+        checkbox.checked = !checkbox.checked;
+        box.classList.toggle('selected');
+    }
 
-                    if (additionalFields.style.display === 'none' || additionalFields.style.display === '') {
-                        additionalFields.style.display = 'block';
-                        button.innerText = 'Close';
-                    } else {
-                        additionalFields.style.display = 'none';
-                        button.innerText = 'Additional information';
-                    }
-                });
-            });
-            var cards = document.querySelectorAll('.card');
-            cards.forEach(function (card) {
-                card.addEventListener('click', function (event) {
-                    event.stopPropagation();
-                });
+    document.addEventListener('DOMContentLoaded', function () {
+        var toggleButtons = document.querySelectorAll('.show-fields');
+
+        toggleButtons.forEach(function (button) {
+            button.addEventListener('click', function (event) {
+                event.stopPropagation();
+                var material = button.getAttribute('data-target');
+                var additionalFields = document.getElementById('fields-' + material);
+
+                if (additionalFields.style.display === 'none' || additionalFields.style.display === '') {
+                    additionalFields.style.display = 'block';
+                    button.innerText = 'Close';
+                } else {
+                    additionalFields.style.display = 'none';
+                    button.innerText = 'Additional information';
+                }
             });
         });
+        var cards = document.querySelectorAll('.card');
+        cards.forEach(function (card) {
+            card.addEventListener('click', function (event) {
+                event.stopPropagation();
+            });
+        });
+    });
 
-        function toggleQuestions() {
-            var serviceType = document.querySelector('input[name="serviceType"]:checked').value;
-            var privateQuestions = document.getElementById("privateQuestions");
-            var companyQuestions = document.getElementById("companyQuestions");
+    function toggleQuestions() {
+        var serviceType = document.querySelector('input[name="serviceType"]:checked').value;
+        var privateQuestions = document.getElementById("privateQuestions");
+        var companyQuestions = document.getElementById("companyQuestions");
 
-            if (serviceType === "private") {
-                privateQuestions.style.display = "block";
-                companyQuestions.style.display = "none";
-            } else if (serviceType === "company") {
-                privateQuestions.style.display = "none";
-                companyQuestions.style.display = "block";
-            }
+        if (serviceType === "private") {
+            privateQuestions.style.display = "block";
+            companyQuestions.style.display = "none";
+        } else if (serviceType === "company") {
+            privateQuestions.style.display = "none";
+            companyQuestions.style.display = "block";
         }
+    }
 
-        function toggleMaterialradius(material) {
-            var radiusType = document.querySelector('input[name="radiusType-' + material + '"]:checked').value;
-            var customDistance = document.getElementById("customDistance-" + material);
+    function toggleMaterialradius(material) {
+        var radiusType = document.querySelector('input[name="radiusType-' + material + '"]:checked').value;
+        var customDistance = document.getElementById("customDistance-" + material);
 
-            if (radiusType === "no-limit-" + material) {
-                customDistance.style.display = "none";
-            } else {
-                customDistance.style.display = "block";
-            }
+        if (radiusType === "no-limit-" + material) {
+            customDistance.style.display = "none";
+        } else {
+            customDistance.style.display = "block";
         }
+    }
 
-        function toggleRadius() {
-            var radiusType = document.querySelector('input[name="radiusType"]:checked').value;
-            var customDistance = document.getElementById("customDistance");
+    function toggleRadius() {
+        var radiusType = document.querySelector('input[name="radiusType"]:checked').value;
+        var customDistance = document.getElementById("customDistance");
 
-            if (radiusType === "no-limit") {
-                customDistance.style.display = "none";
-            } else {
-                customDistance.style.display = "block";
-            }
+        if (radiusType === "no-limit") {
+            customDistance.style.display = "none";
+        } else {
+            customDistance.style.display = "block";
         }
-     
-    </script>
-
-</body>
-</html>
+    }
+    
+</script>
 {% endblock %}

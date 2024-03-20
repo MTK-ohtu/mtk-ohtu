@@ -28,7 +28,7 @@
     /* Transitions */
     --theme-color-transition: var(--theme-color_3) 0.3s ease;
     --button-transition-time: 0.2s;
-    --opening-transition-time: 0.3s; 
+    --opening-transition-time: 0.4s; 
 }
 
 body {
@@ -136,6 +136,11 @@ td {
     padding: 0.5% 0.5% 2% 0 ;
 }
 
+.vertical_scrollbox {
+    overflow-x: scroll;
+    
+}
+
 /*========== CLICKABLE LIST ELEMENTS ===============================*/
 .clickable_list_element {
     background-color: var(--non-focus-background-color);
@@ -202,7 +207,7 @@ td {
 .clickable_list_element #info > * {
     font: var(--description-font);
     opacity: 0;
-    transition: opacity 1s ease-in;
+    transition: opacity 0.8s ease-in;
 }
 
 .clickable_list_element.selected #info > * {
@@ -264,6 +269,11 @@ td {
     transition: translate var(--button-transition-time) ease-in-out;
 }
 
+.toolbar button.pressed {
+    filter: invert(100%);
+    border: var(--focus-border)
+}
+
 .toolbar button:hover {
     border: var(--focus-border);
 }
@@ -274,31 +284,23 @@ td {
 }
 
 .companies_button {
-    max-height: 65px;
     min-width: 120px;
+    max-height: 65px;
     display: flex;
     align-items: center;
     background-image: url('/static/images/ok_truck.png');
-    background-size: 50px auto;
+    background-size: auto;
     background-position: 5px center;
 }
 
-.companies_button.pressed {
-    filter: invert(100%);
-    border: var(--focus-border)
-}
-
 .route_button {
-    min-height: 70px;
-    min-width: 90px;
-    background-size: 85% auto;
-    background-position: left center;
+    min-height: 65px;
+    max-width: 65px;
+    display: flex;
+    align-items: center;
+    background-size: contain;
+    background-position: center;
     background-image: url('/static/images/route_icon.png');
-}
-
-.route_button.pressed {
-    filter: invert(100%);
-    border: var(--focus-border)
 }
 
 .goal_button {
@@ -308,9 +310,11 @@ td {
     background-image: url('/static/images/goal_button.png');
 }
 
-.goal_button.pressed {
-    filter: invert(100%);
-    border: var(--focus-border)
+.handle_button {
+    background-size: contain;
+    min-height: 65px;
+    min-width: 65px;
+    background-image: url('/static/images/handle.png');
 }
 
 .search_button {

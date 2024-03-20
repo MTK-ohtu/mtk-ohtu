@@ -20,9 +20,9 @@ INSERT INTO listings (user_id, listing_type, category, delivery_method, supply_d
 INSERT INTO listings (user_id, listing_type, category, delivery_method, supply_demand, batch_size, batch_units, price, description, address, longitude, latitude, complies_with_regulations) VALUES (3, 'sell', 'Grass, waste fodder and green growths',  'pickup', 'one time', 1, 'tn', 75, 'Ylimääräistä viherkasvustoa halvalla.', 'Porokartanontie 1, Sodankylä', 27.3667281, 68.3336791, '1') ON CONFLICT DO NOTHING;
 INSERT INTO listings (user_id, listing_type, category, delivery_method, supply_demand, batch_size, batch_units, price, description, address, longitude, latitude, complies_with_regulations) VALUES (2, 'sell', 'Grass, waste fodder and green growths',  'pickup', 'one time', 1, 'tn', 30, 'Vanhempia luomukelpoisia säilörehunurmia noin 10 ha.', 'Siggansintie 3, 10140 Siuntio', 24.1444409, 60.1367265, '1') ON CONFLICT DO NOTHING;
 INSERT INTO listings (user_id, listing_type, category, delivery_method, supply_demand, batch_size, batch_units, price, description, address, longitude, latitude, complies_with_regulations) VALUES (3, 'sell', 'Grass, waste fodder and green growths',  'pickup', 'one time', 1, 'tn', 40, 'Vanhempia luomukelpoisia säilörehunurmia noin 10 ha.', 'Åtorpintie 60, 07280 Porvoo', 25.7364406, 60.4667942, '1') ON CONFLICT DO NOTHING;
-INSERT INTO listings (user_id, listing_type, category, delivery_method, supply_demand, batch_size, batch_units, price, description, address, longitude, latitude, complies_with_regulations) VALUES (4, 'sell', 'Wood (treated wood)',  'pickup', 'one time', 1, 'tn', 550, 'Kuivaa jalavaa, vaahteraa ja harvennuspuuta metsätien varrella.', 'Isokoskentie, Kiiskilä', 24.6858813, 63.8003589, '1') ON CONFLICT DO NOTHING;
-INSERT INTO listings (user_id, listing_type, category, delivery_method, supply_demand, batch_size, batch_units, price, description, address, longitude, latitude, complies_with_regulations) VALUES (1, 'sell', 'Wood (forest biomass)',  'pickup', 'one time', 1, 'tn', 700, 'Kuivaa jalavaa, vaahteraa ja harvennuspuuta metsätien varrelta.', 'Tampereentie 5, 31670 Urjala', 23.5494974, 61.0815604, '1') ON CONFLICT DO NOTHING;
-INSERT INTO listings (user_id, listing_type, category, delivery_method, supply_demand, batch_size, batch_units, price, description, address, longitude, latitude, complies_with_regulations) VALUES (4, 'sell', 'Wood (treated wood)',  'pickup', 'one time', 1, 'tn', 710, 'Rikkinäisiä kuorma-lavoja.', 'Rantakankaantie 16, Alajärvi', 23.9481132, 62.8319709, '1') ON CONFLICT DO NOTHING;
+INSERT INTO listings (user_id, listing_type, category, subcategory, delivery_method, supply_demand, batch_size, batch_units, price, description, address, longitude, latitude, complies_with_regulations) VALUES (4, 'sell', 'Wood', 'Treated wood', 'pickup', 'one time', 1, 'tn', 550, 'Kuivaa jalavaa, vaahteraa ja harvennuspuuta metsätien varrella.', 'Isokoskentie, Kiiskilä', 24.6858813, 63.8003589, '1') ON CONFLICT DO NOTHING;
+INSERT INTO listings (user_id, listing_type, category, subcategory, delivery_method, supply_demand, batch_size, batch_units, price, description, address, longitude, latitude, complies_with_regulations) VALUES (1, 'sell', 'Wood', 'Forest biomass', 'pickup', 'one time', 1, 'tn', 700, 'Kuivaa jalavaa, vaahteraa ja harvennuspuuta metsätien varrelta.', 'Tampereentie 5, 31670 Urjala', 23.5494974, 61.0815604, '1') ON CONFLICT DO NOTHING;
+INSERT INTO listings (user_id, listing_type, category, subcategory, delivery_method, supply_demand, batch_size, batch_units, price, description, address, longitude, latitude, complies_with_regulations) VALUES (4, 'sell', 'Wood', 'Treated wood', 'pickup', 'one time', 1, 'tn', 710, 'Rikkinäisiä kuorma-lavoja.', 'Rantakankaantie 16, Alajärvi', 23.9481132, 62.8319709, '1') ON CONFLICT DO NOTHING;
 
 INSERT INTO contractors (user_id, name, created_at, business_id) 
 VALUES 
@@ -52,36 +52,36 @@ VALUES
     (9, 'Mantokoskentie, 99980 Utsjoki', '040-123456', 'testilocation@gmail.com', 27.00864, 69.87624, 300)
 ON CONFLICT DO NOTHING;
 
-INSERT INTO cargo_capabilities (contractor_location_id, type, price_per_km, base_rate, max_capacity, max_distance, unit, can_process)
+INSERT INTO cargo_capabilities (contractor_location_id, category, subcategory, price_per_km, base_rate, max_capacity, max_distance, unit, can_process)
 VALUES
-    (1, 'Wood (treated wood)', 6, 100, 5, 500, 'tn', '0'),
-    (1, 'Plant-based biomasses', 5, 44, 3, 400, 'tn', '0'),
-    (1, 'Digestion', 3, 77, 2, 550, 'tn', '1'),
-    (2, 'Plant-based biomasses', 3, 45, 3, 300, 'tn', '0'),
-    (2, 'Animal-based biomasses', 7, 178, 1, 400, 'tn', '0'),
-    (2, 'Digestion', 3, 50, 9, 100, 'tn', '1'),
-    (3, 'Digestion', 3, 60, 4, 400, 'tn', '1'),
-    (3, 'Plant-based biomasses', 3, 45, 3, 100, 'tn', '0'),
-    (3, 'Soil and growing media', 9, 220, 3, 600, 'tn', '0'),
-    (3, 'Wood (forest biomass)', 6, 100, 10, 300, 'tn', '0'),
-    (4, 'Animal-based biomasses', 6, 178, 3, 300, 'tn', '0'),
-    (4, 'Plant-based biomasses', 5, 119, 2, 600, 'tn', '0'),
-    (4, 'Soil and growing media', 5, 600, 2, 400, 'tn', '0'),
-    (4, 'Dry manure', 5, 60, 2, 300, 'tn', '0'),
-    (4, 'Digestion', 3, 77, 6, 500, 'tn', '1'),
-    (5, 'Soil and growing media', 5, 125, 2, 400, 'tn', '0'),
-    (5, 'Digestion', 3, 60, 2, 600, 'tn', '1'),
-    (5, 'Wood (treated wood)', 7, 100, 8, 500, 'tn', '0'),
-    (5, 'Animal-based biomasses', 4, 120, 2, 300, 'tn', '0'),
-    (6, 'Sludge manure', 5, 60, 3, 500, 'tn', '0'),
-    (6, 'Plant-based biomasses', 3, 45, 3, 400, 'tn', '0'),
-    (6, 'Digestion', 7, 200, 5, 100, 'tn', '1'),
-    (7, 'Soil and growing media', 5, 800, 2, 300, 'tn', '0'),
-    (8, 'Plant-based biomasses', 7, 90, 1, 500, 'tn', '0'),
-    (8, 'Plant-based biomasses', 3, 45, 3, 500, 'tn', '0'),
-    (9, 'Digestion', 3, 77, 2, 600, 'tn', '0'),
-    (9, 'Plant-based biomasses', 6, 80, 6, 400, 'tn', '0'),
-    (9, 'Digestion', 3, 77, 5, 300, 'tn', '0')
+    (1, 'Wood', 'Treated wood', 6, 100, 5, 500, 'tn', '0'),
+    (1, 'Plant-based biomasses', null, 5, 44, 3, 400, 'tn', '0'),
+    (1, 'Digestion', null, 3, 77, 2, 550, 'tn', '1'),
+    (2, 'Plant-based biomasses', null, 3, 45, 3, 300, 'tn', '0'),
+    (2, 'Animal-based biomasses', null, 7, 178, 1, 400, 'tn', '0'),
+    (2, 'Digestion', null, 3, 50, 9, 100, 'tn', '1'),
+    (3, 'Digestion', null, 3, 60, 4, 400, 'tn', '1'),
+    (3, 'Plant-based biomasses', null, 3, 45, 3, 100, 'tn', '0'),
+    (3, 'Soil and growing media', null, 9, 220, 3, 600, 'tn', '0'),
+    (3, 'Wood', 'Forest biomass', 6, 100, 10, 300, 'tn', '0'),
+    (4, 'Animal-based biomasses', null, 6, 178, 3, 300, 'tn', '0'),
+    (4, 'Plant-based biomasses', null, 5, 119, 2, 600, 'tn', '0'),
+    (4, 'Soil and growing media', null, 5, 600, 2, 400, 'tn', '0'),
+    (4, 'Manure', 'Dry manure', 5, 60, 2, 300, 'tn', '0'),
+    (4, 'Digestion', null, 3, 77, 6, 500, 'tn', '1'),
+    (5, 'Soil and growing media', null, 5, 125, 2, 400, 'tn', '0'),
+    (5, 'Digestion', null, 3, 60, 2, 600, 'tn', '1'),
+    (5, 'Wood', 'Treated wood', 7, 100, 8, 500, 'tn', '0'),
+    (5, 'Animal-based biomasses', null, 4, 120, 2, 300, 'tn', '0'),
+    (6, 'Manure', 'Sludge manure', 5, 60, 3, 500, 'tn', '0'),
+    (6, 'Plant-based biomasses', null, 3, 45, 3, 400, 'tn', '0'),
+    (6, 'Digestion', null, 7, 200, 5, 100, 'tn', '1'),
+    (7, 'Soil and growing media', null, 5, 800, 2, 300, 'tn', '0'),
+    (8, 'Plant-based biomasses', null, 7, 90, 1, 500, 'tn', '0'),
+    (8, 'Plant-based biomasses', null, 3, 45, 3, 500, 'tn', '0'),
+    (9, 'Digestion', null, 3, 77, 2, 600, 'tn', '0'),
+    (9, 'Plant-based biomasses', null, 6, 80, 6, 400, 'tn', '0'),
+    (9, 'Digestion', null, 3, 77, 5, 300, 'tn', '0')
 ON CONFLICT DO NOTHING;
 
 INSERT INTO api_keys (name, key) VALUES ('Test API key', 'test_api_key')
