@@ -1,4 +1,4 @@
-# English translations for PROJECT.
+# Chinese translations for PROJECT.
 # Copyright (C) 2024 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
@@ -8,237 +8,220 @@ msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2024-03-20 16:21+0200\n"
-"PO-Revision-Date: 2024-03-18 14:04+0200\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language: en\n"
-"Language-Team: en <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"PO-Revision-Date: 2024-03-20 16:21+0200\n"
+"Last-Translator: \n"
+"Language-Team: zh <LL@li.org>\n"
+"Language: zh\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "Generated-By: Babel 2.14.0\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #: src/mtk_ohtu/routes/cargo.py:40 src/mtk_ohtu/routes/cargo.py:58
 #: src/mtk_ohtu/routes/contractor_location.py:31
 #: src/mtk_ohtu/routes/contractor_location.py:60
 #: src/mtk_ohtu/routes/contractor_location.py:78
 msgid "error_occurred"
-msgstr ""
+msgstr "发生错误"
 
 #: src/mtk_ohtu/routes/cargo.py:43
-#, fuzzy
 msgid "material_type_added"
-msgstr "Nothing in here yet. Start by adding some materials."
+msgstr "添加了材料类型"
 
 #: src/mtk_ohtu/routes/cargo.py:61
-#, fuzzy
 msgid "material_type_removed"
-msgstr "Price"
+msgstr "删除了材料类型"
 
 #: src/mtk_ohtu/routes/contractor_location.py:34
-#, fuzzy
 msgid "new_location_added"
-msgstr "Locations"
+msgstr "添加了新地点"
 
 #: src/mtk_ohtu/routes/contractor_location.py:63
-#, fuzzy
 msgid "changes_saved"
-msgstr "Can spread"
+msgstr "保存了更改"
 
 #: src/mtk_ohtu/routes/contractor_location.py:81
-#, fuzzy
 msgid "location_removed"
-msgstr "Locations"
+msgstr "删除了地点"
 
 #: src/mtk_ohtu/templates/404.html:4 src/mtk_ohtu/templates/404.html:8
 msgid "page_not_found"
-msgstr ""
+msgstr "页面未找到"
 
 #: src/mtk_ohtu/templates/addlogistics.html:4
 #: src/mtk_ohtu/templates/addlogistics.html:170
 msgid "add_logistics_title"
-msgstr "Add a logistics service"
+msgstr "添加物流服务"
 
 #: src/mtk_ohtu/templates/addlogistics.html:174
-#, fuzzy
 msgid "select_service_type"
-msgstr "Select service type"
+msgstr "选择服务类型"
 
 #: src/mtk_ohtu/templates/addlogistics.html:177
 #: src/mtk_ohtu/templates/contractor.html:27
 msgid "private_contractor"
-msgstr "Private contractor"
+msgstr "私人承包商"
 
 #: src/mtk_ohtu/templates/addlogistics.html:179
 msgid "company"
-msgstr "Company"
+msgstr "企业"
 
 #: src/mtk_ohtu/templates/addlogistics.html:183
 msgid "full_name"
-msgstr "Full name"
+msgstr "全名"
 
 #: src/mtk_ohtu/templates/addlogistics.html:188
 msgid "company_name"
-msgstr "Company name"
+msgstr "企业名称"
 
 #: src/mtk_ohtu/templates/addlogistics.html:190
 #: src/mtk_ohtu/templates/contractor.html:25
 msgid "business_id"
-msgstr "Business ID"
+msgstr "企业ＩＤ"
 
 #: src/mtk_ohtu/templates/addlogistics.html:194
 msgid "add_location"
-msgstr "Add location"
+msgstr "添加地点"
 
 #: src/mtk_ohtu/templates/addlogistics.html:197
 msgid "address"
-msgstr "Address"
+msgstr "地址"
 
 #: src/mtk_ohtu/templates/addlogistics.html:199
 msgid "postal_code"
-msgstr "Postal code"
+msgstr "邮政编码"
 
 #: src/mtk_ohtu/templates/addlogistics.html:201
 msgid "city"
-msgstr "City"
+msgstr "城市"
 
 #: src/mtk_ohtu/templates/addlogistics.html:205
 msgid "phone_number"
-msgstr "Phone number"
+msgstr "电话号码"
 
 #: src/mtk_ohtu/templates/addlogistics.html:207
 #: src/mtk_ohtu/templates/register.html:20
 msgid "email"
-msgstr "Email"
+msgstr "电子邮件"
 
 #: src/mtk_ohtu/templates/addlogistics.html:211
 #: src/mtk_ohtu/templates/contractor.html:55
 #: src/mtk_ohtu/templates/product.html:19
 msgid "description"
-msgstr "Description"
+msgstr "描述"
 
 #: src/mtk_ohtu/templates/addlogistics.html:212
-#, fuzzy
 msgid "description_placeholder"
-msgstr "Description"
+msgstr "请描述您的服务"
 
 #: src/mtk_ohtu/templates/addlogistics.html:216
 msgid "how_far_can_you_deliver"
-msgstr "How far are you able to deliver"
+msgstr "您能送到多远"
 
 #: src/mtk_ohtu/templates/addlogistics.html:219
 #: src/mtk_ohtu/templates/contractor.html:43
 msgid "no_limit"
-msgstr "No limit"
+msgstr "无限"
 
 #: src/mtk_ohtu/templates/addlogistics.html:221
 #: src/mtk_ohtu/templates/addlogistics.html:267
 msgid "custom_limit"
-msgstr "Custom limit"
+msgstr "自定义极限"
 
 #: src/mtk_ohtu/templates/addlogistics.html:224
 #: src/mtk_ohtu/templates/addlogistics.html:270
 #: src/mtk_ohtu/templates/contractor.html:43
 #: src/mtk_ohtu/templates/contractor.html:55
 msgid "maximum_distance"
-msgstr "Maximum distance"
+msgstr "最大距离"
 
 #: src/mtk_ohtu/templates/addlogistics.html:225
 #: src/mtk_ohtu/templates/addlogistics.html:271
 msgid "kilometers"
-msgstr "kilometers"
+msgstr "公里"
 
 #: src/mtk_ohtu/templates/addlogistics.html:234
 msgid "select_materials"
-msgstr "Select materials you can deliver"
+msgstr "选择材料"
 
 #: src/mtk_ohtu/templates/addlogistics.html:241
 msgid "additional_information"
-msgstr "Additional information"
+msgstr "补充资料"
 
 #: src/mtk_ohtu/templates/addlogistics.html:245
 msgid "can_spread"
-msgstr "Can spread"
+msgstr "能传播"
 
 #: src/mtk_ohtu/templates/addlogistics.html:251
 #: src/mtk_ohtu/templates/contractor.html:55
 msgid "base_rate"
-msgstr "Base rate"
+msgstr "基本费率"
 
 #: src/mtk_ohtu/templates/addlogistics.html:253
 msgid "price_per_hour"
-msgstr "Price per hour"
+msgstr "小时费率"
 
 #: src/mtk_ohtu/templates/addlogistics.html:255
 msgid "maximum_capacity"
-msgstr "Maximum capacity"
+msgstr "最大容量"
 
 #: src/mtk_ohtu/templates/addlogistics.html:262
-#, fuzzy
 msgid "delivery_distance"
-msgstr "Delivery distance"
+msgstr "输送距离"
 
 #: src/mtk_ohtu/templates/addlogistics.html:265
 msgid "same_as_above"
-msgstr "Same as above"
+msgstr "与上面相同"
 
 #: src/mtk_ohtu/templates/addlogistics.html:274
 msgid "material_delivery_description_placeholder"
-msgstr ""
+msgstr "添加补充资料"
 
 #: src/mtk_ohtu/templates/addlogistics.html:282
-#, fuzzy
 msgid "add_logistics_submit"
-msgstr "Submit logistics"
+msgstr "提交"
 
 #: src/mtk_ohtu/templates/contractor.html:32
-#, fuzzy
 msgid "add_location_button"
-msgstr "create new location"
+msgstr "添加地点"
 
 #: src/mtk_ohtu/templates/contractor.html:37
 msgid "ml_locations_header"
-msgstr "Locations"
+msgstr "我的地点"
 
 #: src/mtk_ohtu/templates/contractor.html:48
-#, fuzzy
 msgid "remove_location"
-msgstr "Add location"
+msgstr "删除地点"
 
 #: src/mtk_ohtu/templates/contractor.html:52
-#, fuzzy
 msgid "contractor_location_material_types"
-msgstr "Material types you can deliver"
+msgstr "地点的材料类型"
 
 #: src/mtk_ohtu/templates/contractor.html:55
-#, fuzzy
 msgid "material_price"
-msgstr "Price"
+msgstr "材料价格"
 
 #: src/mtk_ohtu/templates/contractor.html:55
-#, fuzzy
 msgid "max_capacity"
-msgstr "Maximum capacity"
+msgstr "最大容量"
 
 #: src/mtk_ohtu/templates/contractor.html:55
-#, fuzzy
 msgid "can_process"
-msgstr "Can process"
+msgstr "能加工"
 
 #: src/mtk_ohtu/templates/contractor.html:59
-#, fuzzy
 msgid "remove_material"
-msgstr "Select materials you can deliver"
+msgstr "删除材料"
 
 #: src/mtk_ohtu/templates/contractor.html:62
-#, fuzzy
 msgid "no_material_types_added"
-msgstr "Nothing in here yet. Start by adding some materials."
+msgstr "未添加材料类型"
 
 #: src/mtk_ohtu/templates/contractor.html:67
-#, fuzzy
 msgid "no_locations_added"
-msgstr "Locations"
+msgstr "未添加地点"
 
 #: src/mtk_ohtu/templates/index.html:4 src/mtk_ohtu/templates/index.html:8
 #: src/mtk_ohtu/templates/layout.html:24
@@ -247,198 +230,148 @@ msgstr "MTK-Ohtu"
 
 #: src/mtk_ohtu/templates/layout.html:25
 msgid "title_subtext"
-msgstr "Circular economy and logistics"
+msgstr "循环经济与物流"
 
 #: src/mtk_ohtu/templates/layout.html:30
 msgid "home"
-msgstr "Home"
+msgstr "首页"
 
 #: src/mtk_ohtu/templates/layout.html:31
 msgid "listings"
-msgstr "Listings"
+msgstr "物品"
 
 #: src/mtk_ohtu/templates/layout.html:32
 msgid "distance_calculation_page"
-msgstr ""
+msgstr "计算距离"
 
 #: src/mtk_ohtu/templates/layout.html:37
 msgid "my_logistics"
-msgstr "My logistics"
+msgstr "我的物流"
 
 #: src/mtk_ohtu/templates/layout.html:39
 msgid "add_logistics"
-msgstr "Add a logistics service"
+msgstr "添加物流服务"
 
 #: src/mtk_ohtu/templates/layout.html:41
 msgid "logout"
-msgstr "Log out"
+msgstr "注销"
 
 #: src/mtk_ohtu/templates/layout.html:43 src/mtk_ohtu/templates/login.html:4
 #: src/mtk_ohtu/templates/login.html:17 src/mtk_ohtu/templates/login.html:45
 msgid "login"
-msgstr "Log in"
+msgstr "登录"
 
 #: src/mtk_ohtu/templates/layout.html:64
 msgid "footer_contact"
-msgstr "Contact us"
+msgstr "联系我们"
 
 #: src/mtk_ohtu/templates/layout.html:65
 msgid "footer_last_updated"
-msgstr "Last updated"
+msgstr "最后更新"
 
 #: src/mtk_ohtu/templates/listings.html:8
 msgid "destination_address"
-msgstr ""
+msgstr "目标地址"
 
 #: src/mtk_ohtu/templates/listings.html:10
-#, fuzzy
 msgid "calculate_distance"
-msgstr "Maximum distance"
+msgstr "计算距离"
 
 #: src/mtk_ohtu/templates/listings.html:25
 msgid "distance"
-msgstr "Distance"
+msgstr "距离"
 
 #: src/mtk_ohtu/templates/login.html:21 src/mtk_ohtu/templates/register.html:28
 msgid "username"
-msgstr ""
+msgstr "用户名"
 
 #: src/mtk_ohtu/templates/login.html:25
 msgid "input_username_error"
-msgstr ""
+msgstr "请输入用户名"
 
 #: src/mtk_ohtu/templates/login.html:31 src/mtk_ohtu/templates/register.html:37
 msgid "password"
-msgstr ""
+msgstr "密码"
 
 #: src/mtk_ohtu/templates/login.html:33
 msgid "forgot_password_question"
-msgstr ""
+msgstr "忘记了密码吗"
 
 #: src/mtk_ohtu/templates/login.html:38
 msgid "input_password_error"
-msgstr ""
+msgstr "请输入密码"
 
 #: src/mtk_ohtu/templates/login.html:56
 msgid "dont_have_account_question"
-msgstr ""
+msgstr "没有帐户吗"
 
 #: src/mtk_ohtu/templates/login.html:56
 msgid "register_here_button"
-msgstr ""
+msgstr "登陆"
 
 #: src/mtk_ohtu/templates/product.html:27
 msgid "fuel_economy"
-msgstr "Fuel economy"
+msgstr "燃料经济"
 
 #: src/mtk_ohtu/templates/product.html:29
 #: src/mtk_ohtu/templates/product.html:66
 msgid "fuel"
-msgstr "Fuel"
+msgstr "燃料"
 
 #: src/mtk_ohtu/templates/product.html:31
 msgid "diesel"
-msgstr "Diesel"
+msgstr "柴油"
 
 #: src/mtk_ohtu/templates/product.html:32
 msgid "petrol"
-msgstr "Petrol"
+msgstr "汽油"
 
 #: src/mtk_ohtu/templates/product.html:33
-#, fuzzy
 msgid "biodiesel"
-msgstr "Bio diesel"
+msgstr "生物柴油"
 
 #: src/mtk_ohtu/templates/product.html:34
 msgid "natural_gas"
-msgstr "Natural gas"
+msgstr "天然气"
 
 #: src/mtk_ohtu/templates/product.html:35
-#, fuzzy
 msgid "biogas"
-msgstr "Bio gas"
+msgstr "沼气"
 
 #: src/mtk_ohtu/templates/product.html:36
 msgid "electricity"
-msgstr "Electricity"
+msgstr "电力"
 
 #: src/mtk_ohtu/templates/product.html:40
-#, fuzzy
 msgid "fuel_efficiency"
-msgstr "Fuel economy"
+msgstr "燃料效率"
 
 #: src/mtk_ohtu/templates/product.html:88
 msgid "show_all_button"
-msgstr ""
+msgstr "显示所有"
 
 #: src/mtk_ohtu/templates/product.html:106
 msgid "process_button"
-msgstr ""
+msgstr "加工按钮"
 
 #: src/mtk_ohtu/templates/product.html:131
 msgid "input_address_placeholder"
-msgstr ""
+msgstr "请输入地址"
 
 #: src/mtk_ohtu/templates/register.html:4
 #: src/mtk_ohtu/templates/register.html:16
 #: src/mtk_ohtu/templates/register.html:48
 msgid "register"
-msgstr ""
+msgstr "登录"
 
 #: src/mtk_ohtu/templates/register.html:23
 msgid "email_required_or_already_taken"
-msgstr ""
+msgstr "电子邮件缺失或已被使用"
 
 #: src/mtk_ohtu/templates/register.html:31
 msgid "username_required_or_already_taken"
-msgstr ""
+msgstr "用户名缺失或已被使用"
 
 #: src/mtk_ohtu/templates/register.html:41
 msgid "password_needs_to_have_one_number_and_one_special_character"
-msgstr ""
-
-#~ msgid "password_required"
-#~ msgstr ""
-
-#~ msgid "add_logistics_body_title"
-#~ msgstr "Add a logistics service"
-
-#~ msgid "ml_business_id"
-#~ msgstr "Business ID"
-
-#~ msgid "ml_private_contractor"
-#~ msgstr "private contractor"
-
-#~ msgid "ml_contractor_delivery_radius"
-#~ msgstr "Delivery radius"
-
-#~ msgid "ml_delivery_radius_no_limit"
-#~ msgstr "No limit"
-
-#~ msgid "ml_contractor_location_remove_location_button"
-#~ msgstr "Remove location"
-
-#~ msgid "ml_material_base_rate"
-#~ msgstr "Base rate"
-
-#~ msgid "ml_material_max_capacity"
-#~ msgstr "Maximum capacity"
-
-#~ msgid "ml_max_delivery_distance"
-#~ msgstr "Maximum delivery distance"
-
-#~ msgid "ml_description"
-#~ msgstr "Description"
-
-#~ msgid "ml_remove_material_type_button"
-#~ msgstr "Delete material type"
-
-#~ msgid "ml_no_material_types_added_message"
-#~ msgstr "Nothing in here yet. Start by adding some materials."
-
-#~ msgid "ml_no_locations_added_message"
-#~ msgstr "Nothing in here, yet! Start by adding some delivery locations."
-
-#~ msgid "process button"
-#~ msgstr ""
-
+msgstr "密码需要至少一个数字和一个特殊字符"

@@ -167,11 +167,11 @@
 
 
 {% block content %}
-<h3>{{ _("add_logistics_body_title") }}</h3>
+<h3>{{ _("add_logistics_title") }}</h3>
 <form class="" method="post" autocomplete="off">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
     <div class="form-section">
-    <h4>{{ _("add_logistics_select_service_type") }}</h4>
+    <h4>{{ _("select_service_type") }}</h4>
     <div class="service-option">
         <input type="radio" id="private" name="serviceType" value="private" onclick="toggleQuestions()">
         <label for="private" class="circle-label">{{ _("private_contractor") }}</label><br>
@@ -227,7 +227,7 @@
         <div class="eco-capabilities">
             {% for category in eco_categories %}
                 <input type="checkbox" value="{{ category }}">
-                <label for="{{ category }}">{{ category }}</label>
+                <label for="{{ category }}">{{ _(category) }}</label>
             {% endfor %}
         </div>
     </div>

@@ -22,14 +22,14 @@
     <h2>{{ contractor.name }}</h2>
 
     {% if contractor.business_id %}
-    {{ _("ml_business_id") }}: {{ contractor.business_id }}
+    {{ _("business_id") }}: {{ contractor.business_id }}
     {% else %}
-    {{ _("ml_private_contractor") }}
+    {{ _("private_contractor") }}
     {% endif %}
 
     <p>
     <form action="{{ url_for('main.contractor_location_bp.add') }}">
-        <input type="submit"value="{{ _('ml_add_location_button') }}" />
+        <input type="submit"value="{{ _('add_location_button') }}" />
     </form>
     </p>
 </div>
@@ -40,31 +40,31 @@
 
     <div class="card">
         <h3>{{ location[0].address }}</h3>
-        {{ _("ml_contractor_delivery_radius") }} (km): {% if location[0].delivery_radius == -1 %} {{ _("ml_delivery_radius_no_limit") }} {% else %} {{ location[0].delivery_radius }} {% endif %}
+        {{ _("maximum_distance") }} (km): {% if location[0].delivery_radius == -1 %} {{ _("no_limit") }} {% else %} {{ location[0].delivery_radius }} {% endif %}
         <p>
         <form action="{{ url_for('main.contractor_location_bp.remove') }}" method="POST">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
             <input type="hidden" name="location_id" value="{{ location[0].id }}">
-            <input type="submit" value="{{ _('ml_contractor_location_remove_location_button') }}">
+            <input type="submit" value="{{ _('remove_location') }}">
         </form>
         </p>
 
-        <p><h4>{{ _("ml_contractor_location_material_types") }}:</h4></p>
+        <p><h4>{{ _("contractor_location_material_types") }}:</h4></p>
         {% for sidestream in location[1] %}
     
-            <pre>{{ sidestream.unit.value }}   {{ _("ml_material_price") }} (€/km): {{ sidestream.price_per_km }}    {{ _("ml_material_base_rate") }}: {{ sidestream.base_rate }}€    {{ _("ml_material_max_capacity") }}: {{ sidestream.max_capacity }}{{ sidestream.unit.value }}    {{ _("ml_max_delivery_distance") }}: {{ sidestream.max_distance }}km  {{ _("ml_can_process") }}: {{ sidestream.can_process }}   {{ _("ml_description") }}: {{ sidestream.description }}</pre>
+            <pre>{{ sidestream.unit.value }}   {{ _("material_price") }} (€/km): {{ sidestream.price_per_km }}    {{ _("base_rate") }}: {{ sidestream.base_rate }}€    {{ _("max_capacity") }}: {{ sidestream.max_capacity }}{{ sidestream.unit.value }}    {{ _("maximum_distance") }}: {{ sidestream.max_distance }}km  {{ _("can_process") }}: {{ sidestream.can_process }}   {{ _("description") }}: {{ sidestream.description }}</pre>
             <form action="{{ url_for('main.cargo_bp.remove') }}" method="POST">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                 <input type="hidden" name="cargo_id" value="{{ sidestream.id }}">
-                <input type="submit" value="{{ _('ml_remove_material_type_button') }}">
+                <input type="submit" value="{{ _('remove_material') }}">
             </form>
         {% else %}
-          {{ _("ml_no_material_types_added_message") }}
+          {{ _("no_material_types_added") }}
         {% endfor %}
     </div>
 
 {% else %}
-  {{ _("ml_no_locations_added_message") }}
+  {{ _("no_locations_added") }}
 {% endfor %}
 
 {% endblock %}
