@@ -17,11 +17,6 @@ from ..logic.logistics_info import get_logistics_providers, get_logistics_info
 listing_bp = Blueprint("listing_bp", __name__)
 
 
-@listing_bp.route("/")
-def index():
-    return render_template("index.html")
-
-
 @listing_bp.route("/listings", methods=["GET", "POST"])
 def listings():
     listings = mtk_ohtu.database.db_listings.db_get_product_list(DATABASE_POOL)

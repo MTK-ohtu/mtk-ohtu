@@ -6,6 +6,7 @@ from .routes.contractor_location import contractor_location_bp
 from .routes.location import location_bp
 from .routes.cargo import cargo_bp
 from .routes.user import user_bp
+from .routes.misc import misc_bp
 from .api.routes import api_bp
 from flask_wtf.csrf import CSRFProtect
 from flask_babel import Babel
@@ -33,6 +34,7 @@ def create_app():
     app = Flask(__name__, static_url_path="/static")
     app.url_map.strict_slashes = False
 
+    main.register_blueprint(misc_bp)
     main.register_blueprint(user_bp)
     main.register_blueprint(contractor_bp)
     main.register_blueprint(contractor_location_bp)

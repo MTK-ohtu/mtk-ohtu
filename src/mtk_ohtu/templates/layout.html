@@ -1,16 +1,25 @@
+{% macro language_link(lang_code) -%}
+    <div>
+        <a href="{{ url_for('main.misc_bp.change_language', new_language=lang_code, old_path=request.path) }}" class="lang_link">
+            <img src="{{ url_for('static', filename='images/flag_' + lang_code + '.jpg') }}" alt="Flag for the language code {{ lang_code }}">
+        </a>
+    </div>
+{%- endmacro %}
+
+
 <!DOCTYPE html>
 <html>
 
 <head>
 	<meta charset="utf-8">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dropdown.css') }}">
     <meta name="viewport" layout-content="width=device-width, initial-scale=1">
     <link rel="icon" type="image/x-icon" href="{{url_for('static', filename='images/favicon/favicon.ico') }}">
     {% block head %}{% endblock %}
 </head>
 
 <body>
-
     <div class="layout-header">
         <h2 class="layout-h2">{{ _("title") }}</h2>
         <p class="layout-p">{{ _("title_subtext") }}</p>
@@ -18,25 +27,33 @@
 
     <div id="layout-navbar">
         <div>
-            <a href="{{ url_for('main.listing_bp.index') }}">{{ _("home") }}</a>
+            <a href="{{ url_for('main.misc_bp.index') }}">{{ _("home") }}</a>
             <a href="{{ url_for('main.listing_bp.listings') }}">{{ _("listings") }}</a>
             <a href="{{ url_for('main.location_bp.distance') }}">{{ _("distance") }}</a>
         </div>
-        {% if session.user_id %}
         <div class="layout-navbar-right">
+            {% if session.user_id %}
             {% if session.contractor_id%}
             <a href="{{ url_for('main.contractor_bp.contractor') }}">{{ _("my_logistics") }}</a>
             {% else %}
             <a href="{{ url_for('main.contractor_bp.add_logistics') }}">{{ _("add_logistics") }}</a>
             {% endif %}
             <a href="{{ url_for('main.user_bp.logout') }}">{{ _("logout") }}</a>
-        </div>
-
-        {% else %}
-        <div class="layout-navbar-right">
+            {% else %}
             <a href="{{ url_for('main.user_bp.login') }}">{{ _("login") }}</a>
+            {% endif %}
+
+            <div id="lang_dropdown">
+                {{ language_link(g.lang_code) }}
+                <div id="lang_dropdown_content">
+                    {% for lang_code in config.LANGUAGES %}
+                        {% if lang_code != g.lang_code %}
+                            {{ language_link(lang_code) }}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
         </div>
-        {% endif %}
     </div>
 
     <div class="layout-content">
@@ -60,6 +77,11 @@
             } else {
                 navbar.classList.remove("layout-sticky");
             }
+        }
+
+        function change_language(language)
+        {
+            console.log(language);
         }
     </script>
 
