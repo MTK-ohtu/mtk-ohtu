@@ -45,7 +45,7 @@
             const handleButton = document.getElementById('handle_button')
 
 
-            //Create feature-type JSON
+            //Create feature-type JSON. It's used in VisionController.
             const getJson = function (coordinates, name, address) {
                 return {
                     "geometry": {
@@ -61,10 +61,10 @@
                 }
             }
 
-            //Contractors and product locations in JSON
+            //Contractors and product locations in JSON format
             var in_range_gjson = JSON.parse('{{ in_range | tojson | safe }}');
-            var out_range_gjson = JSON.parse('{{ out_range | tojson | safe }}');
             console.log(in_range_gjson)
+            var out_range_gjson = JSON.parse('{{ out_range | tojson | safe }}');
             var product = getJson (
                 ['{{ listing.location.latitude }}','{{ listing.location.longitude }}'],
                 '{{ listing.category.value }}',
@@ -72,7 +72,7 @@
             )
             
             // Create map
-            const map = L.map('map', { doubleClickZoom: false }).setView([62.9, 26.4], 10);
+            const map = L.map('map', { doubleClickZoom: false, setClosePopupOnClick:false }).setView([62.9, 26.4], 10);
             // Create vision controller
             const V = new VisionController(L, map)
 
@@ -116,22 +116,14 @@
                 }
             })
 
+            // Toggle cargo process button
             handleButton.addEventListener('click', function() {
-                var list = in_range_gjson.features.concat(out_range_gjson.features)
                 if (handleButton.classList.contains('pressed')) {
                     handleButton.classList.remove('pressed')
-                    V.moveListFeaturesToGroup(
-                        list.filter(feature => 
-                            feature.properties.can_process == false), 
-                        'optimal'
-                    )
+                    V.filterBy('can_process', false)
                 } else {
                     handleButton.classList.add('pressed')
-                    V.moveListFeaturesToGroup(
-                        list.filter(feature => 
-                            feature.properties.can_process == false), 
-                        'suboptimal'
-                    )
+                    V.filterBy('can_process', true)
                 }
             })
 

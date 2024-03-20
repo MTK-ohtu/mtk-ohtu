@@ -13,8 +13,8 @@
     --focus-background-color_2: #f4dddd;
     --non-focus-background-color_2: #bb8585;
     /* Theme borders */
-    --common-border: var(--theme-color_2) solid 4px;
-    --focus-border: var(--theme-color_3) solid 4px;
+    --common-border: var(--theme-color_2) solid 3px;
+    --focus-border: var(--theme-color_3) solid 3px;
     /* Theme fonts */
     --theme-font-family_1: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
     --theme-font-family_2: "Consolas", monaco, monospace;
@@ -28,7 +28,9 @@
     /* Transitions */
     --theme-color-transition: var(--theme-color_3) 0.3s ease;
     --button-transition-time: 0.2s;
-    --opening-transition-time: 0.4s; 
+    --opening-transition-time: 0.3s; 
+    --opening-transition-time-fast: 0.2s; 
+
 }
 
 body {
@@ -106,7 +108,7 @@ td {
     margin-left: 15px;
     margin-right: 15px;
     flex-direction: row;
-    align-items: center;
+    align-items: top;
     gap: 25px;
 }
 
@@ -115,8 +117,6 @@ td {
 }
 
 .horizontal-container > div {
-    display: flex;
-    flex-direction: column;
     align-content: top;
 }
 
@@ -145,26 +145,23 @@ td {
 .clickable_list_element {
     background-color: var(--non-focus-background-color);
     width: 100%;
+    height: 68px;
     padding-top: 2% 2% 2% 0;
-    margin: 0.5% 0 0 0;
+    margin: 0 0 0.5% 0;
     overflow: hidden;
     border-radius: 20px 0 0 0;
 }
 
 .clickable_list_element h4 {
     align-self: left;
-    padding: 2% 0 2% 0;
-    margin: 2% 0 2% 0;
     font-size: 150%;
-    line-height: 170%;
+    line-height: 155%;
 }
 
 .clickable_list_element p {
     align-self: center;
-    padding: 2% 0 2% 0;
-    margin: 2% 0 2% 0;
-    font-size: 150%;
-    line-height: 170%;
+    font-size: 130%;
+    line-height: 135%;
 }
 
 .empty_list_element {
@@ -178,6 +175,14 @@ td {
     border: var(--focus-border);
 }
 
+.clickable_list_element.vanished {
+    animation: scroll-closed var(--opening-transition-time-fast) ease-in forwards
+}
+
+.clickable_list_element.visible {
+    animation: scroll-open var(--opening-transition-time-fast) ease-in forwards
+}
+
 .clickable_list_element.closed {
     animation: scroll-closed var(--opening-transition-time) ease-in forwards
 }
@@ -188,30 +193,43 @@ td {
 
 @keyframes scroll-open {
     0%{
-        height: var(--minimum-height);
+        height: var(--lower-height);
     }
     100%{
-        height: var(--total-height);
+        height: var(--upper-height);
     }
 }
 
 @keyframes scroll-closed {
     0%{
-        height: var(--total-height)
+        height: var(--upper-height)
     }
     100%{
-        height: var(--minimum-height);
+        height: var(--lower-height);
     }
 }
 
 .clickable_list_element #info > * {
-    font: var(--description-font);
     opacity: 0;
-    transition: opacity 0.8s ease-in;
+    transition: opacity 1.2s ease-in;
 }
 
 .clickable_list_element.selected #info > * {
     opacity: 1;
+}
+
+.clickable_list_element #info > h4 {
+    padding: 2% 0 2% 0;
+    margin: 2% 0 2% 0;
+    font-size: 120%;
+    line-height: 125%;
+}
+
+.clickable_list_element #info > p {
+    padding: 2% 0 2% 0;
+    margin: 2% 0 2% 0;
+    font-size: 110%;
+    line-height: 115%;
 }
 
 .clickable_list_element.suboptimal {
@@ -229,12 +247,12 @@ td {
     align-items: center;
     flex: 1;
     background-color: var(--theme-background-color_2);
-    justify-content: space-evenly;
+    justify-content:space-around;
     color: var(--non-focus-background-color);
 }
 
 .toolbar div {
-    align-content: center;
+    flex-grow: 1;
 }
 
 .toolbar input {
@@ -315,6 +333,25 @@ td {
     min-height: 65px;
     min-width: 65px;
     background-image: url('/static/images/handle.png');
+}
+
+.cargo_weight_button {
+    min-width: 120px;
+    min-height: 65px;
+    padding-bottom: 150%;
+    background-size: 40%;
+    background-repeat: no-repeat;
+    background-position: 2px 70%;
+    background-image: url('/static/images/cargo_weight.png');
+}
+
+.rate_button {
+    min-width: 120px;
+    min-height: 65px;
+    background-size: 30%;
+    background-repeat: no-repeat;
+    background-position: 2px 2px;
+    background-image: url('/static/images/coins.png');
 }
 
 .search_button {
@@ -405,6 +442,61 @@ input:checked+.slider:before {
     transform: translateX(100%);
 }
 
+.popup_info {
+    display: none;
+}
+/*============ INFO ===========================*/
+.service_element {
+    display:flex; 
+    flex-direction: row; 
+    margin-bottom: 2px;
+    width: 24vh;
+    height: 4vh;    
+}
+
+.service_element > button {
+    border: none;
+    max-height: 100%;
+    margin-right:3px;
+}
+
+.car_info {
+    width: 4vh;
+    display: flex;
+    align-items: center;
+    background-image: url('/static/images/ok_truck.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    overflow-y: hidden;
+}
+
+.rate_info {
+    width: 5vh;
+    display: flex;
+    justify-content: right;
+    padding-top: 10%;
+    background-size: 40%;
+    background-repeat: no-repeat;
+    background-position: 2px 2px;
+    background-image: url('/static/images/coins.png');
+}
+
+.cargo_weight_info {
+    width: 5vh;
+    display: flex;
+    color: white;
+    justify-content: center;    
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-image: url('/static/images/capacity.png');
+}
+
+.handle_info {
+    background-size: contain;
+    width: 4vh;
+    background-image: url('/static/images/handle.png');
+}
 /*============ MAP ============================*/
 #map.set_goal {
     cursor: url('/static/images/set_goal.png'), auto;

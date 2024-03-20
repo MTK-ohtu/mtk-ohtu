@@ -135,8 +135,8 @@ class LocationService:
     Are used in ContractorDivision to create lists 
     for frontend.
     """
+    location_id: int
     contractor_id: int
-    contractor_location_id: int
     name: str
     address: str
     telephone: str

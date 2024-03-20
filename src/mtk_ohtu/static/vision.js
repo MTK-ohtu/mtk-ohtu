@@ -1,4 +1,4 @@
-import { createListElement, createMarker, runListElementAnimation } from './element_factory.js'
+import { createListElement, createMarker, runListElementAnimation, addToListElement } from './element_factory.js'
 
 class VisionController {
 
@@ -9,6 +9,7 @@ class VisionController {
         this.data = {
             popup_open: {},
             element_open: {},
+            category: {},
             group: {},
             group_icon: {},
             element: {},
@@ -25,7 +26,7 @@ class VisionController {
         this.focusedRoute = null
         this.send = false
         this.companyFocus = true
-        this.flyTransition = 'none'
+        this.flyTransition = 'normal'
 
         //Bind data subdirectories to corresponding proxies
         for (const key in this.data) {
@@ -41,31 +42,31 @@ class VisionController {
     visionController(note) {
         console.log("controlMaster === '"+note.key+": '"+note.property+"' -> "+note.value)
         var attribute = note.key
-        var feature = note.property
+        var id = note.property
         var value = note.value
         //=======================================ELEMENT CLOSE/OPEN
         if (attribute == 'element_open') {
             if (value) {
                 if (this.openFeature != null) {
-                    runListElementAnimation(this.data.element[this.openFeature])
+                    runListElementAnimation(this.data.element[this.openFeature], 1)
                     this.data.element_open[this.openFeature] = false
                     this.proxies.popup_open[this.openFeature] = false
                     if (this.zoomedFeature != null) { 
                         this.data.element[this.openFeature].querySelector('#zoom_button')
                             .classList.remove('zoomed_in')
-                        this.data.element[feature].querySelector('#zoom_button')
+                        this.data.element[id].querySelector('#zoom_button')
                             .classList.add('zoomed_in')   
-                        this.zoomedFeature = feature
+                        this.zoomedFeature = id
                     }
                 }
-                this.openFeature = feature
-                runListElementAnimation(this.data.element[feature])
+                this.openFeature = id
+                runListElementAnimation(this.data.element[id], 2)
             } else {
-                runListElementAnimation(this.data.element[feature])
+                runListElementAnimation(this.data.element[id], 1)
                 if (this.focusedRoute == null) this.flyTransition = 'none'
                 this.openFeature = null
                 if (this.zoomedFeature != null) {
-                    this.data.element[feature].querySelector('#zoom_button')
+                    this.data.element[id].querySelector('#zoom_button')
                             .classList.remove('zoomed_in')
                     this.zoomedFeature = null
                 }
@@ -74,36 +75,48 @@ class VisionController {
         }
         //=======================================POPUP CLOSE/OPEN
         if (attribute == 'popup_open') { 
-            var marker = this.data.map_object[feature]
+            var marker = this.data.map_object[id]
             if (value) marker.openPopup()
             else marker.closePopup()
         }
         //=======================================SET VISIBLE / HIDDEN
         if (attribute == 'visible') {
             var count = document.getElementById('company_count')
-            var type = this.data.object_type[feature]
+            var type = this.data.object_type[id]
             // Feature was set to be shown AND it wasn't already visible
             if (type == 'l_marker') count.textContent = parseInt(count.textContent)+ ((-1)+2*(value ? 1 : 0))
             if (value) {
-                this.data.map_object[feature].addTo(this.map)
+                this.data.map_object[id].addTo(this.map)
                 if (type == 'l_marker') {
-                    this.data.element[feature].style.display = 'block'
-                    //runListElementAnimation(this.data.element[feature])
+                    this.data.element[id].style.display = 'block'
+                    this.proxies.in_focus[id] = true
+                    runListElementAnimation(this.data.element[id], 1)
                 }
             }
             else {
-                this.map.removeLayer(this.data.map_object[feature])
+                this.map.removeLayer(this.data.map_object[id])
                 if (type == 'l_marker') {
-                    //runListElementAnimation(this.data.element[feature])
-                    this.data.element[feature].style.display = 'none'
+                    if (this.openFeature == id) {
+                        console.log("OpenFeature: "+this.openFeature)
+                        this.openFeature = null
+                        //this.proxies.element_open[id] = false
+                    }
+                    //this.data.element[id].style.display = 'none'
+                    this.proxies.in_focus[id] = false
+                    this.data.popup_open[id] = false
+                    this.data.element_open[id] = false
+                    runListElementAnimation(this.data.element[id], 0)
+                    this.data.element[id].addEventListener('animationend', () => {
+                        this.data.element[id].style.display = 'none'
+                    }, { once: true })
                 }
             }
         }
         //=======================================ADD/REMOVE FOCUS
         if (attribute == 'in_focus') {
-            if (this.data.object_type[feature] === 'route') {
+            if (this.data.object_type[id] === 'route') {
                 if (this.focusedRoute === null) {
-                    this.focusedRoute = feature
+                    this.focusedRoute = id
                 } else {
                     this.focusedRoute = null
                 }
@@ -112,20 +125,19 @@ class VisionController {
         }
         //======================================MOVE FEATURE TO GROUP
         if (attribute == 'group') {
-            var marker = this.data.map_object[feature]
+            var marker = this.data.map_object[id]
             marker.setIcon(this.data.group_icon[value])
-            var type = this.data.object_type[feature]
-            if (!this.data.visible[feature] && this.data.group_visible[value]) {
-                this.proxies.visible[feature] = true
-                this.data.in_focus[feature] = true
+            var type = this.data.object_type[id]
+            if (!this.data.visible[id] && this.data.group_visible[value]) {
+                this.proxies.visible[id] = true
+                this.proxies.in_focus[id] = true
             }
-            else if (this.data.visible[feature]) {
+            else if (this.data.visible[id]) {
                 if (!this.data.group_visible[value]) {
-                    this.proxies.visible[feature] = false
-                    this.data.in_focus[feature] = false    
+                    this.proxies.visible[id] = false
+                    this.proxies.in_focus[id] = false    
                 }
             }
-            this.fly()
         }
     }
     //New proxy for reporting changes in data
@@ -154,30 +166,35 @@ class VisionController {
         var last = list.length -1
         list.forEach((feature, index) => {
             if (index == last) this.send = false
-            this.proxies.group[feature.properties.address] = group_name
+            this.proxies.group[feature.properties.location_id] = group_name
         })
         this.send = false
     }
 
     //Add list feature with corresponding marker on the map
     addListFeatureToGroup(feature, group_name, icon) {
-        const f = feature.properties.address
+        this.addListFeatureToCategories(feature)
+        const f = feature.properties.location_id
         console.log("Added list-feature: "+f)
         this.data.popup_open[f] = false
         this.data.element_open[f] = false
         this.data.group[f] = group_name
-        this.data.element[f] = createListElement(feature, group_name)
-        this.setEventListener(this.data.element[f])
-        this.data.map_object[f] = createMarker(feature, icon, this.L)
-        this.setMarkerClick(this.data.map_object[f], f)
-        const c = feature.geometry.coordinates
-        this.data.bounds[f] = L.latLngBounds(
-            L.latLng(c[1]-this.padding, c[0]-this.padding),
-            L.latLng(c[1]+this.padding, c[0]+this.padding)
-        )
-        this.data.object_type[f] = 'l_marker'
-        this.data.in_focus[f] = true
-        this.proxies.visible[f] = true
+        if (this.data.element.hasOwnProperty(f)) {
+            addToListElement(this.data.element[f], feature)
+        } else {
+            this.data.element[f] = createListElement(feature, group_name)
+            this.setEventListener(this.data.element[f])
+            this.data.map_object[f] = createMarker(feature, icon, this.L)
+            this.setMarkerClick(this.data.map_object[f], f)
+            const c = feature.geometry.coordinates
+            this.data.bounds[f] = L.latLngBounds(
+                L.latLng(c[1]-this.padding, c[0]-this.padding),
+                L.latLng(c[1]+this.padding, c[0]+this.padding)
+            )
+            this.data.object_type[f] = 'l_marker'
+            this.data.in_focus[f] = true
+            this.proxies.visible[f] = true
+        }
     }
 
     addMapFeatureToGroup(feature, group_name, icon) {
@@ -199,8 +216,8 @@ class VisionController {
     }
 
     addRoutesToGroup(routes, group_name) {
-        routes.forEach(feature => {
-            this.addRoute(feature, group_name)
+        routes.forEach(route => {
+            this.addRoute(route, group_name)
         })
     }
 
@@ -219,29 +236,56 @@ class VisionController {
         this.proxies.visible[routeId] = false
     }
 
+    addListFeatureToCategories(feature) {
+        Object.entries(feature.properties).forEach(([key,value]) => {
+            if (!this.data.category.hasOwnProperty(key)) {
+                this.data.category[key] = {}
+            }
+            this.data.category[key][feature.properties.location_id] = value
+        })
+    }
+    //============================================================================== TOGGLE FILTER
+    filterBy(property, value) {
+        var list = Object.entries(this.data.category[property])
+        console.log("Filtering '"+property+"': "+list)
+        if (typeof(value) === 'boolean') {
+            list.filter(([key, val]) => val == false)
+                .filter(([key, val]) => this.data.group[key] == 'optimal')
+                .forEach(([key, val]) => {
+                    this.proxies.visible[key] = !value
+                })
+        }
+        if (typeof(value) === 'number') {
+            list.filter(([key, val]) => val == false)
+                .forEach(([key, val]) => {
+                    console.log("Id: "+key+" = "+val+" -> "+!value)
+                    this.proxies.visible[key] = !value
+                })
+        }
+    }
     //============================================================================== TOGGLE
     //List element is being clicked (call from listelement)
-    toggleListElement(feature) {
-        var is_open = !Boolean(this.data.popup_open[feature])
-        this.proxies.popup_open[feature] = is_open
-        this.proxies.element_open[feature] = is_open
+    toggleListElement(id) {
+        var is_open = !Boolean(this.data.popup_open[id])
+        this.proxies.popup_open[id] = is_open
+        this.proxies.element_open[id] = is_open
     }
 
-    toggleMarker(feature) {
+    toggleMarker(id) {
         this.flyTransition = 'none'
-        this.toggleListElement(feature)
+        this.toggleListElement(id)
     }
 
     //When zoom button is being pressed (call from listelement#zoom_button)
-    toggleZoom(feature) {
+    toggleZoom(id) {
         this.flyTransition = 'fast'
         if (this.zoomedFeature != null) {
             this.zoomedFeature = null
-            this.data.element[feature].querySelector('#zoom_button')
+            this.data.element[id].querySelector('#zoom_button')
             .classList.remove('zoomed_in')
         } else {
-            this.zoomedFeature = feature
-            this.data.element[feature].querySelector('#zoom_button')
+            this.zoomedFeature = id
+            this.data.element[id].querySelector('#zoom_button')
                 .classList.add('zoomed_in')
         }
         this.fly()
@@ -258,7 +302,6 @@ class VisionController {
         this.data.group_visible[group_name] = is_visible
         entries.forEach((key, index) => {
             // If group has an open element, it will be closed
-            if (this.data.element_open[key]) this.toggleListElement(key)
             if (index == last) this.send = false
             // Change both visible and in_focus value of the feature
             this.proxies.in_focus[key] = is_visible 
@@ -364,19 +407,15 @@ class VisionController {
                 var element = e.target.parentElement.closest('button')
                 this.toggleZoom(element.id)
             } else {
-                if (e.target.tagName === 'BUTTON') {
-                    var element = e.target
-                } else {
-                    var element = e.target.closest('button')
-                }
+                var element = e.target.closest('button')
                 this.toggleListElement(element.id)
             }
         })
     }
 
-    setMarkerClick(marker, feature) {
+    setMarkerClick(marker, id) {
         marker.on('click', (e) => {
-            this.toggleMarker(feature);
+            this.toggleMarker(id);
         });
     }
 }

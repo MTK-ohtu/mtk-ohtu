@@ -291,8 +291,8 @@ def db_get_location_services_by_cargo_type(
         cursor = connection.cursor()
 
         cursor.execute(
-            "SELECT l.contractor_id,\
-                l.id,\
+            "SELECT l.id,\
+                l.contractor_id,\
                 con.name,\
                 l.address,\
                 l.telephone,\
