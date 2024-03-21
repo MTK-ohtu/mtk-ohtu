@@ -29,7 +29,7 @@
 
     <p>
     <form action="{{ url_for('main.contractor_location_bp.add') }}">
-        <input type="submit"value="{{ _('add_location_button') }}" />
+        <input type="submit"value="{{ _('add_contractor_location_button') }}" />
     </form>
     </p>
 </div>
@@ -45,7 +45,7 @@
         <form action="{{ url_for('main.contractor_location_bp.remove') }}" method="POST">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
             <input type="hidden" name="location_id" value="{{ location[0].id }}">
-            <input type="submit" value="{{ _('remove_location') }}">
+            <input type="submit" value="{{ _('remove_location_button') }}">
         </form>
         </p>
 
@@ -56,15 +56,15 @@
             <form action="{{ url_for('main.cargo_bp.remove') }}" method="POST">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                 <input type="hidden" name="cargo_id" value="{{ sidestream.id }}">
-                <input type="submit" value="{{ _('remove_material') }}">
+                <input type="submit" value="{{ _('remove_material_button') }}">
             </form>
         {% else %}
-          {{ _("no_material_types_added") }}
+          {{ _("no_material_types_added_message") }}
         {% endfor %}
     </div>
 
 {% else %}
-  {{ _("no_locations_added") }}
+  {{ _("no_locations_added_message") }}
 {% endfor %}
 
 {% endblock %}

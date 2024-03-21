@@ -7,17 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-03-20 17:20+0200\n"
+"POT-Creation-Date: 2024-03-21 14:31+0200\n"
 "PO-Revision-Date: 2024-03-20 17:21+0200\n"
 "Last-Translator: \n"
-"Language-Team: zh <LL@li.org>\n"
 "Language: zh\n"
+"Language-Team: zh <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
 "Generated-By: Babel 2.14.0\n"
-"X-Generator: Poedit 3.0.1\n"
 
 #: src/mtk_ohtu/database/db_enums.py:8
 msgid "buy"
@@ -333,7 +332,8 @@ msgid "close"
 msgstr "关闭"
 
 #: src/mtk_ohtu/templates/contractor.html:32
-msgid "add_location_button"
+#, fuzzy
+msgid "add_contractor_location_button"
 msgstr "添加地点"
 
 #: src/mtk_ohtu/templates/contractor.html:37
@@ -341,7 +341,8 @@ msgid "ml_locations_header"
 msgstr "我的地点"
 
 #: src/mtk_ohtu/templates/contractor.html:48
-msgid "remove_location"
+#, fuzzy
+msgid "remove_location_button"
 msgstr "删除地点"
 
 #: src/mtk_ohtu/templates/contractor.html:52
@@ -361,15 +362,18 @@ msgid "can_process"
 msgstr "能加工"
 
 #: src/mtk_ohtu/templates/contractor.html:59
-msgid "remove_material"
+#, fuzzy
+msgid "remove_material_button"
 msgstr "删除材料"
 
 #: src/mtk_ohtu/templates/contractor.html:62
-msgid "no_material_types_added"
+#, fuzzy
+msgid "no_material_types_added_message"
 msgstr "未添加材料类型"
 
 #: src/mtk_ohtu/templates/contractor.html:67
-msgid "no_locations_added"
+#, fuzzy
+msgid "no_locations_added_message"
 msgstr "未添加地点"
 
 #: src/mtk_ohtu/templates/index.html:4 src/mtk_ohtu/templates/index.html:8
@@ -516,3 +520,4 @@ msgstr "用户名缺失或已被使用"
 #: src/mtk_ohtu/templates/register.html:41
 msgid "password_needs_to_have_one_number_and_one_special_character"
 msgstr "密码需要至少一个数字和一个特殊字符"
+
