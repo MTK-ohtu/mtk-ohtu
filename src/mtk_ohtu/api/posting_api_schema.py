@@ -31,7 +31,7 @@ class PostingApiSchema(Schema):
     delivery_method = fields.Enum(DeliveryMethodType, by_value=True)
     demand = fields.Enum(SupplyDemandType, by_value=True)
     batch_size = fields.Int()
-    batch_type = fields.Enum(BatchUnitsType, by_value=True)
+    batch_unit = fields.Enum(BatchUnitsType, by_value=True)
     expiry_date = fields.Int()
     price = fields.Float()
     delivery_details = fields.Str()
@@ -46,7 +46,7 @@ class PostingApiSchema(Schema):
         "delivery_method",
         "demand",
         "batch_size",
-        "batch_type",
+        "batch_unit",
         "expiry_date",
         "price",
         "address",
