@@ -460,19 +460,19 @@ msgstr "Distance"
 
 #: src/mtk_ohtu/templates/login.html:21 src/mtk_ohtu/templates/register.html:28
 msgid "username"
-msgstr ""
+msgstr "username"
 
 #: src/mtk_ohtu/templates/login.html:25
 msgid "input_username_error"
-msgstr ""
+msgstr "username required or already taken"
 
 #: src/mtk_ohtu/templates/login.html:31 src/mtk_ohtu/templates/register.html:37
 msgid "password"
-msgstr ""
+msgstr "password"
 
 #: src/mtk_ohtu/templates/login.html:33
 msgid "forgot_password_question"
-msgstr ""
+msgstr "Forgot password?"
 
 #: src/mtk_ohtu/templates/login.html:38
 msgid "input_password_error"
@@ -480,11 +480,11 @@ msgstr ""
 
 #: src/mtk_ohtu/templates/login.html:56
 msgid "dont_have_account_question"
-msgstr ""
+msgstr "Dont have an account"
 
 #: src/mtk_ohtu/templates/login.html:56
 msgid "register_here_button"
-msgstr ""
+msgstr "Register here"
 
 #: src/mtk_ohtu/templates/product.html:27
 msgid "fuel_economy"
@@ -532,12 +532,12 @@ msgstr ""
 
 #: src/mtk_ohtu/templates/register.html:23
 msgid "email_required_or_already_taken"
-msgstr ""
+msgstr "Email required or already taken"
 
 #: src/mtk_ohtu/templates/register.html:31
 msgid "username_required_or_already_taken"
-msgstr ""
+msgstr "Username required or already taken"
 
 #: src/mtk_ohtu/templates/register.html:41
 msgid "password_needs_to_have_one_number_and_one_special_character"
-msgstr ""
+msgstr "Minimum eight characters, at least one letter and one number"
