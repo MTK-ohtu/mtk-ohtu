@@ -3,6 +3,7 @@ import requests
 from ..logic.location import Location
 
 
+
 class Route:
 
     """A class for calculating the distance and duration of a route between two locations.
@@ -47,12 +48,12 @@ class Route:
     def calculate_route(self):
         """Calculate the route between the two locations. The route detailes are saved as class variables."""
         try:
-            call = self.__get_route_call()
+            call = self.__get_route_call_post()
             route_summary = call.json()["features"][0]["properties"]["summary"]
             self.geojson = call.text
         except Exception as exept:
             raise ValueError(
-                f"Error in route call. Coordinates: {self.location1.latitude}, {self.location1.longitude} and {self.location2.latitude}, {self.location2.longitude}"
+                f"Error in route call. Coordinates: {self.location1.latitude}, {self.location1.longitude} and {self.location2.latitude}, {self.location2.longitude} \n types of coordinates, loc1: {type(self.location1.latitude)}, {type(self.location1.longitude)}, loc2: {type(self.location2.latitude)}, {type(self.location2.longitude)}"
             ) from exept
 
         # if the two locations are the same, the summary is an empty dict
@@ -71,8 +72,8 @@ class Route:
         ).m
         return self.geodesic_distance_meters
 
-    def __get_route_call(self):
-        """Return the route call from the openrouteservice API."""
+    def __get_route_call_get(self):
+        """Return the route call from the openrouteservice API (not active)."""
 
         headers = {
             "Accept": "application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8",
@@ -91,8 +92,8 @@ class Route:
         """Return the route call from the openrouteservice API using a more complicated post request."""
         body = {
             "coordinates": [
-                [self.location1.longitude, self.location1.latitude],
-                [self.location2.longitude, self.location2.latitude],
+                [float(self.location1.longitude), float(self.location1.latitude)],
+                [float(self.location2.longitude), float(self.location2.latitude)],
             ],
             "instructions": "false",
             "preference": "shortest",
@@ -104,10 +105,12 @@ class Route:
             "Content-Type": "application/json; charset=utf-8",
         }
         print("calling")
+        print(body)
+        print(headers)
         call = requests.post(
             "https://api.openrouteservice.org/v2/directions/driving-hgv/geojson",
             json=body,
-            headers=headers,
+            headers=headers
         )
 
         print(call.status_code, call.reason)

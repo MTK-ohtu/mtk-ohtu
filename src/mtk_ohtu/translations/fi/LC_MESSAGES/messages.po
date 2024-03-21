@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-03-20 17:20+0200\n"
+"POT-Creation-Date: 2024-03-21 14:24+0200\n"
 "PO-Revision-Date: 2024-03-18 11:56+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fi\n"
@@ -137,32 +137,28 @@ msgstr ""
 #: src/mtk_ohtu/routes/contractor_location.py:60
 #: src/mtk_ohtu/routes/contractor_location.py:78
 msgid "error_occurred"
-msgstr ""
+msgstr "Toiminto epäonnistui. Yritä uudelleen."
 
 #: src/mtk_ohtu/routes/cargo.py:43
-#, fuzzy
 msgid "material_type_added"
-msgstr "Ei lisättyjä materiaalityyppejä."
+msgstr "Materiaalityyppi lisätty."
 
 #: src/mtk_ohtu/routes/cargo.py:61
 #, fuzzy
 msgid "material_type_removed"
-msgstr "Hinta"
+msgstr "Materiaalityyppi poistettu."
 
 #: src/mtk_ohtu/routes/contractor_location.py:34
-#, fuzzy
 msgid "new_location_added"
-msgstr "Toimipaikat"
+msgstr "Uusi toimipiste lisätty"
 
 #: src/mtk_ohtu/routes/contractor_location.py:63
-#, fuzzy
 msgid "changes_saved"
-msgstr "Voin levittää"
+msgstr "Muutokset tallennettu"
 
 #: src/mtk_ohtu/routes/contractor_location.py:81
-#, fuzzy
 msgid "location_removed"
-msgstr "Toimipaikat"
+msgstr "toimipaikka poistettu"
 
 #: src/mtk_ohtu/routes/listing.py:27
 msgid "submit_address_first"
@@ -185,17 +181,17 @@ msgstr "Toimipaikat"
 #: src/mtk_ohtu/templates/addlocation.html:103
 #: src/mtk_ohtu/templates/addlogistics.html:197
 msgid "address"
-msgstr "Katuosoite*"
+msgstr "Katuosoite"
 
 #: src/mtk_ohtu/templates/addlocation.html:105
 #: src/mtk_ohtu/templates/addlogistics.html:199
 msgid "postal_code"
-msgstr "Postinumero*"
+msgstr "Postinumero"
 
 #: src/mtk_ohtu/templates/addlocation.html:107
 #: src/mtk_ohtu/templates/addlogistics.html:201
 msgid "city"
-msgstr "Kaupunki*"
+msgstr "Kaupunki"
 
 #: src/mtk_ohtu/templates/addlocation.html:111
 #: src/mtk_ohtu/templates/addlogistics.html:205
@@ -253,7 +249,7 @@ msgstr "Lisää toimipiste"
 
 #: src/mtk_ohtu/templates/addlocation.html:140
 msgid "cancel"
-msgstr ""
+msgstr "Kumoa"
 
 #: src/mtk_ohtu/templates/addlogistics.html:4
 #: src/mtk_ohtu/templates/addlogistics.html:170
@@ -343,8 +339,7 @@ msgid "close"
 msgstr ""
 
 #: src/mtk_ohtu/templates/contractor.html:32
-#, fuzzy
-msgid "add_location_button"
+msgid "add_contractor_location_button"
 msgstr "uusi toimipaikka"
 
 #: src/mtk_ohtu/templates/contractor.html:37
@@ -352,44 +347,36 @@ msgid "ml_locations_header"
 msgstr "Toimipaikat"
 
 #: src/mtk_ohtu/templates/contractor.html:48
-#, fuzzy
-msgid "remove_location"
-msgstr "Lisää toimipiste"
+msgid "remove_location_button"
+msgstr "poista toimipiste"
 
 #: src/mtk_ohtu/templates/contractor.html:52
-#, fuzzy
 msgid "contractor_location_material_types"
 msgstr "Materiaalityypit"
 
 #: src/mtk_ohtu/templates/contractor.html:55
-#, fuzzy
 msgid "material_price"
 msgstr "Hinta"
 
 #: src/mtk_ohtu/templates/contractor.html:55
-#, fuzzy
 msgid "max_capacity"
 msgstr "Maksimikapasiteetti"
 
 #: src/mtk_ohtu/templates/contractor.html:55
-#, fuzzy
 msgid "can_process"
 msgstr "Levitysmahdollisuus"
 
 #: src/mtk_ohtu/templates/contractor.html:59
-#, fuzzy
-msgid "remove_material"
-msgstr "Valitse materiaalit joita pystyt kuljettamaan"
+msgid "remove_material_button"
+msgstr "poista materiaalityyppi"
 
 #: src/mtk_ohtu/templates/contractor.html:62
-#, fuzzy
-msgid "no_material_types_added"
+msgid "no_material_types_added_message"
 msgstr "Ei lisättyjä materiaalityyppejä."
 
 #: src/mtk_ohtu/templates/contractor.html:67
-#, fuzzy
-msgid "no_locations_added"
-msgstr "Toimipaikat"
+msgid "no_locations_added_message"
+msgstr "Ei lisättyjä toimipaikkoja."
 
 #: src/mtk_ohtu/templates/index.html:4 src/mtk_ohtu/templates/index.html:8
 #: src/mtk_ohtu/templates/layout.html:24
@@ -535,4 +522,5 @@ msgstr "Käyttäjätunnus tarvitaan tai se on otettu"
 
 #: src/mtk_ohtu/templates/register.html:41
 msgid "password_needs_to_have_one_number_and_one_special_character"
-msgstr "Salasanassa pitää olla 1 numero ja 1 erikoismerkki."
+msgstr ""
+

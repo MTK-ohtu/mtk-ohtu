@@ -22,14 +22,12 @@ class TestRoute(unittest.TestCase):
         self.location1 = mock_location_class()
         self.location2 = mock_location_class()
 
-        self.api_key = "test_api_key"
-        self.route = Route(self.location1, self.location2, self.api_key)
+        self.route = Route(self.location1, self.location2)
 
     def test_init(self):
         # Test initialization and attribute assignments
         self.assertEqual(self.route.location1, self.location1)
         self.assertEqual(self.route.location2, self.location2)
-        self.assertEqual(self.route.api_key, self.api_key)
         self.assertEqual(self.route.distance, 0)
         self.assertEqual(self.route.duration, 0)
         self.assertEqual(self.route.geodesic_distance_meters, 0)
@@ -38,10 +36,10 @@ class TestRoute(unittest.TestCase):
     def test_same_location_initialization(self):
         # Test that a ValueError is raised if the two locations are the same
         with self.assertRaises(ValueError):
-            Route(self.location1, self.location1, self.api_key)
+            Route(self.location1, self.location1)
 
-    @patch("requests.get")
-    def test_calculate_route(self, mock_get):
+    @patch("requests.post")
+    def test_calculate_route(self, mock_post):
         # Mock the API response
         mock_response = MagicMock()
         mock_response.status_code = 200
@@ -57,18 +55,30 @@ class TestRoute(unittest.TestCase):
                 }
             ]
         }
-        mock_get.return_value = mock_response
+        mock_post.return_value = mock_response
 
         self.route.calculate_route()
         print(self.route.distance)
 
         # Verify the API call was made correctly
-        mock_get.assert_called_with(
-            f"https://api.openrouteservice.org/v2/directions/driving-hgv?api_key={self.api_key}&start={self.location1.longitude},{self.location1.latitude}&end={self.location2.longitude},{self.location2.latitude}",
-            headers={
-                "Accept": "application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8",
-            },
-            timeout=600,
+        body = {
+            "coordinates": [
+                [float(self.location1.longitude), float(self.location1.latitude)],
+                [float(self.location2.longitude), float(self.location2.latitude)],
+            ],
+            "instructions": "false",
+            "preference": "shortest",
+        }
+
+        headers = {
+            "Accept": "application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8",
+            "Authorization": self.route.api_key,
+            "Content-Type": "application/json; charset=utf-8",
+        }
+        mock_post.assert_called_with(
+            "https://api.openrouteservice.org/v2/directions/driving-hgv/geojson",
+            json=body,
+            headers=headers
         )
 
         # Check if the distance and duration were updated correctly

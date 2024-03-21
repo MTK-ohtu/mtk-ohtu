@@ -70,7 +70,7 @@ def test_api_correct_response(client):
 
         # These values need to be updated with the mock data
         assert response.json["provider_count"] == 4
-        assert round(response.json["distance"], -1) == 530
+        assert round(response.json["distance"], -1) == 480
         assert response.json["logistics_url"] == "http://localhost/listing/3"
 
 

@@ -1,4 +1,5 @@
 import pytest
+from mtk_ohtu import lang
 from mtk_ohtu import app as mtkapp
 from mtk_ohtu.database import db_meta as dbm
 import mtk_ohtu.config as config
