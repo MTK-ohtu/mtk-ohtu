@@ -48,7 +48,7 @@ def test_db_create_post_correct_succeeds(client):
         response = post_test(client, json=json)
         assert response.content_type == "application/json"
         assert response.json["success"]
-        assert client.get("/listing/100").status_code == 200
+        assert client.get("en/listing/100").status_code == 200
 
 def test_db_update_post_id_not_exists(client):
     json = deepcopy(UPDATE_JSON)
@@ -63,11 +63,11 @@ def test_db_update_post_id_not_exists(client):
 def test_db_update_post_correct_succeeds(client):
     json = deepcopy(UPDATE_JSON)
     with client:
-        assert "<h1>250 €</h1>".encode('utf8') in client.get("/listing/1").data
+        assert "<h1>250 €</h1>".encode('utf8') in client.get("en/listing/1").data
         response = post_test(client, json=json)
         assert response.content_type == "application/json"
         assert response.json["success"]
-        assert "<h1>1234 €</h1>".encode('utf8') in client.get("/listing/1").data
+        assert "<h1>1234 €</h1>".encode('utf8') in client.get("en/listing/1").data
 
 def test_db_delete_post_not_exists(client):
     with client:
@@ -79,11 +79,11 @@ def test_db_delete_post_not_exists(client):
 
 def test_db_delete_post_correct_succeeds(client):
     with client:
-        assert client.get("/listing/1").status_code == 200
+        assert client.get("en/listing/1").status_code == 200
         response = post_test(client, json={'posting_id': 1, 'entry_type': 'delete'})
         assert response.content_type == "application/json"
         assert response.json["success"]
-        assert client.get("/listing/1").status_code == 404
+        assert client.get("en/listing/1").status_code == 404
 
 def test_incorrect_api_key(client):
     with client:
