@@ -22,7 +22,7 @@ LISTING_NAME_TABLE = {
     "demand": "supply_demand",
     "expiry_date": "expiration_date",
     "batch_size": "batch_size",
-    "batch_type": "batch_type",
+    "batch_unit": "batch_type",
     # None: "image"
     "price": "price",
     "delivery_details": "delivery_details",
@@ -46,7 +46,7 @@ class FullListing:
     demand: SupplyDemandType = None
     expiry_date: int = None
     batch_size: int = None
-    batch_type: BatchUnitsType = None
+    batch_unit: BatchUnitsType = None
     price: float = None
     delivery_details: str = None
     address: str = None
