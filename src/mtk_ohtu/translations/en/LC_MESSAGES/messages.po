@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-03-20 17:20+0200\n"
+"POT-Creation-Date: 2024-03-21 14:31+0200\n"
 "PO-Revision-Date: 2024-03-18 14:04+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -139,32 +139,27 @@ msgstr ""
 #: src/mtk_ohtu/routes/contractor_location.py:60
 #: src/mtk_ohtu/routes/contractor_location.py:78
 msgid "error_occurred"
-msgstr ""
+msgstr "An error occured. Please try again."
 
 #: src/mtk_ohtu/routes/cargo.py:43
-#, fuzzy
 msgid "material_type_added"
-msgstr "Nothing in here yet. Start by adding some materials."
+msgstr "Material type added"
 
 #: src/mtk_ohtu/routes/cargo.py:61
-#, fuzzy
 msgid "material_type_removed"
-msgstr "Price"
+msgstr "Material type removed"
 
 #: src/mtk_ohtu/routes/contractor_location.py:34
-#, fuzzy
 msgid "new_location_added"
-msgstr "Locations"
+msgstr "New location added"
 
 #: src/mtk_ohtu/routes/contractor_location.py:63
-#, fuzzy
 msgid "changes_saved"
 msgstr "Can spread"
 
 #: src/mtk_ohtu/routes/contractor_location.py:81
-#, fuzzy
 msgid "location_removed"
-msgstr "Locations"
+msgstr "Location removed"
 
 #: src/mtk_ohtu/routes/listing.py:27
 msgid "submit_address_first"
@@ -255,7 +250,7 @@ msgstr "Add location"
 
 #: src/mtk_ohtu/templates/addlocation.html:140
 msgid "cancel"
-msgstr ""
+msgstr "Cancel"
 
 #: src/mtk_ohtu/templates/addlogistics.html:4
 #: src/mtk_ohtu/templates/addlogistics.html:170
@@ -347,52 +342,44 @@ msgid "close"
 msgstr ""
 
 #: src/mtk_ohtu/templates/contractor.html:32
-#, fuzzy
-msgid "add_location_button"
-msgstr "create new location"
+msgid "add_contractor_location_button"
+msgstr "New location"
 
 #: src/mtk_ohtu/templates/contractor.html:37
 msgid "ml_locations_header"
 msgstr "Locations"
 
 #: src/mtk_ohtu/templates/contractor.html:48
-#, fuzzy
-msgid "remove_location"
-msgstr "Add location"
+msgid "remove_location_button"
+msgstr "delete location"
 
 #: src/mtk_ohtu/templates/contractor.html:52
-#, fuzzy
 msgid "contractor_location_material_types"
 msgstr "Material types you can deliver"
 
 #: src/mtk_ohtu/templates/contractor.html:55
-#, fuzzy
 msgid "material_price"
 msgstr "Price"
 
 #: src/mtk_ohtu/templates/contractor.html:55
-#, fuzzy
 msgid "max_capacity"
 msgstr "Maximum capacity"
 
 #: src/mtk_ohtu/templates/contractor.html:55
-#, fuzzy
 msgid "can_process"
 msgstr "Can process"
 
 #: src/mtk_ohtu/templates/contractor.html:59
-#, fuzzy
-msgid "remove_material"
-msgstr "Select materials you can deliver"
+msgid "remove_material_button"
+msgstr "delete material type"
 
 #: src/mtk_ohtu/templates/contractor.html:62
-#, fuzzy
-msgid "no_material_types_added"
+msgid "no_material_types_added_message"
 msgstr "Nothing in here yet. Start by adding some materials."
 
 #: src/mtk_ohtu/templates/contractor.html:67
 #, fuzzy
-msgid "no_locations_added"
+msgid "no_locations_added_message"
 msgstr "Locations"
 
 #: src/mtk_ohtu/templates/index.html:4 src/mtk_ohtu/templates/index.html:8
@@ -541,3 +528,4 @@ msgstr ""
 #: src/mtk_ohtu/templates/register.html:41
 msgid "password_needs_to_have_one_number_and_one_special_character"
 msgstr ""
+
