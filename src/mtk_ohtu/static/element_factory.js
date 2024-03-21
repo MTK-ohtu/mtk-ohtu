@@ -124,7 +124,7 @@ function createMarker(feature, icon, L) {
     var [lat, lng] = feature.geometry.coordinates
     var marker = L.marker(L.latLng(lng, lat), { icon: icon })
     var popup = new L.popup({ autoClose: false, closeOnClick: false }).setContent(
-        '<h4>' + feature.properties.name + '</h4><p>' + feature.properties.address+'</p>'
+        '<h4>' + feature.properties.name + '</h4><p>' + feature.properties.address+'</p><p>' + lat+','+lng+'</p>'
         )
     popup._initLayout()
     marker.i = feature.properties.location_id

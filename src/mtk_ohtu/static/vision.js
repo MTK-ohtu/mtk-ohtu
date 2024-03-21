@@ -56,8 +56,9 @@ class VisionController {
             filtered: {},               // For every CL, keep record of how many active filters they are affected by
                                         // Key: feature.properties.location_id
             
-            service_home: {}            // For every CLF, remember their CL. This removes the need to use JSON.parse in every query
+            service_home: {},           // For every CLF, remember their CL. This removes the need to use JSON.parse in every query
                                         // Key: JSON.stringify(feature) 
+            
         }
 
         //These are used in controller logic
@@ -123,14 +124,19 @@ class VisionController {
             else marker.closePopup()
         }
 
-        //=======================================CHECK FILTER VALUE
+        //=======================================REGISTER CHANGE IN FILTERED VALUES
         if (attribute == 'filtered') {
-            this.data.element[id].classList.remove(this.data.group[id])
-            if (value <= 0) {
-                this.proxies.group[id] = 'suboptimal'
-            } else {
-                this.proxies.group[id] = 'optimal'
-            }
+            Object.entries(this.data.filtered)
+                .forEach(([loc, entries]) => {
+                    var total_filter = Math.max(...Object.values(entries))
+                    console.log(loc+": filters = "+Object.values(entries))
+                    this.data.element[loc].classList.remove(this.data.group[loc])
+                    if (total_filter <= 0) {
+                        this.proxies.group[loc] = 'suboptimal'
+                    } else {
+                        this.proxies.group[loc] = 'optimal'
+                    }
+                })
         }
 
         //=======================================SET VISIBLE / HIDDEN
@@ -230,8 +236,8 @@ class VisionController {
         this.data.group[f] = group_name
         if (this.data.element.hasOwnProperty(f)) {
             addToListElement(this.data.element[f], feature)
-            this.data.filtered[f] += 1
         } else {
+            this.data.filtered[f] = {}
             this.data.element[f] = createListElement(feature, group_name)
             this.setEventListener(this.data.element[f])
             this.data.map_object[f] = createMarker(feature, icon, this.L)
@@ -244,8 +250,10 @@ class VisionController {
             this.data.object_type[f] = 'l_marker'
             this.data.in_focus[f] = true
             this.proxies.visible[f] = true
-            this.data.filtered[f] = 1
         }
+        var filterKey = JSON.stringify(feature)
+        var filterVal = (group_name == 'optimal' ? 1 : 0)
+        this.data.filtered[f][filterKey] = filterVal
     }
 
     addMapFeatureToGroup(feature, group_name, icon) {
@@ -302,20 +310,19 @@ class VisionController {
         if (typeof(value) === 'boolean') {
             list.filter(([key, val]) => val == false)
                 .forEach(([key, val]) => {
-                    this.proxies.filtered[this.data.service_home[key]] -= ((-1)+2*(value ? 1 : 0))
+                    var home = this.data.service_home[key]
+                    this.data.filtered[home][key] -= ((-1)+2*(value ? 1 : 0))
                 })
         }
         if (typeof(value) === 'number') {
-            list.forEach(([key, val]) => {
-                this.data.filtered[this.data.service_home[val]] += 1;
-            })
             // Non positive value means that value*(-1) is LOWER LIMIT (e.g max_capacity)
             if (value <= 0) {
                 //Choose every feature, that has this property value less or equal
                 list.filter(([key, val]) => val <= -value)
                     .forEach(([key, val]) => {
                         // Reduce the home location's filter value for every feature on list
-                        this.data.filtered[this.data.service_home[val]] -= 1;
+                        var home = this.data.service_home[key]
+                        this.data.filtered[key] -= 1;
                     })
             }
             // Positive value means that value is UPPER LIMIT (e.g. base_rate)
@@ -324,10 +331,11 @@ class VisionController {
                 list.filter(([key, val]) => val > value)
                     .forEach(([key, val]) => {
                         // Reduce the home location's filter value for every feature on list
-                        this.data.filtered[this.data.service_home[val]] -= 1;
+                        this.data.filtered[key] -= 1;
                     })
             }
         }
+        this.visionController({key:'filtered', property: property, value: null})
     }
     //============================================================================== TOGGLE
     //List element is being clicked (call from listelement)
