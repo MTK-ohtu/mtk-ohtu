@@ -6,6 +6,16 @@
     .flashes {
         text-align: center;
     }
+
+    .kelluva {
+        position: absolute;
+        width: 50vh;
+        height: 50vh;
+        top: 25vh; /* Säädä nämä arvot haluamasi sijainnin mukaan */
+        left: 25vh; /* Säädä nämä arvot haluamasi sijainnin mukaan */
+        background-color: red;
+        padding: 10px;
+    }
 </style>
 
 {% with messages = get_flashed_messages() %}
@@ -28,9 +38,18 @@
     {% endif %}
 
     <p>
-    <form action="{{ url_for('main.contractor_location_bp.add') }}">
-        <input type="submit"value="{{ _('add_contractor_location_button') }}" />
-    </form>
+    <!-- <form action="{{ url_for('main.contractor_location_bp.add') }}">
+        <input type="submit" id="add_location" value="{{ _('add_location_button') }}" />
+    </form> -->
+    <button id="add_location">AVAA KELLUVA</button>
+    <script>
+        var e = document.createElement('div')
+        e.classList.add('kelluva')
+        var button = document.getElementById('add_location')
+        button.addEventListener('click', () => {
+            button.appendChild(e)
+        })
+    </script>
     </p>
 </div>
 

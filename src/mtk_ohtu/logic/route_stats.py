@@ -24,7 +24,7 @@ class Emissions:
             "petrol": FuelType.PETROL,
             "biodiesel": FuelType.BIODIESEL,
             "natural_gas": FuelType.NATURAL_GAS,
-            "bio_gas": FuelType.BIO_GAS,
+            "biogas": FuelType.BIO_GAS,
             "electricity": FuelType.ELECTRICITY,
         }
 

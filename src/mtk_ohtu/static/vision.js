@@ -80,8 +80,12 @@ class VisionController {
     }
 
     //=========================================================================================== VISION CONTROL
-    //When notified about change, change visuals according to the new state
+    //When notified about change (receiving note), change visuals according to the new state
     visionController(note) {
+        // Note properties:
+        //  key: changed subdirectory (e.g. data.visible)
+        //  property: id of the feature the the change is concerned
+        //  value: new value for the id in this subdirectory
         console.log("visionController === '"+note.key+": '"+note.property+"' -> "+note.value)
         var attribute = note.key
         var id = note.property
@@ -307,6 +311,8 @@ class VisionController {
     //============================================================================== TOGGLE FILTER
     filterBy(property, value) {
         var list = Object.entries(this.data.category[property])
+
+        // For properties with boolean values, choose every feature that is not TRUE (doesn't meet the requirement)
         if (typeof(value) === 'boolean') {
             list.filter(([key, val]) => val == false)
                 .forEach(([key, val]) => {
@@ -317,24 +323,25 @@ class VisionController {
         if (typeof(value) === 'number') {
             // Non positive value means that value*(-1) is LOWER LIMIT (e.g max_capacity)
             if (value <= 0) {
-                //Choose every feature, that has this property value less or equal
+                //Choose every feature, that has this value LESS than
                 list.filter(([key, val]) => val <= -value)
                     .forEach(([key, val]) => {
                         // Reduce the home location's filter value for every feature on list
                         var home = this.data.service_home[key]
-                        this.data.filtered[key] -= 1;
+                        this.data.filtered[key] -= ((-1)+2*(value ? 1 : 0))
                     })
             }
             // Positive value means that value is UPPER LIMIT (e.g. base_rate)
             if (value > 0) {
-                //Choose every feature, that has this property value over
+                //Choose every features, that have this value GREATER than
                 list.filter(([key, val]) => val > value)
                     .forEach(([key, val]) => {
                         // Reduce the home location's filter value for every feature on list
-                        this.data.filtered[key] -= 1;
+                        this.data.filtered[key] -= ((-1)+2*(value ? 1 : 0));
                     })
             }
         }
+        // After updating filter values, notify visionController
         this.visionController({key:'filtered', property: property, value: null})
     }
     //============================================================================== TOGGLE

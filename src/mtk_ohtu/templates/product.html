@@ -67,7 +67,7 @@
                         <th align="left">kg CO2</th>
                         {% for emission in emission_comparison %}
                     <tr>
-                        <td align="left">{{emission}}</td>
+                        <td align="left">{{ _(emission) }}</td>
                         <td align="right">{{emission_comparison[emission]}}</td>
                         {% endfor %}
                 </table>
