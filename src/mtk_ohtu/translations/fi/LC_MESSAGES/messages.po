@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-03-21 14:24+0200\n"
+"POT-Creation-Date: 2024-03-21 14:19+0200\n"
 "PO-Revision-Date: 2024-03-18 11:56+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fi\n"
@@ -443,7 +443,7 @@ msgstr "Kuljetussäde"
 
 #: src/mtk_ohtu/templates/login.html:21 src/mtk_ohtu/templates/register.html:28
 msgid "username"
-msgstr ""
+msgstr "Käyttäjätunnus"
 
 #: src/mtk_ohtu/templates/login.html:25
 msgid "input_username_error"
@@ -451,23 +451,23 @@ msgstr ""
 
 #: src/mtk_ohtu/templates/login.html:31 src/mtk_ohtu/templates/register.html:37
 msgid "password"
-msgstr ""
+msgstr "Salasana"
 
 #: src/mtk_ohtu/templates/login.html:33
 msgid "forgot_password_question"
-msgstr ""
+msgstr "Unohditko salasanasi"
 
 #: src/mtk_ohtu/templates/login.html:38
 msgid "input_password_error"
-msgstr ""
+msgstr "Väärä salasana"
 
 #: src/mtk_ohtu/templates/login.html:56
 msgid "dont_have_account_question"
-msgstr ""
+msgstr "Eikö sinulla ole käyttäjää"
 
 #: src/mtk_ohtu/templates/login.html:56
 msgid "register_here_button"
-msgstr ""
+msgstr "Rekisteröidy tästä"
 
 #: src/mtk_ohtu/templates/product.html:27
 msgid "fuel_economy"
@@ -510,15 +510,15 @@ msgstr ""
 #: src/mtk_ohtu/templates/register.html:16
 #: src/mtk_ohtu/templates/register.html:48
 msgid "register"
-msgstr ""
+msgstr "Rekisteröidy"
 
 #: src/mtk_ohtu/templates/register.html:23
 msgid "email_required_or_already_taken"
-msgstr ""
+msgstr "Sähköposti tarvitaan tai se on otettu"
 
 #: src/mtk_ohtu/templates/register.html:31
 msgid "username_required_or_already_taken"
-msgstr ""
+msgstr "Käyttäjätunnus tarvitaan tai se on otettu"
 
 #: src/mtk_ohtu/templates/register.html:41
 msgid "password_needs_to_have_one_number_and_one_special_character"
