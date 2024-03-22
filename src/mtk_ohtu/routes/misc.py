@@ -21,3 +21,8 @@ def change_language(new_language: str):
 @misc_bp.route("/<path:p>")
 def fallback_errorhandler(p: str):
     return render_template("404.html"), 404
+
+# Temporary, for testing purposes. Remove when not needed.
+@misc_bp.route("/product_redesign")
+def product_redesign():
+    return render_template("product_redesign.html")
