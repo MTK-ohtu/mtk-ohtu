@@ -6,16 +6,6 @@
     .flashes {
         text-align: center;
     }
-
-    .kelluva {
-        position: absolute;
-        width: 50vh;
-        height: 50vh;
-        top: 25vh; /* Säädä nämä arvot haluamasi sijainnin mukaan */
-        left: 25vh; /* Säädä nämä arvot haluamasi sijainnin mukaan */
-        background-color: red;
-        padding: 10px;
-    }
 </style>
 
 {% with messages = get_flashed_messages() %}
@@ -28,6 +18,56 @@
   {% endif %}
 {% endwith %}
 
+<dialog id="removeLocationDialog">
+    <form action="{{url_for('main.contractor_location_bp.remove')}}" method="POST">
+        <p><label>{{ _("remove_location_dialog_header") }}</label></p>
+        <input type="hidden" name="csrf_token" value="{{csrf_token()}}"/>
+        <input type="hidden" id="rld_location_id" name="location_id">
+        <button type="button" id="closeRemoveLocationDialog">{{ _("dialog_cancel") }}</button>
+        <input type="submit" value="{{_('dialog_confirm')}}">
+    </form>
+</dialog>
+
+<dialog id="removeMaterialDialog">
+    <form action="{{url_for('main.cargo_bp.remove')}}" method="POST">
+        <p><label>{{ _("remove_material_dialog_header") }}</label></p>
+        <input type="hidden" name="csrf_token" value="{{csrf_token()}}"/>
+        <input type="hidden" id="rmd_material_id" name="cargo_id">
+        <button type="button" id="closeRemoveMaterialDialog">{{ _("dialog_cancel") }}</button>
+        <input type="submit" value="{{_('dialog_confirm')}}">
+    </form>
+</dialog>
+
+<script>
+    // 'removeLocationDialog' handling
+    const removeLocationDialog = document.getElementById("removeLocationDialog");
+    const closeRemoveLocationDialog = document.getElementById("closeRemoveLocationDialog")
+
+    function openRemoveLocationDialog(id) {
+        console.log(id)
+        document.getElementById("rld_location_id").value = id
+        removeLocationDialog.showModal();
+    }
+
+    closeRemoveLocationDialog.addEventListener("click", () => {
+        removeLocationDialog.close();
+    });
+
+    // 'removeMaterialDialog' handling
+    const removeMaterialDialog = document.getElementById("removeMaterialDialog");
+    const closeRemoveMaterialDialog = document.getElementById("closeRemoveMaterialDialog")
+
+    function openRemoveMaterialDialog(id) {
+        document.getElementById("rmd_material_id").value = id
+        removeMaterialDialog.showModal();
+    }
+
+    closeRemoveMaterialDialog.addEventListener("click", () => {
+        removeMaterialDialog.close();
+    });
+
+</script>
+
 <div>
     <h2>{{ contractor.name }}</h2>
 
@@ -36,21 +76,6 @@
     {% else %}
     {{ _("private_contractor") }}
     {% endif %}
-
-    <p>
-    <!-- <form action="{{ url_for('main.contractor_location_bp.add') }}">
-        <input type="submit" id="add_location" value="{{ _('add_location_button') }}" />
-    </form> -->
-    <button id="add_location">AVAA KELLUVA</button>
-    <script>
-        var e = document.createElement('div')
-        e.classList.add('kelluva')
-        var button = document.getElementById('add_location')
-        button.addEventListener('click', () => {
-            button.appendChild(e)
-        })
-    </script>
-    </p>
 </div>
 
 <h3>{{ _("ml_locations_header") }}</h3>
@@ -61,22 +86,15 @@
         <h3>{{ location[0].address }}</h3>
         {{ _("maximum_distance") }} (km): {% if location[0].delivery_radius == -1 %} {{ _("no_limit") }} {% else %} {{ location[0].delivery_radius }} {% endif %}
         <p>
-        <form action="{{ url_for('main.contractor_location_bp.remove') }}" method="POST">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-            <input type="hidden" name="location_id" value="{{ location[0].id }}">
-            <input type="submit" value="{{ _('remove_location_button') }}">
-        </form>
+        <button onclick='openRemoveLocationDialog("{{location[0].id}}")'>{{_('remove_location_button')}}</button>
         </p>
 
         <p><h4>{{ _("contractor_location_material_types") }}:</h4></p>
         {% for sidestream in location[1] %}
     
             <pre>{{ sidestream.unit.value }}   {{ _("material_price") }} (€/km): {{ sidestream.price_per_km }}    {{ _("base_rate") }}: {{ sidestream.base_rate }}€    {{ _("max_capacity") }}: {{ sidestream.max_capacity }}{{ sidestream.unit.value }}    {{ _("maximum_distance") }}: {{ sidestream.max_distance }}km  {{ _("can_process") }}: {{ sidestream.can_process }}   {{ _("description") }}: {{ sidestream.description }}</pre>
-            <form action="{{ url_for('main.cargo_bp.remove') }}" method="POST">
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-                <input type="hidden" name="cargo_id" value="{{ sidestream.id }}">
-                <input type="submit" value="{{ _('remove_material_button') }}">
-            </form>
+            <button onclick='openRemoveMaterialDialog("{{sidestream.id}}")'>{{_('remove_material_button')}}</button>
+
         {% else %}
           {{ _("no_material_types_added_message") }}
         {% endfor %}
