@@ -102,6 +102,12 @@ CREATE TABLE IF NOT EXISTS contractor_locations (
     description TEXT
 );
 
+CREATE TABLE IF NOT EXISTS eco_types (
+    id SERIAL PRIMARY KEY,
+    contractor_location_id INTEGER REFERENCES contractor_locations(id),
+    eco_type eco_category_type
+);
+
 CREATE TABLE IF NOT EXISTS cargo_capabilities (
     id SERIAL PRIMARY KEY,
     contractor_location_id INTEGER REFERENCES contractor_locations(id),

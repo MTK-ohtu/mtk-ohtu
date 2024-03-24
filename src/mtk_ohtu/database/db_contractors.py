@@ -4,9 +4,10 @@ from mtk_ohtu.database.db_datastructs import (
     LogisticsContractor,
     LogisticsNode,
     CategoryType,
-    LocationService
+    LocationService,
 )
 from mtk_ohtu.logic.location import Location
+from .db_enums import EcoCategoryType
 
 
 # pylint: disable=E1129
@@ -78,6 +79,24 @@ def db_add_contractor_location(
             print(f"Error inserting data: {e}")
     return out
 
+def db_add_eco_type(
+        contractor_location_id: int,
+        eco_type: EcoCategoryType,
+        pool: ConnectionPool,
+) -> bool:
+    """
+    Docstringi
+    """
+    with pool.connection() as connection:
+        cursor = connection.cursor()
+        try:
+            cursor.execute(
+                "INSERT INTO eco_types (contractor_location_id, eco_type) VALUES (%s, %s)",
+                (contractor_location_id, eco_type)
+            )
+        except:
+            return False
+    return True
 
 def db_modify_contractor_location(
     location_id: int,

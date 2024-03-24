@@ -225,9 +225,13 @@
             <input type="text" id="radius" name="radius"> {{ _("kilometers") }}
         </div>
         <div class="eco-capabilities">
+            <h4>{{ _("select_eco_types") }}</h4>
             {% for category in eco_categories %}
-                <input type="checkbox" value="{{ category }}">
-                <label for="{{ category }}">{{ _(category) }}</label>
+                <label class="switch">
+                    <input type="checkbox" name="eco_types[]" value="{{ category }}">
+                    <span class="slider"></span>
+                </label>
+                {{ _(category) }}
             {% endfor %}
         </div>
     </div>

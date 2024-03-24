@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-03-24 01:21+0200\n"
+"POT-Creation-Date: 2024-03-24 17:00+0200\n"
 "PO-Revision-Date: 2024-03-18 11:56+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fi\n"
@@ -21,9 +21,8 @@ msgid "buy"
 msgstr ""
 
 #: src/mtk_ohtu/database/db_enums.py:9
-#, fuzzy
 msgid "sell"
-msgstr "Diesel"
+msgstr ""
 
 #: src/mtk_ohtu/database/db_enums.py:26
 msgid "tn"
@@ -43,94 +42,94 @@ msgstr ""
 
 #: src/mtk_ohtu/database/db_enums.py:30
 msgid "pcs"
-msgstr ""
+msgstr "kpl"
 
 #: src/mtk_ohtu/database/db_enums.py:31
 msgid "batch"
-msgstr ""
+msgstr "erä"
 
 #: src/mtk_ohtu/database/db_enums.py:43
 msgid "Manure"
-msgstr ""
+msgstr "Lanta"
 
 #: src/mtk_ohtu/database/db_enums.py:44
 msgid "Grass, waste fodder and green growths"
-msgstr ""
+msgstr "Nurmi, hävikkirehu ja viherkasvustot"
 
 #: src/mtk_ohtu/database/db_enums.py:45
 msgid "Basket fodder"
-msgstr ""
+msgstr "Korsirehut"
 
 #: src/mtk_ohtu/database/db_enums.py:46
 msgid "Plant-based biomasses"
-msgstr ""
+msgstr "Kasvipohjaiset biomassat"
 
 #: src/mtk_ohtu/database/db_enums.py:47
 msgid "Animal-based biomasses"
-msgstr ""
+msgstr "Eläinperäiset biomassat"
 
 #: src/mtk_ohtu/database/db_enums.py:48
 msgid "Soil and growing media"
-msgstr ""
+msgstr "Maa-aines ja kasvualustat"
 
 #: src/mtk_ohtu/database/db_enums.py:49
-#, fuzzy
 msgid "Digestion"
-msgstr "Kuvaus"
+msgstr "Mädätteet"
 
 #: src/mtk_ohtu/database/db_enums.py:50
 msgid "Wood"
-msgstr ""
+msgstr "Puu"
 
 #: src/mtk_ohtu/database/db_enums.py:51
 msgid "Other side streams (not biomass)"
-msgstr ""
+msgstr "Muut sivuvirrat (ei biomassa)"
 
 #: src/mtk_ohtu/database/db_enums.py:52
 msgid "Logistics and contracting"
-msgstr ""
+msgstr "Logistiikka ja urakointi"
 
 #: src/mtk_ohtu/database/db_enums.py:55
 msgid "Dry manure"
-msgstr ""
+msgstr "Kuivalanta"
 
 #: src/mtk_ohtu/database/db_enums.py:56
 msgid "Sludge manure"
-msgstr ""
+msgstr "Lietelanta"
 
 #: src/mtk_ohtu/database/db_enums.py:57
 msgid "Separated manure"
-msgstr ""
+msgstr "Separoitu lanta"
 
 #: src/mtk_ohtu/database/db_enums.py:58
 msgid "Other manure"
-msgstr ""
+msgstr "Muu lanta"
 
 #: src/mtk_ohtu/database/db_enums.py:59
 msgid "Forest biomass"
-msgstr ""
+msgstr "Metsäbiomassa"
 
 #: src/mtk_ohtu/database/db_enums.py:60
 msgid "Treated wood"
-msgstr ""
+msgstr "Käsitelty puu"
 
 #: src/mtk_ohtu/database/db_enums.py:64 src/mtk_ohtu/templates/product.html:36
+#: src/mtk_ohtu/templates/product_redesign.html:158
 msgid "electricity"
 msgstr "Sähkö"
 
 #: src/mtk_ohtu/database/db_enums.py:65 src/mtk_ohtu/templates/product.html:35
-#, fuzzy
+#: src/mtk_ohtu/templates/product_redesign.html:157
 msgid "biogas"
 msgstr "Biokaasu"
 
 #: src/mtk_ohtu/database/db_enums.py:66 src/mtk_ohtu/templates/product.html:33
-#, fuzzy
+#: src/mtk_ohtu/templates/product_redesign.html:155
 msgid "biodiesel"
 msgstr "Biodiesel"
 
 #: src/mtk_ohtu/database/db_enums.py:67
 msgid "hydrogen"
-msgstr ""
+msgstr "Vety"
 
 #: src/mtk_ohtu/routes/cargo.py:40 src/mtk_ohtu/routes/cargo.py:58
 #: src/mtk_ohtu/routes/contractor_location.py:31
@@ -213,9 +212,8 @@ msgstr "Kuvaus"
 
 #: src/mtk_ohtu/templates/addlocation.html:118
 #: src/mtk_ohtu/templates/addlogistics.html:212
-#, fuzzy
 msgid "description_placeholder"
-msgstr "Kuvaus"
+msgstr "Kirjoita kuvaus"
 
 #: src/mtk_ohtu/templates/addlocation.html:122
 #: src/mtk_ohtu/templates/addlogistics.html:216
@@ -230,20 +228,19 @@ msgstr "Ei rajoitusta"
 
 #: src/mtk_ohtu/templates/addlocation.html:127
 #: src/mtk_ohtu/templates/addlogistics.html:221
-#: src/mtk_ohtu/templates/addlogistics.html:267
+#: src/mtk_ohtu/templates/addlogistics.html:271
 msgid "custom_limit"
 msgstr "Mukautettu"
 
 #: src/mtk_ohtu/templates/addlocation.html:130
 #: src/mtk_ohtu/templates/addlogistics.html:224
-#: src/mtk_ohtu/templates/addlogistics.html:270
+#: src/mtk_ohtu/templates/addlogistics.html:274
 #: src/mtk_ohtu/templates/contractor.html:87
 #: src/mtk_ohtu/templates/contractor.html:95
 msgid "maximum_distance"
 msgstr "Maksimietäisyys"
 
 #: src/mtk_ohtu/templates/addlocation.html:136
-#, fuzzy
 msgid "create_location"
 msgstr "Lisää toimipiste"
 
@@ -257,7 +254,6 @@ msgid "add_logistics_title"
 msgstr "Lisää logistiikkapalvelu"
 
 #: src/mtk_ohtu/templates/addlogistics.html:174
-#, fuzzy
 msgid "select_service_type"
 msgstr "Palvelun tyyppi"
 
@@ -288,55 +284,59 @@ msgid "add_location"
 msgstr "Lisää toimipiste"
 
 #: src/mtk_ohtu/templates/addlogistics.html:225
-#: src/mtk_ohtu/templates/addlogistics.html:271
+#: src/mtk_ohtu/templates/addlogistics.html:275
 msgid "kilometers"
 msgstr "kilometriä"
 
-#: src/mtk_ohtu/templates/addlogistics.html:234
+#: src/mtk_ohtu/templates/addlogistics.html:228
+msgid "select_eco_types"
+msgstr "Merkitse ekologiset kuljetusvaihtoehtosi"
+
+#: src/mtk_ohtu/templates/addlogistics.html:238
 msgid "select_materials"
 msgstr "Valitse materiaalit joita pystyt kuljettamaan"
 
-#: src/mtk_ohtu/templates/addlogistics.html:241
-#: src/mtk_ohtu/templates/addlogistics.html:307
+#: src/mtk_ohtu/templates/addlogistics.html:245
+#: src/mtk_ohtu/templates/addlogistics.html:311
 msgid "additional_information"
 msgstr "Lisätietoja"
 
-#: src/mtk_ohtu/templates/addlogistics.html:245
+#: src/mtk_ohtu/templates/addlogistics.html:249
 msgid "can_spread"
 msgstr "Voin levittää"
 
-#: src/mtk_ohtu/templates/addlogistics.html:251
+#: src/mtk_ohtu/templates/addlogistics.html:255
 #: src/mtk_ohtu/templates/contractor.html:95
 msgid "base_rate"
 msgstr "Pohjamaksu"
 
-#: src/mtk_ohtu/templates/addlogistics.html:253
+#: src/mtk_ohtu/templates/addlogistics.html:257
 msgid "price_per_hour"
 msgstr "Hinta per tunti"
 
-#: src/mtk_ohtu/templates/addlogistics.html:255
+#: src/mtk_ohtu/templates/addlogistics.html:259
 msgid "maximum_capacity"
 msgstr "Maksimikapasiteetti"
 
-#: src/mtk_ohtu/templates/addlogistics.html:262
+#: src/mtk_ohtu/templates/addlogistics.html:266
 msgid "delivery_distance"
 msgstr "Etäisyyden laskenta"
 
-#: src/mtk_ohtu/templates/addlogistics.html:265
+#: src/mtk_ohtu/templates/addlogistics.html:269
 msgid "same_as_above"
 msgstr "Sama kuin ylempänä"
 
-#: src/mtk_ohtu/templates/addlogistics.html:274
+#: src/mtk_ohtu/templates/addlogistics.html:278
 msgid "material_delivery_description_placeholder"
-msgstr ""
+msgstr "Kirjoita kuvaus"
 
-#: src/mtk_ohtu/templates/addlogistics.html:282
+#: src/mtk_ohtu/templates/addlogistics.html:286
 msgid "add_logistics_submit"
 msgstr "Lisää logistiikkapalvelu"
 
-#: src/mtk_ohtu/templates/addlogistics.html:304
+#: src/mtk_ohtu/templates/addlogistics.html:308
 msgid "close"
-msgstr ""
+msgstr "Sulje"
 
 #: src/mtk_ohtu/templates/contractor.html:23
 msgid "remove_location_dialog_header"
@@ -490,26 +490,32 @@ msgstr "Kulutus"
 
 #: src/mtk_ohtu/templates/product.html:29
 #: src/mtk_ohtu/templates/product.html:66
+#: src/mtk_ohtu/templates/product_redesign.html:151
 msgid "fuel"
 msgstr "Käyttövoima"
 
 #: src/mtk_ohtu/templates/product.html:31
+#: src/mtk_ohtu/templates/product_redesign.html:153
 msgid "diesel"
 msgstr "Diesel"
 
 #: src/mtk_ohtu/templates/product.html:32
+#: src/mtk_ohtu/templates/product_redesign.html:154
 msgid "petrol"
 msgstr "Bensiini"
 
 #: src/mtk_ohtu/templates/product.html:34
+#: src/mtk_ohtu/templates/product_redesign.html:156
 msgid "natural_gas"
 msgstr "Maakaasu"
 
 #: src/mtk_ohtu/templates/product.html:40
+#: src/mtk_ohtu/templates/product_redesign.html:162
 msgid "fuel_efficiency"
 msgstr "Kulutus"
 
 #: src/mtk_ohtu/templates/product.html:88
+#: src/mtk_ohtu/templates/product_redesign.html:216
 msgid "show_all_button"
 msgstr ""
 

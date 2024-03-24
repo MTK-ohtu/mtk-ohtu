@@ -62,7 +62,13 @@ def add_contractor_location(
     except Exception as er:
         logging.error(er)
         return False
-
+    
+def add_eco_type(contractor_location_id, eco_type):
+    db_contractors.db_add_eco_type(
+        contractor_location_id,
+        eco_type,
+        pool=DATABASE_POOL
+    )
 
 def modify_contractor_location(
     location_id, address, postcode, city, telephone, email, radius, description

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-03-24 01:21+0200\n"
+"POT-Creation-Date: 2024-03-24 17:00+0200\n"
 "PO-Revision-Date: 2024-03-18 14:04+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -23,9 +23,8 @@ msgid "buy"
 msgstr ""
 
 #: src/mtk_ohtu/database/db_enums.py:9
-#, fuzzy
 msgid "sell"
-msgstr "Diesel"
+msgstr ""
 
 #: src/mtk_ohtu/database/db_enums.py:26
 msgid "tn"
@@ -53,85 +52,86 @@ msgstr ""
 
 #: src/mtk_ohtu/database/db_enums.py:43
 msgid "Manure"
-msgstr ""
+msgstr "Manure"
 
 #: src/mtk_ohtu/database/db_enums.py:44
 msgid "Grass, waste fodder and green growths"
-msgstr ""
+msgstr "Grass, waste fodder and green growths"
 
 #: src/mtk_ohtu/database/db_enums.py:45
 msgid "Basket fodder"
-msgstr ""
+msgstr "Basket fodder"
 
 #: src/mtk_ohtu/database/db_enums.py:46
 msgid "Plant-based biomasses"
-msgstr ""
+msgstr "Plant-based biomasses"
 
 #: src/mtk_ohtu/database/db_enums.py:47
 msgid "Animal-based biomasses"
-msgstr ""
+msgstr "Animal-based biomasses"
 
 #: src/mtk_ohtu/database/db_enums.py:48
 msgid "Soil and growing media"
-msgstr ""
+msgstr "Soil and growing media"
 
 #: src/mtk_ohtu/database/db_enums.py:49
-#, fuzzy
 msgid "Digestion"
-msgstr "Description"
+msgstr "Digestion"
 
 #: src/mtk_ohtu/database/db_enums.py:50
 msgid "Wood"
-msgstr ""
+msgstr "Wood"
 
 #: src/mtk_ohtu/database/db_enums.py:51
 msgid "Other side streams (not biomass)"
-msgstr ""
+msgstr "Other side streams (not biomass)"
 
 #: src/mtk_ohtu/database/db_enums.py:52
 msgid "Logistics and contracting"
-msgstr ""
+msgstr "Logistics and contracting"
 
 #: src/mtk_ohtu/database/db_enums.py:55
 msgid "Dry manure"
-msgstr ""
+msgstr "Dry manure"
 
 #: src/mtk_ohtu/database/db_enums.py:56
 msgid "Sludge manure"
-msgstr ""
+msgstr "Sludge manure"
 
 #: src/mtk_ohtu/database/db_enums.py:57
 msgid "Separated manure"
-msgstr ""
+msgstr "Separated manure"
 
 #: src/mtk_ohtu/database/db_enums.py:58
 msgid "Other manure"
-msgstr ""
+msgstr "Other manure"
 
 #: src/mtk_ohtu/database/db_enums.py:59
 msgid "Forest biomass"
-msgstr ""
+msgstr "Forest biomass"
 
 #: src/mtk_ohtu/database/db_enums.py:60
 msgid "Treated wood"
-msgstr ""
+msgstr "Treated wood"
 
 #: src/mtk_ohtu/database/db_enums.py:64 src/mtk_ohtu/templates/product.html:36
+#: src/mtk_ohtu/templates/product_redesign.html:158
 msgid "electricity"
 msgstr "Electricity"
 
 #: src/mtk_ohtu/database/db_enums.py:65 src/mtk_ohtu/templates/product.html:35
-#, fuzzy
+#: src/mtk_ohtu/templates/product_redesign.html:157
 msgid "biogas"
-msgstr "Bio gas"
+msgstr "Biogas"
 
 #: src/mtk_ohtu/database/db_enums.py:66 src/mtk_ohtu/templates/product.html:33
+#: src/mtk_ohtu/templates/product_redesign.html:155
 msgid "biodiesel"
-msgstr "Bio diesel"
+msgstr "Biodiesel"
 
 #: src/mtk_ohtu/database/db_enums.py:67
 msgid "hydrogen"
-msgstr ""
+msgstr "Hydrogen"
 
 #: src/mtk_ohtu/routes/cargo.py:40 src/mtk_ohtu/routes/cargo.py:58
 #: src/mtk_ohtu/routes/contractor_location.py:31
@@ -174,7 +174,6 @@ msgid "page_not_found"
 msgstr ""
 
 #: src/mtk_ohtu/templates/addlocation.html:97
-#, fuzzy
 msgid "new_location"
 msgstr "Locations"
 
@@ -213,9 +212,8 @@ msgstr "Description"
 
 #: src/mtk_ohtu/templates/addlocation.html:118
 #: src/mtk_ohtu/templates/addlogistics.html:212
-#, fuzzy
 msgid "description_placeholder"
-msgstr "Description"
+msgstr "Write description"
 
 #: src/mtk_ohtu/templates/addlocation.html:122
 #: src/mtk_ohtu/templates/addlogistics.html:216
@@ -230,13 +228,13 @@ msgstr "No limit"
 
 #: src/mtk_ohtu/templates/addlocation.html:127
 #: src/mtk_ohtu/templates/addlogistics.html:221
-#: src/mtk_ohtu/templates/addlogistics.html:267
+#: src/mtk_ohtu/templates/addlogistics.html:271
 msgid "custom_limit"
 msgstr "Custom limit"
 
 #: src/mtk_ohtu/templates/addlocation.html:130
 #: src/mtk_ohtu/templates/addlogistics.html:224
-#: src/mtk_ohtu/templates/addlogistics.html:270
+#: src/mtk_ohtu/templates/addlogistics.html:274
 #: src/mtk_ohtu/templates/contractor.html:87
 #: src/mtk_ohtu/templates/contractor.html:95
 msgid "maximum_distance"
@@ -257,7 +255,6 @@ msgid "add_logistics_title"
 msgstr "Add a logistics service"
 
 #: src/mtk_ohtu/templates/addlogistics.html:174
-#, fuzzy
 msgid "select_service_type"
 msgstr "Select service type"
 
@@ -288,57 +285,59 @@ msgid "add_location"
 msgstr "Add location"
 
 #: src/mtk_ohtu/templates/addlogistics.html:225
-#: src/mtk_ohtu/templates/addlogistics.html:271
+#: src/mtk_ohtu/templates/addlogistics.html:275
 msgid "kilometers"
 msgstr "kilometers"
 
-#: src/mtk_ohtu/templates/addlogistics.html:234
+#: src/mtk_ohtu/templates/addlogistics.html:228
+msgid "select_eco_types"
+msgstr "Select your ecological transport options"
+
+#: src/mtk_ohtu/templates/addlogistics.html:238
 msgid "select_materials"
 msgstr "Select materials you can deliver"
 
-#: src/mtk_ohtu/templates/addlogistics.html:241
-#: src/mtk_ohtu/templates/addlogistics.html:307
+#: src/mtk_ohtu/templates/addlogistics.html:245
+#: src/mtk_ohtu/templates/addlogistics.html:311
 msgid "additional_information"
 msgstr "Additional information"
 
-#: src/mtk_ohtu/templates/addlogistics.html:245
+#: src/mtk_ohtu/templates/addlogistics.html:249
 msgid "can_spread"
 msgstr "Can spread"
 
-#: src/mtk_ohtu/templates/addlogistics.html:251
+#: src/mtk_ohtu/templates/addlogistics.html:255
 #: src/mtk_ohtu/templates/contractor.html:95
 msgid "base_rate"
 msgstr "Base rate"
 
-#: src/mtk_ohtu/templates/addlogistics.html:253
+#: src/mtk_ohtu/templates/addlogistics.html:257
 msgid "price_per_hour"
 msgstr "Price per hour"
 
-#: src/mtk_ohtu/templates/addlogistics.html:255
+#: src/mtk_ohtu/templates/addlogistics.html:259
 msgid "maximum_capacity"
 msgstr "Maximum capacity"
 
-#: src/mtk_ohtu/templates/addlogistics.html:262
-#, fuzzy
+#: src/mtk_ohtu/templates/addlogistics.html:266
 msgid "delivery_distance"
 msgstr "Delivery distance"
 
-#: src/mtk_ohtu/templates/addlogistics.html:265
+#: src/mtk_ohtu/templates/addlogistics.html:269
 msgid "same_as_above"
 msgstr "Same as above"
 
-#: src/mtk_ohtu/templates/addlogistics.html:274
+#: src/mtk_ohtu/templates/addlogistics.html:278
 msgid "material_delivery_description_placeholder"
-msgstr ""
+msgstr "Write description"
 
-#: src/mtk_ohtu/templates/addlogistics.html:282
-#, fuzzy
+#: src/mtk_ohtu/templates/addlogistics.html:286
 msgid "add_logistics_submit"
 msgstr "Submit logistics"
 
-#: src/mtk_ohtu/templates/addlogistics.html:304
+#: src/mtk_ohtu/templates/addlogistics.html:308
 msgid "close"
-msgstr ""
+msgstr "Close"
 
 #: src/mtk_ohtu/templates/contractor.html:23
 msgid "remove_location_dialog_header"
@@ -492,27 +491,33 @@ msgstr "Fuel economy"
 
 #: src/mtk_ohtu/templates/product.html:29
 #: src/mtk_ohtu/templates/product.html:66
+#: src/mtk_ohtu/templates/product_redesign.html:151
 msgid "fuel"
 msgstr "Fuel"
 
 #: src/mtk_ohtu/templates/product.html:31
+#: src/mtk_ohtu/templates/product_redesign.html:153
 msgid "diesel"
 msgstr "Diesel"
 
 #: src/mtk_ohtu/templates/product.html:32
+#: src/mtk_ohtu/templates/product_redesign.html:154
 msgid "petrol"
 msgstr "Petrol"
 
 #: src/mtk_ohtu/templates/product.html:34
+#: src/mtk_ohtu/templates/product_redesign.html:156
 msgid "natural_gas"
 msgstr "Natural gas"
 
 #: src/mtk_ohtu/templates/product.html:40
+#: src/mtk_ohtu/templates/product_redesign.html:162
 #, fuzzy
 msgid "fuel_efficiency"
 msgstr "Fuel economy"
 
 #: src/mtk_ohtu/templates/product.html:88
+#: src/mtk_ohtu/templates/product_redesign.html:216
 msgid "show_all_button"
 msgstr ""
 

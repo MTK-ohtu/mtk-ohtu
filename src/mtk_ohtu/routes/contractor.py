@@ -55,8 +55,16 @@ def add_logistics():
             description,
         )
 
-        categories = request.form.getlist("materials[]")
+        eco_types = request.form.getlist("eco_types[]")
+        print(eco_types)
+        for type in eco_types:
+            print(type)
+            logistics.add_eco_type(
+                contractor_id,
+                type
+            )
 
+        categories = request.form.getlist("materials[]")
         for c in categories:
             price = request.form.get(c + "-price_per_hour")
             base_rate = request.form.get(c + "-base_rate")

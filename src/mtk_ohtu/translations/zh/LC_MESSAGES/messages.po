@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-03-24 01:21+0200\n"
+"POT-Creation-Date: 2024-03-24 17:00+0200\n"
 "PO-Revision-Date: 2024-03-20 17:21+0200\n"
 "Last-Translator: \n"
 "Language: zh\n"
@@ -228,13 +228,13 @@ msgstr "无限"
 
 #: src/mtk_ohtu/templates/addlocation.html:127
 #: src/mtk_ohtu/templates/addlogistics.html:221
-#: src/mtk_ohtu/templates/addlogistics.html:267
+#: src/mtk_ohtu/templates/addlogistics.html:271
 msgid "custom_limit"
 msgstr "自定义极限"
 
 #: src/mtk_ohtu/templates/addlocation.html:130
 #: src/mtk_ohtu/templates/addlogistics.html:224
-#: src/mtk_ohtu/templates/addlogistics.html:270
+#: src/mtk_ohtu/templates/addlogistics.html:274
 #: src/mtk_ohtu/templates/contractor.html:87
 #: src/mtk_ohtu/templates/contractor.html:95
 msgid "maximum_distance"
@@ -284,53 +284,58 @@ msgid "add_location"
 msgstr "添加地点"
 
 #: src/mtk_ohtu/templates/addlogistics.html:225
-#: src/mtk_ohtu/templates/addlogistics.html:271
+#: src/mtk_ohtu/templates/addlogistics.html:275
 msgid "kilometers"
 msgstr "公里"
 
-#: src/mtk_ohtu/templates/addlogistics.html:234
+#: src/mtk_ohtu/templates/addlogistics.html:228
+#, fuzzy
+msgid "select_eco_types"
+msgstr "选择服务类型"
+
+#: src/mtk_ohtu/templates/addlogistics.html:238
 msgid "select_materials"
 msgstr "选择材料"
 
-#: src/mtk_ohtu/templates/addlogistics.html:241
-#: src/mtk_ohtu/templates/addlogistics.html:307
+#: src/mtk_ohtu/templates/addlogistics.html:245
+#: src/mtk_ohtu/templates/addlogistics.html:311
 msgid "additional_information"
 msgstr "补充资料"
 
-#: src/mtk_ohtu/templates/addlogistics.html:245
+#: src/mtk_ohtu/templates/addlogistics.html:249
 msgid "can_spread"
 msgstr "能传播"
 
-#: src/mtk_ohtu/templates/addlogistics.html:251
+#: src/mtk_ohtu/templates/addlogistics.html:255
 #: src/mtk_ohtu/templates/contractor.html:95
 msgid "base_rate"
 msgstr "基本费率"
 
-#: src/mtk_ohtu/templates/addlogistics.html:253
+#: src/mtk_ohtu/templates/addlogistics.html:257
 msgid "price_per_hour"
 msgstr "小时费率"
 
-#: src/mtk_ohtu/templates/addlogistics.html:255
+#: src/mtk_ohtu/templates/addlogistics.html:259
 msgid "maximum_capacity"
 msgstr "最大容量"
 
-#: src/mtk_ohtu/templates/addlogistics.html:262
+#: src/mtk_ohtu/templates/addlogistics.html:266
 msgid "delivery_distance"
 msgstr "输送距离"
 
-#: src/mtk_ohtu/templates/addlogistics.html:265
+#: src/mtk_ohtu/templates/addlogistics.html:269
 msgid "same_as_above"
 msgstr "与上面相同"
 
-#: src/mtk_ohtu/templates/addlogistics.html:274
+#: src/mtk_ohtu/templates/addlogistics.html:278
 msgid "material_delivery_description_placeholder"
 msgstr "添加补充资料"
 
-#: src/mtk_ohtu/templates/addlogistics.html:282
+#: src/mtk_ohtu/templates/addlogistics.html:286
 msgid "add_logistics_submit"
 msgstr "提交"
 
-#: src/mtk_ohtu/templates/addlogistics.html:304
+#: src/mtk_ohtu/templates/addlogistics.html:308
 msgid "close"
 msgstr "关闭"
 
