@@ -38,6 +38,9 @@ jobs:
 
       #- name: Prepare test data and start the application
       #  run: docker compose -f compose.ci.yml up -d
+
+      - name: Compile translations
+        run: poetry run invoke compile-translations
         
       - name: Run tests
         run: poetry run invoke test
