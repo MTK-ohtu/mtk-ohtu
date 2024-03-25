@@ -3,27 +3,51 @@
 {% block head %}
 <title>{{ _("add_logistics_title") }}</title>
 <style>
+    #materials-container {
+        border: 3px solid #ccc;
+        padding: 20px;
+        margin-top: 20px;
+        width: 70%;
+        margin: 0 auto;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .column {
+        display: flex;
+        flex-direction: column;
+        overflow-y: scroll;
+        width: 30%;
+        max-height: 100%;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+
+    .column::-webkit-scrollbar * {
+        display: none;
+    }
+
     .material-box {
-        position: relative;
         border: 2px solid #ccc;
         padding: 20px;
-        margin: 10px;
+        margin-right: 10px;
         cursor: pointer;
-        width: calc(30%);
+        width: calc(100%);
         box-sizing: border-box;
-        float: left;
         outline: 4px solid transparent;
+        font-size: 2vh;
     }
 
     .material-title {
         display: flex;
         align-items: center;
         flex-direction: column;
-    }
-
-    .material-title h5 {
+        overflow-wrap: break-word;
         margin-right: 10px;
-        font-size: 20px;
+        justify-content: center;
     }
 
     .material-box.selected {
@@ -40,18 +64,6 @@
         position: absolute;
         opacity: 0;
         pointer-events: none;
-    }
-
-    #materials-container {
-        border: 3px solid #ccc;
-        padding: 20px;
-        margin-top: 20px;
-        width: 70%;
-        margin: 0 auto;
-        box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
     }
 
     .service-option,
@@ -237,50 +249,57 @@
     </div>
     <h3>{{ _("select_materials") }}</h3>
     <div id="materials-container">
-        {% for material in material_categories %}
-            <div class="material-box" onclick="toggleMaterial(this)">
-                <div class="material-title">
-                    <input type="checkbox" class="hidden-checkbox" name="materials[]" value="{{ material }}">
-                    <h5>{{ _(material) }}</h5>
-                    <button class="show-fields" type="button" data-target="{{ material }}">{{ _("additional_information") }}</button>
-                </div>
-
-                <div id="fields-{{ material }}" style="display: none" class="card">
-                    <label for="can_process" style="align-self: center;">{{ _("can_spread") }}</label>
-                    <label class="switch">
-                        <input type="checkbox" name="{{ material }}-can_process">
-                        <span class="slider"></span>
-                    </label><br>
-
-                    <label for="base_rate">{{ _("base_rate") }}</label>
-                    <input type="text" class="base-rate" name="{{ material }}-base_rate"> €<br>
-                    <label for="price_per_hour">{{ _("price_per_hour") }}</label>
-                    <input type="text" class="price-per-hour" name="{{ material }}-price_per_hour"> €<br>
-                    <label for="max_capacity">{{ _("maximum_capacity") }}</label>
-                    <input type="text" class="max-capacity" name="{{ material }}-max_capacity">
-                    <select id="unitDropdown">
-                        {% for unit in units %}
-                            <option value="{{ unit }}" name="{{ material }}-unit">{{ _(unit) }}</option>
-                        {% endfor %}
-                    </select><br>
-                    <h4>{{ _("delivery_distance") }}</h4>
-                    <div class="radius-option-{{ material }}">
-                        <input type="radio" name="radiusType-{{ material }}" value="no-limit-{{ material }}" checked="checked" onclick="toggleMaterialradius('{{ material }}')">            
-                        <label for="no-limit-{{ material }}" class="circle-label">{{ _("same_as_above") }}</label>
-                        <input type="radio" name="radiusType-{{ material }}" value="custom-limit-{{ material }}" onclick="toggleMaterialradius('{{ material }}')">
-                        <label for="custom-limit-{{ material }}" class="circle-label">{{ _("custom_limit") }}</label>
-                    </div>       
-                    <div id="customDistance-{{ material }}" style="display: none;">
-                        <label for="radius-{{ material }}">{{ _("maximum_distance") }}</label>
-                        <input type="text" id="radius-{{ material }}" name="radius-{{ material }}"> {{ _("kilometers") }}
-                    </div>
-                    <div class="description-field2">
-                        <textarea class="description" name="{{ material }}-description" placeholder="{{ _('material_delivery_description_placeholder') }}" style="width: 250px; height: 150px;"></textarea>
-                    </div>
-                </div>
-            </div>
-        {% endfor %}
+        <div id="column1" class="column">
+        </div>
+        <div id="column2" class="column">
+        </div>
+        <div id="column3" class="column">
+        </div>
     </div>
+
+    {% for material in material_categories %}
+    <div class="material-box" id="{{ material }}-model" style="display: none">
+    <div class="material-title">
+        <input type="checkbox" class="hidden-checkbox" name="materials[]" value="{{ material }}" id="aa">
+        <h5>{{ _(material) }}</h5>
+        <button class="show-fields" type="button" data-target="{{ material }}">{{ _("additional_information") }}</button>
+    </div>
+
+    <div id="fields-{{ material }}" style="display: none" class="card">
+        <label for="can_process" style="align-self: center;">{{ _("can_spread") }}</label>
+        <label class="switch">
+            <input type="checkbox" name="{{ material }}-can_process">
+            <span class="slider"></span>
+        </label><br>
+
+        <label for="base_rate">{{ _("base_rate") }}</label>
+        <input type="text" class="base-rate" name="{{ material }}-base_rate"> €<br>
+        <label for="price_per_hour">{{ _("price_per_hour") }}</label>
+        <input type="text" class="price-per-hour" name="{{ material }}-price_per_hour"> €<br>
+        <label for="max_capacity">{{ _("maximum_capacity") }}</label>
+        <input type="text" class="max-capacity" name="{{ material }}-max_capacity">
+        <select id="unitDropdown">
+            {% for unit in units %}
+                <option value="{{ unit }}" name="{{ material }}-unit">{{ _(unit) }}</option>
+            {% endfor %}
+        </select><br>
+        <h4>{{ _("delivery_distance") }}</h4>
+        <div class="radius-option-{{ material }}">
+            <input type="radio" name="radiusType-{{ material }}" value="no-limit-{{ material }}" checked="checked" onclick="toggleMaterialradius('{{ material }}')">            
+            <label for="no-limit-{{ material }}" class="circle-label">{{ _("same_as_above") }}</label>
+            <input type="radio" name="radiusType-{{ material }}" value="custom-limit-{{ material }}" onclick="toggleMaterialradius('{{ material }}')">
+            <label for="custom-limit-{{ material }}" class="circle-label">{{ _("custom_limit") }}</label>
+        </div>       
+        <div id="customDistance-{{ material }}" style="display: none;">
+            <label for="radius-{{ material }}">{{ _("maximum_distance") }}</label>
+            <input type="text" id="radius-{{ material }}" name="radius-{{ material }}"> {{ _("kilometers") }}
+        </div>
+        <div class="description-field2">
+            <textarea class="description" name="{{ material }}-description" placeholder="{{ _('material_delivery_description_placeholder') }}" style="width: 250px; height: 150px;"></textarea>
+        </div>
+    </div>
+    </div>
+    {% endfor %}
 
     <div class="custom-submit-button-container">
         <button type="submit" class="custom-submit-button">{{ _("add_logistics_submit") }}</button>
@@ -288,10 +307,49 @@
 </form>
 
 <script>
-    function toggleMaterial(box) {
-        var checkbox = box.querySelector('input[type="checkbox"]');
+        var materialDiv = document.getElementById('material-container');
+        var column1 = document.getElementById('column1')
+        var column2 = document.getElementById('column2')
+        var column3 = document.getElementById('column3')
+        var index = 1
+        var materials = JSON.parse('{{ material_categories | tojson | safe }}')
+        console.log(materials)
+        for (const material of materials) {
+            var materialElement = document.getElementById(material + '-model').cloneNode(true)
+            console.log(material)
+            materialElement.classList.add("material-box")
+            materialElement.id = material
+            materialElement.style.display = 'block';
+
+                if (index === 1) {
+                    column1.appendChild(materialElement);
+                }
+                if (index === 2) {
+                    column2.appendChild(materialElement);
+                }
+                if (index === 3) {
+                    column3.appendChild(materialElement);
+                }
+                index = (index === 3 ? 1: index + 1)
+                
+                materialElement.addEventListener('click', (e) => {
+                    var target = e.target.closest('.material-box')
+                    if (target.classList.contains('selected')) {
+                        target.classList.remove('selected')
+                    } else {
+                        target.classList.add('selected')
+                    }
+                    console.log(target.className)
+                })
+        }
+
+    function toggleMaterial(material) {
+        console.log(material)
+        var element = document.querySelector("#" + material);
+        var checkbox = element.querySelector("#aa");
         checkbox.checked = !checkbox.checked;
-        box.classList.toggle('selected');
+        element.classList.toggle('selected');
+        console.log(element.className)
     }
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -301,6 +359,7 @@
             button.addEventListener('click', function (event) {
                 event.stopPropagation();
                 var material = button.getAttribute('data-target');
+                console.log(material)
                 var additionalFields = document.getElementById('fields-' + material);
 
                 if (additionalFields.style.display === 'none' || additionalFields.style.display === '') {

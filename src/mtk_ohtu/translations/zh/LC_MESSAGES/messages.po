@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-03-24 17:00+0200\n"
+"POT-Creation-Date: 2024-03-25 17:52+0200\n"
 "PO-Revision-Date: 2024-03-20 17:21+0200\n"
 "Last-Translator: \n"
 "Language: zh\n"
@@ -75,6 +75,7 @@ msgid "Soil and growing media"
 msgstr "土壤和生长介质"
 
 #: src/mtk_ohtu/database/db_enums.py:49
+#: src/mtk_ohtu/templates/addlogistics.html:281
 msgid "Digestion"
 msgstr "发酵"
 
@@ -178,63 +179,63 @@ msgid "new_location"
 msgstr "新地点"
 
 #: src/mtk_ohtu/templates/addlocation.html:103
-#: src/mtk_ohtu/templates/addlogistics.html:197
+#: src/mtk_ohtu/templates/addlogistics.html:208
 msgid "address"
 msgstr "地址"
 
 #: src/mtk_ohtu/templates/addlocation.html:105
-#: src/mtk_ohtu/templates/addlogistics.html:199
+#: src/mtk_ohtu/templates/addlogistics.html:210
 msgid "postal_code"
 msgstr "邮政编码"
 
 #: src/mtk_ohtu/templates/addlocation.html:107
-#: src/mtk_ohtu/templates/addlogistics.html:201
+#: src/mtk_ohtu/templates/addlogistics.html:212
 msgid "city"
 msgstr "城市"
 
 #: src/mtk_ohtu/templates/addlocation.html:111
-#: src/mtk_ohtu/templates/addlogistics.html:205
+#: src/mtk_ohtu/templates/addlogistics.html:216
 msgid "phone_number"
 msgstr "电话号码"
 
 #: src/mtk_ohtu/templates/addlocation.html:113
-#: src/mtk_ohtu/templates/addlogistics.html:207
+#: src/mtk_ohtu/templates/addlogistics.html:218
 #: src/mtk_ohtu/templates/register.html:20
 msgid "email"
 msgstr "电子邮件"
 
 #: src/mtk_ohtu/templates/addlocation.html:117
-#: src/mtk_ohtu/templates/addlogistics.html:211
+#: src/mtk_ohtu/templates/addlogistics.html:222
 #: src/mtk_ohtu/templates/contractor.html:95
 #: src/mtk_ohtu/templates/product.html:19
 msgid "description"
 msgstr "描述"
 
 #: src/mtk_ohtu/templates/addlocation.html:118
-#: src/mtk_ohtu/templates/addlogistics.html:212
+#: src/mtk_ohtu/templates/addlogistics.html:223
 msgid "description_placeholder"
 msgstr "请描述您的服务"
 
 #: src/mtk_ohtu/templates/addlocation.html:122
-#: src/mtk_ohtu/templates/addlogistics.html:216
+#: src/mtk_ohtu/templates/addlogistics.html:227
 msgid "how_far_can_you_deliver"
 msgstr "您能送到多远"
 
 #: src/mtk_ohtu/templates/addlocation.html:125
-#: src/mtk_ohtu/templates/addlogistics.html:219
+#: src/mtk_ohtu/templates/addlogistics.html:230
 #: src/mtk_ohtu/templates/contractor.html:87
 msgid "no_limit"
 msgstr "无限"
 
 #: src/mtk_ohtu/templates/addlocation.html:127
-#: src/mtk_ohtu/templates/addlogistics.html:221
-#: src/mtk_ohtu/templates/addlogistics.html:271
+#: src/mtk_ohtu/templates/addlogistics.html:232
+#: src/mtk_ohtu/templates/addlogistics.html:308
 msgid "custom_limit"
 msgstr "自定义极限"
 
 #: src/mtk_ohtu/templates/addlocation.html:130
-#: src/mtk_ohtu/templates/addlogistics.html:224
-#: src/mtk_ohtu/templates/addlogistics.html:274
+#: src/mtk_ohtu/templates/addlogistics.html:235
+#: src/mtk_ohtu/templates/addlogistics.html:311
 #: src/mtk_ohtu/templates/contractor.html:87
 #: src/mtk_ohtu/templates/contractor.html:95
 msgid "maximum_distance"
@@ -249,93 +250,93 @@ msgid "cancel"
 msgstr "取消"
 
 #: src/mtk_ohtu/templates/addlogistics.html:4
-#: src/mtk_ohtu/templates/addlogistics.html:170
+#: src/mtk_ohtu/templates/addlogistics.html:181
 msgid "add_logistics_title"
 msgstr "添加物流服务"
 
-#: src/mtk_ohtu/templates/addlogistics.html:174
+#: src/mtk_ohtu/templates/addlogistics.html:185
 msgid "select_service_type"
 msgstr "选择服务类型"
 
-#: src/mtk_ohtu/templates/addlogistics.html:177
+#: src/mtk_ohtu/templates/addlogistics.html:188
 #: src/mtk_ohtu/templates/contractor.html:77
 msgid "private_contractor"
 msgstr "私人承包商"
 
-#: src/mtk_ohtu/templates/addlogistics.html:179
+#: src/mtk_ohtu/templates/addlogistics.html:190
 msgid "company"
 msgstr "企业"
 
-#: src/mtk_ohtu/templates/addlogistics.html:183
+#: src/mtk_ohtu/templates/addlogistics.html:194
 msgid "full_name"
 msgstr "全名"
 
-#: src/mtk_ohtu/templates/addlogistics.html:188
+#: src/mtk_ohtu/templates/addlogistics.html:199
 msgid "company_name"
 msgstr "企业名称"
 
-#: src/mtk_ohtu/templates/addlogistics.html:190
+#: src/mtk_ohtu/templates/addlogistics.html:201
 #: src/mtk_ohtu/templates/contractor.html:75
 msgid "business_id"
 msgstr "企业ＩＤ"
 
-#: src/mtk_ohtu/templates/addlogistics.html:194
+#: src/mtk_ohtu/templates/addlogistics.html:205
 msgid "add_location"
 msgstr "添加地点"
 
-#: src/mtk_ohtu/templates/addlogistics.html:225
-#: src/mtk_ohtu/templates/addlogistics.html:275
+#: src/mtk_ohtu/templates/addlogistics.html:236
+#: src/mtk_ohtu/templates/addlogistics.html:312
 msgid "kilometers"
 msgstr "公里"
 
-#: src/mtk_ohtu/templates/addlogistics.html:228
+#: src/mtk_ohtu/templates/addlogistics.html:239
 #, fuzzy
 msgid "select_eco_types"
 msgstr "选择服务类型"
 
-#: src/mtk_ohtu/templates/addlogistics.html:238
+#: src/mtk_ohtu/templates/addlogistics.html:249
 msgid "select_materials"
 msgstr "选择材料"
 
-#: src/mtk_ohtu/templates/addlogistics.html:245
-#: src/mtk_ohtu/templates/addlogistics.html:311
+#: src/mtk_ohtu/templates/addlogistics.html:260
+msgid "add_logistics_submit"
+msgstr "提交"
+
+#: src/mtk_ohtu/templates/addlogistics.html:282
+#: src/mtk_ohtu/templates/addlogistics.html:365
 msgid "additional_information"
 msgstr "补充资料"
 
-#: src/mtk_ohtu/templates/addlogistics.html:249
+#: src/mtk_ohtu/templates/addlogistics.html:286
 msgid "can_spread"
 msgstr "能传播"
 
-#: src/mtk_ohtu/templates/addlogistics.html:255
+#: src/mtk_ohtu/templates/addlogistics.html:292
 #: src/mtk_ohtu/templates/contractor.html:95
 msgid "base_rate"
 msgstr "基本费率"
 
-#: src/mtk_ohtu/templates/addlogistics.html:257
+#: src/mtk_ohtu/templates/addlogistics.html:294
 msgid "price_per_hour"
 msgstr "小时费率"
 
-#: src/mtk_ohtu/templates/addlogistics.html:259
+#: src/mtk_ohtu/templates/addlogistics.html:296
 msgid "maximum_capacity"
 msgstr "最大容量"
 
-#: src/mtk_ohtu/templates/addlogistics.html:266
+#: src/mtk_ohtu/templates/addlogistics.html:303
 msgid "delivery_distance"
 msgstr "输送距离"
 
-#: src/mtk_ohtu/templates/addlogistics.html:269
+#: src/mtk_ohtu/templates/addlogistics.html:306
 msgid "same_as_above"
 msgstr "与上面相同"
 
-#: src/mtk_ohtu/templates/addlogistics.html:278
+#: src/mtk_ohtu/templates/addlogistics.html:315
 msgid "material_delivery_description_placeholder"
 msgstr "添加补充资料"
 
-#: src/mtk_ohtu/templates/addlogistics.html:286
-msgid "add_logistics_submit"
-msgstr "提交"
-
-#: src/mtk_ohtu/templates/addlogistics.html:308
+#: src/mtk_ohtu/templates/addlogistics.html:362
 msgid "close"
 msgstr "关闭"
 
@@ -553,4 +554,7 @@ msgstr "密码需要至少一个数字和一个特殊字符"
 
 #~ msgid "add_contractor_location_button"
 #~ msgstr "添加地点"
+
+#~ msgid "${material}"
+#~ msgstr "材料价格"
 
