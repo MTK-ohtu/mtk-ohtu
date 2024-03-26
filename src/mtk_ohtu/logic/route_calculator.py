@@ -51,7 +51,10 @@ class Route:
             call = self.__get_route_call_post()
             route_summary = call.json()["features"][0]["properties"]["summary"]
             self.geojson = call.text
-        except Exception as exept:
+        # except:
+        #     print(f"Error in route call. Coordinates: {self.location1.latitude}, {self.location1.longitude} and {self.location2.latitude}, {self.location2.longitude} \n types of coordinates, loc1: {type(self.location1.latitude)}, {type(self.location1.longitude)}, loc2: {type(self.location2.latitude)}, {type(self.location2.longitude)}")
+        #     return
+        except Exception as exept:            
             raise ValueError(
                 f"Error in route call. Coordinates: {self.location1.latitude}, {self.location1.longitude} and {self.location2.latitude}, {self.location2.longitude} \n types of coordinates, loc1: {type(self.location1.latitude)}, {type(self.location1.longitude)}, loc2: {type(self.location2.latitude)}, {type(self.location2.longitude)}"
             ) from exept
@@ -96,7 +99,8 @@ class Route:
                 [float(self.location2.longitude), float(self.location2.latitude)],
             ],
             "instructions": "false",
-            "preference": "shortest",
+            "preference": "recommended", # fastest / shortest / recommended
+            "radiuses": [1000], # max dist (m) limiting the search of nearby road segments
         }
 
         headers = {
@@ -104,17 +108,14 @@ class Route:
             "Authorization": self.api_key,
             "Content-Type": "application/json; charset=utf-8",
         }
-        print("calling")
-        print(body)
-        print(headers)
         call = requests.post(
-            "https://api.openrouteservice.org/v2/directions/driving-hgv/geojson",
+            "https://api.openrouteservice.org/v2/directions/driving-car/geojson",
             json=body,
-            headers=headers
+            headers=headers,
+            timeout=600,
         )
 
-        print(call.status_code, call.reason)
-        print(call.text)
+        print("openrouteservice call:",call.status_code, call.reason)
         if call.status_code != 200:
             return f"error: {call.status_code}"
         else:

@@ -3,7 +3,12 @@
 {% block content %}
 <form action="{{ url_for('main.listing_bp.listing', listing_id=listing.id) }}" method="POST">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-
+    <script>
+        var in_range_gjson = JSON.parse('{{ in_range | tojson | safe }}');
+        console.log(in_range_gjson)
+        var out_range_gjson = JSON.parse('{{ out_range | tojson | safe }}');
+        console.log(out_range_gjson)
+    </script>
     <div class="product_container">
 
         <div class="horizontal-container">

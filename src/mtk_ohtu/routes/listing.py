@@ -63,6 +63,10 @@ def listing(listing_id):
         contractors = ContractorDivision(
             listing, listing.category, db_get_location_services_by_cargo_type, listing.location
         )
+        contractors.calc_contactor_distance_from_product(precise=False)
+        for locationservice in contractors.contractors:
+            print("locationservice:",locationservice)
+
         # contractors.filter_by_cargo_type(listing.category)
         return render_template(
             "product.html",
@@ -85,11 +89,15 @@ def listing(listing_id):
         emission_info = Emissions(fuel, route_to_product.distance, fuel_consumption)
         emissions = emission_info.calculate_emissions()
         emission_comparison = emission_info.get_emissions_for_all_fuels()
-        # contractors = ContractorDivision(float(listing.location.latitude), float(listing.location.longitude), listing.category)
         contractors = ContractorDivision(
             listing, listing.category, db_get_location_services_by_cargo_type, user_location
         )
-        # contractors.filter_by_cargo_type(listing.category)
+        contractors.calc_contactor_distance_from_product(precise=False) #if too slow or API limits get exeeded, change to False to get an estimated distance
+        contractors.calc_contactor_distance_from_delivery(precise=False) #if too slow or API limits get exeeded, change to False to get an estimated distance
+        contractors.calc_emissions_on_route(route_to_product)
+        contractors.calc_emissions_outside_route()
+        for contractor in contractors.contractors:
+            print(contractor)
 
         return render_template(
             "product.html",

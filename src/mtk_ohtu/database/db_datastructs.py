@@ -151,6 +151,12 @@ class LocationService:
     unit: BatchUnitsType
     can_process: bool
     description: str
+    dist_to_product: float = None
+    dist_to_delivery: float = None
+    fuel: str = "diesel"
+    fuel_efficiency: float = 55
+    emissions_on_route: float = None
+    emissions_outside_route: float = None
 
 
 

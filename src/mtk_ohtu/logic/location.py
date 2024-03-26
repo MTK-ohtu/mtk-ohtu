@@ -25,12 +25,12 @@ class Location:
         self.address = ""
         if type(loc_input) == str:
             self.location = self._location_from_address(loc_input)
-            self.longitude = self.location.longitude
-            self.latitude = self.location.latitude
+            self.longitude = float(self.location.longitude)
+            self.latitude = float(self.location.latitude)
         elif type(loc_input) == tuple or type(loc_input) == list:
             self.location = None
-            self.longitude = loc_input[0]
-            self.latitude = loc_input[1]
+            self.longitude = float(loc_input[0])
+            self.latitude = float(loc_input[1])
             self.address = f"Coordinates:\n{self.latitude}','{self.longitude}"
         else:
             raise ValueError("Invalid location input")
@@ -45,3 +45,6 @@ class Location:
             return loc
         except:
             raise ValueError(f"Invalid address: {address}")
+
+    def __str__(self) -> str:
+        return f"({self.latitude}, {self.longitude})"
