@@ -6,6 +6,133 @@
     .flashes {
         text-align: center;
     }
+
+    dialog {
+        border: none;
+        box-shadow: #00000029 2px 2px 5px 2px;
+        border-radius: 10px;
+        padding: 30px;
+        width: 80%;
+    }
+
+    .dialog-header {
+        text-align: center;
+    }
+
+    #allQuestions {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+
+    .address-fields,
+    .contact-fields {
+        width: 30%;
+    }
+
+    .address-fields label,
+    .contact-fields label,
+    .description-field label {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .address-fields input,
+    .contact-fields input {
+        width: 90%;
+        margin-bottom: 10px;
+        padding: 8px;
+        box-sizing: border-box;
+    }
+
+    .description-field {
+        width: 40%;
+    }
+
+    .description-field textarea {
+        width: 90%;
+        height: 150px;
+    }
+
+    .form-section {
+        border: 3px solid #ccc;
+        padding: 20px;
+        width: 70%;
+        margin: 0 auto;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .radius-option label {
+        margin-right: 20px;
+        font-size: 18px;
+    }
+
+    .radius-option {
+        display: flex;
+    }
+
+    .radius-option input[type="radio"] {
+        transform: scale(1.75);
+        margin-right: 10px;
+        margin-bottom: 15px;
+    }
+
+    .custom-submit-button-container {
+        width: 100%;
+        text-align: center;
+        margin-top: 50px;
+    }
+
+    .custom-cancel-button-container {
+        width: 100%;
+        text-align: center;
+        margin-top: 0px;
+        margin-bottom: 5px;
+    }
+
+    .custom-submit-button {
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        padding: 15px 40px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 8px;
+    }
+
+    .custom-cancel-button {
+        background-color: #677067;
+        border: none;
+        color: white;
+        padding: 15px 60px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 8px;
+    }
+
+    .custom-submit-button:hover {
+        background-color: #45a049; 
+    }
+
+    .custom-cancel-button:hover {
+        background-color: #4a4e4a; 
+    }
+
+    .custom-submit-button-container {
+        width: 100%;
+        text-align: center;
+        margin-top: 50px;
+        margin-bottom: 5px;
+    }
 </style>
 
 {% with messages = get_flashed_messages() %}
@@ -17,6 +144,60 @@
     </ul>
   {% endif %}
 {% endwith %}
+
+<dialog id="addLocationDialog">
+    <form action="{{url_for('main.contractor_location_bp.add')}}" method="POST">
+        <div class="dialog-header"><h1>{{ _("add_new_location_header") }}</h1></div>
+        <div id="allQuestions">
+            <div class="address-fields">
+                <label for="address">{{ _("address") }}*</label>
+                <input type="text" id="address" name="address" required>
+                <label for="postcode">{{ _("postal_code") }}*</label>
+                <input type="text" id="postcode" name="postcode" required>
+                <label for="city">{{ _("city") }}*</label>
+                <input type="text" id="city" name="city" required>
+            </div>
+            <div class="contact-fields">
+                <label for="telephone">{{ _("phone_number") }}</label>
+                <input type="text" id="telephone" name="telephone">
+                <label for="email">{{ _("email") }}</label>
+                <input type="text" id="email" name="email">
+            </div>
+            <div class="description-field">
+                <label for="description">{{ _("description") }}</label>
+                <textarea id="description" name="description" placeholder="{{ _('description_placeholder') }}"></textarea>
+            </div>
+        </div>
+        <h4>{{ _("how_far_can_you_deliver") }}*</h4>
+        <div class="radius-option">
+            <input type="radio" name="radiusType" value="no-limit" onclick="toggleRadius()">
+            <label for="no-limit" class="circle-label">{{ _("no_limit") }}</label>
+            <input type="radio" name="radiusType" value="custom-limit" onclick="toggleRadius()">
+            <label for="custom-limit" class="circle-label">{{ _("custom_limit") }}</label>
+        </div>         
+        <div id="customDistance" style="display: none;" class="small-text">
+            <label for="radiusType">{{ _("maximum_distance") }}</label>
+            <input type="text" id="radius" name="radius">{{ _("km") }}
+        </div>
+        <div class="eco-capabilities">
+            <h4>{{ _("select_eco_types") }}</h4>
+            {% for category in eco_categories %}
+                <label class="switch">
+                    <input type="checkbox" name="eco_fuel_types[]" value="{{category}}">
+                    <span class="slider"></span>
+                </label>
+                {{ _(category) }}
+            {% endfor %}
+        </div>
+        <div class="custom-submit-button-container">
+            <button type="submit" value="{{_('dialog_confirm')}}" class="custom-submit-button">{{_("create_location")}}</button>
+        </div>
+        <div class="custom-cancel-button-container">
+            <button type="button" id="closeAddLocationDialog" class="custom-cancel-button">{{_("dialog_cancel")}}</button>
+        </div>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    </form>
+</dialog>
 
 <dialog id="removeLocationDialog">
     <form action="{{url_for('main.contractor_location_bp.remove')}}" method="POST">
@@ -39,6 +220,29 @@
 </dialog>
 
 <script>
+    // 'addLocationDialog' handling
+    const addLocationDialog = document.getElementById("addLocationDialog");
+    const closeAddLocationDialog = document.getElementById("closeAddLocationDialog")
+
+    function openAddLocationDialog() {
+        addLocationDialog.showModal();
+    }
+
+    closeAddLocationDialog.addEventListener("click", () => {
+        addLocationDialog.close();
+    });
+
+    function toggleRadius() {
+        var radiusType = document.querySelector('input[name="radiusType"]:checked').value;
+        var customDistance = document.getElementById("customDistance");
+
+        if (radiusType === "no-limit") {
+            customDistance.style.display = "none";
+        } else {
+            customDistance.style.display = "block";
+        }
+    }
+
     // 'removeLocationDialog' handling
     const removeLocationDialog = document.getElementById("removeLocationDialog");
     const closeRemoveLocationDialog = document.getElementById("closeRemoveLocationDialog")
@@ -80,6 +284,8 @@
 
 <h3>{{ _("ml_locations_header") }}</h3>
 
+<button onclick='openAddLocationDialog()'>{{_('add_location_button')}}</button>
+
 {% for location in locations %}
 
     <div class="card">
@@ -87,6 +293,7 @@
         {{ _("maximum_distance") }} (km): {% if location[0].delivery_radius == -1 %} {{ _("no_limit") }} {% else %} {{ location[0].delivery_radius }} {% endif %}
         <p>
         <button onclick='openRemoveLocationDialog("{{location[0].id}}")'>{{_('remove_location_button')}}</button>
+
         </p>
 
         <p><h4>{{ _("contractor_location_material_types") }}:</h4></p>

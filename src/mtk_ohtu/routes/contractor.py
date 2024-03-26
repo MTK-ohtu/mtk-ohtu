@@ -110,6 +110,7 @@ def contractor():
     if request.method == "GET":
         user_id = users.user_id()
         contractor_info = db_contractors.db_get_contractor(user_id, DATABASE_POOL)
+        eco_categories = [e.value for e in EcoCategoryType]
         if not contractor_info:
             return redirect(url_for("main.contractor_bp.add_logistics"))
 
@@ -120,6 +121,7 @@ def contractor():
             "contractor.html",
             contractor=contractor_info,
             locations=locations_and_cargo_capability,
+            eco_categories=eco_categories 
         )
 
 

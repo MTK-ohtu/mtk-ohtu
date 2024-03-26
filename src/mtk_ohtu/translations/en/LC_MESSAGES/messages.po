@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-03-22 14:23+0200\n"
+"POT-Creation-Date: 2024-03-26 20:31+0200\n"
 "PO-Revision-Date: 2024-03-18 14:04+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -75,7 +75,6 @@ msgid "Soil and growing media"
 msgstr "Soil and growing media"
 
 #: src/mtk_ohtu/database/db_enums.py:49
-#: src/mtk_ohtu/templates/addlogistics.html:281
 msgid "Digestion"
 msgstr "Digestion"
 
@@ -115,18 +114,24 @@ msgstr "Forest biomass"
 msgid "Treated wood"
 msgstr "Treated wood"
 
-#: src/mtk_ohtu/database/db_enums.py:64 src/mtk_ohtu/templates/product.html:36
-#: src/mtk_ohtu/templates/product_redesign.html:158
+#: copy.html:163 src/mtk_ohtu/database/db_enums.py:64
+#: src/mtk_ohtu/templates/product.html:41
+#: src/mtk_ohtu/templates/product_redesign
+#: src/mtk_ohtu/templates/product_redesign.html:267
 msgid "electricity"
 msgstr "Electricity"
 
-#: src/mtk_ohtu/database/db_enums.py:65 src/mtk_ohtu/templates/product.html:35
-#: src/mtk_ohtu/templates/product_redesign.html:157
+#: copy.html:162 src/mtk_ohtu/database/db_enums.py:65
+#: src/mtk_ohtu/templates/product.html:40
+#: src/mtk_ohtu/templates/product_redesign
+#: src/mtk_ohtu/templates/product_redesign.html:266
 msgid "biogas"
 msgstr "Bio gas"
 
-#: src/mtk_ohtu/database/db_enums.py:66 src/mtk_ohtu/templates/product.html:33
-#: src/mtk_ohtu/templates/product_redesign.html:155
+#: copy.html:160 src/mtk_ohtu/database/db_enums.py:66
+#: src/mtk_ohtu/templates/product.html:38
+#: src/mtk_ohtu/templates/product_redesign
+#: src/mtk_ohtu/templates/product_redesign.html:264
 msgid "biodiesel"
 msgstr "Biodiesel"
 
@@ -135,9 +140,9 @@ msgid "hydrogen"
 msgstr "Hydrogen"
 
 #: src/mtk_ohtu/routes/cargo.py:40 src/mtk_ohtu/routes/cargo.py:58
-#: src/mtk_ohtu/routes/contractor_location.py:31
-#: src/mtk_ohtu/routes/contractor_location.py:60
-#: src/mtk_ohtu/routes/contractor_location.py:78
+#: src/mtk_ohtu/routes/contractor_location.py:28
+#: src/mtk_ohtu/routes/contractor_location.py:64
+#: src/mtk_ohtu/routes/contractor_location.py:82
 msgid "error_occurred"
 msgstr "An error occured. Please try again."
 
@@ -149,15 +154,15 @@ msgstr "Material type added"
 msgid "material_type_removed"
 msgstr "Material type removed"
 
-#: src/mtk_ohtu/routes/contractor_location.py:34
+#: src/mtk_ohtu/routes/contractor_location.py:38
 msgid "new_location_added"
 msgstr "New location added"
 
-#: src/mtk_ohtu/routes/contractor_location.py:63
+#: src/mtk_ohtu/routes/contractor_location.py:67
 msgid "changes_saved"
-msgstr "Can spread"
+msgstr "Changes saved!"
 
-#: src/mtk_ohtu/routes/contractor_location.py:81
+#: src/mtk_ohtu/routes/contractor_location.py:85
 msgid "location_removed"
 msgstr "Location removed"
 
@@ -165,235 +170,239 @@ msgstr "Location removed"
 msgid "submit_address_first"
 msgstr ""
 
-#: src/mtk_ohtu/routes/listing.py:35
-#: src/mtk_ohtu/templates/addlocation.html:131
+#: src/mtk_ohtu/routes/listing.py:35 src/mtk_ohtu/templates/contractor.html:180
 msgid "km"
-msgstr ""
+msgstr "km"
 
 #: src/mtk_ohtu/templates/404.html:4 src/mtk_ohtu/templates/404.html:8
 msgid "page_not_found"
 msgstr ""
 
-#: src/mtk_ohtu/templates/addlocation.html:97
-msgid "new_location"
-msgstr "Locations"
+#: src/mtk_ohtu/templates/addlogistics.html:4
+#: src/mtk_ohtu/templates/addlogistics.html:182
+msgid "add_logistics_title"
+msgstr "Add a logistics service"
 
-#: src/mtk_ohtu/templates/addlocation.html:103
-#: src/mtk_ohtu/templates/addlogistics.html:208
+#: src/mtk_ohtu/templates/addlogistics.html:186
+msgid "select_service_type"
+msgstr "Select service type"
+
+#: src/mtk_ohtu/templates/addlogistics.html:189
+#: src/mtk_ohtu/templates/contractor.html:281
+msgid "private_contractor"
+msgstr "Private contractor"
+
+#: src/mtk_ohtu/templates/addlogistics.html:191
+msgid "company"
+msgstr "Company"
+
+#: src/mtk_ohtu/templates/addlogistics.html:195
+msgid "full_name"
+msgstr "Full name"
+
+#: src/mtk_ohtu/templates/addlogistics.html:200
+msgid "company_name"
+msgstr "Company name"
+
+#: src/mtk_ohtu/templates/addlogistics.html:202
+#: src/mtk_ohtu/templates/contractor.html:279
+msgid "business_id"
+msgstr "Business ID"
+
+#: src/mtk_ohtu/templates/addlogistics.html:206
+msgid "add_location"
+msgstr "Add location"
+
+#: src/mtk_ohtu/templates/addlogistics.html:209
+#: src/mtk_ohtu/templates/contractor.html:153
 msgid "address"
 msgstr "Address"
 
-#: src/mtk_ohtu/templates/addlocation.html:105
-#: src/mtk_ohtu/templates/addlogistics.html:210
+#: src/mtk_ohtu/templates/addlogistics.html:211
+#: src/mtk_ohtu/templates/contractor.html:155
 msgid "postal_code"
 msgstr "Postal code"
 
-#: src/mtk_ohtu/templates/addlocation.html:107
-#: src/mtk_ohtu/templates/addlogistics.html:212
+#: src/mtk_ohtu/templates/addlogistics.html:213
+#: src/mtk_ohtu/templates/contractor.html:157
 msgid "city"
 msgstr "City"
 
-#: src/mtk_ohtu/templates/addlocation.html:111
-#: src/mtk_ohtu/templates/addlogistics.html:216
+#: src/mtk_ohtu/templates/addlogistics.html:217
+#: src/mtk_ohtu/templates/contractor.html:161
 msgid "phone_number"
 msgstr "Phone number"
 
-#: src/mtk_ohtu/templates/addlocation.html:113
-#: src/mtk_ohtu/templates/addlogistics.html:218
+#: src/mtk_ohtu/templates/addlogistics.html:219
+#: src/mtk_ohtu/templates/contractor.html:163
 #: src/mtk_ohtu/templates/register.html:20
 msgid "email"
 msgstr "Email"
 
-#: src/mtk_ohtu/templates/addlocation.html:117
-#: src/mtk_ohtu/templates/addlogistics.html:222
-#: src/mtk_ohtu/templates/contractor.html:95
-#: src/mtk_ohtu/templates/product.html:19
+#: src/mtk_ohtu/templates/addlogistics.html:223
+#: src/mtk_ohtu/templates/contractor.html:167
+#: src/mtk_ohtu/templates/contractor.html:302
+#: src/mtk_ohtu/templates/list_and_map.html:2
+#: src/mtk_ohtu/templates/product.html:24
+#: src/mtk_ohtu/templates/product_redesign.html:194
+#: src/mtk_ohtu/templates/product_redesign.html:228
+#: src/mtk_ohtu/templates/product_redesign.html:238
 msgid "description"
 msgstr "Description"
 
-#: src/mtk_ohtu/templates/addlocation.html:118
-#: src/mtk_ohtu/templates/addlogistics.html:223
+#: src/mtk_ohtu/templates/addlogistics.html:224
+#: src/mtk_ohtu/templates/contractor.html:168
 msgid "description_placeholder"
 msgstr "Write description"
 
-#: src/mtk_ohtu/templates/addlocation.html:122
-#: src/mtk_ohtu/templates/addlogistics.html:227
+#: src/mtk_ohtu/templates/addlogistics.html:228
+#: src/mtk_ohtu/templates/contractor.html:171
 msgid "how_far_can_you_deliver"
 msgstr "How far are you able to deliver"
 
-#: src/mtk_ohtu/templates/addlocation.html:125
-#: src/mtk_ohtu/templates/addlogistics.html:230
-#: src/mtk_ohtu/templates/contractor.html:87
+#: src/mtk_ohtu/templates/addlogistics.html:231
+#: src/mtk_ohtu/templates/contractor.html:174
+#: src/mtk_ohtu/templates/contractor.html:293
 msgid "no_limit"
 msgstr "No limit"
 
-#: src/mtk_ohtu/templates/addlocation.html:127
-#: src/mtk_ohtu/templates/addlogistics.html:232
-#: src/mtk_ohtu/templates/addlogistics.html:308
+#: src/mtk_ohtu/templates/addlogistics.html:233
+#: src/mtk_ohtu/templates/addlogistics.html:291
+#: src/mtk_ohtu/templates/contractor.html:176
 msgid "custom_limit"
 msgstr "Custom limit"
 
-#: src/mtk_ohtu/templates/addlocation.html:130
-#: src/mtk_ohtu/templates/addlogistics.html:235
-#: src/mtk_ohtu/templates/addlogistics.html:311
-#: src/mtk_ohtu/templates/contractor.html:87
-#: src/mtk_ohtu/templates/contractor.html:95
+#: src/mtk_ohtu/templates/addlogistics.html:236
+#: src/mtk_ohtu/templates/addlogistics.html:294
+#: src/mtk_ohtu/templates/contractor.html:179
+#: src/mtk_ohtu/templates/contractor.html:293
+#: src/mtk_ohtu/templates/contractor.html:302
 msgid "maximum_distance"
 msgstr "Maximum distance"
 
-#: src/mtk_ohtu/templates/addlocation.html:136
-#, fuzzy
-msgid "create_location"
-msgstr "Add location"
-
-#: src/mtk_ohtu/templates/addlocation.html:140
-msgid "cancel"
-msgstr "Cancel"
-
-#: src/mtk_ohtu/templates/addlogistics.html:4
-#: src/mtk_ohtu/templates/addlogistics.html:181
-msgid "add_logistics_title"
-msgstr "Add a logistics service"
-
-#: src/mtk_ohtu/templates/addlogistics.html:185
-msgid "select_service_type"
-msgstr "Select service type"
-
-#: src/mtk_ohtu/templates/addlogistics.html:188
-#: src/mtk_ohtu/templates/contractor.html:77
-msgid "private_contractor"
-msgstr "Private contractor"
-
-#: src/mtk_ohtu/templates/addlogistics.html:190
-msgid "company"
-msgstr "Company"
-
-#: src/mtk_ohtu/templates/addlogistics.html:194
-msgid "full_name"
-msgstr "Full name"
-
-#: src/mtk_ohtu/templates/addlogistics.html:199
-msgid "company_name"
-msgstr "Company name"
-
-#: src/mtk_ohtu/templates/addlogistics.html:201
-#: src/mtk_ohtu/templates/contractor.html:75
-msgid "business_id"
-msgstr "Business ID"
-
-#: src/mtk_ohtu/templates/addlogistics.html:205
-msgid "add_location"
-msgstr "Add location"
-
-#: src/mtk_ohtu/templates/addlogistics.html:236
-#: src/mtk_ohtu/templates/addlogistics.html:312
+#: src/mtk_ohtu/templates/addlogistics.html:237
+#: src/mtk_ohtu/templates/addlogistics.html:295
 msgid "kilometers"
 msgstr "kilometers"
 
-#: src/mtk_ohtu/templates/addlogistics.html:239
+#: src/mtk_ohtu/templates/addlogistics.html:240
+#: src/mtk_ohtu/templates/contractor.html:183
 msgid "select_eco_types"
 msgstr "Select your ecological transport options"
 
-#: src/mtk_ohtu/templates/addlogistics.html:249
+#: src/mtk_ohtu/templates/addlogistics.html:250
 msgid "select_materials"
 msgstr "Select materials you can deliver"
 
-#: src/mtk_ohtu/templates/addlogistics.html:260
-msgid "add_logistics_submit"
-msgstr "Submit logistics"
-
-#: src/mtk_ohtu/templates/addlogistics.html:282
-#: src/mtk_ohtu/templates/addlogistics.html:365
+#: src/mtk_ohtu/templates/addlogistics.html:265
+#: src/mtk_ohtu/templates/addlogistics.html:370
 msgid "additional_information"
 msgstr "Additional information"
 
-#: src/mtk_ohtu/templates/addlogistics.html:286
+#: src/mtk_ohtu/templates/addlogistics.html:269
 msgid "can_spread"
 msgstr "Can spread"
 
-#: src/mtk_ohtu/templates/addlogistics.html:292
-#: src/mtk_ohtu/templates/contractor.html:95
+#: src/mtk_ohtu/templates/addlogistics.html:275
+#: src/mtk_ohtu/templates/contractor.html:302
 msgid "base_rate"
 msgstr "Base rate"
 
-#: src/mtk_ohtu/templates/addlogistics.html:294
+#: src/mtk_ohtu/templates/addlogistics.html:277
 msgid "price_per_hour"
 msgstr "Price per hour"
 
-#: src/mtk_ohtu/templates/addlogistics.html:296
+#: src/mtk_ohtu/templates/addlogistics.html:279
 msgid "maximum_capacity"
 msgstr "Maximum capacity"
 
-#: src/mtk_ohtu/templates/addlogistics.html:303
+#: src/mtk_ohtu/templates/addlogistics.html:286
 msgid "delivery_distance"
 msgstr "Delivery distance"
 
-#: src/mtk_ohtu/templates/addlogistics.html:306
+#: src/mtk_ohtu/templates/addlogistics.html:289
 msgid "same_as_above"
 msgstr "Same as above"
 
-#: src/mtk_ohtu/templates/addlogistics.html:315
+#: src/mtk_ohtu/templates/addlogistics.html:298
 msgid "material_delivery_description_placeholder"
 msgstr "Write description"
 
-#: src/mtk_ohtu/templates/addlogistics.html:362
+#: src/mtk_ohtu/templates/addlogistics.html:305
+msgid "add_logistics_submit"
+msgstr "Submit logistics"
+
+#: src/mtk_ohtu/templates/addlogistics.html:367
 msgid "close"
 msgstr "Close"
 
-#: src/mtk_ohtu/templates/contractor.html:23
-msgid "remove_location_dialog_header"
-msgstr "Confirm location deletion?"
+#: src/mtk_ohtu/templates/contractor.html:150
+msgid "add_new_location_header"
+msgstr "Create new location"
 
-#: src/mtk_ohtu/templates/contractor.html:26
-#: src/mtk_ohtu/templates/contractor.html:36
-msgid "dialog_cancel"
-msgstr "Cancel"
-
-#: src/mtk_ohtu/templates/contractor.html:27
-#: src/mtk_ohtu/templates/contractor.html:37
+#: src/mtk_ohtu/templates/contractor.html:193
+#: src/mtk_ohtu/templates/contractor.html:208
+#: src/mtk_ohtu/templates/contractor.html:218
 msgid "dialog_confirm"
 msgstr "Confirm"
 
-#: src/mtk_ohtu/templates/contractor.html:33
+#: src/mtk_ohtu/templates/contractor.html:193
+msgid "create_location"
+msgstr "Add location"
+
+#: src/mtk_ohtu/templates/contractor.html:196
+#: src/mtk_ohtu/templates/contractor.html:207
+#: src/mtk_ohtu/templates/contractor.html:217
+msgid "dialog_cancel"
+msgstr "Cancel"
+
+#: src/mtk_ohtu/templates/contractor.html:204
+msgid "remove_location_dialog_header"
+msgstr "Confirm location deletion?"
+
+#: src/mtk_ohtu/templates/contractor.html:214
 msgid "remove_material_dialog_header"
 msgstr "Confirm material deletion?"
 
-#: src/mtk_ohtu/templates/contractor.html:81
+#: src/mtk_ohtu/templates/contractor.html:285
 msgid "ml_locations_header"
 msgstr "Locations"
 
-#: src/mtk_ohtu/templates/contractor.html:89
+#: src/mtk_ohtu/templates/contractor.html:287
+msgid "add_location_button"
+msgstr "Create new location"
+
+#: src/mtk_ohtu/templates/contractor.html:295
 msgid "remove_location_button"
 msgstr "delete location"
 
-#: src/mtk_ohtu/templates/contractor.html:92
+#: src/mtk_ohtu/templates/contractor.html:299
 msgid "contractor_location_material_types"
 msgstr "Material types you can deliver"
 
-#: src/mtk_ohtu/templates/contractor.html:95
+#: src/mtk_ohtu/templates/contractor.html:302
 msgid "material_price"
 msgstr "Price"
 
-#: src/mtk_ohtu/templates/contractor.html:95
+#: src/mtk_ohtu/templates/contractor.html:302
 msgid "max_capacity"
 msgstr "Maximum capacity"
 
-#: src/mtk_ohtu/templates/contractor.html:95
+#: src/mtk_ohtu/templates/contractor.html:302
 msgid "can_process"
 msgstr "Can process"
 
-#: src/mtk_ohtu/templates/contractor.html:96
+#: src/mtk_ohtu/templates/contractor.html:303
 msgid "remove_material_button"
 msgstr "delete material type"
 
-#: src/mtk_ohtu/templates/contractor.html:99
+#: src/mtk_ohtu/templates/contractor.html:306
 msgid "no_material_types_added_message"
 msgstr "Nothing in here yet. Start by adding some materials."
 
-#: src/mtk_ohtu/templates/contractor.html:104
-#, fuzzy
+#: src/mtk_ohtu/templates/contractor.html:311
 msgid "no_locations_added_message"
-msgstr "Locations"
+msgstr "No locations. Start by creating a new location!"
 
 #: src/mtk_ohtu/templates/index.html:4 src/mtk_ohtu/templates/index.html:8
 #: src/mtk_ohtu/templates/layout.html:25
@@ -442,6 +451,7 @@ msgid "footer_last_updated"
 msgstr "Last updated"
 
 #: src/mtk_ohtu/templates/list_and_map.html:3
+#: src/mtk_ohtu/templates/product_redesign.html:195
 msgid "services"
 msgstr "Services"
 
@@ -454,11 +464,11 @@ msgstr ""
 msgid "calculate_distance"
 msgstr "Maximum distance"
 
-#: src/mtk_ohtu/templates/listings.html:23
+#: src/mtk_ohtu/templates/listings.html:24
 msgid "price"
 msgstr ""
 
-#: src/mtk_ohtu/templates/listings.html:25
+#: src/mtk_ohtu/templates/listings.html:26
 msgid "distance"
 msgstr "Distance"
 
@@ -490,48 +500,59 @@ msgstr "Dont have an account"
 msgid "register_here_button"
 msgstr "Register here"
 
-#: src/mtk_ohtu/templates/product.html:27
+#: src/mtk_ohtu/templates/product.html:32
 msgid "fuel_economy"
 msgstr "Fuel economy"
 
-#: src/mtk_ohtu/templates/product.html:29
-#: src/mtk_ohtu/templates/product.html:66
-#: src/mtk_ohtu/templates/product_redesign.html:151
+#: copy.html:156 src/mtk_ohtu/templates/product.html:34
+#: src/mtk_ohtu/templates/product.html:71
+#: src/mtk_ohtu/templates/product_redesign
+#: src/mtk_ohtu/templates/product_redesign.html:260
 msgid "fuel"
 msgstr "Fuel"
 
-#: src/mtk_ohtu/templates/product.html:31
-#: src/mtk_ohtu/templates/product_redesign.html:153
+#: copy.html:158 src/mtk_ohtu/templates/product.html:36
+#: src/mtk_ohtu/templates/product_redesign
+#: src/mtk_ohtu/templates/product_redesign.html:262
 msgid "diesel"
 msgstr "Diesel"
 
-#: src/mtk_ohtu/templates/product.html:32
-#: src/mtk_ohtu/templates/product_redesign.html:154
+#: copy.html:159 src/mtk_ohtu/templates/product.html:37
+#: src/mtk_ohtu/templates/product_redesign
+#: src/mtk_ohtu/templates/product_redesign.html:263
 msgid "petrol"
 msgstr "Petrol"
 
-#: src/mtk_ohtu/templates/product.html:34
-#: src/mtk_ohtu/templates/product_redesign.html:156
+#: copy.html:161 src/mtk_ohtu/templates/product.html:39
+#: src/mtk_ohtu/templates/product_redesign
+#: src/mtk_ohtu/templates/product_redesign.html:265
 msgid "natural_gas"
 msgstr "Natural gas"
 
-#: src/mtk_ohtu/templates/product.html:40
-#: src/mtk_ohtu/templates/product_redesign.html:162
+#: copy.html:167 src/mtk_ohtu/templates/product.html:45
+#: src/mtk_ohtu/templates/product_redesign
+#: src/mtk_ohtu/templates/product_redesign.html:271
 #, fuzzy
 msgid "fuel_efficiency"
 msgstr "Fuel economy"
 
-#: src/mtk_ohtu/templates/product.html:88
-#: src/mtk_ohtu/templates/product_redesign.html:216
+#: copy.html:223 src/mtk_ohtu/templates/product.html:93
+#: src/mtk_ohtu/templates/product_redesign
+#: src/mtk_ohtu/templates/product_redesign.html:313
 msgid "show_all_button"
 msgstr ""
 
-#: src/mtk_ohtu/templates/product.html:106
+#: src/mtk_ohtu/templates/product.html:111
 msgid "process_button"
 msgstr ""
 
-#: src/mtk_ohtu/templates/product.html:131
+#: src/mtk_ohtu/templates/product.html:136
+#: src/mtk_ohtu/templates/product_redesign.html:319
 msgid "input_address_placeholder"
+msgstr ""
+
+#: src/mtk_ohtu/templates/product_redesign.html:253
+msgid "emissions"
 msgstr ""
 
 #: src/mtk_ohtu/templates/register.html:4
@@ -554,4 +575,10 @@ msgstr ""
 
 #~ msgid "${material}"
 #~ msgstr "Price"
+
+#~ msgid "new_location"
+#~ msgstr "Locations"
+
+#~ msgid "cancel"
+#~ msgstr "Cancel"
 
