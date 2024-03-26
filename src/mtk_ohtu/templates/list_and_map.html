@@ -1,23 +1,15 @@
-<!-- Html for feature content -->
-<div id="feature_popup" style="display:none">
-
-</div>
-
-<!-- Html for list element content -->
-<div id="list_element_content" style="display:none">
-
-</div>
+<!-- Translatable texts -->
+<p id="description" style="display:none">{{ _("description") }}</p>
+<p id="services" style="display:none">{{ _("services") }}</p>
 
 <!-- This view is divided into two vertical blocks -->
-<div style="height: 70vh; display: flex;">
+<div style="height: 70vh; display: flex; max-width: 120vh; margin:auto">
 
-    <!-- Block 1: List for contractor cards-->
-    <!--<div style="padding: 10px;  width: 40%; float: left;">-->
-    <div id="list_div" class="card_scrollbox" style="flex:1; max-width: 40%; float: left;">
+    <!-- BLOCK 1: List for contractor cards=============================================================================-->
+    <div id="list_div" class="card_scrollbox" style="padding-left: 5px;flex:1; max-width: 40%; float: left;">
     </div>
-    <!--</div>-->
 
-    <!-- Block 2: Map -->
+    <!-- BLOCK 2: MAP ==================================================================================================-->
     <div name="map_div" style="flex: 1;background-color: #f1f1f1; min-height: 100%;">
     
         <!-- Include Leaflet JavaScript and CSS -->
@@ -26,154 +18,161 @@
 
         <!-- Add a container for the map -->
         <div id="map" style="height: 100%;"></div>
-
-        <!-- Leaflet + code -->
-        <script type="module">
-
-            import { VisionController } from '/static/vision.js'
-            import * as leafletIcons from '/static/leaflet_icons.js'
-
-            // Interactive elements
-            const routeButton = document.getElementById('route_button')
-            const companiesButton = document.getElementById('companies_button')
-            const companyCount = document.getElementById("company_count")
-            const setGoalButton = document.getElementById('set_goal')
-            const searchButton = document.getElementById('search_button')
-            const mapDiv = document.getElementById('map')
-            const addressInput = document.getElementById('address_input')
-            const selectAll = document.getElementById('selectAll');
-            const handleButton = document.getElementById('handle_button')
-
-
-            //Create feature-type JSON. It's used in VisionController.
-            const getJson = function (coordinates, name, address) {
-                return {
-                    "geometry": {
-                        "coordinates": [
-                            parseFloat(coordinates[1]),
-                            parseFloat(coordinates[0])
-                        ]
-                    },
-                    "properties": {
-                        "name": name,
-                        "address": address
-                    }
-                }
-            }
-
-            //Contractors and product locations in JSON format
-            var in_range_gjson = JSON.parse('{{ in_range | tojson | safe }}');
-            console.log(in_range_gjson)
-            var out_range_gjson = JSON.parse('{{ out_range | tojson | safe }}');
-            var product = getJson (
-                ['{{ listing.location.latitude }}','{{ listing.location.longitude }}'],
-                '{{ listing.category.value }}',
-                '{{listing.address}}'
-            )
-            
-            // Create map
-            const map = L.map('map', { doubleClickZoom: false, setClosePopupOnClick:false }).setView([62.9, 26.4], 10);
-            // Create vision controller
-            const V = new VisionController(L, map)
-
-            // Add tiles
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap contributors'
-            }).addTo(map);
-
-            // Add scale
-            L.control.scale().addTo(map);
-            
-            // Add marker to product location
-            V.addMapFeatureToGroup(product, 'product', leafletIcons.product)
-            
-            // Visual representation of the route
-            if ('{{ route_geojson }}'.length !== 0) {
-                // Add route on map
-                var route_geojson = JSON.parse('{{ route_geojson }}'.replaceAll('&#34;', '"'));
-                console.log(route_geojson)
-                // Add destination to vision controller
-                var destination = getJson(
-                    route_geojson["features"][0]["geometry"]["coordinates"].pop().reverse(),
-                    "Destination",
-                    '{{ user_location.address }}'
-                )
-                console.log(destination)
-                V.addMapFeatureToGroup(destination, 'destination', leafletIcons.goal)
-                V.addRouteToGroup(route_geojson, '{{ listing.address }}')
-            }
-
-            // Click on map
-            map.on('click', function (e) {
-                var clickLat = e.latlng.lat
-                var clickLng = e.latlng.lng
-                // If destination selection is on, post chosen coordinates
-                if (setGoalButton.classList.contains('pressed')) {
-                    mapDiv.classList.remove('set_goal')
-                    setGoalButton.classList.remove('pressed')
-                    addressInput.value=clickLat+","+clickLng
-                    searchButton.click()
-                }
-            })
-
-            // Toggle cargo process button
-            handleButton.addEventListener('click', function() {
-                if (handleButton.classList.contains('pressed')) {
-                    handleButton.classList.remove('pressed')
-                    V.filterBy('can_process', false)
-                } else {
-                    handleButton.classList.add('pressed')
-                    V.filterBy('can_process', true)
-                }
-            })
-
-            // Click 'Show companies'
-            companiesButton.addEventListener('click', function() {
-                if (companiesButton.classList.contains('pressed')) {
-                    companiesButton.classList.remove('pressed')
-                } else {
-                    companiesButton.classList.add('pressed')
-                }
-                V.toggleCompanyFocus()
-            })
-
-            // Click 'Show route'
-            if (routeButton != null) {
-                routeButton.addEventListener('click', function() {
-                    if (routeButton.classList.contains('pressed')) {
-                        routeButton.classList.remove('pressed')
-                    } else {
-                        routeButton.classList.add('pressed')
-                    }
-                    V.toggleGroupVisibility('{{listing.address}}')
-                })
-            }
-
-            // Click 'Destination selector'
-            setGoalButton.addEventListener('click', function() {
-                if (event.target.classList.contains('pressed')) {
-                    mapDiv.classList.remove('set_goal')
-                    setGoalButton.classList.remove('pressed')
-                } else {
-                    mapDiv.classList.add('set_goal')
-                    setGoalButton.classList.add('pressed')
-                }
-            })
-
-            // Toggle 'Show all'
-            selectAll.addEventListener("change", function () {
-                V.toggleGroupVisibility('suboptimal')
-            });
-
-            //Init
-            V.addListFeaturesToGroup(in_range_gjson.features, 'optimal', leafletIcons.okTruck)
-            V.addListFeaturesToGroup(out_range_gjson.features, 'suboptimal', leafletIcons.badTruck)
-            //Add empty list element in the list
-            var empty = document.createElement('button')
-            empty.classList.add('empty_list_element')
-            document.getElementById('list_div').appendChild(empty)
-            V.toggleGroupVisibility('suboptimal')
-            V.addFocusOnVisibleListElements()
-        </script>
+        
     </div>
 </div>
+
+<!-- Leaflet + code -->
+<script type="module">
+
+    import { VisionController } from '/static/vision.js'
+    import * as leafletIcons from '/static/leaflet_icons.js'
+
+    // Interactive elements
+    const routeButton = document.getElementById('route_button')
+    const companiesButton = document.getElementById('companies_button')
+    const companyCount = document.getElementById("company_count")
+    const setGoalButton = document.getElementById('set_goal')
+    const searchButton = document.getElementById('search_button')
+    const mapDiv = document.getElementById('map')
+    const addressInput = document.getElementById('address_input')
+    const selectAll = document.getElementById('selectAll');
+    const handleButton = document.getElementById('handle_button')
+
+
+    //Create feature-type JSON. It's used in VisionController.
+    const getJson = function (coordinates, name, address) {
+        return {
+            "geometry": {
+                "coordinates": [
+                    parseFloat(coordinates[1]),
+                    parseFloat(coordinates[0])
+                ]
+            },
+            "properties": {
+                "name": name,
+                "address": address
+            }
+        }
+    }
+
+    //Contractors and product locations in JSON format
+    var in_range_gjson = JSON.parse('{{ in_range | tojson | safe }}');
+    console.log(in_range_gjson)
+    var out_range_gjson = JSON.parse('{{ out_range | tojson | safe }}');
+    var product = getJson (
+        ['{{ listing.location.latitude }}','{{ listing.location.longitude }}'],
+        '{{ listing.category.value }}',
+        '{{listing.address}}'
+    )
+    
+    // Create map
+    const map = L.map('map', { doubleClickZoom: false, setClosePopupOnClick:false })
+                    .setView([62.9, 26.4], 10);
+    // Create vision controller
+    const V = new VisionController(L, map)
+
+    // Add tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Add scale
+    L.control.scale().addTo(map);
+    
+    // Add marker to product location
+    V.addMapFeatureToGroup(product, 'product', leafletIcons.product)
+    
+    // Visual representation of the route
+    if ('{{ route_geojson }}'.length !== 0) {
+        // Add route on map
+        var route_geojson = JSON.parse('{{ route_geojson }}'.replaceAll('&#34;', '"'));
+        console.log(route_geojson)
+        // Add destination to vision controller
+        var destination = getJson(
+            route_geojson["features"][0]["geometry"]["coordinates"].pop().reverse(),
+            "Destination",
+            '{{ user_location.address }}'
+        )
+        console.log(destination)
+        V.addMapFeatureToGroup(destination, 'destination', leafletIcons.goal)
+        V.addRouteToGroup(route_geojson, '{{ listing.address }}')
+    }
+
+    // Click on map
+    map.on('click', function (e) {
+        var clickLat = e.latlng.lat
+        var clickLng = e.latlng.lng
+        // If destination selection is on, post chosen coordinates
+        if (setGoalButton.classList.contains('pressed')) {
+            mapDiv.classList.remove('set_goal')
+            setGoalButton.classList.remove('pressed')
+            addressInput.value=clickLat+","+clickLng
+            searchButton.click()
+        }
+    })
+
+    // Toggle cargo process button
+    handleButton.addEventListener('click', function() {
+        if (handleButton.classList.contains('pressed')) {
+            handleButton.classList.remove('pressed')
+            V.filterBy('can_process', false)
+        } else {
+            handleButton.classList.add('pressed')
+            V.filterBy('can_process', true)
+        }
+    })
+
+    // Click 'Show companies'
+    companiesButton.addEventListener('click', function() {
+        if (companiesButton.classList.contains('pressed')) {
+            companiesButton.classList.remove('pressed')
+        } else {
+            companiesButton.classList.add('pressed')
+        }
+        V.toggleCompanyFocus()
+    })
+
+    // Click 'Show route'
+    if (routeButton != null) {
+        routeButton.addEventListener('click', function() {
+            if (routeButton.classList.contains('pressed')) {
+                routeButton.classList.remove('pressed')
+            } else {
+                routeButton.classList.add('pressed')
+            }
+            V.toggleGroupVisibility('{{listing.address}}')
+        })
+    }
+
+    // Click 'Destination selector'
+    setGoalButton.addEventListener('click', function() {
+        if (event.target.classList.contains('pressed')) {
+            mapDiv.classList.remove('set_goal')
+            setGoalButton.classList.remove('pressed')
+        } else {
+            mapDiv.classList.add('set_goal')
+            setGoalButton.classList.add('pressed')
+        }
+    })
+
+    // Toggle 'Show all'
+    selectAll.addEventListener("change", function () {
+        V.toggleGroupVisibility('suboptimal')
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        //Init
+        V.addListFeaturesToGroup(in_range_gjson.features, 'optimal', leafletIcons.okTruck)
+        V.addListFeaturesToGroup(out_range_gjson.features, 'suboptimal', leafletIcons.badTruck)
+        //Add empty list element in the list
+        var empty = document.createElement('button')
+        empty.classList.add('empty_list_element')
+        document.getElementById('list_div').appendChild(empty)
+        // Hide suboptimals
+        V.toggleGroupVisibility('suboptimal')
+        // Focus on everything visible on the map
+        V.addFocusOnVisibleListElements()
+    });
+
+</script>

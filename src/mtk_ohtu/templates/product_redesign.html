@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html>
 <head>
     <meta charset="utf-8">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
@@ -15,24 +17,37 @@
             border: 1px solid #228B22;
         }
 
-        .product_container {
-            background-color: #badbbb;
+        .upper_left_container {
+            position: relative;
+            min-height: 35%;
+            height: 35%;
+            max-height: 35%;
+            max-width: 99%;
+            width: 99%;
+            overflow-y: hidden;
+            overflow-x: hidden;
+            border: var(--common-border);
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
         }
 
-        .emission_container {
-            background-color: #f8f8f8;
-        }
-
-        .search_container {
-            background-color: #f8f8f8;
-        }
-
-        .route_details_container {
-            background-color: #f8f8f8;
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        .upper_left_container::-webkit-scrollbar * {
+            display: none;
         }
 
         .contractor_list_container {
-            background-color: #f8f8f8;
+            height: 63%;
+            width: 99%;
+            flex:1;
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+            padding: 3px;
+        }
+
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        .contractor_list_container::-webkit-scrollbar * {
+            display: none;
         }
 
         .filter_container {
@@ -42,12 +57,38 @@
 
         .map_container {
             background-color: #f8f8f8;
-            position: relative;
-            min-height: 100%;
+            /* position: relative; */
+            min-height: 95%;
+            max-height: 95%;
             /* flex: 1 1 auto; */
             /* flex-grow: 1; */
             width: 100%;
+            max-width: 100%;
             /* Just for visibility */
+        }
+        
+        .map_container button {
+            background-repeat: no-repeat;
+            background-color: var(--non-focus-background-color);
+            align-self: center;
+            border: var(--common-border);
+            border-radius: 10px;
+            margin-right: 5px;
+            max-width: 45px;
+            transition: translate var(--button-transition-time) ease-in-out;
+        }
+
+        .map_container button:hover {
+            border: var(--focus-border);
+        }
+
+        .map_container button:active {
+            transform: translate(3px, 3px);
+            scale: 0.95;
+        }
+        
+        .map_container button.pressed {
+            filter: invert(100%);
         }
 
 
@@ -67,48 +108,80 @@
 
         /* Base CSS for the grid containers */
         .grid-container {
+            /* background-color: var(--theme-background-color_2); */
             display: flex;
             /* Stack children vertically in base state */
             /* width: 100%; */
-            flex: 1;
             /* overflow: hidden; */
             height: calc(100vh - 100px);
+            margin: auto;
+            border: none;
         }
 
+        
+
         /* portait */
-        @media screen and (max-width: 1000px) {
+        @media (orientation: portrait) {
             .grid-container {
+                height: 100vh;
+                min-height: 100vh;
+                max-height:100vh;
                 flex-direction: column;
+                width: 100%;
+                min-width: 100%;
+                max-width: 100%;
             }
 
             .left-container {
-                flex: 1;
-                overflow-y: auto;
+                flex: 3;
+                /* overflow-y: auto; */
                 width: 100%;
                 height: 50%;
             }
 
             .right-container {
-                flex: 1;
-                height: 50%;
+                margin-top: 1%;
+                flex: 3;
+                min-height: 50%;
                 width: 100%;
                 flex-direction: column;
             }
         }
 
         /*  */
-        @media screen and (min-width: 1000px) {
+        @media (orientation: landscape) {
+
+            @media screen and (max-width: 1000px) {
+                .grid-container {
+                    min-width: 100%;
+                    max-width: 100%;
+                    background-color: red;
+                }
+            }
+
+            @media screen and (min-width: 1000px) {
+                .grid-container {
+                    min-width: 70%;
+                    max-width: 70%;
+                }
+            }
+
+            .grid-container {
+                min-height: 100vh;
+                max-height: 100vh;
+                max-width: 1500px
+            }
             .left-container {
-                flex: 1;
-                overflow-y: auto;
-                width: 50%;
+                flex: 2;
+                /* overflow-y: auto; */
                 height: 100%;
+                max-height: 100%;
             }
 
             .right-container {
-                flex: 1;
+                flex: 3;
                 height: 100%;
-                width: 50%;
+                max-height: 100vh;
                 overflow: clip;
                 flex-direction: column;
             }
@@ -117,7 +190,10 @@
 </head>
 
 <body>
-    <div class="layout-header">
+    <!-- Translatable texts -->
+<p id="description" style="display:none">{{ _("description") }}</p>
+<p id="services" style="display:none">{{ _("services") }}</p>
+    <!-- <div class="layout-header">
         <h2 class="layout-h2">Title</h2>
         <p class="layout-p">subtitle</p>
     </div>
@@ -133,133 +209,361 @@
             <a href="{{ url_for('main.user_bp.login') }}">lokin</a>
 
         </div>
-    </div>
+    </div> -->
 
     <div class="grid-container">
+        <!-- Product, calculations, contractors -->
         <div class="left-container">
-            <div class="product_container parent-container">
-                <h1>Basket fodder</h1>
-                <p>Ylijäämäkatu 6, 66600 Ylivieska</p>
-                <p>50 € / tn</p>
-                <h2>Description</h2>
-                <p>Some really nice basket fodder, whatever that is...</p>
-            </div>
-
-            <div class="emission_container parent-container">
-                <h2>Emissions</h2>
-                <p>
-                    <label for="fuelType">{{ _("fuel") }}</label>
-                    <select id="fuelType" name="fuelType">
-                        <option value="diesel">{{ _("diesel") }}</option>
-                        <option value="petrol">{{ _("petrol") }}</option>
-                        <option value="biodiesel">{{ _("biodiesel") }}</option>
-                        <option value="natural_gas">{{ _("natural_gas") }}</option>
-                        <option value="bio_gas">{{ _("biogas") }}</option>
-                        <option value="electricity">{{ _("electricity") }}</option>
-                    </select>
-                </p>
-                <p>
-                    <label for="fuel_efficiency">{{ _("fuel_efficiency") }}</label>
-                    <input type="number" name="fuel_efficiency" step="0.1" min="0" max="200" value=50>
-                    <span id="unit">l/100 km</span>
-                </p>
-
-            </div>
-
-
-
-            <div class="route_details_container parent-container">
-                <div class="horizontal-container">
-                    <h3>102 km</h3>
-                    <h3>2:26 h</h3>
-                    <h3>89 kg CO2</h3>
+            <div class="upper_left_container" id="info_div" style="position: relative;">
+                <!-- Product -->
+                <div class="clickable_list_element product" id="product_button" style="height: 33%; position: relative;">
+                    <div style="min-height: 100%; align-items: flex-start;">
+                        <div class="horizontal-container even" style="align-items: flex-end; margin-bottom: 30%;">
+                            <h3 style="font-size: 2.4vh; line-height: 2.2vh;">{{ listing.category.value }}</h3>
+                            <h4 style="text-align: right;">{{listing.address}}</h4>
+                        </div>
+                    </div>
+                    <div style="justify-content: flex-end;">
+                        <div class="horizontal-container even">
+                            <h3 style="font-size: 1.6vh;">{{ _("description")}}</h3>
+                            <button type="button" class="zoom_button" id="zoom_button"></button>
+                        </div>
+                        <div class="horizontal-container even">
+                            <p style="font-size: 1.2vh;">{{listing.description}}</p>
+                            <h3 style="font-size: 2.2vh;">{{listing.price}}</h3>
+                        </div>
+                    </div>
+                    <!-- <div style="align-items: flex-end;">
+                        <div class="horizontal-container even">
+                            <h3>{{ _("description")}}</h3>
+                            <button type="button" class="zoom_button" id="zoom_button"></button>
+                        </div>
+                        <div class="horizontal-container even">
+                            <p>{{listing.description}}</p>
+                            <h3>{{listing.price}}</h3>
+                        </div>
+                    </div> -->
                 </div>
-                <div class="horizontal-container">
-                    <h3>Available contractrors: 5</h3>
+                
+                
+                <!-- Emissions -->
+                <div class="clickable_list_element emission" id="emissions_button" style="height: 33%; position: relative">
+                    <div style="min-height: 100%; align-items: flex-start;">
+                        <div class="horizontal-container even" style="align-items: flex-end;  margin-bottom: 30%;">
+                            <h3 style="font-size: 2.2vh;">{{ _("emissions") }}</h3>
+                            <h3 style="font-size: 2.2vh;">89 kg CO2</h3>
+                        </div>
+                    </div>
+                    <div style="align-items: flex-end;">
+                        <div class = "horizontal-container">
+                            <p>
+                                <label for="fuelType">{{ _("fuel") }}</label>
+                                <select id="fuelType" name="fuelType">
+                                    <option value="diesel">{{ _("diesel") }}</option>
+                                    <option value="petrol">{{ _("petrol") }}</option>
+                                    <option value="biodiesel">{{ _("biodiesel") }}</option>
+                                    <option value="natural_gas">{{ _("natural_gas") }}</option>
+                                    <option value="bio_gas">{{ _("biogas") }}</option>
+                                    <option value="electricity">{{ _("electricity") }}</option>
+                                </select>
+                            </p>
+                            <p>
+                                <label for="fuel_efficiency">{{ _("fuel_efficiency") }}</label>
+                                <input type="number" name="fuel_efficiency" step="0.1" min="0" max="200" value=50>
+                                <span id="unit">l/100 km</span>
+                            </p>
+                        </div>
+                    </div>
                 </div>
 
+                <!-- Route specs -->
+                <div class="clickable_list_element route" id="route_info_button" style="height: 33%; position: relative">
+                    <div style="min-height: 100%; align-items: flex-start;">
+                        <div class="horizontal-container even" style="align-items: flex-end;">
+                            <h3 style="font-size: 2vh;">Route</h3>
+                            <div class="horizontal-container">
+                                <h2 style="font-size: 1.9vh;">102 km</h2>
+                                <h2 style="font-size: 1.9vh;">2:26 h</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="align-items: flex-end;">
+                        <div class="horizontal-container">
+                            <h3>This route is so EPIC! Hopefully the journey never ends!</h3>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-
-            <!-- Include Leaflet JavaScript and CSS -->
-            <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-            <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
-            <!-- Include Leaflet Routing Machine JavaScript and CSS -->
-            <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
-            <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
-
-
-            <div class="contractor_list_container parent-container">
-                <p>Contractor 1</p>
-                <p>Contractor 2</p>
-                <p>Contractor 3</p>
+            <!-- Contractors are listed here -->
+            <div class="contractor_list_container card_scrollbox" id="company_div">
             </div>
         </div>
+
+        <!--=======================================================================================-->
         <div class="right-container">
-            <div class="search_container parent-container">
-
-                <div>
-
+            <!-- Search location + show all -->
+            <div class="horizontal-container even toolbar" style="margin: 3px; padding: 3px;background-color: var(--theme-background-color_2);">
+                <div class="horizontal-container" style="justify-content: flex-start;">
+                    <!--Select all slider-->
+                    <label class="switch">
+                        <input type="checkbox" id="selectAll">
+                        <span class="slider"></span>
+                    </label>
+                    <label for="selectAll" style="align-self: center;">{{ _("show_all_button") }}</label>
                 </div>
-
+                <!--Input destination-->
+                <div class="horizontal-container" style="justify-content: flex-end;">
+                    <!-- <div style="max-width: 500px; display: flex; flex-direction: row; justify-content:  right;"> -->
+                        <button id="set_goal" type="button" class="goal_button"></button>
+                        <input class="toolbar stylish-input" type="text" name="address" id="address_input" placeholder="{{ _('input_address_placeholder') }}">
+                        <button type="submit" class="search_button" id="search_button"></button>
+                    <!-- </div> -->
+                </div>
             </div>
 
             <div class="filter_container parent-container">
                 <div>
-                    <div class="horizontal-container">
-                        <!--Select all slider-->
-                        <label class="switch">
-                            <input type="checkbox" id="selectAll">
-                            <span class="slider"></span>
-                        </label>
-                        <label for="selectAll" style="align-self: center;">{{ _("show_all_button") }}</label>
-                    </div>
+                    
                 </div>
                 <div>
                     <div class="horizontal-container">
-
-                        <input type="checkbox" id="filter1" name="filter1" value="filter1">
+                        <input type="checkbox" id="process" name="process" value="process">
                         <label for="filter1">Spread</label>
-                        <input type="checkbox" id="filter2" name="filter2" value="filter2">
+                        <!-- <input type="checkbox" id="filter2" name="filter2" value="filter2">
                         <label for="filter2">Low emission</label>
                         <input type="checkbox" id="filter3" name="filter3" value="filter3">
                         <label for="filter3">Filter 3</label>
                         <input type="checkbox" id="filter4" name="filter4" value="filter4">
-                        <label for="filter4">Filter 4</label>
-
+                        <label for="filter4">Filter 4</label> -->
                     </div>
                 </div>
-
             </div>
-            <div class="map_container">
-                <div class="map_container" id="map">
-                    <div class="top-buttons">
-                        <!--Focus on companies-->
-                        <button type="button" class="companies_button pressed" id="companies_button">
-                            <div style="margin-left: 60px">
-                                <h1 style="font-size: 300%; color: var(--);" id="company_count">0</h1>
-                            </div>
-                        </button>
-                        <button type="button" class="route_button" id="route_button">
-                            <div style="margin-left: 60px">
-                                <h1 style="font-size: 300%; color: var(--);" id="route_count"> </h1>
-                            </div>
-                        </button>
-                    </div>
 
+            <!-- Map -->
+            <div class="map_container" id="map">
+                <!-- Include Leaflet JavaScript and CSS -->
+                <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+                <script src="https://unpkg.com/leaflet/dist/leaflet-src.js"></script>
+
+                <!-- Include Leaflet Routing Machine JavaScript and CSS -->
+                <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+                <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+
+                <div class="top-buttons leaflet-left">
+                    <!--Focus on companies-->
+                    <h1 style="margin-right: 5px; font-size: 300%; color: var(--);" id="company_count">0</h1>
+                    <button type="button" class="companies_button pressed" id="companies_button">
+                    </button>
+                    <button type="button" class="route_button" id="route_button">
+                        <div style="margin-left: 60px">
+                            <h1 style="font-size: 300%; color: var(--);" id="route_count"> </h1>
+                        </div>
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 </body>
 
-<script>
-    var map = L.map('map').setView([65, 25], 5);
+<script type="module">
+    import { VisionController } from '/static/vision.js'
+    import * as leafletIcons from '/static/leaflet_icons.js'
+    import { runListElementAnimation } from '/static/element_factory.js'
 
+    // Interactive elements
+    const routeButton = document.getElementById('route_button')
+    const companiesButton = document.getElementById('companies_button')
+    const companyCount = document.getElementById("company_count")
+    const companyDiv = document.getElementById("company_div")
+    const setGoalButton = document.getElementById('set_goal')
+    const searchButton = document.getElementById('search_button')
+    const mapDiv = document.getElementById('map')
+    const addressInput = document.getElementById('address_input')
+    const selectAll = document.getElementById('selectAll');
+    const handleCB = document.getElementById('process')
+    const productButton = document.getElementById('product_button')
+    const emissionsButton = document.getElementById('emissions_button')
+    const routeInfoButton = document.getElementById('route_info_button')
+    const upperLeft = document.getElementById('info_div')
+
+    Array.from(upperLeft.children).forEach(element => {
+        element.style.setProperty('--closed-height', '33%');
+        element.style.setProperty('--open-height', '100%');
+        element.querySelector('div').style.height = '33%'
+        element.style.setProperty('--to-height', '33%')
+    });
+    
+    productButton.scrollIntoView({block:'start'})
+    //Create feature-type JSON. It's used in VisionController.
+    const getJson = function (coordinates, name, address) {
+        return {
+            "geometry": {
+                "coordinates": [
+                    parseFloat(coordinates[1]),
+                    parseFloat(coordinates[0])
+                ]
+            },
+            "properties": {
+                "name": name,
+                "address": address
+            }
+        }
+    }
+
+    //Contractors and product locations in JSON format
+    var in_range_gjson = JSON.parse('{{ in_range | tojson | safe }}');
+    console.log(in_range_gjson)
+    var out_range_gjson = JSON.parse('{{ out_range | tojson | safe }}');
+    var product = getJson (
+        ['{{ listing.location.latitude }}','{{ listing.location.longitude }}'],
+        '{{ listing.category.value }}',
+        '{{listing.address}}'
+    )
+    
+    // Create map
+    const map = L.map('map', { doubleClickZoom: false, setClosePopupOnClick:false })
+                    .setView([62.9, 26.4], 10);
+    // Create vision controller
+    const V = new VisionController(L, map)
+
+    // Add tiles
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors'
     }).addTo(map);
 
+    // Add scale
+    L.control.scale().addTo(map);
+    
+    // Add marker to product location
+    V.addMapFeatureToGroup(product, 'product', leafletIcons.product)
+    
+    // Visual representation of the route
+    if ('{{ route_geojson }}'.length !== 0) {
+        // Add route on map
+        var route_geojson = JSON.parse('{{ route_geojson }}'.replaceAll('&#34;', '"'));
+        console.log(route_geojson)
+        // Add destination to vision controller
+        var destination = getJson(
+            route_geojson["features"][0]["geometry"]["coordinates"].pop().reverse(),
+            "Destination",
+            '{{ user_location.address }}'
+        )
+        console.log(destination)
+        V.addMapFeatureToGroup(destination, 'destination', leafletIcons.goal)
+        V.addRouteToGroup(route_geojson, '{{ listing.address }}')
+    }
+
+    // Open product info
+    productButton.addEventListener('click', function() {
+        if (this.classList.contains('selected')) {
+            runListElementAnimation(this, 1, 'info')
+        } else {
+            runListElementAnimation(this, 2, 'info')
+        }
+    })
+
+    // Open emissions info
+    emissionsButton.addEventListener('click', function() {
+        if (this.classList.contains('selected')) {
+            runListElementAnimation(productButton, 1)
+            runListElementAnimation(this, 1,'info')
+            runListElementAnimation(routeInfoButton, 1)
+        } else {
+            runListElementAnimation(productButton, 0)
+            runListElementAnimation(this, 2, 'info')
+            runListElementAnimation(routeInfoButton, 0)
+
+        }
+    })
+    
+    // Open emissions info
+    routeInfoButton.addEventListener('click', function() {
+        if (this.classList.contains('selected')) {
+            runListElementAnimation(productButton, 1)
+            runListElementAnimation(this, 1, 'info')
+            runListElementAnimation(emissionsButton, 1)
+        } else {
+            runListElementAnimation(productButton, 0)
+            runListElementAnimation(this, 2, 'info')
+            runListElementAnimation(emissionsButton, 0)
+        }
+    })
+
+    // Click on map
+    map.on('click', function (e) {
+        var clickLat = e.latlng.lat
+        var clickLng = e.latlng.lng
+        // If destination selection is on, post chosen coordinates
+        if (setGoalButton.classList.contains('pressed')) {
+            mapDiv.classList.remove('set_goal')
+            setGoalButton.classList.remove('pressed')
+            addressInput.value=clickLat+","+clickLng
+            searchButton.click()
+        }
+    })
+
+    // Toggle cargo process button
+    handleCB.addEventListener('change', function() {
+        if (this.checked) {
+            V.filterBy('can_process', true)
+        } else {
+            V.filterBy('can_process', false)
+        }
+    })
+
+    // Click 'Show companies'
+    companiesButton.addEventListener('click', function() {
+        if (companiesButton.classList.contains('pressed')) {
+            companiesButton.classList.remove('pressed')
+        } else {
+            companiesButton.classList.add('pressed')
+        }
+        V.toggleCompanyFocus()
+    })
+
+    // Click 'Show route'
+    if (routeButton != null) {
+        routeButton.addEventListener('click', function() {
+            if (routeButton.classList.contains('pressed')) {
+                routeButton.classList.remove('pressed')
+            } else {
+                routeButton.classList.add('pressed')
+            }
+            V.toggleGroupVisibility('{{listing.address}}')
+        })
+    }
+
+    // Click 'Destination selector'
+    setGoalButton.addEventListener('click', function() {
+        if (event.target.classList.contains('pressed')) {
+            mapDiv.classList.remove('set_goal')
+            setGoalButton.classList.remove('pressed')
+        } else {
+            mapDiv.classList.add('set_goal')
+            setGoalButton.classList.add('pressed')
+        }
+    })
+
+    // Toggle 'Show all'
+    selectAll.addEventListener("change", function () {
+        V.toggleGroupVisibility('suboptimal')
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        //Init
+        V.addListFeaturesToGroup(in_range_gjson.features, 'optimal', leafletIcons.okTruck, companyDiv)
+        V.addListFeaturesToGroup(out_range_gjson.features, 'suboptimal', leafletIcons.badTruck, companyDiv)
+        //Add empty list element in the list
+        var empty = document.createElement('button')
+        empty.classList.add('empty_list_element')
+        companyDiv.appendChild(empty)
+        // Hide suboptimals
+        V.toggleGroupVisibility('suboptimal')
+        // Focus on everything visible on the map
+        V.addFocusOnVisibleListElements()
+    });
+
 
 </script>
+</html> 

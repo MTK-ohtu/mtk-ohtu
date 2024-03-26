@@ -12,9 +12,9 @@
     --focus-background-color: #ffffff;
     --non-focus-background-color: #dedede;
     --focus-background-color_2: #f4dddd;
-    --non-focus-background-color_2: #bb8585;
+    --non-focus-background-color_2: #d4d4d4;
     /* Theme borders */
-    --common-border: var(--theme-color_2) solid 3px;
+    --common-border: var(--focus-background-color) solid 3px;
     --focus-border: var(--theme-color_3) solid 3px;
     --focus-border_2: var(--theme-color_4) solid 3px;
     /* Theme fonts */
@@ -30,7 +30,7 @@
     /* Transitions */
     --theme-color-transition: var(--theme-color_3) 0.3s ease;
     --button-transition-time: 0.2s;
-    --opening-transition-time: 0.3s; 
+    --opening-transition-time: 0.2s; 
     --opening-transition-time-fast: 0.2s; 
 
 }
@@ -110,7 +110,7 @@ td {
     margin-left: 15px;
     margin-right: 15px;
     flex-direction: row;
-    align-items: top;
+    align-items: flex-end;
     gap: 25px;
 }
 
@@ -119,7 +119,7 @@ td {
 }
 
 .horizontal-container > div {
-    align-content: top;
+    align-content: bottom;
 }
 
 .card {
@@ -130,12 +130,13 @@ td {
 }
 
 .card_scrollbox {
-    background-color: var(--theme-background-color_1);
+    /* background-color: var(--theme-background-color_1); */
     border: 1px solid #ccc;
     overflow-y: scroll;
     scroll-behavior: smooth;
     flex: 1;
     padding: 0.5% 0.5% 2% 0 ;
+    border: none;
 }
 
 .vertical_scrollbox {
@@ -146,47 +147,133 @@ td {
 /*========== CLICKABLE LIST ELEMENTS ===============================*/
 .clickable_list_element {
     width: 100%;
-    height: 68px;
-    padding-top: 2% 2% 2% 0;
-    margin: 0 0 0.5% 0;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin: 0% 0% 0% 0%;
     overflow: hidden;
     border-radius: 20px 0 0 0;
 }
 
-.clickable_list_element.optimal {
-    background-color: var(--non-focus-background-color);
-    border: var(--common-border);
-    transition: background-color 0.5s ease;
+.clickable_list_element.product {
+    color: white;
+    position: relative;
+    background-color: rgba(0, 0, 0, 0.6 );
+    transition: color 1s ease-in-out;
+}
+.clickable_list_element.product::before {    
+    content: "";
+    position: absolute;
+    background-image: url('/static/images/wood.png');
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    opacity: 0.3;
+    transition: opacity 1s ease-in-out;
 }
 
-.clickable_list_element.optimal.selected {
-    background-color: var(--focus-background-color);
-    border: var(--focus-border);
-    transition: background-color 0.5s ease;
+.clickable_list_element.product.selected {
+    transition: color 1s ease-in-out;
+    color: black;
+}
+.clickable_list_element.product.selected::before {
+    opacity: 0.1;
+ }
+
+.clickable_list_element.emission {
+    color: white;
+    position: relative;
+    background-color:  rgba(0, 0, 0, 0.6 );
+    transition: color 1.2s ease-in-out;
+}
+.clickable_list_element.emission::before {    
+    content: "";
+    position: absolute;
+    background-image: url('/static/images/carbon_dioxide.png');
+    background-size: 100%;
+    background-position: -50 -50;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    opacity: 0.4;
+    transition: opacity 1.2s ease;
+}
+.clickable_list_element.emission.selected {
+    transition: color 1.2s ease-in-out;
+    color: black;
+}
+.clickable_list_element.emission.selected::before {
+    opacity: 0.1;
+}
+
+.clickable_list_element.route {
+    color: white;
+    position: relative;
+    background-color:  rgba(0, 0, 0, 0.6 );
+    transition: color 1.4s ease-in-out;
+}
+.clickable_list_element.route::before {    
+    content: "";
+    position: absolute;
+    background-image: url('/static/images/finding_route.png');
+    background-size: 100%;
+    background-position: 30 0;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    opacity: 0.4;
+    transition: opacity 1.4s ease-in-out;
+}
+.clickable_list_element.route.selected {
+    transition: color 1.4s ease-in-out;
+    color: black;
+}
+.clickable_list_element.route.selected::before {
+    opacity: 0.1;
+}
+
+.clickable_list_element.optimal {
+    background-color: var(--non-focus-background-color);
+    background-image: radial-gradient(ellipse 30vh 30vh at 90% 100%,rgba(255, 0, 0, 0) 0%, rgba(143, 207, 60, 0.1) 80%, rgba(37, 65, 0, 0.2) 100%);
+    /* border: var(--common-border); */
+    transition: background-color 0.7s ease-in-out;
+    border: none;
 }
 
 .clickable_list_element.suboptimal {
-    background-color: var(--non-focus-background-color_2);
-    border: var(--common-border);
-    transition: background-color 0.5s ease;
+    background-color: var(--non-focus-background-color);
+    background-image: radial-gradient(ellipse 110% 120% at 100% 70%,rgba(255, 255, 255, 0) 0%, rgba(207, 107, 60, 0.1) 80%, rgba(255, 0, 0, 0.2) 100%);
+    /* border: var(--common-border); */
+    transition: background-color 0.7s ease-in-out;
+    border: none;
+
 }
 
-.clickable_list_element.suboptimal.selected {
-    background-color: var(--focus-background-color_2);
-    border: var(--focus-border_2);
-    transition: background-color 0.5s ease;
+.clickable_list_element.selected {
+    background-color: var(--focus-background-color);
+    /* border: var(--focus-border); */
 }
 
 .clickable_list_element h4 {
     align-self: left;
-    font-size: 150%;
-    line-height: 155%;
+    font-size: 1.3vh;
+    line-height: 1.32vh;
 }
 
 .clickable_list_element p {
     align-self: center;
-    font-size: 130%;
-    line-height: 135%;
+    font-size: 1.1vh;
+    line-height: 1.12vh;
 }
 
 .empty_list_element {
@@ -195,43 +282,34 @@ td {
     height: 50%;
 }
 
-.clickable_list_element.vanished {
-    animation: scroll-closed var(--opening-transition-time-fast) ease-in forwards
+.animate-closed {
+    animation: scroll-open var(--opening-transition-time) ease-in forwards
 }
-
-.clickable_list_element.visible {
-    animation: scroll-open var(--opening-transition-time-fast) ease-in forwards
-}
-
-.clickable_list_element.closed {
+.animate-open {
     animation: scroll-closed var(--opening-transition-time) ease-in forwards
-}
-
-.clickable_list_element.open {
-    animation: scroll-open var(--opening-transition-time) ease-in forwards;
 }
 
 @keyframes scroll-open {
     0%{
-        height: var(--lower-height);
+        height: var(--from-height);
     }
     100%{
-        height: var(--upper-height);
+        height: var(--to-height);
     }
 }
 
 @keyframes scroll-closed {
     0%{
-        height: var(--upper-height)
+        height: var(--from-height)
     }
     100%{
-        height: var(--lower-height);
+        height: var(--to-height);
     }
 }
 
 .clickable_list_element #info > * {
     opacity: 0;
-    transition: opacity 1.2s ease-in;
+    transition: opacity 1s ease-in-out;
 }
 
 .clickable_list_element.selected #info > * {
@@ -260,7 +338,6 @@ td {
     flex-direction: row;
     align-items: center;
     flex: 1;
-    background-color: var(--theme-background-color_2);
     justify-content:space-around;
     color: var(--non-focus-background-color);
 }
@@ -298,6 +375,7 @@ td {
     border: var(--common-border);
     border-radius: 10px;
     margin-right: 5px;
+    max-width: 45px;
     transition: translate var(--button-transition-time) ease-in-out;
 }
 
@@ -316,18 +394,19 @@ td {
 }
 
 .companies_button {
-    min-width: 120px;
-    max-height: 65px;
+    min-width: 65px;
+    min-height: 65px;
     display: flex;
     align-items: center;
     background-image: url('/static/images/ok_truck.png');
-    background-size: auto;
-    background-position: 5px center;
+    background-size: 80%;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 .route_button {
     min-height: 65px;
-    max-width: 65px;
+    min-width: 65px;
     display: flex;
     align-items: center;
     background-size: contain;

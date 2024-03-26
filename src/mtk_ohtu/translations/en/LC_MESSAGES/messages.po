@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-03-25 17:52+0200\n"
+"POT-Creation-Date: 2024-03-22 14:23+0200\n"
 "PO-Revision-Date: 2024-03-18 14:04+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -123,7 +123,7 @@ msgstr "Electricity"
 #: src/mtk_ohtu/database/db_enums.py:65 src/mtk_ohtu/templates/product.html:35
 #: src/mtk_ohtu/templates/product_redesign.html:157
 msgid "biogas"
-msgstr "Biogas"
+msgstr "Bio gas"
 
 #: src/mtk_ohtu/database/db_enums.py:66 src/mtk_ohtu/templates/product.html:33
 #: src/mtk_ohtu/templates/product_redesign.html:155
@@ -440,6 +440,10 @@ msgstr "Contact us"
 #: src/mtk_ohtu/templates/layout.html:66
 msgid "footer_last_updated"
 msgstr "Last updated"
+
+#: src/mtk_ohtu/templates/list_and_map.html:3
+msgid "services"
+msgstr "Services"
 
 #: src/mtk_ohtu/templates/listings.html:8
 msgid "destination_address"
