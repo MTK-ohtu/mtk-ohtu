@@ -10,6 +10,21 @@ INSERT INTO users (username, password, email) VALUES ('testikuljettaja2', 'scryp
 INSERT INTO users (username, password, email) VALUES ('testikuljettaja3', 'scrypt:32768:8:1$Yu7GsrH9WAn3PKS5$da21d2d2d46ac35eb018cf7aff7597fb1128e6fad5ce643b15ebc2274965f6d221b845dc7fb0f3273eb994c3157b5f614b2d2f18404c7e9b585da852dfcc9bbb', 'testi8@gmail.com') ON CONFLICT DO NOTHING;
 INSERT INTO users (username, password, email) VALUES ('testuser', 'scrypt:32768:8:1$Yu7GsrH9WAn3PKS5$da21d2d2d46ac35eb018cf7aff7597fb1128e6fad5ce643b15ebc2274965f6d221b845dc7fb0f3273eb994c3157b5f614b2d2f18404c7e9b585da852dfcc9bbb', 'test@test.com');
 
+
+INSERT INTO users (username, password, email, company_role_id)
+VALUES
+    ('KuljetusLaakso', 'salasana1', 'info@kuljetuslaakso.com', '1234567-A'),
+    ('MTTrans', 'salasana2', 'info@mttrans.com', '1234567-B'),
+    ('WiseLogistics', 'salasana3', 'info@wiselogistics.com', '1234567-C'),
+    ('MPTKuljetus', 'salasana4', 'info@mptkuljetus.com', '1234567-D'),
+    ('MattiJokimaki', 'salasana5', 'info@mattijokimaki.com', '1234567-E'),
+    ('AlueurakointiPoutiainen', 'salasana6', 'info@alueurakointi.com', '1234567-F'),
+    ('JarvelainenKuljetus', 'salasana7', 'info@jarvelainenkuljetus.com', '1234567-G'),
+    ('RHTrans', 'salasana8', 'info@rhtrans.com', '1234567-H'),
+    ('Anssi K', 'salasana7', 'info@jarvelainenkuljetus.com', '1234567-G'),
+    ('Hietanen', 'salasana8', 'info@rhtrans.com', '1234567-H'),
+    ('TransportOy', 'salasana9', 'info@transportoy.com', '1234567-I')
+ON CONFLICT DO NOTHING;
 INSERT INTO listings (user_id, listing_type, category, delivery_method, supply_demand, batch_size, batch_units, price, description, address, complies_with_regulations) VALUES (1, 'sell', 'Digestion', 'pickup', 'one time', 1, 'tn', 250, 'Keskustassa.', 'Karkkila', '1') ON CONFLICT DO NOTHING;
 INSERT INTO listings (user_id, listing_type, category, delivery_method, supply_demand, batch_size, batch_units, price, description, address, longitude, latitude, complies_with_regulations) VALUES (4, 'sell', 'Basket fodder',  'pickup', 'one time', 1, 'tn', 35, 'Vuoden 2022 säilörehupaaleja, verkot ja muovit osin rikki.', 'Männiköntie 10, 41400 Jyväskylä',26.214065536083947, 62.264343999999994, '1') ON CONFLICT DO NOTHING;
 INSERT INTO listings (user_id, listing_type, category, delivery_method, supply_demand, batch_size, batch_units, price, description, address, longitude, latitude, complies_with_regulations) VALUES (2, 'sell', 'Plant-based biomasses',  'pickup', 'one time', 1, 'tn', 300, 'Harvennuspuuta Suomesta.', 'Vattuperkkiöntie 2, 85500 Nivala', 24.9342153, 63.8923984, '1') ON CONFLICT DO NOTHING;
@@ -37,21 +52,83 @@ VALUES
     (9, 'Transport Oy Ab', NOW(), '1234567-I')
 ON CONFLICT DO NOTHING;
 
+-- INSERT INTO contractor_locations (contractor_id, address, telephone, email, longitude, latitude, delivery_radius)
+-- VALUES
+--     (1, 'Urpunistintie 8, 03400 Vihti', '040-123456', 'testilocation@gmail.com', 24.33768, 60.41596, 500),
+--     (1, 'Kehäkatu, 86300 oululainen', '040-123456', 'testilocation@gmail.com', 24.81586, 64.27193, 200),
+--     (1, 'Saaninranta, 448800 Pihtipudas', '040-123456', 'testilocatin@gmail.com', 25.60259, 63.845, 700),
+--     (2, 'Kullaantie, 29350 Ulvila', '040-123456', 'testilocation@gmail.com', 22.16209, 61.46592, 500),
+--     (2, 'Saukkolantie, 08500 Lohja', '040-123456', 'testilocation@gmail.com', 24.10896, 60.27905, 350),
+--     (3, 'Käpykankaantie, 78210 Lohja', '040-123456', 'testilocation@gmail.com', 27.8562, 62.3068, 600),
+--     (4, 'Talonpojankatu, 67100 Kokkola', '040-123456', 'testilocation@gmail.com', 23.15841, 63.83384, 550),
+--     (5, 'Karjakatu, 90130 Oulu', '040-123456', 'testilocation@gmail.com', 25.48896, 65.0073, 400),
+--     (6, 'Ranniotie, 99600 Sodankylä', '040-123456', 'testilocation@gmail.com', 26.5722, 67.4292, 600),
+--     (7, 'Launeenkatu, 15610 Lahti', '040-123456', 'testilocation@gmail.com', 25.65424, 60.96962, 200),
+--     (9, 'Mantokoskentie, 99980 Utsjoki', '040-123456', 'testilocation@gmail.com', 27.00864, 69.87624, 300)
+-- ON CONFLICT DO NOTHING;
+
 INSERT INTO contractor_locations (contractor_id, address, telephone, email, longitude, latitude, delivery_radius)
 VALUES
-    (1, 'Urpunistintie 8, 03400 Vihti', '040-123456', 'testilocation@gmail.com', 24.33768, 60.41596, 500),
-    (1, 'Kehäkatu, 86300 oululainen', '040-123456', 'testilocation@gmail.com', 24.81586, 64.27193, 200),
-    (1, 'Saaninranta, 448800 Pihtipudas', '040-123456', 'testilocatin@gmail.com', 25.60259, 63.845, 700),
-    (2, 'Kullaantie, 29350 Ulvila', '040-123456', 'testilocation@gmail.com', 22.16209, 61.46592, 500),
-    (2, 'Saukkolantie, 08500 Lohja', '040-123456', 'testilocation@gmail.com', 24.10896, 60.27905, 350),
-    (3, 'Käpykankaantie, 78210 Lohja', '040-123456', 'testilocation@gmail.com', 27.8562, 62.3068, 600),
-    (4, 'Talonpojankatu, 67100 Kokkola', '040-123456', 'testilocation@gmail.com', 23.15841, 63.83384, 550),
-    (5, 'Karjakatu, 90130 Oulu', '040-123456', 'testilocation@gmail.com', 25.48896, 65.0073, 400),
-    (6, 'Ranniotie, 99600 Sodankylä', '040-123456', 'testilocation@gmail.com', 26.5722, 67.4292, 600),
-    (7, 'Launeenkatu, 15610 Lahti', '040-123456', 'testilocation@gmail.com', 25.65424, 60.96962, 200),
-    (9, 'Mantokoskentie, 99980 Utsjoki', '040-123456', 'testilocation@gmail.com', 27.00864, 69.87624, 300)
+    (1, 'Hämeenkatu 5, 33100 Tampere', '040-123456', 'info@kuljetuslaakso.com', 23.7696, 61.4984, 500),
+    (1, 'Kauppakatu 3, 40100 Jyväskylä', '040-123456', 'info@kuljetuslaakso.com', 25.7421, 62.2391, 400),
+    (1, 'Valtakatu 22, 90100 Oulu', '040-123456', 'info@kuljetuslaakso.com', 25.4705, 65.0131, 350),
+    (2, 'Kaisaniemenkatu 5, 00100 Helsinki', '040-123456', 'info@mttrans.com', 24.9437, 60.1705, 550),
+    (2, 'Rautatienkatu 6, 33100 Tampere', '040-123456', 'info@mttrans.com', 23.7763, 61.4982, 500),
+    (2, 'Isokatu 14, 90100 Oulu', '040-123456', 'info@mttrans.com', 25.4703, 65.0115, 400),
+    (3, 'Mikonkatu 17, 00100 Helsinki', '040-123456', 'info@wiselogistics.com', 24.9479, 60.1699, 600),
+    (3, 'Kauppapuistikko 25, 65100 Vaasa', '040-123456', 'info@wiselogistics.com', 21.6015, 63.0961, 450),
+    (3, 'Kirkkokatu 20, 90100 Oulu', '040-123456', 'info@wiselogistics.com', 25.4695, 65.0134, 350),
+    (4, 'Hatanpään valtatie 34, 33100 Tampere', '040-123456', 'info@mptkuljetus.com', 23.7788, 61.4903, 500),
+    (4, 'Pakkahuoneenkatu 5, 90100 Oulu', '040-123456', 'info@mptkuljetus.com', 25.4704, 65.0118, 400),
+    (4, 'Näsilinnankatu 21, 33200 Tampere', '040-123456', 'info@mptkuljetus.com', 23.7584, 61.4995, 350),
+    (5, 'Lönnrotinkatu 32, 00180 Helsinki', '040-123456', 'info@mattijokimaki.com', 24.9415, 60.1632, 550),
+    (5, 'Korkeavuorenkatu 32, 00130 Helsinki', '040-123456', 'info@mattijokimaki.com', 24.9479, 60.1638, 500),
+    (5, 'Mannerheimintie 17, 00100 Helsinki', '040-123456', 'info@mattijokimaki.com', 24.9329, 60.1699, 450),
+    (6, 'Kauppakatu 15, 80100 Joensuu', '040-123456', 'info@alueurakointi.com', 29.7763, 62.6010, 500),
+    (6, 'Soliskyläntie, Viitasaari', '040-123456', 'info@alueurakointi.com', 25.781828,63.043751, 400),
+    (6, 'Kirkkokatu 34, 90100 Oulu', '040-123456', 'info@alueurakointi.com', 25.4715, 65.0125, 350),
+    (7, 'Hintsanlammentie, Suokonmäki, 63510 Alajärvi', '040-123456', 'info@jarvelainenkuljetus.com', 23.943844,62.824108, 500),
+    (7, 'Pakkahuoneenkatu 5, 90100 Oulu', '040-123456', 'info@jarvelainenkuljetus.com', 25.4704, 65.0118, 400),
+    (7, 'Mannenkatu 3, 90100 Oulu', '040-123456', 'info@jarvelainenkuljetus.com', 25.4727, 65.0137, 350),
+    (8, 'Hallituskatu 29, 90100 Oulu', '040-123456', 'info@rhtrans.com', 25.4769, 65.0126, 500),
+    (8, 'Pakkahuoneenkatu 9, 90100 Oulu', '040-123456', 'info@rhtrans.com', 25.4720, 65.0120, 400),
+    (8, 'Asemakatu 8, 90100 Oulu', '040-123456', 'info@rhtrans.com', 25.4731, 65.0143, 350),
+    (9, 'Uusikatu 55, 90100 Oulu', '040-123456', 'info@transportoy.com', 25.4741, 65.0148, 500),
+    (9, 'Rajamiehenkatu, 93600 Kuusamo', '040-123456', 'info@transportoy.com', 29.169713,65.976682, 400),
+    (9, 'Kirkkokatu 30, 90100 Oulu', '040-123456', 'info@transportoy.com', 25.4724, 65.0131, 350)
 ON CONFLICT DO NOTHING;
 
+-- INSERT INTO cargo_capabilities (contractor_location_id, category, subcategory, price_per_km, base_rate, max_capacity, max_distance, unit, can_process)
+-- VALUES
+--     (1, 'Wood', 'Treated wood', 6, 100, 5, 500, 'tn', '0'),
+--     (1, 'Plant-based biomasses', null, 5, 44, 3, 400, 'tn', '0'),
+--     (1, 'Digestion', null, 3, 77, 2, 550, 'tn', '1'),
+--     (2, 'Plant-based biomasses', null, 3, 45, 3, 300, 'tn', '0'),
+--     (2, 'Animal-based biomasses', null, 7, 178, 1, 400, 'tn', '0'),
+--     (2, 'Digestion', null, 3, 50, 9, 100, 'tn', '1'),
+--     (3, 'Digestion', null, 3, 60, 4, 400, 'tn', '1'),
+--     (3, 'Plant-based biomasses', null, 3, 45, 3, 100, 'tn', '0'),
+--     (3, 'Soil and growing media', null, 9, 220, 3, 600, 'tn', '0'),
+--     (3, 'Wood', 'Forest biomass', 6, 100, 10, 300, 'tn', '0'),
+--     (4, 'Animal-based biomasses', null, 6, 178, 3, 300, 'tn', '0'),
+--     (4, 'Plant-based biomasses', null, 5, 119, 2, 600, 'tn', '0'),
+--     (4, 'Soil and growing media', null, 5, 600, 2, 400, 'tn', '0'),
+--     (4, 'Manure', 'Dry manure', 5, 60, 2, 300, 'tn', '0'),
+--     (4, 'Digestion', null, 3, 77, 6, 500, 'tn', '1'),
+--     (5, 'Soil and growing media', null, 5, 125, 2, 400, 'tn', '0'),
+--     (5, 'Digestion', null, 3, 60, 2, 600, 'tn', '1'),
+--     (5, 'Wood', 'Treated wood', 7, 100, 8, 500, 'tn', '0'),
+--     (5, 'Animal-based biomasses', null, 4, 120, 2, 300, 'tn', '0'),
+--     (6, 'Manure', 'Sludge manure', 5, 60, 3, 500, 'tn', '0'),
+--     (6, 'Plant-based biomasses', null, 3, 45, 3, 400, 'tn', '0'),
+--     (6, 'Digestion', null, 7, 200, 5, 100, 'tn', '1'),
+--     (7, 'Soil and growing media', null, 5, 800, 2, 300, 'tn', '0'),
+--     (8, 'Plant-based biomasses', null, 7, 90, 1, 500, 'tn', '0'),
+--     (8, 'Plant-based biomasses', null, 3, 45, 3, 500, 'tn', '0'),
+--     (9, 'Digestion', null, 3, 77, 2, 600, 'tn', '0'),
+--     (9, 'Plant-based biomasses', null, 6, 80, 6, 400, 'tn', '0'),
+--     (9, 'Digestion', null, 3, 77, 5, 300, 'tn', '0')
+-- ON CONFLICT DO NOTHING;
 INSERT INTO cargo_capabilities (contractor_location_id, category, subcategory, price_per_km, base_rate, max_capacity, max_distance, unit, can_process)
 VALUES
     (1, 'Wood', 'Treated wood', 6, 100, 5, 500, 'tn', '0'),
@@ -74,14 +151,43 @@ VALUES
     (5, 'Wood', 'Treated wood', 7, 100, 8, 500, 'tn', '0'),
     (5, 'Animal-based biomasses', null, 4, 120, 2, 300, 'tn', '0'),
     (6, 'Manure', 'Sludge manure', 5, 60, 3, 500, 'tn', '0'),
-    (6, 'Plant-based biomasses', null, 3, 45, 3, 400, 'tn', '0'),
-    (6, 'Digestion', null, 7, 200, 5, 100, 'tn', '1'),
-    (7, 'Soil and growing media', null, 5, 800, 2, 300, 'tn', '0'),
-    (8, 'Plant-based biomasses', null, 7, 90, 1, 500, 'tn', '0'),
-    (8, 'Plant-based biomasses', null, 3, 45, 3, 500, 'tn', '0'),
-    (9, 'Digestion', null, 3, 77, 2, 600, 'tn', '0'),
-    (9, 'Plant-based biomasses', null, 6, 80, 6, 400, 'tn', '0'),
-    (9, 'Digestion', null, 3, 77, 5, 300, 'tn', '0')
+    (1, 'Wood', 'Treated wood', 6, 100, 5, 500, 'tn', '0'),
+    (2, 'Plant-based biomasses', null, 5, 44, 3, 400, 'tn', '0'),
+    (3, 'Digestion', null, 3, 77, 2, 550, 'tn', '1'),
+    (4, 'Plant-based biomasses', null, 3, 45, 3, 300, 'tn', '0'),
+    (5, 'Animal-based biomasses', null, 7, 178, 1, 400, 'tn', '0'),
+    (6, 'Digestion', null, 3, 50, 9, 100, 'tn', '1'),
+    (7, 'Digestion', null, 3, 60, 4, 400, 'tn', '1'),
+    (8, 'Plant-based biomasses', null, 3, 45, 3, 100, 'tn', '0'),
+    (9, 'Soil and growing media', null, 9, 220, 3, 600, 'tn', '0'),
+    (10, 'Wood', 'Forest biomass', 6, 100, 10, 300, 'tn', '0'),
+    (11, 'Wood', 'Treated wood', 6, 100, 5, 500, 'tn', '0'),
+    (11, 'Plant-based biomasses', null, 5, 44, 3, 400, 'tn', '0'),
+    (11, 'Digestion', null, 3, 77, 2, 550, 'tn', '1'),
+    (12, 'Plant-based biomasses', null, 3, 45, 3, 300, 'tn', '0'),
+    (12, 'Animal-based biomasses', null, 7, 178, 1, 400, 'tn', '0'),
+    (12, 'Digestion', null, 3, 50, 9, 100, 'tn', '1'),
+    (13, 'Digestion', null, 3, 60, 4, 400, 'tn', '1'),
+    (13, 'Plant-based biomasses', null, 3, 45, 3, 100, 'tn', '0'),
+    (13, 'Soil and growing media', null, 9, 220, 3, 600, 'tn', '0'),
+    (14, 'Animal-based biomasses', null, 6, 178, 3, 300, 'tn', '0'),
+    (14, 'Plant-based biomasses', null, 5, 119, 2, 600, 'tn', '0'),
+    (14, 'Soil and growing media', null, 5, 600, 2, 400, 'tn', '0'),
+    (15, 'Soil and growing media', null, 5, 125, 2, 400, 'tn', '0'),
+    (15, 'Digestion', null, 3, 60, 2, 600, 'tn', '1'),
+    (15, 'Wood', 'Treated wood', 7, 100, 8, 500, 'tn', '0'),
+    (16, 'Manure', 'Sludge manure', 5, 60, 3, 500, 'tn', '0'),
+    (16, 'Plant-based biomasses', null, 3, 45, 3, 400, 'tn', '0'),
+    (16, 'Digestion', null, 7, 200, 5, 100, 'tn', '1'),
+    (17, 'Soil and growing media', null, 5, 800, 2, 300, 'tn', '0'),
+    (17, 'Plant-based biomasses', null, 7, 90, 1, 500, 'tn', '0'),
+    (17, 'Plant-based biomasses', null, 3, 45, 3, 500, 'tn', '0'),
+    (18, 'Digestion', null, 3, 77, 2, 600, 'tn', '0'),
+    (26, 'Plant-based biomasses', null, 6, 80, 6, 400, 'tn', '0'),
+    (18, 'Digestion', null, 3, 77, 5, 300, 'tn', '0')
+    -- Lisää tästä eteenpäin lisää rivejä tarvittaessa
+    -- Muista vaihtaa contractor_location_id ja arvojen muut tarpeen mukaan
+    -- Voit myös käyttää GENERATE_SERIES() funktiota, jos haluat luoda paljon rivejä automaattisesti
 ON CONFLICT DO NOTHING;
 
 INSERT INTO api_keys (name, key) VALUES ('Test API key', 'test_api_key')

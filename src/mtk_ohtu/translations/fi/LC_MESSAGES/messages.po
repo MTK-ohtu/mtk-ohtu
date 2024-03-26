@@ -440,6 +440,10 @@ msgstr "Ota yhteyttä"
 msgid "footer_last_updated"
 msgstr "Viimeksi päivitetty"
 
+#: src/mtk_ohtu/templates/list_and_map.html:3
+msgid "services"
+msgstr "Palvelut"
+
 #: src/mtk_ohtu/templates/listings.html:8
 msgid "destination_address"
 msgstr ""

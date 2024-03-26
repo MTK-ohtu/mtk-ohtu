@@ -68,6 +68,7 @@ class VisionController {
         this.send = false
         this.companyFocus = true
         this.flyTransition = 'normal'
+        this.click_origin = null
 
         //Bind one proxy to every data subdirectory. There will be one for every subdirectory, but they may not be used.
         this.proxies = {};
@@ -95,6 +96,7 @@ class VisionController {
         if (attribute == 'element_open') {
             if (value) {
                 if (this.openFeature != null) {
+
                     runListElementAnimation(this.data.element[this.openFeature], 1)
                     this.data.element_open[this.openFeature] = false
                     this.proxies.popup_open[this.openFeature] = false
@@ -107,7 +109,8 @@ class VisionController {
                     }
                 }
                 this.openFeature = id
-                runListElementAnimation(this.data.element[id], 2)
+                runListElementAnimation(this.data.element[id], 2, this.click_origin)
+                this.click_origin = null
             } else {
                 runListElementAnimation(this.data.element[id], 1)
                 if (this.focusedRoute == null) this.flyTransition = 'none'
@@ -217,11 +220,11 @@ class VisionController {
     }
     
     //=============================================================================== ADD
-    addListFeaturesToGroup(features, group_name, icon) {
+    addListFeaturesToGroup(features, group_name, icon, container) {
         this.data.group_icon[group_name] = icon
         this.data.group_visible[group_name] = true
         features.forEach(feature => {
-            this.addListFeatureToGroup(feature, group_name, icon)
+            this.addListFeatureToGroup(feature, group_name, icon, container)
         })
     }
     
@@ -231,7 +234,8 @@ class VisionController {
     // 'properties': {}, containing named fields:
     // address, name, location_id, email, telephone, base_rate, price_per_km, max_capacity, unit, can_process
 
-    addListFeatureToGroup(feature, group_name, icon) {
+    addListFeatureToGroup(feature, group_name, icon, container) {
+        console.log(container)
         this.addListFeatureToCategories(feature)
         const f = feature.properties.location_id
         console.log("Added list-feature: "+f)
@@ -242,7 +246,7 @@ class VisionController {
             addToListElement(this.data.element[f], feature)
         } else {
             this.data.filtered[f] = {}
-            this.data.element[f] = createListElement(feature, group_name)
+            this.data.element[f] = createListElement(feature, group_name, container)
             this.setEventListener(this.data.element[f])
             this.data.map_object[f] = createMarker(feature, icon, this.L)
             this.setMarkerClick(this.data.map_object[f], f)
@@ -353,7 +357,9 @@ class VisionController {
     }
 
     toggleMarker(id) {
+        // When interaction originated on map, do these
         this.flyTransition = 'none'
+        this.click_origin = 'map'
         this.toggleListElement(id)
     }
 

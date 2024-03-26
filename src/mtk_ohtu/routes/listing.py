@@ -50,8 +50,12 @@ def get_url_for_listing(listing: Listing) -> str:
     return request.url_root + "listing/" + str(listing.id)
 
 
-@listing_bp.route("/listing/<int:listing_id>", methods=["GET", "POST"])
-def listing(listing_id):
+@listing_bp.route("/listing/<int:listing_id>/<int:product_page>", methods=["GET", "POST"])
+def listing(listing_id, product_page):
+    if product_page == 1:
+        page = "product.html"
+    else:
+        page = "product_redesign.html"
     listing = mtk_ohtu.database.db_listings.db_get_product_by_id(
         listing_id, DATABASE_POOL
     )
@@ -69,7 +73,7 @@ def listing(listing_id):
 
         # contractors.filter_by_cargo_type(listing.category)
         return render_template(
-            "product.html",
+            page,
             listing=listing,
             show_route=0,
             user_location=None,
@@ -100,7 +104,7 @@ def listing(listing_id):
             print(contractor)
 
         return render_template(
-            "product.html",
+            page,
             listing=listing,
             distance=round(route_to_product.distance / 1000, 1),
             duration=str(

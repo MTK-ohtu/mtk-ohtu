@@ -19,7 +19,8 @@
 {% for listing in listings %}
 
 <div class="card">
-    <h2><a href="{{ url_for('main.listing_bp.listing', listing_id=listing.id) }}">{{ _(listing.category.value) }}</a></h2>
+    <h2><a href="{{ url_for('main.listing_bp.listing', listing_id=listing.id, product_page=1) }}">{{ _(listing.category.value) }}</a></h2>
+    <h2><a href="{{ url_for('main.listing_bp.listing', listing_id=listing.id, product_page=2) }}">TEST: {{ _(listing.category.value) }}</a></h2>
     <p>{{ _("price") }}: {{ listing.price }} €</p>
     <p>{{ listing.address }}</p>
     <p>{{ _("distance") }}: {{ distances[listing.id]}}</p>

@@ -1,63 +1,120 @@
 
-var runListElementAnimation = function (element, state) {
-    if (element.classList.contains('vanished')) {
-        element.classList.remove('vanished')
-        var from = 0
-    }
-    if (element.classList.contains('visible')) {
-        element.classList.remove('visible')
-        var from = 1
-    }
-    if (element.classList.contains('closed')) {
-        element.classList.remove('closed')
-        var from = 1
-    }
-    if (element.classList.contains('open')) {
-        element.classList.remove('open')
-        var from = 2
-    }
+// var runListElementAnimation = function (element, state, target) {
+    
+    
+//     if (element.classList.contains('visible')) {
+//         element.classList.remove('visible')
+//         var from = 1
+//     }
+//     if (element.classList.contains('closed')) {
+//         element.classList.remove('closed')
+//         var from = 1
+//     }
+//     if (element.classList.contains('open')) {
+//         element.classList.remove('open')
+//         var from = 2
+//     }
+//     else {
+//         element.classList.remove('vanished')
+//         var from = 0
+//     }
+    
+//     console.log("Animate element "+element.id+": "+from+" -> "+state)
+
+//     if (target == 'info') {
+//         document.getElementById('blank').style.display = 'block'
+//         element.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest'});
+//     } 
+//     else if (target == 'map'){
+//         element.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest'});
+//     } 
+
+//     if (state == 0) {
+//         console.log("Vanishing element "+element.id)
+//         element.style.setProperty('--lower-height', '0%')
+//         if (from == 2) {
+//             element.style.setProperty('--upper-height', element.style.getPropertyValue('--open-height'))//element.scrollHeight+'px')
+//         }
+//         else {
+//             element.style.setProperty('--upper-height',  element.style.getPropertyValue('--closed-height'))//element.querySelector('div').scrollHeight+'px')
+//         }
+//         element.classList.add('vanished')
+//         element.classList.remove('selected')
+
+//     } else if (state == 1) {
+//         console.log("To closed state: element "+element.id)
+//         if (from == 2) {
+//             if (target == 'info') element.querySelector('div').style.minHeight = '100%'
+//             element.style.setProperty('--lower-height',  element.style.getPropertyValue('--closed-height'))//element.querySelector('div').scrollHeight+'px')
+//             element.style.setProperty('--upper-height',  element.style.getPropertyValue('--open-height'))//element.scrollHeight-25+'px')
+//             element.classList.add('closed')
+//             element.classList.remove('selected')
+//         }
+//         else {
+//             element.style.setProperty('--lower-height', '0%')
+//             element.style.setProperty('--upper-height',  element.style.getPropertyValue('--closed-height'))//element.querySelector('div').scrollHeight+'px')
+//             element.classList.add('visible')
+//         }
+
+//     } else {
+//         console.log("Opening element "+element.id)
+//         console.log(element.className+": Closed: "+  element.style.getPropertyValue('--closed-height') 
+//                         +"%, Open:"+ element.style.getPropertyValue('--open-height')+"%")
+//         console.log(element.className+": upper: "+  element.style.getPropertyValue('--upper-height') +"%, lower:"
+//                         + element.style.getPropertyValue('--lower-height')+"%")
+//         if (target == 'info') element.querySelector('div').style.minHeight = '0%'
+//         element.style.setProperty('--lower-height',  element.style.getPropertyValue('--closed-height'))//element.querySelector('div').scrollHeight+'px')
+//         element.style.setProperty('--upper-height',  element.style.getPropertyValue('--open-height'))//element.scrollHeight+'px')
+//         console.log(element.className+": upper: "+  element.style.getPropertyValue('--upper-height') +"%, lower:"
+//                         + element.style.getPropertyValue('--lower-height')+"%")
+//         element.classList.add('selected')
+//         element.classList.add('open')
+//     }
+//     console.log("Element "+element.id+": --")
+//     document.getElementById('blank').style.display = 'none'
+// }   
+var runListElementAnimation = function (element, state, target) {
+    element.style.setProperty('--from-height', element.style.getPropertyValue('--to-height'))
+    console.log("Element "+element.id+" FROM "+ element.style.getPropertyValue('--from-height'))
+    if (target == 'map'){
+        element.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'nearest'});
+    } 
+
     if (state == 0) {
-        element.style.setProperty('--lower-height', '0px')
-        if (from == 2) {
-            element.style.setProperty('--upper-height', element.scrollHeight+'px')
-        }
-        else {
-            element.style.setProperty('--upper-height', element.querySelector('div').scrollHeight+'px')
-        }
-        element.classList.add('vanished')
+        console.log("Vanishing element "+element.id)
+        element.style.setProperty('--to-height', '0%')
         element.classList.remove('selected')
 
     } else if (state == 1) {
-        if (from == 2) {
-            element.style.setProperty('--lower-height', element.querySelector('div').scrollHeight+'px')
-            element.style.setProperty('--upper-height', element.scrollHeight-25+'px')
-            element.classList.add('closed')
-            element.classList.remove('selected')
-        }
-        else {
-            element.style.setProperty('--lower-height', '0px')
-            element.style.setProperty('--upper-height', element.querySelector('div').scrollHeight+'px')
-            element.classList.add('visible')
-        }
+        console.log("To closed state: element "+element.id)
+        if (target == 'info') element.querySelector('div').style.minHeight = '100%'
+        element.style.setProperty('--to-height', element.style.getPropertyValue('--closed-height'))
+        element.classList.remove('selected')
+
     } else {
-        element.style.setProperty('--lower-height', element.querySelector('div').scrollHeight+'px')
-        element.style.setProperty('--upper-height', element.scrollHeight+'px')
-        // Wait opening animation to end before scrolling into view
-        element.addEventListener('animationend', function() {
-            element.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start'});
-        }, { once: true })
+        console.log("Opening element "+element.id)
+        if (target == 'info') element.querySelector('div').style.minHeight = '0%'
+        element.style.setProperty('--to-height', element.style.getPropertyValue('--open-height'))
         element.classList.add('selected')
-        element.classList.add('open')
     }
+    console.log("Element "+element.id+" TO "+ element.style.getPropertyValue('--to-height'))
     
-}   
+    if (element.classList.contains('animate-open')){
+        element.classList.remove('animate-open')
+        element.classList.add('animate-closed')
+    }
+    else {
+        element.classList.remove('animate-closed')
+        element.classList.add('animate-open')
+    }
+}  
 
 // Create elements to show on the list side ====================================================================
-function createListElement(feature, styleClass) {
+function createListElement(feature, styleClass, container) {
     var listElement = document.createElement('button');
     listElement.id = feature.properties.location_id
     listElement.innerHTML = `
-        <div class="horizontal-container even" style="padding-top: 2px; margin-top: 2px;">
+        <div class="horizontal-container even"> 
             <h4>${feature.properties.name}</h4>
             <p>${feature.properties.address}</p>
         </div>
@@ -67,38 +124,53 @@ function createListElement(feature, styleClass) {
                 <h4>${feature.properties.telephone}</h4>
                 <button type="button" class="zoom_button" id="zoom_button"></button>
             </div>
-            <div class="horizontal-container even">
-                <h4>{{ _("description") }}</h4>
+            
+            <div class="horizontal-container even"  style="align-items: flex-start">
+                <h4>${document.getElementById('services').textContent}</h4>
+                <div>
+                    <div id="services">
+                    </div>
+                </div>
+            </div>
+            <div class="horizontal-container even" style="align-items: flex-start">
+                <h4>${document.getElementById('description').textContent}</h4>
                 <p>
                     "As a transportation entrepreneur, I take immense pride in the operations of my company. Our commitment to excellence shines through in every aspect of our business, from the reliability of our fleet to the professionalism of our drivers. We have cultivated a reputation for efficiency and timeliness, ensuring that our clients' goods reach their destinations safely and on schedule. What sets us apart is our unwavering dedication to customer satisfaction, always going above and beyond to meet their unique needs. With a focus on innovation and continuous improvement, we strive to exceed expectations, solidifying our position as a leader in the transportation industry."
                     - ChatGPT
                 </p>
             </div>
-            <div class="horizontal-container even">
-                <h4>{{ _("services") }}</h4>
-                <div style="justify-content: center">
-                    <div id="services">
-                                
-                    </div>
-                </div>
-            </div>
         </div></div>
-        <h4></h4>
+        <div style="height: 10px;"></div>
         `;
+    
+    container.appendChild(listElement)
+    listElement.querySelector('#services').appendChild(createServiceElement(feature))
+    listElement.classList.add('clickable_list_element');
+    
     if (typeof styleClass !== 'undefined') {
+        console.log("Lisätään elementille "+listElement.id+" luokka "+styleClass)
         listElement.classList.add(styleClass)
     }
-    var listDiv = document.getElementById('list_div')
-    listElement.querySelector('#services').appendChild(createServiceElement(feature))
-    listDiv.appendChild(listElement)
-    listElement.classList.add('clickable_list_element');
 
+    listElement.style.setProperty('--closed-height',
+        (listElement.querySelector('div').scrollHeight/ listElement.parentNode.clientHeight)*100 + '%')
+    listElement.style.setProperty('--open-height',
+        (listElement.scrollHeight/ listElement.parentNode.clientHeight)*100 + '%')
+    listElement.style.setProperty('--from-height', '0%')
+    listElement.style.setProperty('--to-height', listElement.style.getPropertyValue('--closed-height'))
+
+    listElement.classList.add('animated');
+        
     return listElement
+
 } // ==============================================================================================
+
 function addToListElement(element, feature) {
     console.log("Elementti "+feature.properties.address+" sisälsi jo yhden elementin")
     console.log(element.querySelector('#services'))
     element.querySelector('#services').appendChild(createServiceElement(feature))
+    element.style.setProperty('--open-height',
+        (element.scrollHeight/ element.parentNode.clientHeight)*100 + '%')
 }
 
 function createServiceElement(feature) {
@@ -118,8 +190,7 @@ function createServiceElement(feature) {
     return serviceElement
 }
 
-
-//Returns a function which is to be used as 'pointToLayer' function in leaflet
+//Returns a function which is to be used as 'pointToLayer' function in leaflet. Creates marker popup.
 function createMarker(feature, icon, L) {
     var [lat, lng] = feature.geometry.coordinates
     var marker = L.marker(L.latLng(lng, lat), { icon: icon })

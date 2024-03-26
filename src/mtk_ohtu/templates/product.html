@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<form action="{{ url_for('main.listing_bp.listing', listing_id=listing.id) }}" method="POST">
+<form action="{{ url_for('main.listing_bp.listing', listing_id=listing.id, product_page=1) }}" method="POST">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
     <script>
         var in_range_gjson = JSON.parse('{{ in_range | tojson | safe }}');

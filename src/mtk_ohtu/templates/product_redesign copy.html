@@ -1,0 +1,272 @@
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dropdown.css') }}">
+    <meta name="viewport" layout-content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/x-icon" href="{{url_for('static', filename='images/favicon/favicon.ico') }}">
+
+
+    <style>
+        .parent-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid #228B22;
+        }
+
+        .product_container {
+            background-color: #badbbb;
+        }
+
+        .emission_container {
+            background-color: #f8f8f8;
+        }
+
+        .search_container {
+            background-color: #f8f8f8;
+        }
+
+        .route_details_container {
+            background-color: #f8f8f8;
+        }
+
+        .contractor_list_container {
+            background-color: #f8f8f8;
+        }
+
+        .filter_container {
+            background-color: #f8f8f8;
+            flex: 0 1 auto;
+        }
+
+        .map_container {
+            background-color: #f8f8f8;
+            position: relative;
+            min-height: 100%;
+            /* flex: 1 1 auto; */
+            /* flex-grow: 1; */
+            width: 100%;
+            /* Just for visibility */
+        }
+
+
+        .layout_header {
+            width: 100%;
+            /* Add your header styling here */
+        }
+
+        .top-buttons {
+            z-index: 1000;
+            position: relative;
+            /*align rigth*/
+            display: flex;
+            justify-content: flex-end;
+
+        }
+
+        /* Base CSS for the grid containers */
+        .grid-container {
+            display: flex;
+            /* Stack children vertically in base state */
+            /* width: 100%; */
+            flex: 1;
+            /* overflow: hidden; */
+            height: calc(100vh - 100px);
+            min-width: 120vh;
+            max-width: 120vh;
+            margin: auto;
+        }
+
+        /* portait */
+        @media screen and (max-width: 1000px) {
+            .grid-container {
+                flex-direction: column;
+            }
+
+            .left-container {
+                flex: 1;
+                overflow-y: auto;
+                width: 100%;
+                height: 50%;
+            }
+
+            .right-container {
+                flex: 1;
+                height: 50%;
+                width: 100%;
+                flex-direction: column;
+            }
+        }
+
+        /*  */
+        @media screen and (min-width: 1000px) {
+            .left-container {
+                flex: 1;
+                overflow-y: auto;
+                width: 50%;
+                height: 100%;
+            }
+
+            .right-container {
+                flex: 1;
+                height: 100%;
+                width: 50%;
+                overflow: clip;
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- <div class="layout-header">
+        <h2 class="layout-h2">Title</h2>
+        <p class="layout-p">subtitle</p>
+    </div>
+
+    <div id="layout-navbar">
+        <div>
+            <a href="{{ url_for('main.misc_bp.index') }}">Home</a>
+            <a href="{{ url_for('main.listing_bp.listings') }}">Listings</a>
+            <a href="{{ url_for('main.location_bp.distance') }}">Distance</a>
+            <a href="{{ url_for('main.misc_bp.product_redesign') }}">Redesign</a>
+        </div>
+        <div class="layout-navbar-right">
+            <a href="{{ url_for('main.user_bp.login') }}">lokin</a>
+
+        </div>
+    </div> -->
+
+    <div class="grid-container">
+
+        <!-- Product, calculations, contractors -->
+        <div class="left-container">
+            <div class="product_container parent-container">
+                <h1>Basket fodder</h1>
+                <p>Ylijäämäkatu 6, 66600 Ylivieska</p>
+                <p>50 € / tn</p>
+                <h2>Description</h2>
+                <p>Some really nice basket fodder, whatever that is...</p>
+            </div>
+
+            <div class="emission_container parent-container">
+                <h2>Emissions</h2>
+                <p>
+                    <label for="fuelType">{{ _("fuel") }}</label>
+                    <select id="fuelType" name="fuelType">
+                        <option value="diesel">{{ _("diesel") }}</option>
+                        <option value="petrol">{{ _("petrol") }}</option>
+                        <option value="biodiesel">{{ _("biodiesel") }}</option>
+                        <option value="natural_gas">{{ _("natural_gas") }}</option>
+                        <option value="bio_gas">{{ _("biogas") }}</option>
+                        <option value="electricity">{{ _("electricity") }}</option>
+                    </select>
+                </p>
+                <p>
+                    <label for="fuel_efficiency">{{ _("fuel_efficiency") }}</label>
+                    <input type="number" name="fuel_efficiency" step="0.1" min="0" max="200" value=50>
+                    <span id="unit">l/100 km</span>
+                </p>
+
+            </div>
+
+
+
+            <div class="route_details_container parent-container">
+                <div class="horizontal-container">
+                    <h3>102 km</h3>
+                    <h3>2:26 h</h3>
+                    <h3>89 kg CO2</h3>
+                </div>
+                <div class="horizontal-container">
+                    <h3>Available contractrors: 5</h3>
+                </div>
+
+            </div>
+
+
+            <!-- Include Leaflet JavaScript and CSS -->
+            <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+            <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+            <!-- Include Leaflet Routing Machine JavaScript and CSS -->
+            <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+            <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+
+
+            <div class="contractor_list_container parent-container">
+                <p>Contractor 1</p>
+                <p>Contractor 2</p>
+                <p>Contractor 3</p>
+            </div>
+        </div>
+
+        <!-- Map -->
+        <div class="right-container">
+            <div class="search_container parent-container">
+
+                <div>
+
+                </div>
+
+            </div>
+
+            <div class="filter_container parent-container">
+                <div>
+                    <div class="horizontal-container">
+                        <!--Select all slider-->
+                        <label class="switch">
+                            <input type="checkbox" id="selectAll">
+                            <span class="slider"></span>
+                        </label>
+                        <label for="selectAll" style="align-self: center;">{{ _("show_all_button") }}</label>
+                    </div>
+                </div>
+                <div>
+                    <div class="horizontal-container">
+
+                        <input type="checkbox" id="filter1" name="filter1" value="filter1">
+                        <label for="filter1">Spread</label>
+                        <input type="checkbox" id="filter2" name="filter2" value="filter2">
+                        <label for="filter2">Low emission</label>
+                        <input type="checkbox" id="filter3" name="filter3" value="filter3">
+                        <label for="filter3">Filter 3</label>
+                        <input type="checkbox" id="filter4" name="filter4" value="filter4">
+                        <label for="filter4">Filter 4</label>
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="map_container">
+                <div class="map_container" id="map">
+                    <div class="top-buttons">
+                        <!--Focus on companies-->
+                        <button type="button" class="companies_button pressed" id="companies_button">
+                            <div style="margin-left: 60px">
+                                <h1 style="font-size: 300%; color: var(--);" id="company_count">0</h1>
+                            </div>
+                        </button>
+                        <button type="button" class="route_button" id="route_button">
+                            <div style="margin-left: 60px">
+                                <h1 style="font-size: 300%; color: var(--);" id="route_count"> </h1>
+                            </div>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script>
+    var map = L.map('map').setView([65, 25], 5);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+
+</script>

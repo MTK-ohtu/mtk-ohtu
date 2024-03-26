@@ -447,6 +447,11 @@ msgstr "联系我们"
 msgid "footer_last_updated"
 msgstr "最后更新"
 
+#: src/mtk_ohtu/templates/list_and_map.html:3
+#, fuzzy
+msgid "services"
+msgstr "价格"
+
 #: src/mtk_ohtu/templates/listings.html:8
 msgid "destination_address"
 msgstr "目标地址"
