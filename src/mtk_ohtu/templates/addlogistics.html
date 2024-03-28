@@ -12,14 +12,13 @@
         box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
         display: flex;
         flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: space-between;
+        overflow: auto;
     }
 
     .column {
         display: flex;
         flex-direction: column;
-        overflow-y: scroll;
+        overflow-y: hidden;
         width: 30%;
         max-height: 100%;
         -ms-overflow-style: none;
@@ -34,8 +33,30 @@
         width: 3%;
     }
 
+    .switch3 {
+        position: absolute;
+        display: inline-block;
+        height: 3%;
+        align-self: center;
+        width: 3%;
+    }
+
     .column::-webkit-scrollbar * {
         display: none;
+    }
+
+    .clickable_list_element {
+        width: 99%;
+        max-width: 99%;
+        display: flex;
+        flex-direction: column;
+        margin: 0% 0.8% 0% 0.8%;
+        border-radius: 20px 0 0 0;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+        border-top: 1px solid var(--theme-color_2); /* Valkea yläreuna */
+        border-left: 1px solid var(--theme-color_2); /* Valkea vasen reuna */
+        border-right: 1px solid var(--theme-color_2); /* Valkea oikea reuna */  
     }
 
     .material-box {
@@ -44,6 +65,7 @@
         margin-right: 10px;
         cursor: pointer;
         width: calc(100%);
+        height: 25%;
         box-sizing: border-box;
         outline: 4px solid transparent;
         font-size: 2vh;
@@ -53,7 +75,6 @@
         display: flex;
         align-items: center;
         flex-direction: column;
-        overflow-wrap: break-word;
         margin-right: 10px;
         justify-content: center;
     }
@@ -181,6 +202,10 @@
 
     .card {
         font-size: 17px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-start;
     }
 </style>
 {% endblock %}
@@ -251,7 +276,7 @@
                     <input type="checkbox" name="fuel_types[]" value="{{ category }}">
                     <span class="slider"></span>
                 </label>
-                {{ _(category) }}
+                {{ _(type) }}
             {% endfor %}
         </div>
     </div>
@@ -267,17 +292,16 @@
     </div>
 
     <!-- material entry template -->
-    {% for material in material_categories %}
     <div class="material-box" id="{{ material }}-model" style="display: none">
     <div class="material-title">
-        <input type="checkbox" class="hidden-checkbox" name="materials[]" value="{{ material }}" id="aa">
+        <input type="checkbox" class="hidden-checkbox" name="materials[]" value="{{ material }}">
         <h5>{{ _(material) }}</h5>
         <button class="show-fields" type="button" data-target="{{ material }}">{{ _("additional_information") }}</button>
     </div>
 
     <div id="fields-{{ material }}" style="display: none" class="card">
-        <label for="can_process" style="align-self: center;">{{ _("can_spread") }}</label>
-        <label class="switch">
+        <label for="can_process">{{ _("can_spread") }}</label>
+        <label class="switch3">
             <input type="checkbox" name="{{ material }}-can_process">
             <span class="slider"></span>
         </label><br>
@@ -309,14 +333,14 @@
         </div>
     </div>
     </div>
-    {% endfor %}
 
     <div class="custom-submit-button-container">
         <button type="submit" class="custom-submit-button">{{ _("add_logistics_submit") }}</button>
     </div>
 </form>
 
-<script>
+<script type="module">
+    import {runListElementAnimation} from "/static/element_factory.js"
         var materialDiv = document.getElementById('material-container');
         var column1 = document.getElementById('column1')
         var column2 = document.getElementById('column2')
@@ -326,30 +350,41 @@
         console.log(materials)
         for (const material of materials) {
             var materialElement = document.getElementById(material + '-model').cloneNode(true)
+            if (index === 1) {
+                column1.appendChild(materialElement);
+            }
+            if (index === 2) {
+                column2.appendChild(materialElement);
+            }
+            if (index === 3) {
+                column3.appendChild(materialElement);
+            }
+
+            materialElement.style.setProperty('--closed-height', '25%');
+            materialElement.style.setProperty('--open-height', '100%');
+            materialElement.style.setProperty('--to-height', '25%');
+
+            materialElement.classList.add("closed")
+            materialElement.classList.add("clickable_list_element")
             console.log(material)
             materialElement.classList.add("material-box")
             materialElement.id = material
             materialElement.style.display = 'block';
 
-                if (index === 1) {
-                    column1.appendChild(materialElement);
-                }
-                if (index === 2) {
-                    column2.appendChild(materialElement);
-                }
-                if (index === 3) {
-                    column3.appendChild(materialElement);
-                }
-                index = (index === 3 ? 1: index + 1)
+
+            index = (index === 3 ? 1: index + 1)
                 
                 materialElement.addEventListener('click', (e) => {
                     var target = e.target.closest('.material-box')
                     if (target.classList.contains('selected')) {
                         target.classList.remove('selected')
+                        target.querySelector('.hidden-checkbox').checked = false;
                     } else {
                         target.classList.add('selected')
+                        target.querySelector('.hidden-checkbox').checked = true; 
                     }
                     console.log(target.className)
+                    console.log(target.value)
                 })
         }
 
@@ -367,17 +402,31 @@
 
         toggleButtons.forEach(function (button) {
             button.addEventListener('click', function (event) {
+                console.log(event)
                 event.stopPropagation();
                 var material = button.getAttribute('data-target');
-                console.log(material)
+                // console.log(material)
                 var additionalFields = document.getElementById('fields-' + material);
 
-                if (additionalFields.style.display === 'none' || additionalFields.style.display === '') {
+                // if (additionalFields.style.display === 'none' || additionalFields.style.display === '') {
+                //     additionalFields.style.display = 'block';
+                //     runListElementAnimation(event.target.closest(".clickable_list_element"), 2)
+                //     button.innerText = "{{ _('close') }}";
+                // } else {
+                //     additionalFields.style.display = 'none';
+                //     runListElementAnimation(event.target.closest(".clickable_list_element"), 1)
+                //     button.innerText = "{{ _('additional_information') }}";
+                // }
+                var box = event.target.closest(".clickable_list_element")
+                console.log(box)
+                if (box.classList.contains("closed")) {
+                    runListElementAnimation(box, 2)
+                    box.classList.remove("closed")
                     additionalFields.style.display = 'block';
-                    button.innerText = "{{ _('close') }}";
                 } else {
+                    runListElementAnimation(box, 1)
+                    box.classList.add("closed")
                     additionalFields.style.display = 'none';
-                    button.innerText = "{{ _('additional_information') }}";
                 }
             });
         });

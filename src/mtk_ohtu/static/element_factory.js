@@ -100,7 +100,7 @@ var runListElementAnimation = function (element, state, target) {
         element.classList.add('selected')
         element.classList.remove('hidden')
     }
-    // console.log("Element "+element.id+" TO "+ element.style.getPropertyValue('--to-height'))
+    console.log("Element "+element.id+" TO "+ element.style.getPropertyValue('--to-height'))
     
     if (element.classList.contains('animate-open')){
         element.classList.remove('animate-open')

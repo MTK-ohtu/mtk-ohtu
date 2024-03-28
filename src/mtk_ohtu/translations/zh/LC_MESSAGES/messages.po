@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-03-26 20:31+0200\n"
+"POT-Creation-Date: 2024-03-28 14:33+0200\n"
 "PO-Revision-Date: 2024-03-20 17:21+0200\n"
 "Last-Translator: \n"
 "Language: zh\n"
@@ -117,27 +117,38 @@ msgstr "经处理的木材"
 #: copy.html:163 src/mtk_ohtu/database/db_enums.py:64
 #: src/mtk_ohtu/templates/product.html:41
 #: src/mtk_ohtu/templates/product_redesign
-#: src/mtk_ohtu/templates/product_redesign.html:267
+#: src/mtk_ohtu/templates/product_redesign.html:261
 msgid "electricity"
 msgstr "电力"
 
 #: copy.html:162 src/mtk_ohtu/database/db_enums.py:65
 #: src/mtk_ohtu/templates/product.html:40
 #: src/mtk_ohtu/templates/product_redesign
-#: src/mtk_ohtu/templates/product_redesign.html:266
+#: src/mtk_ohtu/templates/product_redesign.html:260
 msgid "biogas"
 msgstr "沼气"
 
 #: copy.html:160 src/mtk_ohtu/database/db_enums.py:66
 #: src/mtk_ohtu/templates/product.html:38
 #: src/mtk_ohtu/templates/product_redesign
-#: src/mtk_ohtu/templates/product_redesign.html:264
+#: src/mtk_ohtu/templates/product_redesign.html:258
 msgid "biodiesel"
 msgstr "生物柴油"
 
 #: src/mtk_ohtu/database/db_enums.py:67
 msgid "hydrogen"
 msgstr "氢"
+
+#: copy.html:158 src/mtk_ohtu/database/db_enums.py:68
+#: src/mtk_ohtu/templates/product.html:36
+#: src/mtk_ohtu/templates/product_redesign
+#: src/mtk_ohtu/templates/product_redesign.html:256
+msgid "diesel"
+msgstr "柴油"
+
+#: src/mtk_ohtu/database/db_enums.py:69
+msgid "gasoline"
+msgstr ""
 
 #: src/mtk_ohtu/routes/cargo.py:40 src/mtk_ohtu/routes/cargo.py:58
 #: src/mtk_ohtu/routes/contractor_location.py:28
@@ -179,161 +190,160 @@ msgid "page_not_found"
 msgstr "页面未找到"
 
 #: src/mtk_ohtu/templates/addlogistics.html:4
-#: src/mtk_ohtu/templates/addlogistics.html:182
+#: src/mtk_ohtu/templates/addlogistics.html:190
 msgid "add_logistics_title"
 msgstr "添加物流服务"
 
-#: src/mtk_ohtu/templates/addlogistics.html:186
+#: src/mtk_ohtu/templates/addlogistics.html:194
 msgid "select_service_type"
 msgstr "选择服务类型"
 
-#: src/mtk_ohtu/templates/addlogistics.html:189
+#: src/mtk_ohtu/templates/addlogistics.html:197
 #: src/mtk_ohtu/templates/contractor.html:281
 msgid "private_contractor"
 msgstr "私人承包商"
 
-#: src/mtk_ohtu/templates/addlogistics.html:191
+#: src/mtk_ohtu/templates/addlogistics.html:199
 msgid "company"
 msgstr "企业"
 
-#: src/mtk_ohtu/templates/addlogistics.html:195
+#: src/mtk_ohtu/templates/addlogistics.html:203
 msgid "full_name"
 msgstr "全名"
 
-#: src/mtk_ohtu/templates/addlogistics.html:200
+#: src/mtk_ohtu/templates/addlogistics.html:208
 msgid "company_name"
 msgstr "企业名称"
 
-#: src/mtk_ohtu/templates/addlogistics.html:202
+#: src/mtk_ohtu/templates/addlogistics.html:210
 #: src/mtk_ohtu/templates/contractor.html:279
 msgid "business_id"
 msgstr "企业ＩＤ"
 
-#: src/mtk_ohtu/templates/addlogistics.html:206
+#: src/mtk_ohtu/templates/addlogistics.html:214
 msgid "add_location"
 msgstr "添加地点"
 
-#: src/mtk_ohtu/templates/addlogistics.html:209
+#: src/mtk_ohtu/templates/addlogistics.html:217
 #: src/mtk_ohtu/templates/contractor.html:153
 msgid "address"
 msgstr "地址"
 
-#: src/mtk_ohtu/templates/addlogistics.html:211
+#: src/mtk_ohtu/templates/addlogistics.html:219
 #: src/mtk_ohtu/templates/contractor.html:155
 msgid "postal_code"
 msgstr "邮政编码"
 
-#: src/mtk_ohtu/templates/addlogistics.html:213
+#: src/mtk_ohtu/templates/addlogistics.html:221
 #: src/mtk_ohtu/templates/contractor.html:157
 msgid "city"
 msgstr "城市"
 
-#: src/mtk_ohtu/templates/addlogistics.html:217
+#: src/mtk_ohtu/templates/addlogistics.html:225
 #: src/mtk_ohtu/templates/contractor.html:161
 msgid "phone_number"
 msgstr "电话号码"
 
-#: src/mtk_ohtu/templates/addlogistics.html:219
+#: src/mtk_ohtu/templates/addlogistics.html:227
 #: src/mtk_ohtu/templates/contractor.html:163
 #: src/mtk_ohtu/templates/register.html:20
 msgid "email"
 msgstr "电子邮件"
 
-#: src/mtk_ohtu/templates/addlogistics.html:223
+#: src/mtk_ohtu/templates/addlogistics.html:231
 #: src/mtk_ohtu/templates/contractor.html:167
 #: src/mtk_ohtu/templates/contractor.html:302
 #: src/mtk_ohtu/templates/list_and_map.html:2
 #: src/mtk_ohtu/templates/product.html:24
-#: src/mtk_ohtu/templates/product_redesign.html:194
-#: src/mtk_ohtu/templates/product_redesign.html:228
-#: src/mtk_ohtu/templates/product_redesign.html:238
+#: src/mtk_ohtu/templates/product_redesign.html:193
+#: src/mtk_ohtu/templates/product_redesign.html:223
 msgid "description"
 msgstr "描述"
 
-#: src/mtk_ohtu/templates/addlogistics.html:224
+#: src/mtk_ohtu/templates/addlogistics.html:232
 #: src/mtk_ohtu/templates/contractor.html:168
 msgid "description_placeholder"
 msgstr "请描述您的服务"
 
-#: src/mtk_ohtu/templates/addlogistics.html:228
+#: src/mtk_ohtu/templates/addlogistics.html:236
 #: src/mtk_ohtu/templates/contractor.html:171
 msgid "how_far_can_you_deliver"
 msgstr "您能送到多远"
 
-#: src/mtk_ohtu/templates/addlogistics.html:231
+#: src/mtk_ohtu/templates/addlogistics.html:239
 #: src/mtk_ohtu/templates/contractor.html:174
 #: src/mtk_ohtu/templates/contractor.html:293
 msgid "no_limit"
 msgstr "无限"
 
-#: src/mtk_ohtu/templates/addlogistics.html:233
-#: src/mtk_ohtu/templates/addlogistics.html:291
+#: src/mtk_ohtu/templates/addlogistics.html:241
+#: src/mtk_ohtu/templates/addlogistics.html:301
 #: src/mtk_ohtu/templates/contractor.html:176
 msgid "custom_limit"
 msgstr "自定义极限"
 
-#: src/mtk_ohtu/templates/addlogistics.html:236
-#: src/mtk_ohtu/templates/addlogistics.html:294
+#: src/mtk_ohtu/templates/addlogistics.html:244
+#: src/mtk_ohtu/templates/addlogistics.html:304
 #: src/mtk_ohtu/templates/contractor.html:179
 #: src/mtk_ohtu/templates/contractor.html:293
 #: src/mtk_ohtu/templates/contractor.html:302
 msgid "maximum_distance"
 msgstr "最大距离"
 
-#: src/mtk_ohtu/templates/addlogistics.html:237
-#: src/mtk_ohtu/templates/addlogistics.html:295
+#: src/mtk_ohtu/templates/addlogistics.html:245
+#: src/mtk_ohtu/templates/addlogistics.html:305
 msgid "kilometers"
 msgstr "公里"
 
-#: src/mtk_ohtu/templates/addlogistics.html:240
+#: src/mtk_ohtu/templates/addlogistics.html:248
 #: src/mtk_ohtu/templates/contractor.html:183
 #, fuzzy
 msgid "select_eco_types"
 msgstr "选择服务类型"
 
-#: src/mtk_ohtu/templates/addlogistics.html:250
+#: src/mtk_ohtu/templates/addlogistics.html:259
 msgid "select_materials"
 msgstr "选择材料"
 
-#: src/mtk_ohtu/templates/addlogistics.html:265
-#: src/mtk_ohtu/templates/addlogistics.html:370
+#: src/mtk_ohtu/templates/addlogistics.html:275
+#: src/mtk_ohtu/templates/addlogistics.html:383
 msgid "additional_information"
 msgstr "补充资料"
 
-#: src/mtk_ohtu/templates/addlogistics.html:269
+#: src/mtk_ohtu/templates/addlogistics.html:279
 msgid "can_spread"
 msgstr "能传播"
 
-#: src/mtk_ohtu/templates/addlogistics.html:275
+#: src/mtk_ohtu/templates/addlogistics.html:285
 #: src/mtk_ohtu/templates/contractor.html:302
 msgid "base_rate"
 msgstr "基本费率"
 
-#: src/mtk_ohtu/templates/addlogistics.html:277
+#: src/mtk_ohtu/templates/addlogistics.html:287
 msgid "price_per_hour"
 msgstr "小时费率"
 
-#: src/mtk_ohtu/templates/addlogistics.html:279
+#: src/mtk_ohtu/templates/addlogistics.html:289
 msgid "maximum_capacity"
 msgstr "最大容量"
 
-#: src/mtk_ohtu/templates/addlogistics.html:286
+#: src/mtk_ohtu/templates/addlogistics.html:296
 msgid "delivery_distance"
 msgstr "输送距离"
 
-#: src/mtk_ohtu/templates/addlogistics.html:289
+#: src/mtk_ohtu/templates/addlogistics.html:299
 msgid "same_as_above"
 msgstr "与上面相同"
 
-#: src/mtk_ohtu/templates/addlogistics.html:298
+#: src/mtk_ohtu/templates/addlogistics.html:308
 msgid "material_delivery_description_placeholder"
 msgstr "添加补充资料"
 
-#: src/mtk_ohtu/templates/addlogistics.html:305
+#: src/mtk_ohtu/templates/addlogistics.html:315
 msgid "add_logistics_submit"
 msgstr "提交"
 
-#: src/mtk_ohtu/templates/addlogistics.html:367
+#: src/mtk_ohtu/templates/addlogistics.html:380
 msgid "close"
 msgstr "关闭"
 
@@ -453,15 +463,17 @@ msgid "login"
 msgstr "登录"
 
 #: src/mtk_ohtu/templates/layout.html:65
+#: src/mtk_ohtu/templates/product_redesign.html:364
 msgid "footer_contact"
 msgstr "联系我们"
 
 #: src/mtk_ohtu/templates/layout.html:66
+#: src/mtk_ohtu/templates/product_redesign.html:365
 msgid "footer_last_updated"
 msgstr "最后更新"
 
 #: src/mtk_ohtu/templates/list_and_map.html:3
-#: src/mtk_ohtu/templates/product_redesign.html:195
+#: src/mtk_ohtu/templates/product_redesign.html:194
 #, fuzzy
 msgid "services"
 msgstr "价格"
@@ -517,37 +529,31 @@ msgstr "燃料经济"
 #: copy.html:156 src/mtk_ohtu/templates/product.html:34
 #: src/mtk_ohtu/templates/product.html:71
 #: src/mtk_ohtu/templates/product_redesign
-#: src/mtk_ohtu/templates/product_redesign.html:260
+#: src/mtk_ohtu/templates/product_redesign.html:254
+#: src/mtk_ohtu/templates/product_redesign.html:274
 msgid "fuel"
 msgstr "燃料"
 
-#: copy.html:158 src/mtk_ohtu/templates/product.html:36
-#: src/mtk_ohtu/templates/product_redesign
-#: src/mtk_ohtu/templates/product_redesign.html:262
-msgid "diesel"
-msgstr "柴油"
-
 #: copy.html:159 src/mtk_ohtu/templates/product.html:37
 #: src/mtk_ohtu/templates/product_redesign
-#: src/mtk_ohtu/templates/product_redesign.html:263
+#: src/mtk_ohtu/templates/product_redesign.html:257
 msgid "petrol"
 msgstr "汽油"
 
 #: copy.html:161 src/mtk_ohtu/templates/product.html:39
 #: src/mtk_ohtu/templates/product_redesign
-#: src/mtk_ohtu/templates/product_redesign.html:265
+#: src/mtk_ohtu/templates/product_redesign.html:259
 msgid "natural_gas"
 msgstr "天然气"
 
 #: copy.html:167 src/mtk_ohtu/templates/product.html:45
 #: src/mtk_ohtu/templates/product_redesign
-#: src/mtk_ohtu/templates/product_redesign.html:271
+#: src/mtk_ohtu/templates/product_redesign.html:265
 msgid "fuel_efficiency"
 msgstr "燃料效率"
 
 #: copy.html:223 src/mtk_ohtu/templates/product.html:93
 #: src/mtk_ohtu/templates/product_redesign
-#: src/mtk_ohtu/templates/product_redesign.html:313
 msgid "show_all_button"
 msgstr "显示所有"
 
@@ -556,13 +562,33 @@ msgid "process_button"
 msgstr "加工按钮"
 
 #: src/mtk_ohtu/templates/product.html:136
-#: src/mtk_ohtu/templates/product_redesign.html:319
+#: src/mtk_ohtu/templates/product_redesign.html:333
 msgid "input_address_placeholder"
 msgstr "请输入地址"
 
-#: src/mtk_ohtu/templates/product_redesign.html:253
+#: src/mtk_ohtu/templates/product_redesign.html:231
+#, fuzzy
+msgid "filter_contractors"
+msgstr "私人承包商"
+
+#: src/mtk_ohtu/templates/product_redesign.html:237
+#, fuzzy
+msgid "can process"
+msgstr "能加工"
+
+#: src/mtk_ohtu/templates/product_redesign.html:246
 msgid "emissions"
 msgstr ""
+
+#: src/mtk_ohtu/templates/product_redesign.html:310
+#, fuzzy
+msgid "no contractors"
+msgstr "私人承包商"
+
+#: src/mtk_ohtu/templates/product_redesign.html:327
+#, fuzzy
+msgid "show_all"
+msgstr "显示所有"
 
 #: src/mtk_ohtu/templates/register.html:4
 #: src/mtk_ohtu/templates/register.html:16
