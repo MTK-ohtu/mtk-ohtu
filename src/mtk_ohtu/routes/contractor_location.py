@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, request, abort, flash, url_for
 from flask_babel import _
 from ..logic import logistics
-from ..database.db_enums import EcoCategoryType
+from ..database.db_enums import FuelType
 
 
 contractor_location_bp = Blueprint("contractor_location_bp", __name__)
@@ -28,9 +28,9 @@ def add():
         flash(_("error_occurred"))
         return redirect(url_for("main.contractor_bp.contractor"))
 
-    eco_types = request.form.getlist("eco_fuel_types[]")
-    for type in eco_types:
-        logistics.add_eco_type(
+    fuel_types = request.form.getlist("fuel_types[]")
+    for type in fuel_types:
+        logistics.add_fuel_type(
             contractor_id,
             type
         )

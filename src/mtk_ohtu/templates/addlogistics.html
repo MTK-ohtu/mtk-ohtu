@@ -26,6 +26,14 @@
         scrollbar-width: none;
     }
 
+    .switch2 {
+        position: relative;
+        display: inline-block;
+        height: 50%;
+        align-self: center;
+        width: 3%;
+    }
+
     .column::-webkit-scrollbar * {
         display: none;
     }
@@ -238,17 +246,18 @@
         </div>
         <div class="eco-capabilities">
             <h4>{{ _("select_eco_types") }}</h4>
-            {% for category in eco_categories %}
-                <label class="switch">
-                    <input type="checkbox" name="eco_types[]" value="{{ category }}">
+            {% for type in fuel_types %}
+                <label class="switch2">
+                    <input type="checkbox" name="fuel_types[]" value="{{ category }}">
                     <span class="slider"></span>
                 </label>
                 {{ _(category) }}
             {% endfor %}
         </div>
     </div>
+    <!-- container for material entries -->
     <h3>{{ _("select_materials") }}</h3>
-    <div id="materials-container">
+    <div id="materials-container">  
         <div id="column1" class="column">
         </div>
         <div id="column2" class="column">
@@ -257,6 +266,7 @@
         </div>
     </div>
 
+    <!-- material entry template -->
     {% for material in material_categories %}
     <div class="material-box" id="{{ material }}-model" style="display: none">
     <div class="material-title">

@@ -7,7 +7,7 @@ from mtk_ohtu.database.db_datastructs import (
     LocationService,
 )
 from mtk_ohtu.logic.location import Location
-from .db_enums import EcoCategoryType
+from .db_enums import FuelType
 
 
 # pylint: disable=E1129
@@ -79,9 +79,9 @@ def db_add_contractor_location(
             print(f"Error inserting data: {e}")
     return out
 
-def db_add_eco_type(
+def db_add_fuel_type(
         contractor_location_id: int,
-        eco_type: EcoCategoryType,
+        fuel_type: FuelType,
         pool: ConnectionPool,
 ) -> bool:
     """
@@ -91,8 +91,8 @@ def db_add_eco_type(
         cursor = connection.cursor()
         try:
             cursor.execute(
-                "INSERT INTO eco_types (contractor_location_id, eco_type) VALUES (%s, %s)",
-                (contractor_location_id, eco_type)
+                "INSERT INTO fuel_types (contractor_location_id, fuel_type) VALUES (%s, %s)",
+                (contractor_location_id, fuel_type)
             )
         except:
             return False

@@ -63,10 +63,10 @@ def add_contractor_location(
         logging.error(er)
         return False
     
-def add_eco_type(contractor_location_id, eco_type):
-    db_contractors.db_add_eco_type(
+def add_fuel_type(contractor_location_id, fuel_type):
+    db_contractors.db_add_fuel_type(
         contractor_location_id,
-        eco_type,
+        fuel_type,
         pool=DATABASE_POOL
     )
 

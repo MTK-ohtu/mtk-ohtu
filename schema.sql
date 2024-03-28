@@ -22,7 +22,7 @@ DO $$ BEGIN
     CREATE TYPE supply_demand_type AS ENUM ('one time', 'recurring', 'annually', 'weekly');
     CREATE TYPE batch_units_type AS ENUM ('tn', 'm^3', 'kg', 'l', 'kpl');
     CREATE TYPE vehichle_requirement_type AS ENUM ('dry', 'refrigerated', 'tanker', 'flatbed', 'container');
-    CREATE TYPE eco_category_type AS ENUM ('electricity', 'biogas', 'biodiesel', 'hydrogen');
+    CREATE TYPE fuel_type AS ENUM ('electricity', 'biogas', 'biodiesel', 'hydrogen', 'diesel', 'gasoline');
     CREATE TYPE category_type AS ENUM (
     'Manure',
     'Grass, waste fodder and green growths',
@@ -102,10 +102,10 @@ CREATE TABLE IF NOT EXISTS contractor_locations (
     description TEXT
 );
 
-CREATE TABLE IF NOT EXISTS eco_types (
+CREATE TABLE IF NOT EXISTS fuel_types (
     id SERIAL PRIMARY KEY,
     contractor_location_id INTEGER REFERENCES contractor_locations(id),
-    eco_type eco_category_type
+    fuel_type fuel_type
 );
 
 CREATE TABLE IF NOT EXISTS cargo_capabilities (

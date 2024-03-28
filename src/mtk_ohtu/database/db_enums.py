@@ -60,11 +60,13 @@ class SubcategoryType(Enum):
     TREATED_WOOD = _("Treated wood")
 
 
-class EcoCategoryType(Enum):
+class FuelType(Enum):
     ELECTRICITY = _("electricity")
     BIOGAS = _("biogas")
     BIODIESEL = _("biodiesel")
     HYDROGEN = _("hydrogen")
+    DIESEL = _("diesel")
+    GASOLINE = _("gasoline")
 
 
 DEFINED_ENUMS = {
@@ -74,6 +76,6 @@ DEFINED_ENUMS = {
     "batch_units_type": BatchUnitsType,
     "category_type": CategoryType,
     "vehichle_requirement_type": VehicleRequirementType,
-    "eco_category_type": EcoCategoryType,
+    "fuel_type": FuelType,
     "subcategory_type": SubcategoryType
 }

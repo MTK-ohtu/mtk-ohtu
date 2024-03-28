@@ -3,7 +3,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, abort,
 from geojson import Point, Feature, FeatureCollection
 
 from ..database import db_contractors
-from ..database.db_enums import CategoryType, BatchUnitsType, EcoCategoryType
+from ..database.db_enums import CategoryType, BatchUnitsType, FuelType
 from ..config import DATABASE_POOL
 from ..logic import user as users
 from ..logic import logistics
@@ -16,11 +16,11 @@ contractor_bp = Blueprint("contractor_bp", __name__)
 @contractor_bp.route("/addlogistics", methods=["GET", "POST"])
 def add_logistics():
     if request.method == "GET":
-        eco_categories = [e.value for e in EcoCategoryType]
+        fuel_types = [e.value for e in FuelType]
         material_categories = [e.value for e in CategoryType]
         units = [e.value for e in BatchUnitsType]
         return render_template(
-            "addlogistics.html", eco_categories=eco_categories, material_categories=material_categories, units=units
+            "addlogistics.html", fuel_types=fuel_types, material_categories=material_categories, units=units
         )
 
     if request.method == "POST":
@@ -55,11 +55,11 @@ def add_logistics():
             description,
         )
 
-        eco_types = request.form.getlist("eco_types[]")
-        print(eco_types)
-        for type in eco_types:
+        fuel_types = request.form.getlist("fuel_types[]")
+        print(fuel_types)
+        for type in fuel_types:
             print(type)
-            logistics.add_eco_type(
+            logistics.add_fuel_type(
                 contractor_id,
                 type
             )
