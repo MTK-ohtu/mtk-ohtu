@@ -73,7 +73,7 @@ def listing(listing_id, product_page):
 
         # contractors.filter_by_cargo_type(listing.category)
         return render_template(
-            page,
+            'product_redesign.html',
             listing=listing,
             show_route=0,
             user_location=None,
@@ -104,7 +104,7 @@ def listing(listing_id, product_page):
             print(contractor)
 
         return render_template(
-            page,
+            'product_redesign.html',
             listing=listing,
             distance=round(route_to_product.distance / 1000, 1),
             duration=str(

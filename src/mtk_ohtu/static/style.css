@@ -14,8 +14,8 @@
     --focus-background-color_2: #f4dddd;
     --non-focus-background-color_2: #d4d4d4;
     /* Theme borders */
-    --common-border: var(--focus-background-color) solid 3px;
-    --focus-border: var(--theme-color_3) solid 3px;
+    --common-border: var(--focus-background-color) solid 2px;
+    --focus-border: var(--theme-color_3) solid 2px;
     --focus-border_2: var(--theme-color_4) solid 3px;
     /* Theme fonts */
     --theme-font-family_1: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
@@ -107,19 +107,13 @@ td {
 
 .horizontal-container {
     display: flex;
-    margin-left: 15px;
-    margin-right: 15px;
     flex-direction: row;
-    align-items: flex-end;
-    gap: 25px;
+    gap: 10px;
+    max-width: 100%;
 }
 
 .horizontal-container.even {
     justify-content: space-between;
-}
-
-.horizontal-container > div {
-    align-content: bottom;
 }
 
 .card {
@@ -146,13 +140,25 @@ td {
 
 /*========== CLICKABLE LIST ELEMENTS ===============================*/
 .clickable_list_element {
-    width: 100%;
-    max-width: 100%;
+    width: 99%;
+    max-width: 99%;
     display: flex;
     flex-direction: column;
-    margin: 0% 0% 0% 0%;
+    margin: 0% 0.8% 0% 0.8%;
     overflow: hidden;
     border-radius: 20px 0 0 0;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    border-top: 1px solid var(--theme-color_2); /* Valkea yläreuna */
+    border-left: 1px solid var(--theme-color_2); /* Valkea vasen reuna */
+    border-right: 1px solid var(--theme-color_2); /* Valkea oikea reuna */
+}
+.clickable_list_element::-webkit-scrollbar * {
+    display: none;
+}
+
+.clickable_list_element > div {
+    padding: 0% 2% 0% 2%;
 }
 
 .clickable_list_element.product {
@@ -161,7 +167,8 @@ td {
     background-color: rgba(0, 0, 0, 0.6 );
     transition: color 1s ease-in-out;
 }
-.clickable_list_element.product::before {    
+.clickable_list_element.product::before {   
+    pointer-events: none; 
     content: "";
     position: absolute;
     background-image: url('/static/images/wood.png');
@@ -181,6 +188,7 @@ td {
     color: black;
 }
 .clickable_list_element.product.selected::before {
+    pointer-events: none;
     opacity: 0.1;
  }
 
@@ -191,6 +199,7 @@ td {
     transition: color 1.2s ease-in-out;
 }
 .clickable_list_element.emission::before {    
+    pointer-events: none;
     content: "";
     position: absolute;
     background-image: url('/static/images/carbon_dioxide.png');
@@ -210,6 +219,8 @@ td {
     color: black;
 }
 .clickable_list_element.emission.selected::before {
+    pointer-events: none;
+
     opacity: 0.1;
 }
 
@@ -242,12 +253,15 @@ td {
     opacity: 0.1;
 }
 
+.clickable_list_element.hidden {
+    border: none;
+}
+
 .clickable_list_element.optimal {
     background-color: var(--non-focus-background-color);
     background-image: radial-gradient(ellipse 30vh 30vh at 90% 100%,rgba(255, 0, 0, 0) 0%, rgba(143, 207, 60, 0.1) 80%, rgba(37, 65, 0, 0.2) 100%);
     /* border: var(--common-border); */
     transition: background-color 0.7s ease-in-out;
-    border: none;
 }
 
 .clickable_list_element.suboptimal {
@@ -255,13 +269,10 @@ td {
     background-image: radial-gradient(ellipse 110% 120% at 100% 70%,rgba(255, 255, 255, 0) 0%, rgba(207, 107, 60, 0.1) 80%, rgba(255, 0, 0, 0.2) 100%);
     /* border: var(--common-border); */
     transition: background-color 0.7s ease-in-out;
-    border: none;
-
 }
 
 .clickable_list_element.selected {
     background-color: var(--focus-background-color);
-    /* border: var(--focus-border); */
 }
 
 .clickable_list_element h4 {
@@ -277,9 +288,10 @@ td {
 }
 
 .empty_list_element {
-    opacity: 0;
+    pointer-events: none;
     width: 100%;
     height: 50%;
+    opacity: 0;
 }
 
 .animate-closed {
@@ -307,6 +319,12 @@ td {
     }
 }
 
+.clickable_list_element #info {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
 .clickable_list_element #info > * {
     opacity: 0;
     transition: opacity 1s ease-in-out;
@@ -330,35 +348,56 @@ td {
     line-height: 115%;
 }
 
+.zoom_button {
+    min-height: 3.5vh;
+    min-width: 3.5vh;
+    background-color: var(--non-focus-background-color);
+    background-image: url('/static/images/zoom_in_button.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    align-self: center;
+    border: var(--common-border);
+    border-radius: 16px;
+    margin-right: 5px;
+    margin-bottom: 3px;
+    transition: translate var(--button-transition-time) ease-in-out;
+}
+
+.zoom_button:active {
+    transform: translate(3px, 3px);
+    scale: 0.95;
+}
+
+.zoom_button:hover {
+    border: var(--focus-border);
+}
+
+.zoom_button.zoomed_in {
+    background-image: url('/static/images/zoom_out_button.png');
+    filter: invert(100%)
+}
 
 
 /*========= TOOLBAR ==========================================*/
 .toolbar {
-    display: flex;
+    position: relative;
+    display: flex;;
     flex-direction: row;
-    align-items: center;
-    flex: 1;
-    justify-content:space-around;
-    color: var(--non-focus-background-color);
-}
-
-.toolbar div {
-    flex-grow: 1;
+    background-color: var(--theme-background-color_2);
 }
 
 .toolbar input {
     width: 70%;
-    height: 40px;
-    padding: 1px;
-    margin-right: 5px;
+    min-height: 35px;
+    max-height: 35px;
     align-self: center;
     border: var(--common-border);
     border-radius: 5px;
     font: var(--common-text-font);
+    font-size: 1.5vh;
     color: var(--theme-color_2);
     background-color: var(--non-focus-background-color);
-    transition: var(--theme-color-transition);
-    float: left;
+    transition: background-color 0.5s ease-in-out;
     align-content: center;
 }
 
@@ -369,13 +408,16 @@ td {
 }
 
 .toolbar button {
+    color: rgba(0,0,0,0);
+    max-height: 40px;
+    max-width: 40px;
+    min-height: 40px;
+    min-width: 40px;
     background-repeat: no-repeat;
     background-color: var(--non-focus-background-color);
     align-self: center;
     border: var(--common-border);
     border-radius: 10px;
-    margin-right: 5px;
-    max-width: 45px;
     transition: translate var(--button-transition-time) ease-in-out;
 }
 
@@ -454,40 +496,13 @@ td {
     background-image: url('/static/images/search_icon.png');
 }
 
-.zoom_button {
-    min-height: 46px;
-    min-width: 46px;
-    background-color: var(--non-focus-background-color);
-    background-image: url('/static/images/zoom_in_button.png');
-    background-size: contain;
-    background-repeat: no-repeat;
-    align-self: center;
-    border: var(--common-border);
-    border-radius: 16px;
-    margin-right: 5px;
-    margin-bottom: 3px;
-    transition: translate var(--button-transition-time) ease-in-out;
-}
 
-.zoom_button:active {
-    transform: translate(3px, 3px);
-    scale: 0.95;
-}
-
-.zoom_button:hover {
-    border: var(--focus-border);
-}
-
-.zoom_button.zoomed_in {
-    background-image: url('/static/images/zoom_out_button.png');
-    filter: invert(100%)
-}
 
 .switch {
     position: relative;
     display: inline-block;
-    width: 45px;
-    height: 23px;
+    height: 50%;
+    aspect-ratio: 2/1;
     align-self: center;
 }
 
@@ -507,7 +522,7 @@ td {
     background-color: black;
     -webkit-transition: .4s;
     transition: .4s;
-    border-radius: 34px;
+    border-radius: 38px;
 }
 
 .slider:before {
@@ -517,7 +532,7 @@ td {
     width: 50%;
     background-color: var(--non-focus-background-color);
     -webkit-transition: .2s;
-    transition: .2s;
+    transition: .15s;
     border-radius: 50%;
 }
 

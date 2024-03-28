@@ -77,27 +77,30 @@ var runListElementAnimation = function (element, state, target) {
     element.style.setProperty('--from-height', element.style.getPropertyValue('--to-height'))
     console.log("Element "+element.id+" FROM "+ element.style.getPropertyValue('--from-height'))
     if (target == 'map'){
-        element.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'nearest'});
+        element.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest'});
     } 
 
     if (state == 0) {
-        console.log("Vanishing element "+element.id)
+        // console.log("Vanishing element "+element.id)
         element.style.setProperty('--to-height', '0%')
         element.classList.remove('selected')
+        element.classList.add('hidden')
 
     } else if (state == 1) {
         console.log("To closed state: element "+element.id)
         if (target == 'info') element.querySelector('div').style.minHeight = '100%'
         element.style.setProperty('--to-height', element.style.getPropertyValue('--closed-height'))
         element.classList.remove('selected')
+        element.classList.remove('hidden')
 
     } else {
         console.log("Opening element "+element.id)
-        if (target == 'info') element.querySelector('div').style.minHeight = '0%'
+        if (target == 'info') element.querySelector('div').style.minHeight = '33%'
         element.style.setProperty('--to-height', element.style.getPropertyValue('--open-height'))
         element.classList.add('selected')
+        element.classList.remove('hidden')
     }
-    console.log("Element "+element.id+" TO "+ element.style.getPropertyValue('--to-height'))
+    // console.log("Element "+element.id+" TO "+ element.style.getPropertyValue('--to-height'))
     
     if (element.classList.contains('animate-open')){
         element.classList.remove('animate-open')
@@ -111,35 +114,32 @@ var runListElementAnimation = function (element, state, target) {
 
 // Create elements to show on the list side ====================================================================
 function createListElement(feature, styleClass, container) {
-    var listElement = document.createElement('button');
+    var listElement = document.createElement('div');
     listElement.id = feature.properties.location_id
     listElement.innerHTML = `
         <div class="horizontal-container even"> 
             <h4>${feature.properties.name}</h4>
-            <p>${feature.properties.address}</p>
+            <p style="text-align: right;">${feature.properties.address}</p>
         </div>
-        <div id="info"><div>
+        <div id="info">
             <div class="horizontal-container even">
                 <h4>${feature.properties.email}</h4>
                 <h4>${feature.properties.telephone}</h4>
                 <button type="button" class="zoom_button" id="zoom_button"></button>
             </div>
             
-            <div class="horizontal-container even"  style="align-items: flex-start">
-                <h4>${document.getElementById('services').textContent}</h4>
+            <div class="horizontal-container" style="align-items: flex-start; margin-top: 3%">
+                <h4>${document.getElementById('services').textContent}:</h4>
                 <div>
                     <div id="services">
                     </div>
                 </div>
             </div>
-            <div class="horizontal-container even" style="align-items: flex-start">
-                <h4>${document.getElementById('description').textContent}</h4>
-                <p>
-                    "As a transportation entrepreneur, I take immense pride in the operations of my company. Our commitment to excellence shines through in every aspect of our business, from the reliability of our fleet to the professionalism of our drivers. We have cultivated a reputation for efficiency and timeliness, ensuring that our clients' goods reach their destinations safely and on schedule. What sets us apart is our unwavering dedication to customer satisfaction, always going above and beyond to meet their unique needs. With a focus on innovation and continuous improvement, we strive to exceed expectations, solidifying our position as a leader in the transportation industry."
-                    - ChatGPT
-                </p>
+            <div class="horizontal-container" style="gap: 5%">
+                <h4>${document.getElementById('description').textContent}:</h4>
+                <p>Kuljetusyritys</p>
             </div>
-        </div></div>
+        </div>
         <div style="height: 10px;"></div>
         `;
     
@@ -154,11 +154,14 @@ function createListElement(feature, styleClass, container) {
 
     listElement.style.setProperty('--closed-height',
         (listElement.querySelector('div').scrollHeight/ listElement.parentNode.clientHeight)*100 + '%')
+    const childSum = Array.from(listElement.children)
+            .map(child => child.scrollHeight)
+            .reduce((acc, val) => acc + val, 0);
     listElement.style.setProperty('--open-height',
-        (listElement.scrollHeight/ listElement.parentNode.clientHeight)*100 + '%')
+        (childSum/ listElement.parentNode.clientHeight)*100 + '%')
+    console.log("LISTDIV HEIGHT: "+listElement.parentNode.scrollHeight)
     listElement.style.setProperty('--from-height', '0%')
     listElement.style.setProperty('--to-height', listElement.style.getPropertyValue('--closed-height'))
-
     listElement.classList.add('animated');
         
     return listElement

@@ -42,7 +42,8 @@ class VisionController {
                                         // Key: feature.properties.location_id OR route.metadata.timestamp
             
             bounds: {},                 // For every map object, remember their corresponding latLngBounds value on leaflet
-                                        // Key: feature.properties.location_id OR route.metadata.timestamp
+                                        // Key: feature.properties.location_id (contractors) OR route.metadata.timestamp (routes) 
+                                        // OR feature.properties.address (distinct map features)
             
             in_focus: {},               // For every feature, keep record wether their bounds will be considered in calculation of total bounds
                                         // Key: feature.properties.location_id OR route.metadata.timestamp
@@ -100,7 +101,7 @@ class VisionController {
                     runListElementAnimation(this.data.element[this.openFeature], 1)
                     this.data.element_open[this.openFeature] = false
                     this.proxies.popup_open[this.openFeature] = false
-                    if (this.zoomedFeature != null) { 
+                    if (this.zoomedFeature != null) {
                         this.data.element[this.openFeature].querySelector('#zoom_button')
                             .classList.remove('zoomed_in')
                         this.data.element[id].querySelector('#zoom_button')
@@ -111,17 +112,19 @@ class VisionController {
                 this.openFeature = id
                 runListElementAnimation(this.data.element[id], 2, this.click_origin)
                 this.click_origin = null
+                this.fly()
             } else {
                 runListElementAnimation(this.data.element[id], 1)
-                if (this.focusedRoute == null) this.flyTransition = 'none'
+                
                 this.openFeature = null
                 if (this.zoomedFeature != null) {
                     this.data.element[id].querySelector('#zoom_button')
-                            .classList.remove('zoomed_in')
+                        .classList.remove('zoomed_in')
                     this.zoomedFeature = null
                 }
+                //if (this.focusedRoute == null) this.flyTransition = 'none'
             }
-            this.fly()
+            
         }
 
         //=======================================POPUP CLOSE/OPEN
@@ -232,7 +235,7 @@ class VisionController {
     //
     // 'geometry': { 'coordinates': [FLOAT (longitude), FLOAT (latitude)] }}
     // 'properties': {}, containing named fields:
-    // address, name, location_id, email, telephone, base_rate, price_per_km, max_capacity, unit, can_process
+    //          address, name, location_id, email, telephone, base_rate, price_per_km, max_capacity, unit, can_process
 
     addListFeatureToGroup(feature, group_name, icon, container) {
         console.log(container)
@@ -259,14 +262,16 @@ class VisionController {
             this.data.in_focus[f] = true
             this.proxies.visible[f] = true
         }
+        // Initial filter value for optimal = 1, suboptimal = 0
         var filterKey = JSON.stringify(feature)
         var filterVal = (group_name == 'optimal' ? 1 : 0)
         this.data.filtered[f][filterKey] = filterVal
     }
 
-    addMapFeatureToGroup(feature, group_name, icon) {
+    addMapFeatureToGroup(feature, group_name, icon, element) {
         const f = feature.properties.address
         console.log("Added map-feature: "+f)
+        if (typeof(element) !== 'undefined') this.data.element[f] = element
         if (!this.data.group_visible.hasOwnProperty(group_name)) {
             this.data.group_visible[group_name] = true
         }
@@ -314,9 +319,10 @@ class VisionController {
     }
     //============================================================================== TOGGLE FILTER
     filterBy(property, value) {
+        //Get every value of every feature by given property (e.g. can_process)
         var list = Object.entries(this.data.category[property])
 
-        // For properties with boolean values, choose every feature that is not TRUE (doesn't meet the requirement)
+        // For properties with boolean values, choose every feature that is not TRUE (= it doesn't meet the requirement)
         if (typeof(value) === 'boolean') {
             list.filter(([key, val]) => val == false)
                 .forEach(([key, val]) => {
@@ -345,7 +351,7 @@ class VisionController {
                     })
             }
         }
-        // After updating filter values, notify visionController
+        // After updating filter values, notify visionController to act accordingly
         this.visionController({key:'filtered', property: property, value: null})
     }
     //============================================================================== TOGGLE
@@ -365,17 +371,21 @@ class VisionController {
 
     //When zoom button is being pressed (call from listelement#zoom_button)
     toggleZoom(id) {
-        this.flyTransition = 'fast'
+        
         if (this.zoomedFeature != null) {
             this.zoomedFeature = null
             this.data.element[id].querySelector('#zoom_button')
-            .classList.remove('zoomed_in')
+                .classList.remove('zoomed_in')
+            this.fly()
+            this.flyTransition = 'normal'
         } else {
             this.zoomedFeature = id
             this.data.element[id].querySelector('#zoom_button')
                 .classList.add('zoomed_in')
+            this.flyTransition = 'fast'
+            this.fly()
         }
-        this.fly()
+        
     }
 
     //Show or hide group of features. Doesn't trigger flying effect
@@ -412,6 +422,16 @@ class VisionController {
         this.send = false
     }
 
+    //Center focus on list of elements
+    centerFocusOn(feature) {
+        console.log("CENTERING FOCUS ON"+JSON.stringify(feature))
+        var zoomedFeature = this.zoomedFeature
+        this.zoomedFeature = feature.properties.address
+        this.flyTransition = 'fast'
+        this.fly()
+        this.zoomedFeature = zoomedFeature
+    }
+
     //Set focus on all visible l_markers
     addFocusOnVisibleListElements() {
         this.send = true
@@ -430,6 +450,8 @@ class VisionController {
     //Toggle forced focus on companies
     toggleCompanyFocus() {
         this.companyFocus = !this.companyFocus
+        console.log("Company focus "+(this.companyFocus ? 'ON' : 'OFF'))
+        //this.flyTransition = (this.companyFocus ? 'none':'normal')
         this.fly()
     }
 
@@ -456,8 +478,10 @@ class VisionController {
         )
     }
 
-    //Fly here
+    //Flying logic here
     fly() {
+        console.log("Fly: openFeat: "+this.openFeature+", zoomedFeat: "+this.zoomedFeature
+            +", flyTransit.:" +this.flyTransition+", comp.Focus: "+this.companyFocus)
         // Don't fly if updates are still coming
         if (this.send) {
             return
@@ -484,17 +508,17 @@ class VisionController {
         } 
         if (this.flyTransition == 'fast') this.map.fitBounds(bounds)
         else if (this.flyTransition == 'normal') this.map.flyToBounds(bounds)
-        this.flyTransition = 'normal'        
+        if (this.flyTransition == 'none') this.flyTransition = 'normal'        
     }
 
     //============================================================================= LISTENERS
     setEventListener(element) {
         element.addEventListener('click', (e) => {
             if (e.target.id === 'zoom_button') {
-                var element = e.target.parentElement.closest('button')
+                var element = e.target.parentElement.closest('.clickable_list_element')
                 this.toggleZoom(element.id)
             } else {
-                var element = e.target.closest('button')
+                var element = e.target.closest('.clickable_list_element')
                 this.toggleListElement(element.id)
             }
         })
